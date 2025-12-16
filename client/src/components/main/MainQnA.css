@@ -1,0 +1,16 @@
+/* 네번째 영역 - FAQ */
+.main-qna-board {
+  padding: 2rem;
+}
+
+.main-qna-box {
+  border: 1px solid var(--color-dark-blue);
+  padding: 2rem;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .main-qna-box {
+    padding: 1rem;
+  }
+}

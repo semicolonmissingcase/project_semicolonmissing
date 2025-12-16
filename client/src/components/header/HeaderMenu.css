@@ -1,0 +1,117 @@
+/* 모바일 오버레이 */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+}
+
+/* 어두운 배경 */
+.mobile-menu-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* 메뉴 내용 영역 */
+.mobile-menu-content {
+  position: relative;
+  width: 80%; 
+  max-width: 350px;
+  height: 100%;
+  background-color: var(--color-white);
+  padding: 20px;
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  z-index: 2; /* backdrop 위에 */
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+/* 오른쪽에서 슬라이드 애니메이션 */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* 닫기 버튼 스타일 */
+.mobile-menu-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: var(--color-black);
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.mobile-menu-close:hover {
+  color: var(--color-bark-blue);
+}
+
+/* 메뉴 항목 스타일 */
+.mobile-menu-item {
+  font-size: 1.5rem;
+  padding: 15px 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+.mobile-menu-item:hover {
+  color: var(--color-bark-blue);
+}
+
+.mobile-menu-item:first-of-type {
+  margin-top: 60px; /* 첫 번째 항목은 닫기 버튼 아래로 */
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background-color: var(--color-bark-blue);
+  margin: 10px 0;
+}
+
+/* 하단 로그아웃 버튼 */
+.mobile-menu-bottom-logout {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  background-color: var(--color-light-gray);
+}
+
+.mobile-menu-logout-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  background-color: var(--color-light-gray);
+}
+
+.mobile-menu-logout-btn:hover {
+  background-color: var(--color-bark-blue);
+  color: var(--color-white);
+}

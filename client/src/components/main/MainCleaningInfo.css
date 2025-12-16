@@ -1,0 +1,96 @@
+/* 두번째 영역 - 청소 정보 */
+.main-cleaning-info {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.main-cleaning-info-text {
+  text-align: center;
+}
+
+.main-cleaning-info-text > h2 {
+  color: var(--color-blue);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+/* 이미지 컨테이너 */
+.main-cleaning-info-images {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+}
+
+.main-cleaning-info-img {
+  flex: 1;
+  padding-top: 30%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 15px;
+}
+
+/* 캐러셀 wrapper */
+.main-carousel-wrapper {
+  display: flex;
+  transition: transform 0.3s ease;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+/* 캐러셀 컨트롤 - 기본 숨김 */
+.main-carousel-control {
+  display: none;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .main-cleaning-info-images {
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+    gap: 0;
+  }
+
+  .main-carousel-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+  }
+
+  .main-cleaning-info-img {
+    padding-top: 60%;
+    min-width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* 캐러셀 화살표 표시 */
+  .main-carousel-control {
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: var(--color-white);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .main-carousel-prev {
+    left: 10px;
+  }
+
+  .main-carousel-next {
+    right: 10px;
+  }
+}

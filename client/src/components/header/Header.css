@@ -1,0 +1,86 @@
+.header-container {
+  height: 80px;
+  padding: 1.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 헤더 왼쪽 */
+.header-left-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-logo-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header-character-size {
+  width: 6rem;
+  height: 6rem;
+}
+
+.header-nav-qna {
+  color: var(--color-black);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* 헤더 오른쪽 */
+.header-right-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-right-btn {
+  color: var(--color-black);
+  background-color: var(--color-white);
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+/* PC 전용 요소 (모바일에서 숨김) */
+.pc-only {
+  display: block; 
+}
+
+/* 모바일 햄버거 */
+.hamburger-menu-icon {
+  display: none; /* 기본적으로 PC에서는 숨김 */
+  cursor: pointer;
+  padding: 5px;
+  z-index: 1001;
+  transition: opacity 0.3s ease;
+}
+
+.hamburger-menu-icon.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.header-hamburger {
+  font-size: 2rem;
+  margin: 0;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {  
+  /* PC 전용 요소 숨기기 */
+  .pc-only {
+    display: none !important;
+  }
+
+  /* 햄버거 아이콘 보이기 */
+  .hamburger-menu-icon {
+    display: block;
+  }
+}
