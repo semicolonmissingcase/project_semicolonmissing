@@ -59,24 +59,24 @@ button {
 }
 
 /* 배경 관련 */
-.bg-gray {
-  background-color: var(--text-gray);
-  color: var(--input-box);
+.bg-darkblue {
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
 }
 
-.bg-dark {
-  background-color: var(--darkgreen);
-  color: var(--input-box);
+.bg-gray {
+  background-color: var(--color-gray);
+  color: var(--color-white);
 }
 
 .bg-red {
-  background-color: var(--red-btn);
-  color: var(--input-box);
+  background-color: var(--color-red);
+  color: var(--color-white);
 }
 
 .bg-light {
-  background-color: var(--primary-color-light);
-  color: var(--primary-color-dark);
+  background-color: var(--color-light-gray);
+  color: var(--color-black);
 }
 
 .bg-img-kakao {
@@ -86,27 +86,9 @@ button {
   background-repeat: no-repeat;
 }
 
-/* 프로필 관련 */
-.profile {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 50%;
-}
-
-.profile-medium {
-  width: 100px;
-  height: 100px;
-}
-
-.profile-small {
-  width: 50px;
-  height: 50px;
-}
-
 /* 절취선 */
 .bottom-line {
-  border-bottom: var(--primary-line);
+  border-bottom: var(--color-dark-blue);
 }
 
 /* 텍스트 있는 절취선 */
@@ -117,14 +99,6 @@ button {
   gap: 10px;
   color: var(--primary-color-gray);
   font-size: 30px;
-}
-
-.text-on-line::before,
-.text-on-line::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: var(--primary-color-gray);
 }
 
 /* input 관련 */

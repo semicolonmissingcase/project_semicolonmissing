@@ -8,12 +8,12 @@
   display: grid;
   place-items: left;
   align-items: end;
-  padding: 3rem;
+  padding: 3rem 13rem;
 }
+
 
 .main-top-text {
   color: var(--color-black);
-  max-width: 500px;
   text-align: left; 
 }
 

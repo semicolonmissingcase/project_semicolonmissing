@@ -7,8 +7,21 @@ export default function Header() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // 버튼 네비게이터
   function mainPage() {
     navigate('/');
+  }
+
+  function qnaPage() {
+    navigate('/qnapost');
+  }
+
+  function loginPage() {
+    navigate('/login');
+  }
+
+  function registrationPage() {
+    navigate('/registration');
   }
 
   const toggleMobileMenu = () => {
@@ -30,13 +43,13 @@ export default function Header() {
             <h1>ICE DOCTOR</h1>
           </div>
           {/* PC용 '문의사항' */}
-          <p className='header-nav-qna pc-only'>문의사항</p>
+          <p className='header-nav-qna pc-only' onClick={qnaPage}>문의사항</p>
         </div>
         
         {/* PC 환경에서만 보이는 로그인/회원가입 버튼 */}
         <div className='header-right-container pc-only'>
-          <button type='button' className='header-right-btn' onClick={() => handleMenuItemClick('/login')}>로그인</button>
-          <button type='button' className='header-right-btn' onClick={() => handleMenuItemClick('/signup')}>회원가입</button>
+          <button type='button' className='header-right-btn' onClick={loginPage}>로그인</button>
+          <button type='button' className='header-right-btn' onClick={registrationPage}>회원가입</button>
         </div>
         
         {/* 모바일 햄버거 버튼 */}
