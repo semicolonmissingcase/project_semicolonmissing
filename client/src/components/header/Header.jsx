@@ -13,7 +13,7 @@ export default function Header() {
   }
 
   function qnaPage() {
-    navigate('/qnapost');
+    navigate('/qnaposts');
   }
 
   function loginPage() {

@@ -19,7 +19,15 @@
 
 #root {
   width: 100%;
-  margin: auto;
+  margin: auto;  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
 .all-container {
@@ -47,9 +55,9 @@ button {
 }
 
 .btn-medium {
-  width: 120px;
-  height: 50px;
-  font-size: 25px;
+  width: 12rem;
+  height: 3rem;
+  font-size: 1.3rem;
 }
 
 .btn-small {
@@ -77,6 +85,11 @@ button {
 .bg-light {
   background-color: var(--color-light-gray);
   color: var(--color-black);
+}
+
+.bg-blue {
+  background-color: var(--color-blue);
+  color: var(--color-white);
 }
 
 .bg-img-kakao {
