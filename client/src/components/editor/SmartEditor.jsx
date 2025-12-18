@@ -55,12 +55,9 @@ export default function SmartEditor({ onContentChange }) {
   }, [onContentChange]);
 
   return (
-    <textarea 
-      name="smartEditor" 
-      id="smartEditor" 
-      rows="10" 
-      cols="100" 
-      style={{ width: '100%' }}
-    />
+    <div className="all-container">
+      <textarea 
+        name="smartEditor" id="smartEditor" />
+    </div>
   );
 }

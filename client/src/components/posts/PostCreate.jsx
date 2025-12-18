@@ -20,25 +20,21 @@ export default function PostCreate () {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>새 게시글 작성</h1>
+    <div className="all-container">   
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '20px' }}>
-          <input
-            type="text"
-            placeholder="제목을 입력하세요"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{ width: '100%', padding: '10px' }}
-          />
+        <div className="postcreate-title-container">
+          <input type="text" placeholder="제목을 입력하세요" value={title} 
+            onChange={(e) => setTitle(e.target.value)} className="postcreate-title" />
         </div>
-        <div style={{ marginBottom: '20px' }}>
+        <div className="postcreate-content">
           {/* SmartEditor 컴포넌트 사용 */}
           <SmartEditor onContentChange={handleContentChange} />
         </div>
-        <button type="submit" style={{ padding: '10px 20px' }}>
+        <div className="postcreate-btn-container">
+        <button type="submit" className="postcreate-save-btn">
           저장
         </button>
+        </div>
       </form>
     </div>
   );
