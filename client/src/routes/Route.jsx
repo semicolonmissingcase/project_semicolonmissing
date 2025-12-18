@@ -6,8 +6,10 @@ import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import OwnerLogin from "../owner/auth/OwnerLogin.jsx";
-import EngineerInfoEdit from "../components/engineer/EngineerInfoEdit.jsx";
-import EngineerAccountEdit from "../components/engineer/EngineerAccountEdit.jsx";
+import CleanerInfoEdit from "../components/cleaner/CleanerInfoEdit.jsx";
+import CleanerAccountEdit from "../components/cleaner/CleanerAccountEdit.jsx";
+import CleanerQuotationPreparation from "../components/cleaner/CleanerQuotationPreparation.jsx";
+import CleanerQuotationPreparationSave from "../components/cleaner/CleanerQuotationPreparationSave.jsx";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +50,7 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: '/engineer',
+        path: '/Cleaner',
         element: <Outlet />,
         children: [
           {
@@ -57,12 +59,20 @@ const router = createBrowserRouter([
             element: <QnaPost />
           },
           {
-            path: 'engineeraccountedit',
-            element: <EngineerAccountEdit />
+            path: 'cleaneraccountedit',
+            element: <CleanerAccountEdit />
           },
           {
-            path: 'engineerinfoedit',
-            element: <EngineerInfoEdit />
+            path: 'cleanerinfoedit',
+            element: <CleanerInfoEdit />
+          },
+          {
+            path: 'cleanerquotationpreparation',
+            element: <CleanerQuotationPreparation />,
+          },
+          {
+            path: 'cleanerquotationpreparationsave',
+            element: <CleanerQuotationPreparationSave />,
           },
         ]
       },

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import './EngineerAccountEdit.css';
+import './CleanerAccountEdit.css';
 
-function EngineerAccountEdit () {
+function CleanerAccountEdit () {
 
   const [toggleNew, setToggleNew] = useState(false);
   const [toggleInfo, setToggleInfo] = useState(false);
@@ -29,28 +29,28 @@ function EngineerAccountEdit () {
 
   return (
     <>
-    <div className="engineer-account-edit-account-management">
+    <div className="Cleaner-account-edit-account-management">
 
-      <div className="engineer-account-edit-new-account">
+      <div className="Cleaner-account-edit-new-account">
         
-        <div className="engineer-account-edit-account-management-title">
-        <img className="engineer-account-edit-toggle-img" src={toggleNew ? "/icons/toggle_down.png" : "/icons/toggle_up.png"} onClick={toggleMenuNew} />
-        <p className="engineer-account-edit-new-account-message">신규 정산 계좌</p>
+        <div className="Cleaner-account-edit-account-management-title">
+        <img className="Cleaner-account-edit-toggle-img" src={toggleNew ? "/icons/toggle_down.png" : "/icons/toggle_up.png"} onClick={toggleMenuNew} />
+        <p className="Cleaner-account-edit-new-account-message">신규 정산 계좌</p>
         </div>
 
       </div>
 
       <div className={
     toggleNew 
-      ? "engineer-account-edit-toggle-updown-contents-toggledown" 
-      : "engineer-account-edit-toggle-updown-contents"
+      ? "Cleaner-account-edit-toggle-updown-contents-toggledown" 
+      : "Cleaner-account-edit-toggle-updown-contents"
   }
 >
       <div>
-        <p className="engineer-account-edit-account-message">정산에 사용할 계좌를 선택해 주세요.</p>
+        <p className="Cleaner-account-edit-account-message">정산에 사용할 계좌를 선택해 주세요.</p>
       </div>
 
-      <div className="engineer-account-edit-active-account">
+      <div className="Cleaner-account-edit-active-account">
 
         <span>정산 계좌</span>
         <form>
@@ -71,7 +71,7 @@ function EngineerAccountEdit () {
         <span>예금주</span>
           <input>
           </input>
-        <span>계좌 별명</span><span className="engineer-account-edit-option">(선택)</span>
+        <span>계좌 별명</span><span className="Cleaner-account-edit-option">(선택)</span>
           <input>
           </input>
         <button type="button">취소</button>
@@ -80,31 +80,31 @@ function EngineerAccountEdit () {
 
       </div>
 
-      <div className="engineer-account-edit-add-settlement-account">
-        <img src={!addAccounts ? "/icons/add.png" : "/icons/add_selected.png"} onClick={addSettlementAccounts}/><span className="engineer-account-edit-new-accounts" onClick={addSettlementAccounts} >신규 정산 계좌</span>
+      <div className="Cleaner-account-edit-add-settlement-account">
+        <img src={!addAccounts ? "/icons/add.png" : "/icons/add_selected.png"} onClick={addSettlementAccounts}/><span className="Cleaner-account-edit-new-accounts" onClick={addSettlementAccounts} >신규 정산 계좌</span>
       </div>
 
     </div>
     </div>
 
-    <div className="engineer-account-edit-account-info">
+    <div className="Cleaner-account-edit-account-info">
 
-      <div className="engineer-account-edit-info-account">
+      <div className="Cleaner-account-edit-info-account">
         
-        <div className="engineer-account-edit-account-info-title">
+        <div className="Cleaner-account-edit-account-info-title">
 
-          <img className="engineer-account-edit-toggle-img-info" src={toggleInfo ? "/icons/toggle_down.png" : "/icons/toggle_up.png"} onClick={toggleMenuInfo} />
-          <p className="engineer-account-edit-account-info-message">정산 계좌 정보</p>
+          <img className="Cleaner-account-edit-toggle-img-info" src={toggleInfo ? "/icons/toggle_down.png" : "/icons/toggle_up.png"} onClick={toggleMenuInfo} />
+          <p className="Cleaner-account-edit-account-info-message">정산 계좌 정보</p>
 
         </div>
 
         <div className={
             toggleInfo 
-              ? "engineer-account-edit-toggle-updown-info-contents-toggledown" 
-              : "engineer-account-edit-toggle-updown-info-contents"
+              ? "Cleaner-account-edit-toggle-updown-info-contents-toggledown" 
+              : "Cleaner-account-edit-toggle-updown-info-contents"
           }
         >
-        <div className="engineer-account-edit-accout-settlement-criteria-guide">
+        <div className="Cleaner-account-edit-accout-settlement-criteria-guide">
 
           <span>
             정산 기준 안내
@@ -138,7 +138,7 @@ function EngineerAccountEdit () {
       </div>
       </div>
 
-      <div className="engineer-account-edit-account-modal-page">
+      <div className="Cleaner-account-edit-account-modal-page">
         
       </div>
 
@@ -148,4 +148,4 @@ function EngineerAccountEdit () {
 
 };
 
-export default EngineerAccountEdit;
+export default CleanerAccountEdit;
