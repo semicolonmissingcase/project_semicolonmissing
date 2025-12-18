@@ -6,6 +6,8 @@ import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import OwnerLogin from "../owner/auth/OwnerLogin.jsx";
+import EngineerInfoEdit from "../components/engineer/EngineerInfoEdit.jsx";
+import EngineerAccountEdit from "../components/engineer/EngineerAccountEdit.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,8 +45,10 @@ const router = createBrowserRouter([
           },
         ]
       },
+        ]
+      },
       {
-        path: '/qnapost',
+        path: '/engineer',
         element: <Outlet />,
         children: [
           {
@@ -53,15 +57,17 @@ const router = createBrowserRouter([
             element: <QnaPost />
           },
           {
-            // 게시판 작성
-            path: 'create',
-            element: <PostCreate />
+            path: 'engineeraccountedit',
+            element: <EngineerAccountEdit />
+          },
+          {
+            path: 'engineerinfoedit',
+            element: <EngineerInfoEdit />
           },
         ]
       },
     ]
-  }
-]);
+);
 
 export default function Router() {
   return <RouterProvider router={router} />;

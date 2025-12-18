@@ -1,0 +1,54 @@
+.all-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.engineer-account-edit-account-management {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  height: 60px;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.engineer-account-edit-toggle-img {
+  display: inline-block;
+}
+
+.engineer-account-edit-new-account-message {
+  display: inline-block;
+}
+
+.engineer-account-edit-toggle-updown-contents {
+  display: contents;
+}
+
+.engineer-account-edit-toggle-updown-contents-toggledown {
+  display: none;
+}
+
+.engineer-account-edit-account-info {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  height: 60px;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.engineer-account-edit-toggle-img-info {
+  display: inline-block;
+}
+
+.engineer-account-edit-account-info-message {
+  display: inline-block;
+}
+
+.engineer-account-edit-toggle-updown-info-contents {
+  display: contents;
+}
+
+.engineer-account-edit-toggle-updown-info-contents-toggledown {
+  display: none;
+}
