@@ -1,6 +1,6 @@
-import './CleanerMyPage.css';
+import './CleanerMyPageD.css';
 
-function CleanerMyPage () {
+function CleanerMyPageD () {
 
   return (
     <>
@@ -25,6 +25,7 @@ function CleanerMyPage () {
         <button type="button">프로필 편집</button>
         <button type="button">정보 수정</button>
       </div>
+      <div className="cleaner-my-page-buttons">
         <div className="cleaner-my-page">
         <button type="button">현재 정산 상태</button>  
         <button type="button">오늘 예정 일정</button>  
@@ -38,8 +39,14 @@ function CleanerMyPage () {
         <button type="button">정산 대기</button>
         <button type="button">완료</button>
         </div>
+      </div>
+      <div className="cleaner-my-page-wrapper">
+        <div className="">
+          대구 중구 남일동
+        </div>
+      </div>
     </>
   )
 }
 
-export default CleanerMyPage;
+export default CleanerMyPageD;

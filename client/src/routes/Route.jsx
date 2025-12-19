@@ -10,7 +10,9 @@ import CleanerAccountEdit from "../components/cleaners/CleanerAccountEdit.jsx";
 import CleanerInfoEdit from "../components/cleaners/CleanerInfoEdit.jsx";
 import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteListPreparation.jsx";
 import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
-import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
+import CleanerMyPageM from "../components/cleaners/CleanerMyPageM.jsx";
+import CleanerMyPageD from "../components/cleaners/CleanerMyPageD.jsx";
+import UserQuoteList from "../components/cleaners/UserQuoteList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -76,9 +78,17 @@ const router = createBrowserRouter([
             element: <CleanerQuoteListPreparationSave />,
           },
           {
-            path: 'mypage',
-            element: <CleanerMyPage />,
+            path: 'mypagem',
+            element: <CleanerMyPageM />,
           },
+          {
+            path: 'mypaged',
+            element: <CleanerMyPageD />,
+          },
+          {
+            path: 'userquotelist',
+            element: <UserQuoteList />,
+          }
         ]
       },
     ]
