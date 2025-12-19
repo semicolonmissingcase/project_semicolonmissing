@@ -32,7 +32,7 @@ const attributes = {
     comment: '기사 PK', 
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

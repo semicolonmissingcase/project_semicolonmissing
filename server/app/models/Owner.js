@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251217-01-create-owners.js
- * @description owners migration file
- * 251217 v1.0.0 jae init
+ * @file app/models/Owner.js
+ * @description owner model
+ * 251219 v1.0.0 jae init
  */
 
-import { DataTypes } from "sequelize";
+import dayjs from 'dayjs';
+import { DataTypes } from 'sequelize';
 
-// 테이블명 
-const tableName = 'owners';
+const modelName = 'Owner'; // 모델명
 
 // 컬럼 정의
 const attributes = {
@@ -73,38 +73,64 @@ const attributes = {
     field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '작성일', 
+    get() {
+      const val = this.getDataValue('createdAt')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+    } 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '수정일',
+    get() {
+      const val = this.getDataValue('updatedAt')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+    }     
   },
   deletedAt: {
     field: 'deleted_at',
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '삭제일',
+    get() {
+      const val = this.getDataValue('deletedAt')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+    }    
   }
 };
 
-// 옵션 
 const options = {
-  charset: 'utf8mb4',      // 테이블 문자셋 설정 (이모지 지원)
-  collate: 'utf8mb4_bin',  // 정렬 방식 설정 (영어 대소문자 구분 정렬)
-  engine: 'InnoDB'         // 사용 엔진 설정, 대량의 데이터 조회에 특화 
-};
+  tableName: 'owners',  // 실제 DB 테이블명
+  timestams: true,      // createdAt, updatedAt를 자동 관리
+  paranoid: true,       // soft delete 설정 (deletedAt 자동 관리)
+}
 
-/** @type {import('sequelize-cli').Migration} */
-export default {
-  // 마이그레이션 실행 시 호출되는 메소드 (스키마 생성, 수정)
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable(tableName, attributes, options);
+const Owner = {
+  init: (sequelize) => {
+    const define = sequelize.define(modelName, attributes, options);
+
+    // JSON으로 serialize시, 제외할 컬럼을 지정
+    define.prototype.toJSON = function() {
+      const attributes = this.get();
+      delete attributes.password;
+      delete attributes.refreshToken;
+
+      return attributes;
+    }
+
+    return define;
   },
-
-  // 마이그레이션을 롤백 시 호출되는 메소드 (스키마 제거, 수정)
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable(tableName);
+  associate: (db) => {
+    db.Owner.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'ownerId', as: 'chatRooms'});
   }
-};
+}
+
+export default Owner;

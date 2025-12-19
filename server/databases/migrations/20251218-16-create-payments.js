@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-09-create-questions.js
- * @description questions migration file
+ * @file databases/migrations/20251218-15-create-payments.js
+ * @description payments migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'questions';
+const tableName = 'payments';
 
 // 컬럼 정의
 const attributes = {
@@ -17,34 +17,31 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '질문 PK',
+    comment: '결제 PK',
   },
-  questionCode: {
-    field: 'question_code',
-    type: DataTypes.STRING(20),
+  ownerId: {
+    field: 'owner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true,
-    comment: '질문코드'
+    comment: '점주 PK',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.STRING(250),
-    allowNull: true,
-    comment: '질문',
-  },
-  questionType: {
-    field: 'question_type',
-    type: DataTypes.ENUM('RADIO', 'STRING'),
-    defaultValue: 'RADIO',
+  cleanerId: {
+    field: 'cleaner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '질문타입',
+    comment: '기사 PK',
   },
-  sortOrder: {
-    field: 'sort_order',
+  totalAmount: {
+    field: 'total_amount',
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0,
-    comment : '순서배치',
+    comment: '실제 결제 금액',
+  },
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(20),
+    allowNull: true,
+    comment: '상태(PAID, CANCELED)'
   },
   createdAt: {
     field: 'created_at',

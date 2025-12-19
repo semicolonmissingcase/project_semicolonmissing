@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-09-create-questions.js
- * @description questions migration file
+ * @file databases/migrations/20251218-14-create-chat_messages.js
+ * @description chatMessages migration file
  * 251218 v1.0.0 jae init
  */
 
-import { DataTypes } from "sequelize";
+import { DataTypes, TINYINT } from "sequelize";
 
 // 테이블명 
-const tableName = 'questions';
+const tableName = 'chat_messages';
 
 // 컬럼 정의
 const attributes = {
@@ -17,34 +17,38 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '질문 PK',
+    comment: '채팅메세지 PK',
   },
-  questionCode: {
-    field: 'question_code',
-    type: DataTypes.STRING(20),
+  chatRoomId: {
+    field: 'chat_room_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true,
-    comment: '질문코드'
+    comment: '채팅방 PK',
   },
   content: {
     field: 'content',
-    type: DataTypes.STRING(250),
-    allowNull: true,
-    comment: '질문',
-  },
-  questionType: {
-    field: 'question_type',
-    type: DataTypes.ENUM('RADIO', 'STRING'),
-    defaultValue: 'RADIO',
+    type: DataTypes.STRING(2000),
     allowNull: false,
-    comment: '질문타입',
+    comment: '내용', 
   },
-  sortOrder: {
-    field: 'sort_order',
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  isRead: {
+    field: 'is_read',
+    type: TINYINT(1),
     defaultValue: 0,
-    comment : '순서배치',
+    allowNull: false,
+    comment: '읽음 여부',
+  },
+  senderId: {
+    field: 'sender_id',
+    type: DataTypes.BIGINT,
+    allowNull: false,
+    comment: '발신자',
+  },
+  senderRole: {
+    field: 'sender_role',
+    type: DataTypes.STRING(10),
+    allowNull: false,
+    comment: '발신자 역할',
   },
   createdAt: {
     field: 'created_at',
@@ -52,18 +56,6 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
-    field: 'updated_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '수정일',
-  },
-  deletedAt: {
-    field: 'deleted_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '삭제일',
-  }
 };
 
 // 옵션 

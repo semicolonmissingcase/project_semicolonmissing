@@ -38,7 +38,7 @@ const attributes = {
     comment: '견적설명',
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

@@ -4,7 +4,7 @@
  * 251217 v1.0.0 jae 최초 작성 
  */
 
-import '../../configs/env.config';
+import '../../configs/env.config.js';
 
 export default {
   development: {

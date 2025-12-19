@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-17-create-templates.js
- * @description templates migration file
+ * @file databases/migrations/20251218-18-create-certifications.js
+ * @description certifications migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'templates';
+const tableName = 'certifications';
 
 // 컬럼 정의
 const attributes = {
@@ -17,7 +17,7 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '템플릿 PK',
+    comment: '자격증 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
@@ -25,20 +25,50 @@ const attributes = {
     allowNull: false,
     comment: '기사 PK',
   },
-  estimatedAmount: {
-    field: 'estimated_amount',
-    type: DataTypes.INTEGER,
+  name: {
+    field: 'name',
+    type: DataTypes.STRING(30),
     allowNull: false,
-    comment: '견적 금액',
+    comment: '자격증제목'
   },
-  description: {
-    field: 'description',
+  number: {
+    field: 'number',
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    comment: '자격증번호',
+  },
+  image: {
+    field: 'image',
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    comment: '자격증이미지',
+  },
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(30),
+    allowNull: true,
+    comment: '상태(보류, 승인, 거절)' 
+  },
+  submittedAt: {
+    field: 'submitted_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '업로드한 시간',
+  },
+  reviewedAt: {
+    field: 'reviewed_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '승인/반려 시간',
+  },
+  reason: {
+    field: 'reason',
     type: DataTypes.STRING(400),
     allowNull: true,
-    comment: '견적설명',
+    comment: '반려시 사유'
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

@@ -43,7 +43,7 @@ const attributes = {
     comment: '추가요청사항'
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

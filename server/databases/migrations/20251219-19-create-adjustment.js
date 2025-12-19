@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-13-create-chatRooms.js
- * @description chatRooms migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251219-19-create-adjustments.js
+ * @description adjustments migration file
+ * 251219 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'chatRooms';
+const tableName = 'adjustments';
 
 // 컬럼 정의
 const attributes = {
@@ -17,39 +17,61 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '채팅방 PK',
-  },
-  ownerId: {
-    field: 'owner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '점주 PK',
+    comment: '기사정산 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true, 
     comment: '기사 PK',
   },
-  estimateId: {
-    field: 'estimate_id',
-    type: DataTypes.BIGINT.UNSIGNED,
+  bank: {
+    field: 'bank',
+    type: DataTypes.STRING(20),
+    allowNull: false, 
+    comment: '은행',
+  },
+  depositor: {
+    field: 'depositor',
+    type: DataTypes.STRING(50),
     allowNull: false,
-    unique: true,
-    comment: '견적서 PK',
+    comment: '예금주',
+  },
+  accountNumber: {
+    field: 'account_nuber',
+    type: DataTypes.STRING(20), // TO-DO 추가 논의 필요
+    allowNull: false,
+    comment: '계좌번호',
+  },
+  isPrimary: {
+    field: 'is_primary',
+    type: DataTypes.BOOLEAN,
+    allowNull: true,   // TO-DO 추가 논의 필요
+    comment: '주계좌여부'
   },
   status: {
     field: 'status',
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(20),
     allowNull: false,
-    comment: '채팅방 상태',
+    comment: '상태(완료/미완료)'
+  },
+  settlementAmount: {
+    field: 'settlement_amount',
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    comment: '정산금액'
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 
+  },
+  upatedAt: {
+    field: 'updated_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '수정일',
   },
   deletedAt: {
     field: 'deleted_at',

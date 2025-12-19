@@ -45,7 +45,7 @@ const attributes = {
     comment: '리프레시 토큰',
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-17-create-templates.js
- * @description templates migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251218-19-create-driverRegions.js
+ * @description driverRegions migration file
+ * 251219 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'templates';
+const tableName = 'driverRegions';
 
 // 컬럼 정의
 const attributes = {
@@ -17,7 +17,7 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '템플릿 PK',
+    comment: '매핑 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
@@ -25,29 +25,17 @@ const attributes = {
     allowNull: false,
     comment: '기사 PK',
   },
-  estimatedAmount: {
-    field: 'estimated_amount',
-    type: DataTypes.INTEGER,
+  locationId: {
+    field: 'location_id',
+    type: DataTypes.BIGINT,
     allowNull: false,
-    comment: '견적 금액',
-  },
-  description: {
-    field: 'description',
-    type: DataTypes.STRING(400),
-    allowNull: true,
-    comment: '견적설명',
+    comment: '지역 PK',
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 
-  },
-  upatedAt: {
-    field: 'updated_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '수정일',
   },
   deletedAt: {
     field: 'deleted_at',

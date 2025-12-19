@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-16-create-estimates.js
- * @description estimates migration file
+ * @file databases/migrations/20251218-13-create-chat_rooms.js
+ * @description chatRooms migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'estimates';
+const tableName = 'chat_rooms';
 
 // 컬럼 정의
 const attributes = {
@@ -17,43 +17,39 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '견적서 PK',
+    comment: '채팅방 PK',
+  },
+  ownerId: {
+    field: 'owner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '점주 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
+    unique: true, 
     comment: '기사 PK',
   },
-  estimatedAmount: {
-    field: 'estimated_amount',
-    type: DataTypes.INTEGER,
+  estimateId: {
+    field: 'estimate_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '견적 금액',
-  },
-  description: {
-    field: 'description',
-    type: DataTypes.STRING(400),
-    allowNull: true,
-    comment: '견적설명',
+    unique: true,
+    comment: '견적서 PK',
   },
   status: {
     field: 'status',
-    type: DataTypes.STRING(20),
-    allowNull: true,
-    comment: '상태(전송, 수락)'
+    type: DataTypes.STRING(100),
+    allowNull: false,
+    comment: '채팅방 상태',
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 
-  },
-  upatedAt: {
-    field: 'updated_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '수정일',
   },
   deletedAt: {
     field: 'deleted_at',

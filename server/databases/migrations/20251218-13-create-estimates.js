@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-17-create-templates.js
- * @description templates migration file
+ * @file databases/migrations/20251218-16-create-estimates.js
+ * @description estimates migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'templates';
+const tableName = 'estimates';
 
 // 컬럼 정의
 const attributes = {
@@ -17,7 +17,7 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '템플릿 PK',
+    comment: '견적서 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
@@ -37,8 +37,14 @@ const attributes = {
     allowNull: true,
     comment: '견적설명',
   },
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(20),
+    allowNull: true,
+    comment: '상태(전송, 수락)'
+  },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

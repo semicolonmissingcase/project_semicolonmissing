@@ -50,7 +50,7 @@ const attributes = {
     comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

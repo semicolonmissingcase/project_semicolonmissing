@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-15-create-payments.js
- * @description payments migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251219-21-create-locations.js
+ * @description locations migration file
+ * 251219 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'payments';
+const tableName = 'locations';
 
 // 컬럼 정의
 const attributes = {
@@ -17,49 +17,19 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '결제 PK',
+    comment: '지역구 PK',
   },
-  ownerId: {
-    field: 'owner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '점주 PK',
-  },
-  cleanerId: {
-    field: 'cleaner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '기사 PK',
-  },
-  totalAmount: {
-    field: 'total_amount',
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    comment: '실제 결제 금액',
-  },
-  status: {
-    field: 'status',
+  city: {
+    field: 'city',
     type: DataTypes.STRING(20),
-    allowNull: true,
-    comment: '상태(PAID, CANCELED)'
+    allowNull: false,
+    comment: '시/도',
   },
-  createdAt: {
-    field: 'credated_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '작성일', 
-  },
-  upatedAt: {
-    field: 'updated_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '수정일',
-  },
-  deletedAt: {
-    field: 'deleted_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '삭제일',
+  district: {
+    field: 'district',
+    type: DataTypes.STRING(30),
+    allowNull: false,
+    comment: '시/군/구',
   }
 };
 

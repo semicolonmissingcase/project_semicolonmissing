@@ -56,7 +56,7 @@ const attributes = {
     comment: '매장번호',
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 

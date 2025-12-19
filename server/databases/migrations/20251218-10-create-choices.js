@@ -39,7 +39,7 @@ const attributes = {
     comment : '질문내 보기 순서',
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 
