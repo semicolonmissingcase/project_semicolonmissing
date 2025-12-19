@@ -1,0 +1,51 @@
+.all-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.wrapper-cleaner-info-edit {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.cleaner-info-edit-form {
+  display: flex;
+  flex-direction: column; 
+}
+
+.cleaner-info-edit-radio {
+  display: none;
+}
+
+.cleaner-info-edit-label {
+  width: 100px;
+  height: 50px;
+  border: 1px solid var(--color-gray);
+  background-color: var(--color-light-gray);
+}
+
+.cleaner-info-edit-label-selected {
+  background-color: var(--color-gray);
+}
+
+.cleaner-info-edit-radio-notification {
+  display: none;
+}
+
+.cleaner-info-edit-label-notification {
+  width: 100px;
+  height: 50px;
+  border: 1px solid var(--color-gray);
+  background-color: var(--color-light-gray);
+}
+
+.cleaner-info-edit-lobel-notification-selected {
+  background-color: var(--color-gray);
+}

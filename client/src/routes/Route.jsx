@@ -6,6 +6,11 @@ import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import OwnerLogin from "../owner/auth/OwnerLogin.jsx";
+import CleanerAccountEdit from "../components/cleaners/CleanerAccountEdit.jsx";
+import CleanerInfoEdit from "../components/cleaners/CleanerInfoEdit.jsx";
+import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteListPreparation.jsx";
+import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
+import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,8 +48,10 @@ const router = createBrowserRouter([
           },
         ]
       },
+        ]
+      },
       {
-        path: '/qnapost',
+        path: '/cleaners',
         element: <Outlet />,
         children: [
           {
@@ -53,15 +60,29 @@ const router = createBrowserRouter([
             element: <QnaPost />
           },
           {
-            // 게시판 작성
-            path: 'create',
-            element: <PostCreate />
+            path: 'accountedit',
+            element: <CleanerAccountEdit />
+          },
+          {
+            path: 'infoedit',
+            element: <CleanerInfoEdit />
+          },
+          {
+            path: 'quotelistpreparation',
+            element: <CleanerQuoteListPreparation />,
+          },
+          {
+            path: 'quotelistpreparationsave',
+            element: <CleanerQuoteListPreparationSave />,
+          },
+          {
+            path: 'mypage',
+            element: <CleanerMyPage />,
           },
         ]
       },
     ]
-  }
-]);
+);
 
 export default function Router() {
   return <RouterProvider router={router} />;

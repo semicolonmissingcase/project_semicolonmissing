@@ -1,6 +1,5 @@
 import "./PostCreate.css";
 import React, { useState } from 'react';
-import SmartEditor from '../editor/SmartEditor.jsx'; 
 
 export default function PostCreate () {
   const [title, setTitle] = useState('');
