@@ -1,10 +1,91 @@
 import "./QnaPost.css";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function QnaPost () {
-  
+  const navigate = useNavigate();
+  const [userType, setUserType] = useState('owner'); // 'owner' 또는 'cleaner'
+  const [openIndex, setOpenIndex] = useState(null); // 열린 FAQ 인덱스
+
+  // FAQ 데이터
+  const faqData = {
+    owner: [
+      { q: "제빙기 청소는 얼마나 자주 해야 하나요?", a: "일반적으로 3개월에 한 번 정기 청소를 권장합니다." },
+      { q: "청소 비용은 어떻게 되나요?", a: "제빙기 크기와 상태에 따라 5만원~15만원 사이입니다." },
+      { q: "예약 취소는 어떻게 하나요?", a: "예약 관리 페이지에서 24시간 전까지 취소 가능합니다." },
+      { q: "청소 시간은 얼마나 걸리나요?", a: "일반적으로 1~2시간 정도 소요됩니다." },
+    ],
+    cleaner: [
+      { q: "기사 등록은 어떻게 하나요?", a: "회원가입 후 기사 인증 서류를 제출하시면 됩니다." },
+      { q: "수수료는 얼마인가요?", a: "건당 결제 금액의 10%입니다." },
+      { q: "정산은 언제 되나요?", a: "매주 월요일에 전주 작업분이 정산됩니다." },
+      { q: "보험은 어떻게 되나요?", a: "작업 중 발생한 사고는 플랫폼 보험으로 처리됩니다." },
+    ]
+  };
+
+  // 토글 함수
+  const toggleFaq = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  function qnaPostCreate() {
+    navigate('/qnaposts/create');
+  }
+
   return (
-    <>
-    <h1>QnA게시판입니다</h1>
-    </>
+    <div className="qnapost-main-container">
+      <div className="all-container qnapost-container">
+        <h2>주요 문의 사항</h2>
+
+        {/* 사용자 유형 선택 */}
+        <div className="qnapost-btn-container">
+          <button 
+            className={`btn-medium ${userType === 'owner' ? 'bg-darkblue' : 'bg-blue'}`}
+            onClick={() => {
+              setUserType('owner');
+              setOpenIndex(null); // 타입 변경 시 모두 닫기
+            }}
+          >
+            점주님용
+          </button>
+          <button 
+            className={`btn-medium ${userType === 'cleaner' ? 'bg-darkblue' : 'bg-blue'}`}
+            onClick={() => {
+              setUserType('cleaner');
+              setOpenIndex(null);
+            }}
+          >
+            기사님용
+          </button>
+        </div>
+
+        {/* FAQ 아코디언 */}
+        <div className="qnapost-qna-box">
+          {faqData[userType].map((faq, index) => (
+            <div key={index} className="qnapost-item-wrapper">
+              <div 
+                className="qnapost-item"
+                onClick={() => toggleFaq(index)}
+              >
+                <span>Q. {faq.q}</span>
+                <span className="qnapost-arrow">
+                  {openIndex === index ? '▲' : '▼'}
+                </span>
+              </div>
+              {openIndex === index && (
+                <div className="qnapost-answer">
+                  A. {faq.a}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* 문의하기 버튼 */}
+        <button className="bg-blue btn-big" onClick={qnaPostCreate}>
+          1 : 1 문의하러 가기
+        </button>
+      </div>
+    </div>
   );
-};
+}

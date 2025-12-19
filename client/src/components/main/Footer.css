@@ -11,8 +11,8 @@
 }
 
 .footer-logo {
-  width: 10rem;
-  height: 10rem;
+  width: 17rem;
+  aspect-ratio: 60 / 22;
 }
 
 .footer-comments {
