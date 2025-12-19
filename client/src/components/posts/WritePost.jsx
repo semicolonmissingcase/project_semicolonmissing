@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import SmartEditor from '../editor/SmartEditor.jsx'; 
 
+// SmartEditor 관련입니다. 포스트글 써야하는 페이지에 <WrietPost /> 불러주시면 됩니다.
 export default function PostCreate () {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');

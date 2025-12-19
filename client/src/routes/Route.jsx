@@ -5,7 +5,7 @@ import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
-import OwnerLogin from "../owner/auth/OwnerLogin.jsx";
+import OwnerRegistration from "../owner/auth/OwnerRegistration.jsx";
 import Result from "./result/Result.jsx";
 
 const router = createBrowserRouter([
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
           {
             // 점주 회원가입 페이지
             path: 'owners',
-            element: <OwnerLogin />,
+            element: <OwnerRegistration />,
           },
         ]
       },

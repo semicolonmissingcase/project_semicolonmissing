@@ -10,11 +10,13 @@ export default function Result () {
 
   return (
     <div className="all-container result-container">
-      <div className="result-result-box">
+      <div className="result-box">
         <div style={{ backgroundImage: `url('/icons/success.png')` }} className="result-img"></div>
-        <h3>문의글 작성이 완료되었습니다.</h3>
-        <p>기사님들이 내용을 검토한 후<br />
-          견적서를 보내드립니다.</p>
+        <div className="result-text">
+          <h3>문의글 작성이 완료되었습니다.</h3>
+          <p>기사님들이 내용을 검토한 후<br />
+            견적서를 보내드립니다.</p>
+        </div>
       </div>
       <div className="result-btn-containver">
         <button type="button" className="bg-light btn-medium" onClick={mainPage}>

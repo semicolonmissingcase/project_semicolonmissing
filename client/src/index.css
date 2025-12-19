@@ -25,20 +25,16 @@
   flex-direction: column;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
 .all-container {
   max-width: 1200px;
+  min-height: 100%;
   margin: auto;
 }
 
 /* 버튼 관련 */
 button {
+  background: none;
   border: none;
-  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -52,18 +48,21 @@ button {
   width: 300px;
   height: 50px;
   font-size: 25px;
+  border-radius: 10px;
 }
 
 .btn-medium {
   width: 12rem;
   height: 3rem;
   font-size: 1.3rem;
+  border-radius: 10px;
 }
 
 .btn-small {
-  width: 90px;
-  height: 30px;
-  font-size: 16px;
+  width: 7.5rem;
+  height: 2rem;
+  font-size: 1rem;
+  border-radius: 10px;
 }
 
 /* 배경 관련 */
@@ -92,11 +91,26 @@ button {
   color: var(--color-white);
 }
 
+.bg-white {
+  background-color: var(--color-white);
+  color: var(--color-dark-blue);
+}
+
 .bg-img-kakao {
-  background-image: url("/icons/kakao.png");
+  width: 20rem;
+  aspect-ratio: 300 / 45;
+  border-radius: 12px;
+  background-image: url("/icons/kakao_login.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+}
+
+/* 그림자 관련 */
+.card-shadow {
+  box-shadow: 9px 9px 20px rgba(64, 87, 146, 0.4),
+             -9px -9px 23px var(--color-white);
 }
 
 /* 절취선 */
@@ -130,12 +144,39 @@ button {
   padding: 0 10px;
   width: 300px;
   height: 40px;
+  border: 1px solid var(--color-dark-blue);
   border-radius: 10px;
 }
 
 /* 캐릭터 관련 */
 .ice-doctor-character {
   background-image: url('/icons/ice-doctor-character.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* 캐릭터+로고 */
+.ice-doctor-logo-character {
+  background-image: url('/icons/ice_doctor_logo_and_ character.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* 로고관련 */
+.ice-doctor-logo1 {
+  background-image: url('/icons/ice_doctor_logo_1.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.ice-doctor-logo2 {
+  background-image: url('/icons/ice_doctor_logo_2.svg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

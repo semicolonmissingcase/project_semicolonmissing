@@ -1,4 +1,4 @@
-import "./OwnerLogin.css";
+import "./OwnerRegistration.css";
 
 export default function OwnerLogin () {
   
