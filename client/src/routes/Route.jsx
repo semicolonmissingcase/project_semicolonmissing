@@ -52,10 +52,6 @@ const router = createBrowserRouter([
           },
         ]
       },
-        ]
-      },
-        ]
-      },
       {
         path: '/cleaners',
         element: <Outlet />,
@@ -97,6 +93,7 @@ const router = createBrowserRouter([
         element: <ChatList />
       },
     ]
+  }]
 );
 
 export default function Router() {
