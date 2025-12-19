@@ -12,6 +12,10 @@ import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteList
 import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
 import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
 
+// 채팅 관련 import
+import ChatMain from "../components/chat/ChatMain.jsx";
+import ChatList from "../components/chat/chatList.jsx";
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -50,6 +54,8 @@ const router = createBrowserRouter([
       },
         ]
       },
+        ]
+      },
       {
         path: '/cleaners',
         element: <Outlet />,
@@ -80,6 +86,15 @@ const router = createBrowserRouter([
             element: <CleanerMyPage />,
           },
         ]
+      },
+      // 채팅 관련 라우트
+      {
+        path: '/chatroom/:id',
+        element: <ChatMain />
+      },
+      {
+        path: '/chatlist',
+        element: <ChatList />
       },
     ]
 );

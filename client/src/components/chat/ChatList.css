@@ -1,0 +1,139 @@
+.chatlist-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 280px);
+}
+
+.chatlist-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* 검색창 */
+.chatlist-search-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.chatlist-search-box input {
+  width: 100%;
+  padding: 12px 15px 12px 40px;
+  border: none;
+  border-radius: 8px;
+  background-color: #eef1f7;
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-gray);
+}
+
+/* 탭 메뉴 */
+.chatlist-tabs {
+  display: flex;
+  gap: 15px;
+  border-bottom: 1px solid var(--color-light-gray);
+  margin-bottom: 15px;
+}
+
+.chatlist-tabs button {
+  padding: 10px 5px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--color-gray);
+  position: relative;
+}
+
+.chatlist-tabs button.active {
+  color: var(--color-black);
+  font-weight: bold;
+}
+
+.chatlist-tabs button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-dark-blue);
+}
+
+/* 리스트 아이템 카드 스타일 */
+.chatlist-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 12px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.chatlist-item:hover {
+  background-color: #f8f9fa;
+}
+
+.chatlist-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #d1e1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.chatlist-info {
+  flex: 1;
+}
+
+.info-top {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.cleaner-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.cleaner-name.deleted {
+  color: var(--color-gray);
+}
+
+.cleaner-location {
+  font-size: 0.85rem;
+  color: var(--color-gray);
+}
+
+.info-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.last-message {
+  font-size: 0.9rem;
+  color: var(--color-black);
+  margin: 0;
+}
+
+.last-time {
+  font-size: 0.8rem;
+  color: var(--color-gray);
+}
