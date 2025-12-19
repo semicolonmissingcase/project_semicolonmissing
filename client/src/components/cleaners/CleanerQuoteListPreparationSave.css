@@ -9,12 +9,12 @@ button {
   cursor: pointer;
 }
 
-.Cleaner-quotation-preparation-save-wrapper {
+.cleaner-quotation-preparation-save-wrapper {
   display: flex;
   flex-direction: column;
 }
 
-.Cleaner-quotation-preparation-quotation-saves {
+.cleaner-quotation-preparation-quotation-saves {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;

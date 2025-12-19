@@ -6,10 +6,11 @@ import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import OwnerLogin from "../owner/auth/OwnerLogin.jsx";
-import CleanerInfoEdit from "../components/cleaner/CleanerInfoEdit.jsx";
-import CleanerAccountEdit from "../components/cleaner/CleanerAccountEdit.jsx";
-import CleanerQuotationPreparation from "../components/cleaner/CleanerQuotationPreparation.jsx";
-import CleanerQuotationPreparationSave from "../components/cleaner/CleanerQuotationPreparationSave.jsx";
+import CleanerAccountEdit from "../components/cleaners/CleanerAccountEdit.jsx";
+import CleanerInfoEdit from "../components/cleaners/CleanerInfoEdit.jsx";
+import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteListPreparation.jsx";
+import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
+import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: '/Cleaner',
+        path: '/cleaners',
         element: <Outlet />,
         children: [
           {
@@ -59,20 +60,24 @@ const router = createBrowserRouter([
             element: <QnaPost />
           },
           {
-            path: 'cleaneraccountedit',
+            path: 'accountedit',
             element: <CleanerAccountEdit />
           },
           {
-            path: 'cleanerinfoedit',
+            path: 'infoedit',
             element: <CleanerInfoEdit />
           },
           {
-            path: 'cleanerquotationpreparation',
-            element: <CleanerQuotationPreparation />,
+            path: 'quotelistpreparation',
+            element: <CleanerQuoteListPreparation />,
           },
           {
-            path: 'cleanerquotationpreparationsave',
-            element: <CleanerQuotationPreparationSave />,
+            path: 'quotelistpreparationsave',
+            element: <CleanerQuoteListPreparationSave />,
+          },
+          {
+            path: 'mypage',
+            element: <CleanerMyPage />,
           },
         ]
       },

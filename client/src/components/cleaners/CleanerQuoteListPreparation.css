@@ -9,12 +9,12 @@ button {
   cursor: pointer;
 }
 
-.Cleaner-quotation-preparation-wrapper {
+.cleaner-quotation-preparation-wrapper {
   display: flex;
   flex-direction: column;
 }
 
-.Cleaner-quotation-preparation-profile {
+.cleaner-quotation-preparation-profile {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -23,7 +23,7 @@ button {
   height:auto;
 }
 
-.Cleaner-quotation-preparation-quotation {
+.cleaner-quotation-preparation-quotation {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -32,13 +32,13 @@ button {
   height:auto;
 }
 
-.Cleaner-quotation-preparation-profile-img {
+.cleaner-quotation-preparation-profile-img {
   width: 100px;
   height: auto;
   border-radius: 50%;
 }
 
-.Cleaner-quotation-preparation-quotation-price {
+.cleaner-quotation-preparation-quotation-price {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -46,7 +46,7 @@ button {
   width: 260px;
 }
 
-.Cleaner-quotation-preparation-quotation-details {
+.cleaner-quotation-preparation-quotation-details {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
