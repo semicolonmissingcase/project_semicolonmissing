@@ -1,73 +1,42 @@
 /**
- * @file databases/migrations/20251217-01-create-owners.js
- * @description owners migration file
- * 251217 v1.0.0 jae init
+ * @file databases/migrations/20251218-10-create-choices.js
+ * @description choices migration file
+ * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'owners';
+const tableName = 'choices';
 
 // 컬럼 정의
 const attributes = {
   id: {
     field: 'id',
     type: DataTypes.BIGINT.UNSIGNED,
-    primaryKey: true, 
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '점주 PK',
+    comment: '선택 PK',
   },
-  name: {
-    field: 'name',
-    type: DataTypes.STRING(50),
+  questionId: {
+    field: 'question_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 이름',
+    comment: '질문 PK',
   },
-  gender: {
-    field: 'gender',
-    type: DataTypes.CHAR(1),
-    allowNull: false,
-    comment: '점주 성별',
-  },
-  email: {
-    field: 'email',
-    type: DataTypes.STRING(100),
-    allowNull: false,
-    unique: true,
-    comment: '이메일(로그인ID)',
-  },
-  password: {
-    field: 'password',
-    type: DataTypes.STRING(255),
-    allowNull: false,
-    comment: '비밀번호',
-  },
-  provider: {
-    field: 'provider',
+  content: {
+    field: 'content',
     type: DataTypes.STRING(10),
     allowNull: false,
-    comment: '로그인 제공자(NONE, KAKAO, NAVER...)',
+    comment: '보기 문구 저장',
   },
-  phoneNumber: {
-    field: 'phone_number',
-    type: DataTypes.STRING(13),
+  sortOrder: {
+    field: 'sort_order',
+    type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,  // 중복 가입 방지
-    comment: '점주 전화번호',
-  },
-  profile: {
-    field: 'profile',
-    type: DataTypes.STRING(100),
-    allowNull: true, 
-    comment: '점주 프로필',
-  },
-  refreshToken: {
-    field: 'refresh_token',
-    type: DataTypes.STRING(255),
-    allowNull: true,
-    comment: '리프레시 토큰',
+    defaultValue: 0,
+    comment : '질문내 보기 순서',
   },
   createdAt: {
     field: 'created_at',
