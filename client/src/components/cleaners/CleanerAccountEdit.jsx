@@ -20,11 +20,10 @@ function CleanerAccountEdit () {
 
   const [selectAddAccount, setSelectAddAccount] = useState(false);
 
-  const AddAccountButtonSmallCat = () => {
-
-    setSelectAddAccount(!selectAddAccount);
-
-  }
+  const toggleAddAccount = (e) => {
+  e.stopPropagation();           // 바깥 토글로 클릭 전파 방지
+  setSelectAddAccount(prev => !prev);
+  };
 
   return (
 
@@ -57,7 +56,7 @@ function CleanerAccountEdit () {
       <div className="cleaner-account-edit-new-account-title-wrapper">
 
           <div className="cleaner-account-edit-add-button"
-            onClick={AddAccountButtonSmallCat}>
+            onClick={toggleAddAccount}>
           <div className={
             selectAddAccount
               ? "cleaner-account-edit-toggle-updown-form-contents-toggledown" 
@@ -75,6 +74,8 @@ function CleanerAccountEdit () {
       </div>
       </div>
 
+      {selectAddAccount && (
+        <div className="cleaner-account-edit-form-wrapper">
         <span>정산 계좌</span>
         <form className="cleaner-account-edit-form">
           <label htmlFor="banks">은행</label>
@@ -103,7 +104,8 @@ function CleanerAccountEdit () {
         <button type="submit">저장</button>
         </div>
         </form>
-      
+        </div>
+        )}
       </div>
       </div>
 

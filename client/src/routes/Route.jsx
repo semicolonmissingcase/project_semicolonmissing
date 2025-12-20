@@ -10,8 +10,7 @@ import CleanerAccountEdit from "../components/cleaners/CleanerAccountEdit.jsx";
 import CleanerInfoEdit from "../components/cleaners/CleanerInfoEdit.jsx";
 import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteListPreparation.jsx";
 import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
-import CleanerMyPageM from "../components/cleaners/CleanerMyPageM.jsx";
-import CleanerMyPageD from "../components/cleaners/CleanerMyPageD.jsx";
+import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
 import UserQuoteList from "../components/cleaners/UserQuoteList.jsx";
 
 const router = createBrowserRouter([
@@ -62,30 +61,32 @@ const router = createBrowserRouter([
             element: <QnaPost />
           },
           {
+            // 계좌 수정 페이지
             path: 'accountedit',
             element: <CleanerAccountEdit />
           },
           {
+            // 정보 수정 페이지
             path: 'infoedit',
             element: <CleanerInfoEdit />
           },
           {
+            // 기사 견적 작성 페이지
             path: 'quotelistpreparation',
             element: <CleanerQuoteListPreparation />,
           },
           {
+            // 기사 견적 작성 임시저장 페이지
             path: 'quotelistpreparationsave',
             element: <CleanerQuoteListPreparationSave />,
           },
-          {
-            path: 'mypagem',
-            element: <CleanerMyPageM />,
+          { 
+            // 마이페이지
+            path: 'mypage',
+            element: <CleanerMyPage />,
           },
           {
-            path: 'mypaged',
-            element: <CleanerMyPageD />,
-          },
-          {
+            // 유저 견적 작성 페이지
             path: 'userquotelist',
             element: <UserQuoteList />,
           }
