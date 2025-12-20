@@ -9,7 +9,7 @@ function CleanerQuotationPreparation () {
 
     <h3>자주 쓰는 견적서 양식</h3>
 
-    <div calssName="cleaner-quotation-preparation-wrapper">
+    <div classsName="cleaner-quotation-preparation-wrapper">
 
       <div className="cleaner-quotation-preparation-profile">
 
@@ -34,7 +34,7 @@ function CleanerQuotationPreparation () {
           {/* 그.. 코드로 적어서 필터? 역할 하는 기호로 숫자만 쓸 수 있게.. 하기 */}
 
           <label htmlFor="details">견적 설명</label>
-          <input name="details" id="details" type="text" placeholder="견적서 작성" className="cleaner-quotation-preparation-quotation-details" / >  
+          <input name="details" id="details" type="text" placeholder="견적서 작성" className="cleaner-quotation-preparation-quotation-details" />  
 
           <button type="button">작성 취소</button>
           <button type="submit">임시 저장</button>

@@ -57,7 +57,7 @@ const router = createBrowserRouter([
       {
         path: '/cleaners',
         element: <Outlet />,
-        cildren: [
+        children: [
            {
             path: 'accountedit',
             element: <CleanerAccountEdit />
