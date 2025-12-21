@@ -1,5 +1,5 @@
 import { useState } from "react";
-import './CleanerAccountEdit.css';
+import './CleanersAccountEdit.css';
 
 function CleanerAccountEdit () {
 

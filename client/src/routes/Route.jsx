@@ -6,12 +6,24 @@ import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import OwnerLogin from "../owner/auth/OwnerLogin.jsx";
+<<<<<<< Updated upstream
 import CleanerAccountEdit from "../components/cleaners/CleanerAccountEdit.jsx";
 import CleanerInfoEdit from "../components/cleaners/CleanerInfoEdit.jsx";
 import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteListPreparation.jsx";
 import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
 import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
 import UserQuoteList from "../components/cleaners/UserQuoteList.jsx";
+=======
+import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
+import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
+import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
+import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
+import CleanersMyPage from "../components/cleaners/CleanersMyPage.jsx";
+import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
+import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
+import CleanersUserQuoteList from "../components/cleaners/CleanersUSerQuoteList.jsx";
+import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUSerQuoteListDetails.jsx";
+>>>>>>> Stashed changes
 
 const router = createBrowserRouter([
   {
@@ -63,33 +75,62 @@ const router = createBrowserRouter([
           {
             // 계좌 수정 페이지
             path: 'accountedit',
-            element: <CleanerAccountEdit />
+            element: <CleanersAccountEdit />
           },
           {
+<<<<<<< Updated upstream
+=======
+            // 계좌 저장 페이지
+            path: 'accountsave',
+            element: <CleanersAccountSave />,
+          },
+          {
+>>>>>>> Stashed changes
             // 정보 수정 페이지
             path: 'infoedit',
-            element: <CleanerInfoEdit />
+            element: <CleanersInfoEdit />
           },
           {
+<<<<<<< Updated upstream
+=======
+            path: 'profileedit',
+            element: <CleanersProfileEdit />,
+          },
+          { 
+            // 마이페이지
+            path: 'mypage',
+            element: <CleanersMyPage />,
+          },
+          {
+>>>>>>> Stashed changes
             // 기사 견적 작성 페이지
             path: 'quotelistpreparation',
-            element: <CleanerQuoteListPreparation />,
+            element: <CleanersQuoteListPreparation />,
           },
           {
             // 기사 견적 작성 임시저장 페이지
             path: 'quotelistpreparationsave',
+<<<<<<< Updated upstream
             element: <CleanerQuoteListPreparationSave />,
           },
           { 
             // 마이페이지
             path: 'mypage',
             element: <CleanerMyPage />,
+=======
+            element: <CleanersQuoteListPreparationSave />,
+>>>>>>> Stashed changes
           },
           {
             // 유저 견적 작성 페이지
             path: 'userquotelist',
-            element: <UserQuoteList />,
-          }
+            eleemnt: <CleanersUserQuoteList />,
+          },
+          {
+            // 유저 견적 작성 페이지 상세
+            path: 'userquotelistdetails',
+            element: <CleanersUserQuoteListDetails />,
+          },
         ]
       },
     ]

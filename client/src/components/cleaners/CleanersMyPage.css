@@ -16,6 +16,7 @@ button {
   border-radius: 10px;
   padding: 8px 12px;
   width: 90%;
+  background-color: var(--color-light-blue);
 }
 
 .cleaner-my-page-photo-frame {

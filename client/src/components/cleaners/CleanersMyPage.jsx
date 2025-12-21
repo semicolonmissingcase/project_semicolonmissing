@@ -1,4 +1,4 @@
-import './CleanerMyPage.css';
+import './CleanersMyPage.css';
 
 function CleanerMyPage () {
 
@@ -6,7 +6,8 @@ function CleanerMyPage () {
     <>
     <div className="cleaner-my-page-div">
       <div className="cleaner-my-page-wrapper">
-      <h3 className="cleaner-my-page-title">프로필 편집</h3>
+        <span>안녕하세요, 김기사 기사님!</span>
+      <h3 className="cleaner-my-page-title">총 정산금액: 3,000,000원</h3>
 
       <span className="cleaner-my-page-notice">※회원가입 시에 업로드한 사진을 교체하시려면 관리자에 문의 바랍니다.</span>
 
@@ -14,9 +15,7 @@ function CleanerMyPage () {
         <div className="cleaner-my-page-photo-frame">
         <img className="cleaner-my-page-profile-img" src="/icons/default-profile.png"/>
         </div>
-        <div className="">
-          <h4>안녕하세요, 김기사 기사님!</h4>
-          <span>총 정산금액: <br/> 3,000,000원</span>
+        <div className="c">
           <span>오늘의 의뢰 건수: 10건</span>
           <span>오늘의 예약 건수: 1건</span>
         </div>
