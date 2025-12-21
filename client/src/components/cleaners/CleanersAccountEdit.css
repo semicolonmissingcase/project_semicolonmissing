@@ -9,13 +9,13 @@ button {
   cursor: pointer;
 }
 
-.cleaner-account-edit-wrapper {
+.cleaners-account-edit-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.cleaner-account-edit-account-management {
+.cleaners-account-edit-account-management {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -25,76 +25,76 @@ button {
   height:auto;
 }
 
-.cleaner-account-edit-account-management-title {
+.cleaners-account-edit-account-management-title {
   display: flex;
   align-items: center;
 }
 
-.cleaner-account-edit-new-account-img {
+.cleaners-account-edit-new-account-img {
   width: 17px;
   height: 8px;
 }
 
-.cleaner-account-edit-new-account-message {
+.cleaners-account-edit-new-account-message {
   display: inline-block;
 }
 
-.cleaner-account-edit-new-account-title-wrapper {
+.cleaners-account-edit-new-account-title-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.cleaner-account-edit-new-account-wrapper {
+.cleaners-account-edit-new-account-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.cleaner-account-edit-remove-button{
+.cleaners-account-edit-remove-button{
   display: flex;
   flex-direction: column;
 }
 
-.cleaner-account-edit-add-button {
+.cleaners-account-edit-add-button {
   display: flex;
   flex-direction: column;
 }
 
-.cleaner-account-edit-add-button-text {
+.cleaners-account-edit-add-button-text {
   display: flex;
   justify-content: center;
 }
 
-.cleaner-account-edit-toggle-updown-new-contents {
+.cleaners-account-edit-toggle-updown-new-contents {
   display: block;
 }
 
-.cleaner-account-edit-toggle-updown-new-contents-toggledown {
+.cleaners-account-edit-toggle-updown-new-contents-toggledown {
   display: none;
 }
 
-.cleaner-account-edit-form {
+.cleaners-account-edit-form {
   display: flex;
   flex-direction: column;
 }
 
-.cleaner-account-edit-toggle-updown-form-contents {
+.cleaners-account-edit-toggle-updown-form-contents {
   display: block;
 }
 
-.cleaner-account-edit-toggle-updown-form-contents-toggledown {
+.cleaners-account-edit-toggle-updown-form-contents-toggledown {
   display: none;
 }
 
-.cleaner-account-edit-button {
+.cleaners-account-edit-button {
   padding: 15px;
   display: flex;
   justify-content: center;
   gap: 20px;
 }
 
-.cleaner-account-edit-account-info {
+.cleaners-account-edit-account-info {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -104,32 +104,32 @@ button {
   height:auto;
 }
 
-.cleaner-account-edit-account-info-title {
+.cleaners-account-edit-account-info-title {
   display: flex;
   align-items: center;
 }
 
-.cleaner-account-edit-toggle-img-info {
+.cleaners-account-edit-toggle-img-info {
   width: 17px;
   height: 8px;
 }
 
-.cleaner-account-edit-toggle-img-info {
+.cleaners-account-edit-toggle-img-info {
   display: inline-block;
 }
 
-.cleaner-account-edit-account-info-message {
+.cleaners-account-edit-account-info-message {
   display: inline-block;
 }
 
-.cleaner-account-edit-toggle-updown-info-contents {
+.cleaners-account-edit-toggle-updown-info-contents {
   display: block;
 }
 
-.cleaner-account-edit-toggle-updown-info-contents-toggledown {
+.cleaners-account-edit-toggle-updown-info-contents-toggledown {
   display: none;
 }
 
-.cleaner-account-edit-account-modal-page {
+.cleaners-account-edit-account-modal-page {
   display: none;
 }

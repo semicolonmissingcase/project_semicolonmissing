@@ -10,7 +10,7 @@ button {
 }
 
 
-.cleaner-my-page-wrapper {
+.cleaners-my-page-wrapper {
   margin: 0 auto;
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
@@ -19,7 +19,7 @@ button {
   background-color: var(--color-light-blue);
 }
 
-.cleaner-my-page-photo-frame {
+.cleaners-my-page-photo-frame {
   width: 120px;
   height: 160px;        /* 예: 3:4 증명사진 */
   background-color: #BBDCDD;
@@ -27,13 +27,13 @@ button {
   overflow: hidden;
 }
 
-.cleaner-my-page-profile-img {
+.cleaners-my-page-profile-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.cleaner-my-page-lists {
+.cleaners-my-page-lists {
   margin: 0 auto;
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
@@ -45,15 +45,15 @@ button {
   display: flex;
 }
 
-.cleaner-my-page-lists-1-place {
+.cleaners-my-page-lists-1-place {
   font-size: 20px;
 }
 
-.cleaner-my-page-lists-user-info {
+.cleaners-my-page-lists-user-info {
   display: flex;
   flex-direction: column;
 }
 
-.cleaner-my-page-lists-status {
+.cleaners-my-page-lists-status {
   font-size: 20px;
 }

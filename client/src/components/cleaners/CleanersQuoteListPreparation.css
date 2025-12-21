@@ -9,12 +9,12 @@ button {
   cursor: pointer;
 }
 
-.cleaner-quotation-preparation-wrapper {
+.cleaners-quote-list-preparation-wrapper {
   display: flex;
   flex-direction: column;
 }
 
-.cleaner-quotation-preparation-profile {
+.cleaners-quote-list-preparation-profile {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -23,7 +23,7 @@ button {
   height:auto;
 }
 
-.cleaner-quotation-preparation-quotation {
+.cleaners-quote-list-preparation-quote-list {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -32,13 +32,13 @@ button {
   height:auto;
 }
 
-.cleaner-quotation-preparation-profile-img {
+.cleaners-quote-list-preparation-profile-img {
   width: 100px;
   height: auto;
   border-radius: 50%;
 }
 
-.cleaner-quotation-preparation-quotation-price {
+.cleaners-quote-list-preparation-quote-list-price {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -46,7 +46,7 @@ button {
   width: 260px;
 }
 
-.cleaner-quotation-preparation-quotation-details {
+.cleaners-quote-list-preparation-quote-list-details {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;

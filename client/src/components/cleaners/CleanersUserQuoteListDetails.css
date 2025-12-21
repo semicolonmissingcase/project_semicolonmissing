@@ -18,17 +18,17 @@
   background-color: var(--color-light-gray);
 }
 
-.user-quote-list-details-container {
+.cleaners-user-quote-list-details-container {
   font-size: 16px;
 }
 
-.user-quote-list-details-page-info {
+.cleaners-user-quote-list-details-page-info {
   width: 90%;
   margin: 0 auto;
   padding: 30px 0;
 }
 
-.user-quote-list-details-wrapper {
+.cleaners-user-quote-list-details-wrapper {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -39,7 +39,7 @@
   justify-self: center;
 }
 
-.user-quote-list-details-reservation-date-time-wrapper {
+.cleaners-user-quote-list-details-reservation-date-time-wrapper {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -50,40 +50,40 @@
   justify-self: center;
 }
 
-.user-quote-list-details-list-reservation-date {
+.cleaners-user-quote-list-details-list-reservation-date {
   margin-top: 10px;
   display: flex;
   gap: 20px;
 }
 
-fieldset.user-quote-list-details-border-none {
+fieldset.cleaners-user-quote-list-details-border-none {
   border: none;
   padding: 5px 15px 15px 15px;
 }
 
-legend.user-quote-list-details-border-none {
+legend.cleaners-user-quote-list-details-border-none {
   border: none;
   display: flex;
   flex-direction: column;
 }
 
-.user-quote-list-details-quote-status {
+.cleaners-user-quote-list-details-quote-status {
   color: var(--color-blue);
   font-size: 30px;
   font-weight: bold;
   white-space: nowrap;
 }
 
-.user-quote-list-details-reservation-time {
+.cleaners-user-quote-list-details-reservation-time {
   display: flex;
   flex-direction: row;
 }
 
-.user-quote-list-details-answer-display-none {
+.cleaners-user-quote-list-details-answer-display-none {
   display: none;
 }
 
-.user-quote-list-details-answer {
+.cleaners-user-quote-list-details-answer {
   width: fit-content;
   max-width: 100%;
   white-space: nowrap;
@@ -96,7 +96,7 @@ legend.user-quote-list-details-border-none {
   margin: 7px 10px;
 }
 
-.user-quote-list-details-answer-selected {
+.cleaners-user-quote-list-details-answer-selected {
   width: 100px;
   height: 40px;
   border: 1px solid var(--color-gray);
@@ -108,7 +108,7 @@ legend.user-quote-list-details-border-none {
   margin: 7px 10px;
 }
 
-.user-quote-list-details-attachment-btn {
+.cleaners-user-quote-list-details-attachment-btn {
   width: 90px;
   height: 30px;
   font-size: 16px;
@@ -120,19 +120,19 @@ legend.user-quote-list-details-border-none {
   background-color: var(--color-light-gray);
 }
 
-.user-quote-list-details-attachment {
+.cleaners-user-quote-list-details-attachment {
   display: none;
 }
 
-.user-quote-list-details-ul-title {
+.cleaners-user-quote-list-details-ul-title {
   list-style: none;
 }
 
-.user-quote-list-details-answer-binary-layout {
+.cleaners-user-quote-list-details-answer-binary-layout {
   padding: 10px 0;
 }
 
-.user-quote-list-details-radio-ui {
+.cleaners-user-quote-list-details-radio-ui {
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -143,17 +143,17 @@ legend.user-quote-list-details-border-none {
 }
 
 /* 선택되었을 때: label이 selected 상태일 경우, 그 안의 원형만 변경 */
-.user-quote-list-details-answer-binary-selected .user-quote-list-details-radio-ui {
+.cleaners-user-quote-list-details-answer-binary-selected .cleaners-user-quote-list-details-radio-ui {
   background-color: var(--color-gray);
   border-color: var(--color-gray);
   display: inline-block;
 }
 
-.user-quote-list-details-radio-input {
+.cleaners-user-quote-list-details-radio-input {
   display: none;
 }
 
-.user-quote-list-details-details-wrapper {
+.cleaners-user-quote-list-details-details-wrapper {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
@@ -164,35 +164,35 @@ legend.user-quote-list-details-border-none {
   justify-self: center;
 }
 
-.user-quote-list-details-first-card {
+.cleaners-user-quote-list-details-first-card {
   display: flex;
   flex-direction: column;
 }
 
-.user-quote-list-details-reservation-date {
+.cleaners-user-quote-list-details-reservation-date {
   display: flex;
 }
 
-.user-quote-list-details-info {
+.cleaners-user-quote-list-details-info {
   padding-top: 15px;
   font-size: 24px;
   font-weight: bold;
 }
 
-.user-quote-list-details-details {
+.cleaners-user-quote-list-details-details {
   padding-top: 15px;
   font-size: 24px;
   font-weight: bold;
 }
 
-.user-quote-list-details-details-option-info {
+.cleaners-user-quote-list-details-details-option-info {
   color: var(--color-gray);
 }
 
-.user-quote-list-details-requests-title {
+.cleaners-user-quote-list-details-requests-title {
   margin: 10px 0;
 }
 
-.user-quote-list-details-requests {
+.cleaners-user-quote-list-details-requests {
   min-height: 200px;
 }
