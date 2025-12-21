@@ -1,13 +1,13 @@
 /**
- * @file app/models/Estimate.js
- * @description Estimate model
- * 251219 v1.0.0 jae init
+ * @file app/models/Store.js
+ * @description Store model
+ * 251222 v1.0.0 jae init
  */
 
 import dayjs from 'dayjs';
 import { DataTypes } from 'sequelize';
 
-const modelName = 'Estimate'; // 모델명
+const modelName = 'Store'; // 모델명
 
 // 컬럼 정의
 const attributes = {
@@ -17,37 +17,43 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '견적서 PK',
+    comment: '매장 PK',
   },
-  cleanerId: {
-    field: 'cleaner_id',
+  ownerId: {
+    field: 'owner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '기사 PK',
+    comment: '점주 PK',
   },
-  reservationId: {
-    field: 'reservation_id',
-    type: DataTypes.BIGINT.UNSIGNED,
+  name: {
+    field: 'name',
+    type: DataTypes.STRING(50),
     allowNull: false,
-    comment: '예약 PK',
+    comment: '매장명',
   },
-  estimatedAmount: {
-    field: 'estimated_amount',
-    type: DataTypes.INTEGER,
+  addr1: {
+    field: 'addr1',
+    type: DataTypes.STRING(10),
     allowNull: false,
-    comment: '견적 금액',
+    comment: '시/도',
   },
-  description: {
-    field: 'description',
-    type: DataTypes.STRING(400),
-    allowNull: true,
-    comment: '견적설명',
+  addr2: {
+    field: 'addr2',
+    type: DataTypes.STRING(40),
+    allowNull: false,
+    comment: '군/구/읍/면/동',
   },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
+  addr3: {
+    field: 'addr3',
+    type: DataTypes.STRING(10),
+    allowNull: false,
+    comment: '상세주소',
+  },
+  phoneNumber: {
+    field: 'phone_number',
+    type: DataTypes.STRING(12),
     allowNull: true,
-    comment: '상태(전송, 수락)'
+    comment: '매장번호',
   },
   createdAt: {
     field: 'created_at',
@@ -88,22 +94,28 @@ const attributes = {
 };
 
 const options = {
-  tableName: 'estimates',     // 실제 DB 테이블명
-  timestams: true,            // createdAt, updatedAt를 자동 관리
-  paranoid: true,             // soft delete 설정 (deletedAt 자동 관리)
+  tableName: 'stores',  // 실제 DB 테이블명
+  timestams: true,      // createdAt, updatedAt를 자동 관리
+  paranoid: true,       // soft delete 설정 (deletedAt 자동 관리)
 }
 
-const Estimate = {
+const Store = {
   init: (sequelize) => {
     const define = sequelize.define(modelName, attributes, options);
+
+    // JSON으로 serialize시, 제외할 컬럼을 지정
+    define.prototype.toJSON = function() {
+      const attributes = this.get();
+
+      return attributes;
+    }
 
     return define;
   },
   associate: (db) => {
-    db.Estimate.belongsTo(db.Reservation, { targetKey: 'id', foreignKey: 'reservationId', as: 'reservation' });
-    db.Estimate.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'estimateId', as: 'chatRooms'});
-    db.Estimate.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner'});
+    db.Store.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
+    db.Store.hasMany(db.Reservation, { sourceKey: 'id', foreignKey: 'storeId', as: 'reservations' });
   }
 }
 
-export default Estimate;
+export default Store;

@@ -81,7 +81,7 @@ const attributes = {
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
     } 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,
@@ -131,6 +131,10 @@ const Cleaner = {
   associate: (db) => {
     db.Cleaner.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'chatRooms'});
     db.Cleaner.hasMany(db.Estimate, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'estimates'});
+    db.Cleaner.hasMany(db.Reservation, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'matchedReservations' });
+    db.Cleaner.hasMany(db.CleanerArea, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'areas' });
+    db.Cleaner.hasMany(db.Certificate, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'certificates' });
+    db.Cleaner.hasMany(db.Inquiry, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'inquiries' });
   }
 }
 

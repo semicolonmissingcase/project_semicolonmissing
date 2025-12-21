@@ -25,30 +25,30 @@ const attributes = {
     allowNull: false,
     comment: '채팅방 PK',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.STRING(2000),
-    allowNull: false,
-    comment: '내용', 
-  },
-  isRead: {
-    field: 'is_read',
-    type: DataTypes.TINYINT(1),
-    defaultValue: 0,
-    allowNull: false,
-    comment: '읽음 여부',
-  },
   senderId: {
     field: 'sender_id',
     type: DataTypes.BIGINT,
     allowNull: false,
     comment: '발신자',
   },
-  senderRole: {
-    field: 'sender_role',
-    type: DataTypes.STRING(10),
+  senderTye: {
+    field: 'sender_type',
+    type: DataTypes.STRING(20),
     allowNull: false,
-    comment: '발신자 역할',
+    comment: '발신자 유형(OWNER 또는 CLEANER)'
+  },
+  content: {
+    field: 'content',
+    type: DataTypes.TEXT,
+    allowNull: false,
+    comment: '내용', 
+  },
+  isRead: {
+    field: 'is_read',
+    type: TINYINT(1),
+    defaultValue: 0,
+    allowNull: false,
+    comment: '읽음 여부',
   },
   createdAt: {
     field: 'created_at',

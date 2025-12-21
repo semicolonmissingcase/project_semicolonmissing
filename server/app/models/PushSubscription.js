@@ -1,13 +1,13 @@
 /**
- * @file app/models/Estimate.js
- * @description Estimate model
- * 251219 v1.0.0 jae init
+ * @file app/models/PushSubscription.js
+ * @description PushSubscription model
+ * 251222 v1.0.0 jae init
  */
 
 import dayjs from 'dayjs';
 import { DataTypes } from 'sequelize';
 
-const modelName = 'Estimate'; // 모델명
+const modelName = 'PushSubscription'; // 모델명
 
 // 컬럼 정의
 const attributes = {
@@ -17,7 +17,13 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '견적서 PK',
+    comment: '푸시구독 PK',
+  },
+  ownerId: {
+    field: 'owner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '점주 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
@@ -25,29 +31,12 @@ const attributes = {
     allowNull: false,
     comment: '기사 PK',
   },
-  reservationId: {
-    field: 'reservation_id',
-    type: DataTypes.BIGINT.UNSIGNED,
+  endPoint: {
+    field: 'end_point',
+    type: DataTypes.STRING(255),
     allowNull: false,
-    comment: '예약 PK',
-  },
-  estimatedAmount: {
-    field: 'estimated_amount',
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    comment: '견적 금액',
-  },
-  description: {
-    field: 'description',
-    type: DataTypes.STRING(400),
-    allowNull: true,
-    comment: '견적설명',
-  },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
-    allowNull: true,
-    comment: '상태(전송, 수락)'
+    unique: true,
+    comment: '앤드 포인트',
   },
   createdAt: {
     field: 'created_at',
@@ -88,22 +77,28 @@ const attributes = {
 };
 
 const options = {
-  tableName: 'estimates',     // 실제 DB 테이블명
-  timestams: true,            // createdAt, updatedAt를 자동 관리
-  paranoid: true,             // soft delete 설정 (deletedAt 자동 관리)
+  tableName: 'push_subscriptions',  // 실제 DB 테이블명
+  timestams: true,             // createdAt, updatedAt를 자동 관리
+  paranoid: true,              // soft delete 설정 (deletedAt 자동 관리)
 }
 
-const Estimate = {
+const PushSubscription = {
   init: (sequelize) => {
     const define = sequelize.define(modelName, attributes, options);
+
+    // JSON으로 serialize시, 제외할 컬럼을 지정
+    define.prototype.toJSON = function() {
+      const attributes = this.get();
+
+      return attributes;
+    }
 
     return define;
   },
   associate: (db) => {
-    db.Estimate.belongsTo(db.Reservation, { targetKey: 'id', foreignKey: 'reservationId', as: 'reservation' });
-    db.Estimate.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'estimateId', as: 'chatRooms'});
-    db.Estimate.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner'});
+    db.PushSubscription.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
+    db.PushSubscription.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
   }
 }
 
-export default Estimate;
+export default PushSubscription;

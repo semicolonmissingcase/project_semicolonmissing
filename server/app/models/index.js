@@ -11,6 +11,22 @@ import Cleaner from './Cleaner.js';
 import Estimate from './Estimate.js';
 import ChatRoom from './ChatRoom.js';
 import ChatMessage from './ChatMessage.js';
+import Admin from './Admin.js';
+import Location from './Location.js';
+import Store from './Store.js';
+import Certification from './Certification.js';
+import DriverRegion from './DriverRegion.js';
+import Template from './Template.js';
+import PushSubscription from './PushSubscription.js';
+import Question from './Question.js';
+import Submission from './Submission.js';
+import Reservation from './Reservation.js';
+import Inquiry from './Inquiry.js';
+import Answer from './Answer.js';
+import Review from './Review.js';
+import Like from './Like.js';
+import Payment from './Payment.js';
+import Adjustment from './Adjustment.js';
 
 const db = {}; // 생성할 db 인스턴스 저장용 
 
@@ -45,6 +61,22 @@ db.Cleaner = Cleaner.init(sequelize);
 db.Estimate = Estimate.init(sequelize);
 db.ChatRoom = ChatRoom.init(sequelize);
 db.ChatMessage = ChatMessage.init(sequelize);
+db.Admin = Admin.init(sequelize);
+db.Location = Location.init(sequelize);
+db.Store = Store.init(sequelize);
+db.Certification = Certification.init(sequelize);
+db.DriverRegion = DriverRegion.init(sequelize);
+db.Template = Template.init(sequelize);
+db.PushSubscription = PushSubscription.init(sequelize);
+db.Question = Question.init(sequelize);
+db.Submission = Submission.init(sequelize);
+db.Reservation = Reservation.init(sequelize);
+db.Inquiry = Inquiry.init(sequelize);
+db.Answer = Answer.init(sequelize);
+db.Review = Review.init(sequelize);
+db.Like = Like.init(sequelize);
+db.Payment = Payment.init(sequelize);
+db.Adjustment = Adjustment.init(sequelize);
 
 // 모델 관계 설정
 Owner.associate(db);
@@ -52,5 +84,21 @@ Cleaner.associate(db);
 Estimate.associate(db);
 ChatRoom.associate(db);
 ChatMessage.associate(db);
+Admin.associate(db);
+Location.associate(db);
+Store.associate(db);
+Certification.associate(db);
+DriverRegion.associate(db);
+Template.associate(db);
+PushSubscription.associate(db);
+Question.associate(db);
+Submission.associate(db);
+Reservation.associate(db);
+Inquiry.associate(db);
+Answer.associate(db);
+Review.associate(db);
+Like.associate(db);
+Payment.associate(db);
+Adjustment.associate(db);
 
 export default db;
