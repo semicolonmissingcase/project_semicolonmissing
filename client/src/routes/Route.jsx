@@ -70,7 +70,6 @@ const router = createBrowserRouter([
             element: <CleanersAccountEdit />
           },
           {
-
             // 계좌 저장 페이지
             path: 'accountsave',
             element: <CleanersAccountSave />,
@@ -91,7 +90,6 @@ const router = createBrowserRouter([
             element: <CleanersMyPage />,
           },
           {
-
             // 기사 견적 작성 페이지
             path: 'quotelistpreparation',
             element: <CleanersQuoteListPreparation />,

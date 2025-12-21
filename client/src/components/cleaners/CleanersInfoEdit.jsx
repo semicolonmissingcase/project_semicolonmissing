@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './CleanersInfoEdit.css';
 
 function CleanerInfoEdit () {
+
   const [gender, setGender] = useState('');
 
   function changeGender(e) {
@@ -46,7 +47,23 @@ function CleanerInfoEdit () {
         <input className="cleaners-info-edit-input-border-radius" id="name" name="name"/>
 
         <label htmlFor="birth">생년월일:</label>
-        <input className="cleaners-info-edit-input-border-radius" id="birth" name="birth" type="text" placeholder="6자리" />
+        <input className="cleaners-info-edit-input-border-radius" 
+        id="birth" 
+        name="birth" 
+        type="text" 
+        inputMode="numeric"
+        pattern="[0-9]*"
+        maxLength={6}
+        placeholder="6자리"
+        onBeforeInput={(e) => {
+        if (!/^\d*$/.test(e.data)) {
+        e.preventDefault();
+        }
+        }}
+        onChange={(e) => 
+        {const onlyNumber = (e.target.value.replace(/\D/g, ""));
+        setValue(onlyNumber);
+        }} />
 
         <label htmlfor="gender">성별:</label>
 

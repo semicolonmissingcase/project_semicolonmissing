@@ -2,7 +2,7 @@ import './CleanersQuoteListPreparation.css';
 
 function CleanersQuoteListPreparation () {
 
-
+  
 
   return (
     <>
@@ -33,8 +33,9 @@ function CleanersQuoteListPreparation () {
           <input 
           name="price" 
           id="price" 
-          className="cleaners-quote-list-preparation-quote-list-price" /><span>원</span>
-          {/* 그.. 코드로 적어서 필터? 역할 하는 기호로 숫자만 쓸 수 있게.. 하기 */}
+          className="cleaners-quote-list-preparation-quote-list-price"
+          /> <span>원</span>
+          
 
           <label htmlFor="details">견적 설명</label>
           <input 
@@ -57,3 +58,4 @@ function CleanersQuoteListPreparation () {
 }
 
 export default CleanersQuoteListPreparation;
+
