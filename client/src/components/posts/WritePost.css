@@ -1,4 +1,75 @@
-.all-container {
+.writepost-form {
   width: 100%;
   padding: 20px;
+}
+
+.writepost-form-group {
+  margin-bottom: 25px;
+}
+
+.writepost-form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #495057;
+  font-size: 15px;
+}
+
+.writepost-title,
+.writepost-category {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 15px;
+  transition: border-color 0.2s ease;
+}
+
+.writepost-title:focus,
+.writepost-category:focus {
+  outline: none;
+  border-color: var(--color-blue);
+}
+
+.writepost-category {
+  cursor: pointer;
+}
+
+.smart-editor-wrapper {
+  width: 100%;
+  min-height: 400px;
+  overflow: hidden; /* 추가 */
+}
+
+/* 모바일 대응 */
+@media (max-width: 820px) {
+  .writepost-form {
+    padding: 15px;
+  }
+
+  .writepost-form-group {
+    margin-bottom: 20px;
+  }
+
+  .writepost-title,
+  .writepost-category {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .smart-editor-wrapper {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  /* SmartEditor iframe 크기 조정 */
+  .smart-editor-wrapper iframe {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* SmartEditor 툴바 조정 */
+  .smart-editor-wrapper .se2_editor {
+    width: 100% !important;
+  }
 }

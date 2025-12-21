@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 export default function SmartEditor({ onContentChange }) {
   const editorRef = useRef([]);
@@ -22,7 +22,7 @@ export default function SmartEditor({ onContentChange }) {
         window.nhn.husky.EZCreator.createInIFrame({
           oAppRef: editorRef.current,
           elPlaceHolder: "smartEditor",
-          sSkinURI: "/smarteditor2/dist/index.html",
+          sSkinURI: "/smarteditor2/dist/SmartEditor2Skin.html", // ← 파일명 확인!
           htParams: {
             bUseToolbar: true,
             bUseVerticalResizer: true,
@@ -32,9 +32,10 @@ export default function SmartEditor({ onContentChange }) {
           fOnAppLoad: function () {
             console.log("5. 에디터 로드 완료!");
 
+            // 내용 업데이트 함수
             const updateContent = () => {
               if (editorRef.current[0]) {
-                editorRef.current.getById["smartEditor"].exec("UPDATE_CONTENTS_FIELD", []);
+                editorRef.current[0].exec("UPDATE_CONTENTS_FIELD", []);
                 const content = document.getElementById("smartEditor").value;
                 if (onContentChange) {
                   onContentChange(content);
@@ -42,24 +43,33 @@ export default function SmartEditor({ onContentChange }) {
               }
             };
 
-            const editorDoc = editorRef.current.getById["smartEditor"].oDoc;
-            if (editorDoc) {
-              editorDoc.addEventListener('keyup', updateContent);
-              editorDoc.addEventListener('click', updateContent);
-              editorDoc.addEventListener('paste', updateContent);
+            // 이벤트 리스너 등록 (iframe 내부 문서에)
+            try {
+              const editorFrame = document.querySelector('iframe[id*="smartEditor"]');
+              if (editorFrame && editorFrame.contentDocument) {
+                const editorBody = editorFrame.contentDocument.body;
+                editorBody.addEventListener('keyup', updateContent);
+                editorBody.addEventListener('click', updateContent);
+                editorBody.addEventListener('paste', updateContent);
+              }
+            } catch (error) {
+              console.error("이벤트 리스너 등록 실패:", error);
             }
           }
         });
+      } else {
+        console.error("window.nhn.husky가 없습니다!");
       }
     };
     
     script.onerror = () => {
-      console.error("스크립트 로드 실패!");
+      console.error("스크립트 로드 실패! 경로를 확인하세요: /smarteditor2/dist/js/service/HuskyEZCreator.js");
     };
     
     document.head.appendChild(script);
 
     return () => {
+      // 정리 작업
       const editorContainer = document.getElementById("smartEditor");
       if (editorContainer && editorContainer.parentNode) {
         const iframes = editorContainer.parentNode.querySelectorAll('iframe');
@@ -67,7 +77,6 @@ export default function SmartEditor({ onContentChange }) {
       }
       editorRef.current = [];
       
-      // 스크립트도 제거
       if (script.parentNode) {
         script.parentNode.removeChild(script);
       }
@@ -75,9 +84,12 @@ export default function SmartEditor({ onContentChange }) {
   }, [onContentChange]);
 
   return (
-    <div className="all-container">
+    <div className="smart-editor-wrapper">
       <textarea 
-        name="smartEditor" id="smartEditor" />
+        name="smartEditor" 
+        id="smartEditor"
+        style={{ width: '100%', height: '400px' }}
+      />
     </div>
   );
 }

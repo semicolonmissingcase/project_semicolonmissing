@@ -1,0 +1,56 @@
+.favorite-driver-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.fav-card {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+
+.fav-avatar-large {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 4px solid #333;
+  background: #c2e2e8;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.rating-star {
+  color: #f59e0b;
+  font-weight: bold;
+  margin: 8px 0 15px;
+}
+
+.fav-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: var(--cancel-red);
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.btn-profile {
+  flex: 1;
+  background: #e2e8f0;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}

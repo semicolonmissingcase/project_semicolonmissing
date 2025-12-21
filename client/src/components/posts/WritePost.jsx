@@ -1,32 +1,117 @@
-import React, { useCallback, useState } from 'react';
-import SmartEditor from '../editor/SmartEditor.jsx'; 
+import { useRef, useEffect } from "react";
 
-// SmartEditor 관련입니다. 포스트글 써야하는 페이지에 <WrietPost /> 불러주시면 됩니다.
-export default function PostCreate () {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+export default function SmartEditor({ onContentChange }) {
+  const editorRef = useRef([]);
 
-  // SmartEditor의 내용이 변경될 때마다 호출될 함수
-  const handleContentChange = useCallback((newContent) => {
-    setContent(newContent);
-  }, []);
+  useEffect(() => {
+    console.log("1. useEffect 시작");
+    
+    const script = document.createElement('script');
+    script.src = '/smarteditor2/dist/js/service/HuskyEZCreator.js';
+    script.type = 'text/javascript';
+    script.charset = 'utf-8';
+    
+    script.onload = () => {
+      console.log("2. 스크립트 로드 완료!");
+      
+      if (window.nhn && window.nhn.husky) {
+        console.log("4. 에디터 초기화 시작");
+        
+        // 화면 너비에 따라 에디터 높이 설정
+        const isMobile = window.innerWidth <= 820;
+        const editorHeight = isMobile ? 300 : 400;
+        
+        window.nhn.husky.EZCreator.createInIFrame({
+          oAppRef: editorRef.current,
+          elPlaceHolder: "smartEditor",
+          sSkinURI: "/smarteditor2/dist/SmartEditor2Skin.html",
+          htParams: {
+            bUseToolbar: true,
+            bUseVerticalResizer: true,
+            bUseModeChanger: true,
+            fOnBeforeUnload: function(){},
+          },
+          fCreator: "createSEditor2",
+          fOnAppLoad: function () {
+            console.log("5. 에디터 로드 완료!");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // 'content' state에는 에디터의 HTML 내용이 담겨 있습니다.
-    console.log('제목:', title);
-    console.log('내용:', content);
-    // 여기서 서버로 제목과 내용을 전송하는 API를 호출하면 됩니다.
-  };
+            // 모바일에서 에디터 높이 조정
+            const editorFrame = document.querySelector('iframe[id*="smartEditor"]');
+            if (editorFrame && isMobile) {
+              editorFrame.style.height = editorHeight + 'px';
+              editorFrame.style.maxWidth = '100%';
+              editorFrame.style.width = '100%';
+            }
+
+            const updateContent = () => {
+              if (editorRef.current[0]) {
+                editorRef.current[0].exec("UPDATE_CONTENTS_FIELD", []);
+                const content = document.getElementById("smartEditor").value;
+                if (onContentChange) {
+                  onContentChange(content);
+                }
+              }
+            };
+
+            try {
+              const editorFrame = document.querySelector('iframe[id*="smartEditor"]');
+              if (editorFrame && editorFrame.contentDocument) {
+                const editorBody = editorFrame.contentDocument.body;
+                editorBody.addEventListener('keyup', updateContent);
+                editorBody.addEventListener('click', updateContent);
+                editorBody.addEventListener('paste', updateContent);
+              }
+            } catch (error) {
+              console.error("이벤트 리스너 등록 실패:", error);
+            }
+          }
+        });
+      }
+    };
+    
+    script.onerror = () => {
+      console.error("스크립트 로드 실패!");
+    };
+    
+    document.head.appendChild(script);
+
+    // 화면 크기 변경 감지
+    const handleResize = () => {
+      const editorFrame = document.querySelector('iframe[id*="smartEditor"]');
+      if (editorFrame) {
+        const isMobile = window.innerWidth <= 820;
+        if (isMobile) {
+          editorFrame.style.maxWidth = '100%';
+          editorFrame.style.width = '100%';
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      
+      const editorContainer = document.getElementById("smartEditor");
+      if (editorContainer && editorContainer.parentNode) {
+        const iframes = editorContainer.parentNode.querySelectorAll('iframe');
+        iframes.forEach(iframe => iframe.remove());
+      }
+      editorRef.current = [];
+      
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, [onContentChange]);
 
   return (
-    <form id="writePostForm" onSubmit={handleSubmit} className='all-container'>
-      <input type="text" placeholder="제목을 입력하세요" value={title} 
-      onChange={(e) => setTitle(e.target.value)} className="writepost-title" 
-      style={{ width: '100%'}} />
-      {/* SmartEditor 컴포넌트 사용 */}
-      <SmartEditor onContentChange={handleContentChange} className='writepost-editor'
-      style={{ width: '100%'}} />      
-    </form>
+    <div className="smart-editor-wrapper">
+      <textarea 
+        name="smartEditor" 
+        id="smartEditor"
+        style={{ width: '100%', height: '400px' }}
+      />
+    </div>
   );
-};
+}

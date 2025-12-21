@@ -5,14 +5,16 @@ import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
+import Result from "./result/Result.jsx";
+// 기사님 관련
 import CleanerAccountEdit from "../components/cleaners/CleanerAccountEdit.jsx";
 import CleanerInfoEdit from "../components/cleaners/CleanerInfoEdit.jsx";
 import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteListPreparation.jsx";
 import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
 import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
-import OwnerRegistration from "../owner/auth/OwnerRegistration.jsx";
-import Result from "./result/Result.jsx";
-
+// 점주님 관련
+import OwnerRegistration from "../components/owner/auth/OwnerRegistration.jsx";
+import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -77,6 +79,16 @@ const router = createBrowserRouter([
           {
             path: 'mypage',
             element: <CleanerMyPage />,
+          },
+        ]
+      },
+      {
+        path: '/owner',
+        element: <Outlet />,
+        children: [
+          {
+            path: 'mypage/:id',
+          element: <OwnerMyPage />
           },
         ]
       },

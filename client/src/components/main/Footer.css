@@ -19,3 +19,9 @@
   color: var(--color-white);
   font-weight: 300;
 }
+
+@media (max-width: 820px) {
+  .footer-container {
+    display: none;
+  }
+}

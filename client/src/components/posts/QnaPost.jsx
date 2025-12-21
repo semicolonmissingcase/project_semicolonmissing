@@ -1,11 +1,14 @@
 import "./QnaPost.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import TableUi from "./table/TableUi.jsx";
 
 export default function QnaPost () {
   const navigate = useNavigate();
   const [userType, setUserType] = useState('owner'); // 'owner' 또는 'cleaner'
   const [openIndex, setOpenIndex] = useState(null); // 열린 FAQ 인덱스
+  const [posts, setPosts] = useState([]); // 게시글 데이터
+  const [loading, setLoading] = useState(true);
 
   // FAQ 데이터
   const faqData = {
@@ -22,6 +25,136 @@ export default function QnaPost () {
       { q: "보험은 어떻게 되나요?", a: "작업 중 발생한 사고는 플랫폼 보험으로 처리됩니다." },
     ]
   };
+
+  // 서버에서 게시글 데이터 가져오기
+  useEffect(() => {
+    setLoading(true);
+    fetch('/api/qna/posts')
+      .then(res => res.json())
+      .then(data => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+        // 테스트용 샘플 데이터
+        setPosts([
+          {
+            id: 1,
+            status: 'completed',
+            category: 'icemaker',
+            title: '제빙기 청소 비용 문의드립니다',
+            author: '홍길동',
+            createdAt: '2024-12-20T10:30:00',
+            views: 152,
+            commentCount: 3
+          },
+          {
+            id: 2,
+            status: 'pending',
+            category: 'refrigerator',
+            title: '냉장고 냉매 충전 가능한가요?',
+            author: '김철수',
+            createdAt: '2024-12-21T15:20:00',
+            views: 87,
+            commentCount: 1
+          },
+          {
+            id: 3,
+            status: 'pending',
+            category: 'freezer',
+            title: '냉동고 소음이 심한데 점검 부탁드립니다',
+            author: '이영희',
+            createdAt: '2024-12-22T09:15:00',
+            views: 45,
+            commentCount: 0
+          },
+        ]);
+      });
+  }, []);
+
+  // 테이블 컬럼 정의
+  const columns = [
+    {
+      accessorKey: 'status',
+      header: '상태',
+      size: 100,
+      enableSorting: true,
+      cell: ({ getValue }) => {
+        const status = getValue();
+        return (
+          <span className={`status-badge status-${status}`}>
+            {status === 'completed' ? '완료' : '미완료'}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: 'category',
+      header: '카테고리',
+      size: 120,
+      enableSorting: true,
+      cell: ({ getValue }) => {
+        const categoryMap = {
+          'icemaker': '제빙기',
+          'refrigerator': '냉장고',
+          'freezer': '냉동고',
+          'etc': '기타'
+        };
+        return categoryMap[getValue()] || getValue();
+      },
+    },
+    {
+      accessorKey: 'title',
+      header: '제목',
+      enableSorting: true,
+      cell: ({ row }) => (
+        <a 
+          href={`/qnaposts/${row.original.id}`}
+          className="post-title-link"
+        >
+          {row.original.title}
+          {row.original.commentCount > 0 && (
+            <span className="comment-count"> [{row.original.commentCount}]</span>
+          )}
+        </a>
+      ),
+    },
+    {
+      accessorKey: 'author',
+      header: '작성자',
+      size: 120,
+      enableSorting: true,
+    },
+    {
+      accessorKey: 'createdAt',
+      header: '작성일',
+      size: 150,
+      enableSorting: true,
+      cell: ({ getValue }) => {
+        const date = new Date(getValue());
+        const now = new Date();
+        const diff = now - date;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        
+        if (hours < 24) {
+          return `${hours}시간 전`;
+        }
+        return date.toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+      },
+    },
+    {
+      accessorKey: 'views',
+      header: '조회수',
+      size: 100,
+      enableSorting: true,
+    },
+  ];
 
   // 토글 함수
   const toggleFaq = (index) => {
@@ -85,6 +218,22 @@ export default function QnaPost () {
         <button className="bg-blue btn-big" onClick={qnaPostCreate}>
           1 : 1 문의하러 가기
         </button>
+
+        {/* 게시글 목록 테이블 */}
+        <div className="qnapost-table-section">
+          <h3>문의 게시판</h3>
+          {loading ? (
+            <div className="qnapost-loading">로딩 중...</div>
+          ) : (
+            <TableUi 
+              data={posts} 
+              columns={columns}
+              showSearch={true}
+              showPagination={true}
+              pageSize={10}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
