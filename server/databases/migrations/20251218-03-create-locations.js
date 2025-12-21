@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-03-create-stores.js
- * @description stores migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251219-21-create-locations.js
+ * @description locations migration file
+ * 251219 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'stores';
+const tableName = 'locations';
 
 // 컬럼 정의
 const attributes = {
@@ -17,43 +17,19 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '매장 PK',
+    comment: '지역구 PK',
   },
-  ownerId: {
-    field: 'owner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '점주 PK',
-  },
-  name: {
-    field: 'name',
-    type: DataTypes.STRING(50),
-    allowNull: false,
-    comment: '매장명',
-  },
-  addr1: {
-    field: 'addr1',
-    type: DataTypes.STRING(10),
+  city: {
+    field: 'city',
+    type: DataTypes.STRING(20),
     allowNull: false,
     comment: '시/도',
   },
-  addr2: {
-    field: 'addr2',
-    type: DataTypes.STRING(40),
+  district: {
+    field: 'district',
+    type: DataTypes.STRING(30),
     allowNull: false,
-    comment: '군/구/읍/면/동',
-  },
-  addr3: {
-    field: 'addr3',
-    type: DataTypes.STRING(10),
-    allowNull: false,
-    comment: '상세주소',
-  },
-  phoneNumber: {
-    field: 'phone_number',
-    type: DataTypes.STRING(12),
-    allowNull: true,
-    comment: '매장번호',
+    comment: '시/군/구',
   },
   createdAt: {
     field: 'created_at',
@@ -61,7 +37,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

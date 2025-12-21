@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-06-create-reservations.js
- * @description reservations migration file
+ * @file databases/migrations/20251218-18-create-certifications.js
+ * @description certifications migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'reservations';
+const tableName = 'certifications';
 
 // 컬럼 정의
 const attributes = {
@@ -17,37 +17,55 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '예약 PK',
-  },
-  ownerId: {
-    field: 'owner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '점주 PK',
+    comment: '자격증 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '기사 PK', 
+    comment: '기사 PK',
   },
-  date: {
-    field: 'date',
-    type: DataTypes.DATE,
+  name: {
+    field: 'name',
+    type: DataTypes.STRING(30),
     allowNull: false,
-    comment: '예약 시간',
+    comment: '자격증제목'
   },
-  time: {
-    field: 'time',
-    type: DataTypes.TIME,
-    allowNull: false,
-    comment: '예약 날짜', 
+  number: {
+    field: 'number',
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    comment: '자격증번호',
+  },
+  image: {
+    field: 'image',
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    comment: '자격증이미지',
   },
   status: {
     field: 'status',
-    type: DataTypes.ENUM('request', 'approve', 'in_progress', 'complete', 'consent', 'cancel'),
-    allowNull: false,
-    comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
+    type: DataTypes.STRING(30),
+    allowNull: true,
+    comment: '상태(보류, 승인, 거절)' 
+  },
+  submittedAt: {
+    field: 'submitted_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '업로드한 시간',
+  },
+  reviewedAt: {
+    field: 'reviewed_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '승인/반려 시간',
+  },
+  reason: {
+    field: 'reason',
+    type: DataTypes.STRING(400),
+    allowNull: true,
+    comment: '반려시 사유'
   },
   createdAt: {
     field: 'created_at',
@@ -55,7 +73,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

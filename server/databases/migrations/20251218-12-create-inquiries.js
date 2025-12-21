@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-08-create-answers.js
- * @description answers migration file
+ * @file databases/migrations/20251218-07-create-inquiries.js
+ * @description inquiries migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'answers';
+const tableName = 'inquiries';
 
 // 컬럼 정의
 const attributes = {
@@ -17,19 +17,50 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '문의 답변 PK',
-  },
-  inquiryId: {
-    field: 'inquiry_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
     comment: '문의 PK',
+  },
+ ownerId: {
+  field: 'owner_id',
+  type: DataTypes.BIGINT.UNSIGNED,
+  allowNull: false,
+  comment: '점주 PK(nullable 설정해야함)',
+ },
+ cleanerId: {
+  field: 'cleaner_id',
+  type: DataTypes.BIGINT.UNSIGNED,
+  allowNull: false,
+  comment: '기사 PK(nullable 설정해야함)',
+ },
+  title: {
+    field: 'title',
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    comment: '제목',
   },
   content: {
     field: 'content',
-    type: DataTypes.STRING(250),
+    type: DataTypes.TEXT,
     allowNull: true,
-    comment: '문의답변',
+    comment: '문의내용',
+  },
+  guestName: {
+    field: 'guest_name',
+    type: DataTypes.STRING(50),
+    allowNull: true,
+    comment: '비회원 이름(nullable 설정해야함)'
+  },
+  guestPassword: {
+    field: 'guest_password',
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    comment: '비회원 비밀번호(nullable)'
+  },
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    defaultValue: 'PENDING',
+    comment: '상태(PENDING, COMPLETED)',
   },
   createdAt: {
     field: 'created_at',
@@ -37,7 +68,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

@@ -19,32 +19,29 @@ const attributes = {
     autoIncrement: true,
     comment: '질문 PK',
   },
-  questionCode: {
-    field: 'question_code',
+  ownerId: {
+    field: 'owner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '점주 PK',
+  },
+  questionType: {
+    field : 'question_type',
     type: DataTypes.STRING(20),
     allowNull: false,
-    unique: true,
-    comment: '질문코드'
+    comment: '질문 출처 구분(시스템 제공, 직접 입력)'
   },
   content: {
     field: 'content',
-    type: DataTypes.STRING(250),
-    allowNull: true,
-    comment: '질문',
-  },
-  questionType: {
-    field: 'question_type',
-    type: DataTypes.ENUM('RADIO', 'STRING'),
-    defaultValue: 'RADIO',
+    type: DataTypes.TEXT,
     allowNull: false,
-    comment: '질문타입',
+    comment: '내용(유저가 직접 쓴 텍스트 또는 시스템 질문 내용)'
   },
-  sortOrder: {
-    field: 'sort_order',
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
-    comment : '순서배치',
+  isActive: {
+    field: 'is_active',
+    type: DataTypes.BOOLEAN,
+    default: true, 
+    comment: '현재 이 질문을 사용 중인지 여부',
   },
   createdAt: {
     field: 'created_at',
@@ -52,7 +49,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-19-create-driverRegions.js
- * @description driverRegions migration file
+ * @file databases/migrations/20251219-22-create-pushSubscriptions.js
+ * @description pushSubscriptions migration file
  * 251219 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'driverRegions';
+const tableName = 'push_subscriptions';
 
 // 컬럼 정의
 const attributes = {
@@ -17,7 +17,13 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '매핑 PK',
+    comment: '푸시구독 PK',
+  },
+  ownerId: {
+    field: 'owner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '점주 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
@@ -25,17 +31,24 @@ const attributes = {
     allowNull: false,
     comment: '기사 PK',
   },
-  locationId: {
-    field: 'location_id',
-    type: DataTypes.BIGINT,
+  endPoint: {
+    field: 'end_point',
+    type: DataTypes.STRING(255),
     allowNull: false,
-    comment: '지역 PK',
+    unique: true,
+    comment: '앤드 포인트',
   },
   createdAt: {
     field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     comment: '작성일', 
+  },
+  updatedAt: {
+    field: 'updated_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '수정일',
   },
   deletedAt: {
     field: 'deleted_at',

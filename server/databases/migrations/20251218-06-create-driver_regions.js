@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-04-create-reviews.js
- * @description reviews migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251218-19-create-driverRegions.js
+ * @description driverRegions migration file
+ * 251219 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'reviews';
+const tableName = 'driver_regions';
 
 // 컬럼 정의
 const attributes = {
@@ -17,25 +17,19 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '리뷰 PK',
+    comment: '매핑 PK',
   },
-  ownerId: {
-    field: 'owner_id',
+  cleanerId: {
+    field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 PK',
+    comment: '기사 PK',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.STRING(255),
-    allowNull: true,
-    comment: '내용',
-  },
-  star: {
-    field: 'star',
-    type: DataTypes.INTEGER(5),
+  locationId: {
+    field: 'location_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '별점',
+    comment: '지역구 PK',
   },
   createdAt: {
     field: 'created_at',
@@ -43,7 +37,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: { 
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-07-create-inquiries.js
- * @description inquiries migration file
+ * @file databases/migrations/20251218-03-create-stores.js
+ * @description stores migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'inquiries';
+const tableName = 'stores';
 
 // 컬럼 정의
 const attributes = {
@@ -17,37 +17,43 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '문의 PK',
+    comment: '매장 PK',
   },
-  writer: {
-    field: 'writer',
-    type: DataTypes.ENUM('GUEST', 'OWNER', 'CLEANER'),
+  ownerId: {
+    field: 'owner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '작성자'
+    comment: '점주 PK',
   },
-  writerId: {
-    field: 'writer_id',
-    type: DataTypes.INTEGER.UNSIGNED,
-    allowNull: true,
-    comment: '작성자ID'
-  },
-  title: {
-    field: 'title',
+  name: {
+    field: 'name',
     type: DataTypes.STRING(50),
     allowNull: false,
-    comment: '제목',
+    comment: '매장명',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.STRING(250),
-    allowNull: true,
-    comment: '문의내용',
-  },
-  status: {
-    field: 'status',
-    type: DataTypes.ENUM('ANSWERED', 'UNANSWERED'),
+  addr1: {
+    field: 'addr1',
+    type: DataTypes.STRING(10),
     allowNull: false,
-    comment: '상태(완료, 미완료)'
+    comment: '시/도',
+  },
+  addr2: {
+    field: 'addr2',
+    type: DataTypes.STRING(40),
+    allowNull: false,
+    comment: '군/구/읍/면/동',
+  },
+  addr3: {
+    field: 'addr3',
+    type: DataTypes.STRING(10),
+    allowNull: false,
+    comment: '상세주소',
+  },
+  phoneNumber: {
+    field: 'phone_number',
+    type: DataTypes.STRING(12),
+    allowNull: true,
+    comment: '매장번호',
   },
   createdAt: {
     field: 'created_at',
@@ -55,7 +61,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

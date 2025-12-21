@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251219-19-create-adjustments.js
- * @description adjustments migration file
- * 251219 v1.0.0 jae init
+ * @file databases/migrations/20251218-17-create-templates.js
+ * @description templates migration file
+ * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'adjustments';
+const tableName = 'templates';
 
 // 컬럼 정의
 const attributes = {
@@ -17,7 +17,7 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '기사정산 PK',
+    comment: '템플릿 PK',
   },
   cleanerId: {
     field: 'cleaner_id',
@@ -25,41 +25,17 @@ const attributes = {
     allowNull: false,
     comment: '기사 PK',
   },
-  bank: {
-    field: 'bank',
-    type: DataTypes.STRING(20),
-    allowNull: false, 
-    comment: '은행',
-  },
-  depositor: {
-    field: 'depositor',
-    type: DataTypes.STRING(50),
-    allowNull: false,
-    comment: '예금주',
-  },
-  accountNumber: {
-    field: 'account_nuber',
-    type: DataTypes.STRING(20), // TO-DO 추가 논의 필요
-    allowNull: false,
-    comment: '계좌번호',
-  },
-  isPrimary: {
-    field: 'is_primary',
-    type: DataTypes.BOOLEAN,
-    allowNull: true,   // TO-DO 추가 논의 필요
-    comment: '주계좌여부'
-  },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
-    allowNull: false,
-    comment: '상태(완료/미완료)'
-  },
-  settlementAmount: {
-    field: 'settlement_amount',
+  estimatedAmount: {
+    field: 'estimated_amount',
     type: DataTypes.INTEGER,
     allowNull: false,
-    comment: '정산금액'
+    comment: '견적 금액',
+  },
+  description: {
+    field: 'description',
+    type: DataTypes.STRING(400),
+    allowNull: true,
+    comment: '견적설명',
   },
   createdAt: {
     field: 'created_at',
@@ -67,7 +43,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

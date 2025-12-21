@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-10-create-choices.js
- * @description choices migration file
+ * @file databases/migrations/20251218-05-create-likes.js
+ * @description likes migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'choices';
+const tableName = 'likes';
 
 // 컬럼 정의
 const attributes = {
@@ -17,26 +17,19 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '선택 PK',
+    comment: '찜 PK',
   },
-  questionId: {
-    field: 'question_id',
+  ownerId: {
+    field: 'owner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '질문 PK',
+    comment: '점주 PK',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.STRING(10),
+  cleanerId: {
+    field: 'cleaner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '보기 문구 저장',
-  },
-  sortOrder: {
-    field: 'sort_order',
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
-    comment : '질문내 보기 순서',
+    comment: '기사 PK', 
   },
   createdAt: {
     field: 'created_at',
@@ -44,7 +37,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

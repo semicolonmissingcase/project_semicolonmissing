@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-11-create-submissions.js
- * @description submissions migration file
+ * @file databases/migrations/20251218-04-create-reviews.js
+ * @description reviews migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'submissions';
+const tableName = 'reviews';
 
 // 컬럼 정의
 const attributes = {
@@ -17,7 +17,7 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '제출 PK',
+    comment: '리뷰 PK',
   },
   ownerId: {
     field: 'owner_id',
@@ -25,11 +25,23 @@ const attributes = {
     allowNull: false,
     comment: '점주 PK',
   },
-  status: {
-    field: 'status',
-    type: DataTypes.ENUM('COMPLETED', 'INCOMPLETE'),
+  reservation: {
+    field: 'resrvation_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '제출 상태',
+    comment: '예약 PK',
+  },
+  content: {
+    field: 'content',
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    comment: '내용',
+  },
+  star: {
+    field: 'star',
+    type: DataTypes.INTEGER(5),
+    allowNull: false,
+    comment: '별점',
   },
   createdAt: {
     field: 'created_at',
@@ -37,7 +49,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

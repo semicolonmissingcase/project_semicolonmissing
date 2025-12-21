@@ -1,7 +1,7 @@
 /**
- * @file databases/migrations/20251219-24-fk-chat_rooms-estimates.js
+ * @file databases/migrations/20251221-45-fk-chat_rooms-estimates.js
  * @description Add on chat_room.estimate_id
- * 251219 v1.0.0 jae init
+ * 251221 v1.0.0 jae init
  */
 
 // 테이블명 

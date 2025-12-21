@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-17-create-templates.js
- * @description templates migration file
+ * @file databases/migrations/20251218-08-create-answers.js
+ * @description answers migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'templates';
+const tableName = 'answers';
 
 // 컬럼 정의
 const attributes = {
@@ -17,25 +17,25 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '템플릿 PK',
+    comment: '문의 답변 PK',
   },
-  cleanerId: {
-    field: 'cleaner_id',
+  inquiryId: {
+    field: 'inquiry_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '기사 PK',
+    comment: '문의 PK',
   },
-  estimatedAmount: {
-    field: 'estimated_amount',
-    type: DataTypes.INTEGER,
+  adminId: {
+    field: 'admin_id',
+    type: DataTypes.INTEGER.UNSIGNED,
     allowNull: false,
-    comment: '견적 금액',
+    comment: '관리자 PK',
   },
-  description: {
-    field: 'description',
-    type: DataTypes.STRING(400),
+  content: {
+    field: 'content',
+    type: DataTypes.TEXT,
     allowNull: true,
-    comment: '견적설명',
+    comment: '문의답변',
   },
   createdAt: {
     field: 'created_at',
@@ -43,7 +43,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

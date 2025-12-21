@@ -19,17 +19,17 @@ const attributes = {
     autoIncrement: true,
     comment: '결제 PK',
   },
-  ownerId: {
-    field: 'owner_id',
+  estimateId: {
+    field: 'estimate_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 PK',
+    comment: '견적서 PK',
   },
-  cleanerId: {
-    field: 'cleaner_id',
+  reservationId: {
+    field: 'reservation_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '기사 PK',
+    comment: '예약 PK',
   },
   totalAmount: {
     field: 'total_amount',
@@ -49,7 +49,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

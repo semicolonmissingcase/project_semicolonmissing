@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-12-create-details.js
- * @description details migration file
+ * @file databases/migrations/20251218-06-create-reservations.js
+ * @description reservations migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'details';
+const tableName = 'reservations';
 
 // 컬럼 정의
 const attributes = {
@@ -17,30 +17,43 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '상세 답변 PK',
+    comment: '예약 PK',
   },
-  submissionId: {
-    field: 'submission_id',
+  ownerId: {
+    field: 'owner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '제출 PK',
+    comment: '점주 PK',
   },
-  questionId: {
-    field: 'question_id',
+  storeId: {
+    field: 'store_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '질문 PK',
+    comment: '매장 PK',
   },
-  choiceId: {
-    field: 'choice_id',
+  date: {
+    field: 'date',
+    type: DataTypes.DATE,
+    allowNull: false,
+    comment: '희망 날짜',
+  },
+  time: {
+    field: 'time',
+    type: DataTypes.TIME,
+    allowNull: false,
+    comment: '희망 시간(nullable 고려중)', 
+  },
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
+  },
+  CleanerId: {
+    field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: true,
-  },
-  answerText: {
-    field: 'answer_text',
-    type: DataTypes.TEXT,
-    allowNull: true, 
-    comment: '추가요청사항'
+    comment: '기사 PK(nullable 고려)'
   },
   createdAt: {
     field: 'created_at',
@@ -48,7 +61,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

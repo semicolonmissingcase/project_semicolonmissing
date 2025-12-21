@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251219-21-create-locations.js
- * @description locations migration file
- * 251219 v1.0.0 jae init
+ * @file databases/migrations/20251218-14-create-chat_messages.js
+ * @description chatMessages migration file
+ * 251218 v1.0.0 jae init
  */
 
-import { DataTypes } from "sequelize";
+import { DataTypes, TINYINT } from "sequelize";
 
 // 테이블명 
-const tableName = 'locations';
+const tableName = 'chat_messages';
 
 // 컬럼 정의
 const attributes = {
@@ -17,20 +17,45 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '지역구 PK',
+    comment: '채팅메세지 PK',
   },
-  city: {
-    field: 'city',
+  chatRoomId: {
+    field: 'chat_room_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '채팅방 PK',
+  },
+  senderId: {
+    field: 'sender_id',
+    type: DataTypes.BIGINT,
+    allowNull: false,
+    comment: '발신자',
+  },
+  senderTye: {
+    field: 'sender_type',
     type: DataTypes.STRING(20),
     allowNull: false,
-    comment: '시/도',
+    comment: '발신자 유형(OWNER 또는 CLEANER)'
   },
-  district: {
-    field: 'district',
-    type: DataTypes.STRING(30),
+  content: {
+    field: 'content',
+    type: DataTypes.TEXT,
     allowNull: false,
-    comment: '시/군/구',
-  }
+    comment: '내용', 
+  },
+  isRead: {
+    field: 'is_read',
+    type: TINYINT(1),
+    defaultValue: 0,
+    allowNull: false,
+    comment: '읽음 여부',
+  },
+  createdAt: {
+    field: 'created_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '작성일', 
+  },
 };
 
 // 옵션 
