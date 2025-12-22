@@ -89,7 +89,7 @@ const Location = {
     return define;
   },
   associate: (db) => {
-    db.Location.hasMany(db.DriverRegions, { sourcKey: 'id', foreignKey: 'locationId', as: 'locations' });
+    db.Location.hasMany(db.DriverRegion, { sourceKey: 'id', foreignKey: 'locationId', as: 'locations' });
   }
 }
 

@@ -26,7 +26,7 @@ const attributes = {
     comment: '점주 PK',
   },
   reservation: {
-    field: 'resrvation_id',
+    field: 'reservation_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
     comment: '예약 PK',

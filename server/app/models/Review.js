@@ -103,7 +103,7 @@ const Review = {
   },
   associate: (db) => {
     db.Review.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
-    db.Review.belongsTo(db.Reservation, { targetKey: 'id', foreignKey: 'reservationId', as: 'reservation' });
+    db.Review.belongsTo(db.Reservation, { targetKey: 'id', foreignKey: 'reservationId', as: 'reservationData' });
   }
 }
 

@@ -5,10 +5,10 @@
  */
 import bcrypt from 'bcrypt';
 import db from '../../app/models/index.js';
-const { Owner } = db;
+const { Cleaner } = db;
 
 // 테이블명 
-const tableName = 'owners';
+const tableName = 'Cleaners';
 
 /**@type {import('sequelize-cli').Migration} */
 export default {
@@ -30,7 +30,7 @@ export default {
 
     // 데이터 생성 : queryInterface.bulkInsert(tabelName, records, options)
     // await queryInterface.bulkInsert(tableName, records, {});
-    await Owner.bulkCreate(records);
+    await Cleaner.bulkCreate(records);
   },
 
   async down (queryInterface, Sequelize) {

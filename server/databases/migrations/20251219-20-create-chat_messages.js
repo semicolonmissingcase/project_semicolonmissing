@@ -45,7 +45,7 @@ const attributes = {
   },
   isRead: {
     field: 'is_read',
-    type: TINYINT(1),
+    type: DataTypes.TINYINT(1),
     defaultValue: 0,
     allowNull: false,
     comment: '읽음 여부',
