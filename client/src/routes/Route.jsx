@@ -13,8 +13,12 @@ import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteList
 import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
 import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
 // 점주님 관련
-import OwnerRegistration from "../components/owner/auth/OwnerRegistration.jsx";
+import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";
+import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
+// 관리자 관련
+import AdminMain from "../components/admin/main/AdminMain.jsx";
+import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -31,14 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <Outlet />,
-        children: [
-          {
-            // 로그인 페이지
-            path: '',
-            element: <Login />,
-          },
-        ]
+        element: <Login />
       },
       {
         path: '/registration',
@@ -83,13 +80,19 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: '/owner',
+        path: '/owners',
         element: <Outlet />,
         children: [
           {
-            path: 'mypage/:id',
-          element: <OwnerMyPage />
+            // 점주 마이페이지
+            path: 'mypage',
+            element: <OwnerMyPage />
           },
+          {
+            // 점주 정보 수정페이지
+            path: 'info',
+            element: <OwnerInfo />
+          }
         ]
       },
       {
@@ -118,9 +121,27 @@ const router = createBrowserRouter([
         element: <ChatList />
       },
       {
+        // 결과 페이지(ex. 문의가 등록되었습니다!)
         path: '/result',
         element: <Result />
       },
+      {
+        // 관리자페이지
+        path: '/hospital',
+        element: <Outlet />,
+        children: [
+          {
+            // 통합모니터링
+            path: '',
+            element: <AdminMain />
+          },
+          {
+            // 관리자 로그인
+            path: 'login',
+            element: <AdminLogin />
+          },
+        ]
+      }
     ]
   }]
 );

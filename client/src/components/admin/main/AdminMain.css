@@ -1,0 +1,249 @@
+.admin-monitoring {
+  padding: 2rem;
+  min-height: 100vh;
+  margin-left: 220px;
+}
+
+.admin-monitoring-title {
+  margin: 0 0 2rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-monitoring-top {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.admin-monitoring-summary {
+  background-color: var(--color-light-blue);
+  border-radius: 12px;
+  padding: 2rem;
+  flex: 1;
+  color: var(--color-white);
+}
+
+.admin-summary-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.admin-summary-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-summary-title h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.admin-summary-date {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.admin-summary-title button {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  opacity: 0.9;
+}
+
+.admin-summary-title button:hover {
+  opacity: 1;
+}
+
+.admin-summary-count {
+  text-align: right;
+}
+
+.admin-count-number {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.admin-count-unit {
+  font-size: 1.2rem;
+  margin-left: 0.3rem;
+}
+
+.admin-summary-stats {
+  display: flex;
+  gap: 1rem;
+  background: var(--color-white);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.admin-stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.admin-stat-icon {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+  font-size: 1.2rem;
+}
+
+.admin-stat-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.admin-stat-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-monitoring-revenue {
+  background-color: var(--color-gray);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 280px;
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-revenue-header {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.admin-revenue-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.9;
+}
+
+.admin-revenue-header button:hover {
+  opacity: 1;
+}
+
+.admin-revenue-content {
+  flex: 1;
+  text-align: center;
+}
+
+.admin-revenue-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.admin-revenue-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.admin-revenue-sub {
+  font-size: 0.85rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.admin-revenue-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-white);
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.admin-revenue-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.admin-monitoring-bottom {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.admin-monitoring-table {
+  flex: 1;
+  background: var(--color-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.admin-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.admin-table-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-table-header button {
+  background: none;
+  border: none;
+  color: var(--color-bark-blue);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.admin-table-header button:hover {
+  opacity: 0.8;
+}
+
+.admin-monitoring-chart {
+  width: 550px;
+  background:var(--color-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.admin-chart-header {
+  margin-bottom: 1rem;
+}
+
+.admin-chart-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-chart-content {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

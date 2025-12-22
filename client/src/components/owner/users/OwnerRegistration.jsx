@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OwnerRegistration.css';
+import useKakaoPostcode from "../../hooks/useKakaoPostcode.js";
 
 export default function OwnerRegistration() {
   const navigate = useNavigate();
+  const { openPostcode } = useKakaoPostcode();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -42,6 +44,15 @@ export default function OwnerRegistration() {
       ...prev,
       gender
     }));
+  };
+
+  const handleAddressSearch = () => {
+    openPostcode((addr) => {
+      setFormData(prev => ({
+        ...prev,
+        address: addr
+      }));
+    });
   };
 
   const validateForm = () => {
@@ -83,11 +94,6 @@ export default function OwnerRegistration() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleAddressSearch = () => {
-    // 주소 검색 API 연동 (예: 다음 주소 API)
-    alert('주소 검색 기능 구현 예정');
   };
 
   const handleSubmit = async (e) => {
@@ -162,7 +168,7 @@ export default function OwnerRegistration() {
             </div>
           </div>
 
-          {/* 이메일 (생년월일) */}
+          {/* 이메일 */}
           <div className="form-group">
             <label>이메일</label>
             <div className="birth-inputs">

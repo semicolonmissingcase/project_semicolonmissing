@@ -1,26 +1,24 @@
 /* 기본 레이아웃 */
-.owner-page-container {
+.owner-mypage-container {
   padding: 2rem;
   max-width: 800px;
-  font-family: 'Pretendard', sans-serif;
-  color: #333;
 }
 
 /* 상단 프로필 */
-.profile-header {
-  background-color: #4dbff2;
+.owner-mypage-profile-header {
+  background-color: var(--color-light-blue);
   border-radius: 15px;
   padding: 20px;
-  color: white;
+  color: var(--color-white);
   position: relative;
   margin-bottom: 20px;
 }
 
-.edit-info-btn {
+.owner-mypage-edit-info-btn {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: white;
+  background: var(--color-white);
   border: none;
   border-radius: 4px;
   padding: 4px 8px;
@@ -28,69 +26,69 @@
   cursor: pointer;
 }
 
-.profile-main {
+.owner-mypage-profile-main {
   display: flex;
   align-items: center;
   gap: 20px;
   margin-bottom: 20px;
 }
 
-.profile-image-container {
+.owner-mypage-profile-image-container {
   position: relative;
   width: 100px;
   height: 100px;
 }
 
-.profile-placeholder-img {
+.owner-mypage-profile-placeholder-img {
   width: 100%;
   height: 100%;
-  background: #c2e2e8;
-  border: 4px solid #333;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
 }
 
-.profile-edit-badge {
+.owner-mypage-profile-edit-badge {
+  background-image: url('/icons/edit-icon.png');
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  background: white;
-  border: 2px solid #333;
+  bottom: 1px;
+  right: 1px;
+  background: var(--color-white);
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 2rem;
+  height: 2rem;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
   cursor: pointer;
 }
 
 /* 통계 부분 */
-.stats-container {
+.owner-mypage-stats-container {
   display: flex;
   justify-content: space-around;
   text-align: center;
 }
 
-.stat-item span {
+.owner-mypage-stat-item span {
   display: block;
   font-size: 14px;
   margin-bottom: 5px;
 }
 
-.stat-item strong {
+.owner-mypage-stat-item strong {
   font-size: 18px;
 }
 
 /* 탭 메뉴 */
-.tabs {
+.owner-mypage-tabs {
   display: flex;
   border: 0 1px 1px 1px solid #ddd;
   border-radius: 8px 8px 0 0;
   overflow: hidden;
 }
 
-.tab-item {
+.owner-mypage-tab-item {
   flex: 1;
   padding: 12px;
   background: white;
@@ -100,7 +98,7 @@
   font-size: 14px;
 }
 
-.tab-item.active {
+.owner-mypage-tab-item.owner-mypage-active {
   background-color: #556699;
   color: white;
 }
