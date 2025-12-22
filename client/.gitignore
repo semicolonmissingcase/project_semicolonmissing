@@ -22,4 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-/public/smarteditor2-2.10.0
+/public/smarteditor2
+/public/icons

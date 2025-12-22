@@ -1,0 +1,14 @@
+
+.cleaner-quotation-preparation-save-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.cleaners-quote-list-preparation-quote-list--saves {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 600px;
+  margin-bottom: 30px;
+  height:auto;
+}

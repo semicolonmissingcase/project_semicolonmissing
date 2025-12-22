@@ -1,0 +1,59 @@
+.section-label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #334155;
+}
+
+.review-status-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.review-avatar-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.review-text-content h4 {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+.heart-red { color: #ef4444; }
+
+.sub-info {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.price-info {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.review-action-btn {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.review-action-btn.write { background: var(--navy); color: white; }
+.review-action-btn.edit { background: #5c6da3; color: white; }

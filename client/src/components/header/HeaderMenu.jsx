@@ -1,7 +1,31 @@
+import { useNavigate } from "react-router-dom";
 import "./HeaderMenu.css";
 
-export default function HeaderMenu({ isOpen, onClose, onMenuItemClick }) {
+export default function HeaderMenu({ isOpen, onClose }) {
+  const navigate = useNavigate();
+
   if (!isOpen) return null;
+
+  // 버튼 네비게이터
+  function mainPage() {
+    navigate('/');
+    onClose();
+  }
+
+  function qnaPage() {
+    navigate('/qnaposts');
+    onClose();
+  }
+
+  function loginPage() {
+    navigate('/login');
+    onClose();
+  }
+
+  function registrationPage() {
+    navigate('/registration');
+    onClose();
+  }
 
   return (
     <div className='header-menu-mobile-menu-overlay'>
@@ -19,12 +43,12 @@ export default function HeaderMenu({ isOpen, onClose, onMenuItemClick }) {
         </div>
 
         {/* 메뉴 항목 */}
-        <p className='header-menu-mobile-menu-item under-line'>문의사항</p>
+        <p className='header-menu-mobile-menu-item under-line' onClick={qnaPage}>문의사항</p>
         <hr className='header-menu-mobile-menu-divider'/>
-        <p className='header-menu-mobile-menu-item' onClick={() => onMenuItemClick('/login')}>
+        <p className='header-menu-mobile-menu-item' onClick={loginPage}>
           로그인
         </p>
-        <p className='header-menu-mobile-menu-item' onClick={() => onMenuItemClick('/signup')}>
+        <p className='header-menu-mobile-menu-item' onClick={registrationPage}>
           회원가입
         </p>
         
@@ -32,18 +56,11 @@ export default function HeaderMenu({ isOpen, onClose, onMenuItemClick }) {
         <div className="header-menu-mobile-menu-bottom-logout">
           <button 
             className='header-menu-mobile-menu-logout-btn' 
-            onClick={() => {
-              // 로그아웃 로직
-              onMenuItemClick('/');
-            }}
-          >
+            onClick={mainPage}>
             로그아웃
           </button>
         </div>
       </div>
-      
-      {/* 배경 클릭 시 닫기 */}
-      <div className='header-menu-mobile-menu-backdrop' onClick={onClose}></div>
     </div>
   );
 }

@@ -1,0 +1,131 @@
+.chatsidebarrequest-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.chatsidebarrequest-header {
+  padding: 24px 24px 0 24px;
+}
+
+.chatsidebarrequest-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.chatsidebarrequest-content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.chatsidebarrequest-content-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.chatsidebarrequest-content-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--color-light-gray);
+  border-radius: 10px;
+}
+
+.chatsidebarrequest-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.chatsidebarrequest-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #f0f4f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.chatsidebarrequest-info span {
+  display: block;
+}
+
+.chatsidebarrequest-info span:first-child {
+  font-weight: 700;
+  color: #1a3a5f;
+}
+
+.chatsidebarrequest-info span:last-child {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.chatsidebarrequest-request-card {
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f0f4f8;
+}
+
+.chatsidebarrequest-request-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chatsidebarrequest-label {
+  font-size: 0.75rem;
+  color: var(--color-gray);
+}
+
+.chatsidebarrequest-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.chatsidebarrequest-qna-section h4 {
+  font-size: 1rem;
+  margin: 20px 0 10px;
+}
+
+.chatsidebarrequest-qna-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.chatsidebarrequest-qna-q {
+  font-size: 0.85rem;
+  color: var(--color-gray);
+}
+
+.chatsidebarrequest-qna-a {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.chatsidebarrequest-qna-item.warning .chatsidebarrequest-qna-a {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.chatsidebarrequest-memo-box {
+  margin-top: 20px;
+  padding: 15px;
+  border-left: 3px solid var(--color-light-blue);
+}
+
+.chatsidebarrequest-memo-box p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.chatsidebarrequest-memo-label {
+  font-weight: bold;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+  color: var(--color-dark-blue);
+}

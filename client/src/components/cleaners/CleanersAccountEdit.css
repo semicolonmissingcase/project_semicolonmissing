@@ -1,0 +1,141 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.all-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.cleaners-account-edit-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cleaners-account-edit-account-management {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  height: 60px;
+  width: 90%;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.cleaners-account-edit-account-management-title {
+  display: flex;
+  align-items: center;
+}
+
+.cleaners-account-edit-new-account-img {
+  width: 17px;
+  height: 8px;
+}
+
+.cleaners-account-edit-new-account-message {
+  display: inline-block;
+}
+
+.cleaners-account-edit-new-account-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cleaners-account-edit-new-account-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cleaners-account-edit-remove-button{
+  display: flex;
+  flex-direction: column;
+}
+
+.cleaners-account-edit-add-button {
+  display: flex;
+  flex-direction: column;
+}
+
+.cleaners-account-edit-add-button-text {
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-account-edit-toggle-updown-new-contents {
+  display: block;
+}
+
+.cleaners-account-edit-toggle-updown-new-contents-toggledown {
+  display: none;
+}
+
+.cleaners-account-edit-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.cleaners-account-edit-toggle-updown-form-contents {
+  display: block;
+}
+
+.cleaners-account-edit-toggle-updown-form-contents-toggledown {
+  display: none;
+}
+
+.cleaners-account-edit-button {
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.cleaners-account-edit-account-info {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  height: 60px;
+  width: 90%;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.cleaners-account-edit-account-info-title {
+  display: flex;
+  align-items: center;
+}
+
+.cleaners-account-edit-toggle-img-info {
+  width: 17px;
+  height: 8px;
+}
+
+.cleaners-account-edit-toggle-img-info {
+  display: inline-block;
+}
+
+.cleaners-account-edit-account-info-message {
+  display: inline-block;
+}
+
+.cleaners-account-edit-toggle-updown-info-contents {
+  display: block;
+}
+
+.cleaners-account-edit-toggle-updown-info-contents-toggledown {
+  display: none;
+}
+
+.cleaners-account-edit-account-modal-page {
+  display: none;
+}

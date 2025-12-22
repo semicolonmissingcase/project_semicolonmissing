@@ -1,0 +1,44 @@
+.cleaners-quote-list-preparation-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.cleaners-quote-list-preparation-profile {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 600px;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.cleaners-quote-list-preparation-quote-list {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 600px;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.cleaners-quote-list-preparation-profile-img {
+  width: 100px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.cleaners-quote-list-preparation-quote-list-price {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  height: 50px;
+  width: 260px;
+}
+
+.cleaners-quote-list-preparation-quote-list-details {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  height: 200px;
+  width: 500px;
+}

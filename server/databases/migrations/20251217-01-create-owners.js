@@ -10,7 +10,7 @@ import { DataTypes } from "sequelize";
 const tableName = 'owners';
 
 // 컬럼 정의
-const attributs = {
+const attributes = {
   id: {
     field: 'id',
     type: DataTypes.BIGINT.UNSIGNED,
@@ -20,14 +20,14 @@ const attributs = {
     comment: '점주 PK',
   },
   name: {
-    field: 'owner_name',
+    field: 'name',
     type: DataTypes.STRING(50),
     allowNull: false,
     comment: '점주 이름',
   },
   gender: {
-    field: 'owner_gender',
-    type: DataTypes.CHAR(2),
+    field: 'gender',
+    type: DataTypes.CHAR(1),
     allowNull: false,
     comment: '점주 성별',
   },
@@ -58,7 +58,7 @@ const attributs = {
     comment: '점주 전화번호',
   },
   profile: {
-    field: 'owner_profile',
+    field: 'profile',
     type: DataTypes.STRING(100),
     allowNull: true, 
     comment: '점주 프로필',
@@ -70,19 +70,22 @@ const attributs = {
     comment: '리프레시 토큰',
   },
   createdAt: {
-    field: 'credated_at',
+    field: 'created_at',
     type: DataTypes.DATE,
-    allowNull: true, 
+    allowNull: true,
+    comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,
+    comment: '수정일',
   },
   deletedAt: {
     field: 'deleted_at',
     type: DataTypes.DATE,
     allowNull: true,
+    comment: '삭제일',
   }
 };
 
@@ -97,7 +100,7 @@ const options = {
 export default {
   // 마이그레이션 실행 시 호출되는 메소드 (스키마 생성, 수정)
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable(tableName, attributs, options);
+    await queryInterface.createTable(tableName, attributes, options);
   },
 
   // 마이그레이션을 롤백 시 호출되는 메소드 (스키마 제거, 수정)

@@ -1,0 +1,159 @@
+.qnapost-main-container {
+  background-color: var(--color-blue);
+  padding: 2rem;
+}
+
+.qnapost-container {
+  border-radius: 15px;
+  background-color: var(--color-white);
+  padding: 2rem;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.qnapost-container > h2 {
+  color: var(--color-blue);
+  font-size: 2rem;
+}
+
+.qnapost-btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+@media (max-width: 820px) {
+  .qnapost-btn-container {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 70 / 9;
+  }
+}
+
+.qnapost-qna-box {
+  width: 100%;
+  padding: 2rem;
+  border: 1px solid var(--color-blue);
+  border-radius: 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.qnapost-item-wrapper {
+  width: 95%;
+  border: 1px solid var(--color-blue);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.qnapost-item {
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.qnapost-item:hover {
+  background-color: var(--color-light-gray);
+}
+
+.qnapost-arrow {
+  font-size: 12px;
+  color: var(--color-dark-blue);
+}
+
+.qnapost-answer {
+  padding: 20px;
+  border-top: 1px solid var(--color-dark-blue);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 200px;
+  }
+}
+
+/* 테이블 섹션 */
+.qnapost-table-section {
+  margin-top: 60px;
+  width: 100%;
+}
+
+.qnapost-table-section h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 20px;
+}
+
+.qnapost-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+/* 상태 뱃지 */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* 제목 링크 */
+.post-title-link {
+  color: #212529;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.post-title-link:hover {
+  color: #007bff;
+}
+
+.comment-count {
+  color: #007bff;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .qnapost-table-section {
+    margin-top: 40px;
+  }
+
+  .qnapost-table-section h3 {
+    font-size: 20px;
+  }
+}

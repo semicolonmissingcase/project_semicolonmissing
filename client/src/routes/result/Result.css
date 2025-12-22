@@ -1,0 +1,42 @@
+.result-container{
+  padding: 2rem;
+}
+
+.result-box {
+  margin: 3rem 3rem 0 3rem ;
+  padding: 3rem;
+  border: 1px solid var(--color-blue);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.result-img {
+  width: 10rem;
+  height: 10rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.result-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.result-text > h3 {
+  font-size: 1.5rem;
+}
+
+.result-btn-containver {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+}

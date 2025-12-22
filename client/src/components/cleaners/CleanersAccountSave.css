@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.all-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
