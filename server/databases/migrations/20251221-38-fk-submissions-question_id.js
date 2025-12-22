@@ -1,14 +1,14 @@
 /**
- * @file databases/migrations/20251221-38-fk-answers-question_id.js
- * @description Add on answers-question_id
+ * @file databases/migrations/20251221-38-fk-submissions-question_id.js
+ * @description Add on submissions-question_id
  * 251221 v1.0.0 jae init
  */
 
 // 테이블명 
-const tableName = 'answers';
+const tableName = 'submissions';
 
 // Constraint명 
-const constraintName = 'fk-answers-question_id'; 
+const constraintName = 'fk-submissions-question_id'; 
 
 // Constraint 정의 
 const options = {

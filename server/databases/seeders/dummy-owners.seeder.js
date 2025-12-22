@@ -4,6 +4,8 @@
  * 251229 v1.0.0 jae init
  */
 import bcrypt from 'bcrypt';
+import db from '../../app/models/index.js';
+const { Owner } = db;
 
 // 테이블명 
 const tableName = 'owners';
@@ -21,13 +23,11 @@ export default {
         provider: 'NONE',
         phoneNumber: '010-1111-1111',
         profile: '',
-        created_at: new Date(),
-        updated_at: new Date(),
       },
     ];
 
     // 데이터 생성 : queryInterface.bulkInsert(tabelName, records, options)
-    await queryInterface.bulkInsert(tableName, records, {});
+    await Owner.bulkCreate(records);
   },
 
   async down (queryInterface, Sequelize) {
