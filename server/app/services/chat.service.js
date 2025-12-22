@@ -20,7 +20,7 @@ import db from '../models/index.js';
  */
 async function createOrGetRoom(body) {
   return await db.sequelize.transaction(async t => {
-    const { estimate_id, cleaner_id } = body;
+    const { estimate_id, cleaner_id, owner_id } = body;
 
     // 기존 채팅방 확인
     let room = await chatRepository.findByKeys(t, estimate_id, cleaner_id);
@@ -30,7 +30,7 @@ async function createOrGetRoom(body) {
     }
 
     // 새 채팅방 생성
-    room = await chatRepository.create(t, { estimate_id, cleaner_id });
+    room = await chatRepository.create(t, { estimate_id, cleaner_id, owner_id, status: 'OPEN' });
     return { room, isNew: true };
   });
 }
