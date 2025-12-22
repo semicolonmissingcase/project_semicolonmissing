@@ -28,7 +28,7 @@ export default {
         cleanerId: 1,
         reservationId: 2,
         estimatedAmount: 250000,
-        description: '견적 금액 확인 부타드립니다.',
+        description: '견적 금액 확인 부탁드립니다.',
         status: '수락',
         // created_at: new Date(),
         // updated_at: new Date(),

@@ -50,7 +50,7 @@ const attributes = {
     allowNull: false,
     comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
   },
-  CleanerId: {
+  cleanerId: {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: true,
