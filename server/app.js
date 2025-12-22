@@ -4,7 +4,7 @@
  * 251217 v1.0.0 jae
  */
 import express from  'express';
-import './configs/env.config';
+import './configs/env.config.js';
 
 const app = express();
 

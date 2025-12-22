@@ -8,7 +8,7 @@ import db from '../../app/models/index.js';
 const { Cleaner } = db;
 
 // 테이블명 
-const tableName = 'Cleaners';
+const tableName = 'cleaners';
 
 /**@type {import('sequelize-cli').Migration} */
 export default {
