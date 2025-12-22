@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./CleanersUserQuoteListDetails.css";
 
-function CleanersUserQuoteList () {}
+function CleanersUserQuoteList () {
 
 
   const [answers, setAnswers] = useState({
@@ -233,8 +233,7 @@ function CleanersUserQuoteList () {}
             <span 
             className="cleaners-user-quote-list-details-radio-text">네, 악취가 나요.</span>
           </label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
+          <label
           htmlFor="Q4-no" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q4 === "no" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -255,8 +254,7 @@ function CleanersUserQuoteList () {}
         <label 
         className="cleaners-user-quote-list-details-answer-binary-layout" 
         htmlFor="Q4">Q5. 얼음이 탁한가요?</label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout"
+          <label
           htmlFor="Q5-yes" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q5 === "yes" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -273,8 +271,7 @@ function CleanersUserQuoteList () {}
             <span 
             className="cleaners-user-quote-list-details-radio-text">네, 탁해요.</span>
           </label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
+          <label
           htmlFor="Q5-no" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q5 === "no" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -292,11 +289,9 @@ function CleanersUserQuoteList () {}
             className="cleaners-user-quote-list-details-radio-text">아니요. 괜찮아요.</span>
           </label>
 
-        <label 
-        className="cleaners-user-quote-list-details-answer-binary-layout" 
+        <label
         htmlFor="Q6">Q6. 얼음의 맛이 평소와 다른가요?</label>
           <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
           htmlFor="Q6-yes" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q6 === "yes" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -313,7 +308,6 @@ function CleanersUserQuoteList () {}
             className="cleaners-user-quote-list-details-radio-text">네, 달라요.</span>
           </label>
           <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
           htmlFor="Q6-no" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q6 === "no" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -331,11 +325,9 @@ function CleanersUserQuoteList () {}
             className="cleaners-user-quote-list-details-radio-text">아니요. 같아요.</span>
           </label>    
         
-        <label 
-        className="cleaners-user-quote-list-details-answer-binary-layout" 
+        <label
         htmlFor="Q7">Q7. 제빙량이 감소했나요?</label>
           <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
           htmlFor="Q7-yes" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q7 === "yes" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -352,8 +344,7 @@ function CleanersUserQuoteList () {}
             <span 
             className="cleaners-user-quote-list-details-radio-text">네, 감소했어요.</span>
           </label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
+          <label
           htmlFor="Q7-no" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q7 === "no" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -374,8 +365,7 @@ function CleanersUserQuoteList () {}
         <label 
         className="cleaners-user-quote-list-details-answer-binary-layout" 
         htmlFor="Q8">Q8. 기계에서 평소와 다른 소음이 있나요?</label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
+          <label
           htmlFor="Q8-yes" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q8 === "yes" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -392,8 +382,7 @@ function CleanersUserQuoteList () {}
             <span 
             className="cleaners-user-quote-list-details-radio-text">네, 있어요.</span>
           </label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
+          <label
           htmlFor="Q8-no" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q8 === "no" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -414,8 +403,7 @@ function CleanersUserQuoteList () {}
         <label 
         className="cleaners-user-quote-list-details-answer-binary-layout" 
         htmlFor="Q9">Q9. 기계 주변은 청결한가요?</label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
+          <label
           htmlFor="Q9-yes" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q9 === "yes" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
@@ -432,8 +420,7 @@ function CleanersUserQuoteList () {}
             <span 
             className="cleaners-user-quote-list-details-radio-text">네, 깨끗해요.</span>
           </label>
-          <label 
-          className="cleaners-user-quote-list-details-answer-binary-layout" 
+          <label
           htmlFor="Q9-no" 
           className={`cleaners-user-quote-list-details-answer-binary 
           ${answers.Q9 === "no" ? "cleaners-user-quote-list-details-answer-binary-selected" : ""}`}>
