@@ -11,11 +11,17 @@
 }
 
 .footer-logo {
-  width: 10rem;
-  height: 10rem;
+  width: 17rem;
+  aspect-ratio: 60 / 22;
 }
 
 .footer-comments {
   color: var(--color-white);
   font-weight: 300;
+}
+
+@media (max-width: 820px) {
+  .footer-container {
+    display: none;
+  }
 }

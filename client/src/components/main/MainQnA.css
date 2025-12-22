@@ -9,7 +9,7 @@
 }
 
 /* 모바일 반응형 */
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .main-qna-box {
     padding: 1rem;
   }

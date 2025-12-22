@@ -1,0 +1,79 @@
+.login-page-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.login-logo {
+  width: 480px;
+  aspect-ratio: 70 / 9;
+  margin: 2rem 0 4rem 0;
+}
+
+@media (max-width: 820px) {
+  .login-logo {
+    width: 90%;
+    max-width: 300px;
+    aspect-ratio: 70 / 9;
+  }
+}
+
+.login-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-tap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-tap > button {
+  border: 1px solid var(--color-blue);
+}
+
+.login-tap > button:hover {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+.login-bnt-size {
+  width: 100%;
+}
+
+.login-form-container {
+  padding: 2rem;
+  border: 1px solid var(--color-blue);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+
+.login-form-container > .input-medium {
+  width: 100%;
+}
+
+.login-submit-btn:hover {
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
+}
+
+.login-redirect > button {
+  padding: 0.5rem 0.7rem;
+}
+
+.login-social > hr{
+  color: var(--color-dark-blue);
+  margin-bottom: 1rem;
+}

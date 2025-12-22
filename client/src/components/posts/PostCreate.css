@@ -1,0 +1,25 @@
+.postcreate-background{
+  background-color: var(--color-blue);
+  padding: 2rem;
+}
+
+.postcrete-container {
+  padding: 2rem;
+  background-color: var(--color-white);
+  border-radius: 15px;
+}
+
+.postcreat-title {
+  color: var(--color-blue);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.postcreate-btn-container {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+}

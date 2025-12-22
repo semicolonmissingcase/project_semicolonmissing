@@ -5,7 +5,8 @@ import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
-import OwnerLogin from "../owner/auth/OwnerLogin.jsx";
+import Result from "./result/Result.jsx";
+// 기사님 관련
 import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
 import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
@@ -15,6 +16,13 @@ import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteLi
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
 import CleanersUserQuoteList from "../components/cleaners/CleanersUSerQuoteList.jsx";
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUSerQuoteListDetails.jsx";
+// 점주님 관련
+import OwnerRegistration from "../components/owner/auth/OwnerRegistration.jsx";
+import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";
+// 채팅 관련 import
+import ChatMain from "../components/chat/ChatMain.jsx";
+import ChatList from "../components/chat/chatList.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -48,23 +56,16 @@ const router = createBrowserRouter([
           },
           {
             // 점주 회원가입 페이지
-            path: 'owner',
-            element: <OwnerLogin />,
+            path: 'owners',
+            element: <OwnerRegistration />,
           },
-        ]
-      },
         ]
       },
       {
         path: '/cleaners',
         element: <Outlet />,
         children: [
-          {
-            // 문의게시판
-            path: '',
-            element: <QnaPost />
-          },
-          {
+           {
             // 계좌 수정 페이지
             path: 'accountedit',
             element: <CleanersAccountEdit />
@@ -111,7 +112,47 @@ const router = createBrowserRouter([
           },
         ]
       },
+      {
+        path: '/owner',
+        element: <Outlet />,
+        children: [
+          {
+            path: 'mypage/:id',
+          element: <OwnerMyPage />
+          },
+        ]
+      },
+      {
+        path: '/qnaposts',
+        element: <Outlet />,
+        children: [
+          {
+            // 문의게시판
+            path: '',
+            element: <QnaPost />
+          },
+          {
+            // 글작성 페이지
+            path: 'create',
+            element: <PostCreate />
+          }
+        ]
+      },      
+      // 채팅 관련 라우트
+      {
+        path: '/chatroom/:id',
+        element: <ChatMain />
+      },
+      {
+        path: '/chatlist',
+        element: <ChatList />
+      },
+      {
+        path: '/result',
+        element: <Result />
+      },
     ]
+  }]
 );
 
 export default function Router() {

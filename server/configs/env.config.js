@@ -12,7 +12,7 @@ const envFiles = [
     '.env.test',
     '.env'
 ];
-let filepath = '';
+let filePath = '';
 
 // `envFiles` 루프 : 해당 파일이 있으면 파일 경로 저장 
 // 예) `.env.test`와 `.env`가 있을 경우 최종적으로 `.env`를 세팅

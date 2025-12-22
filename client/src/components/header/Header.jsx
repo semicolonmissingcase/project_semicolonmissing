@@ -13,7 +13,7 @@ export default function Header() {
   }
 
   function qnaPage() {
-    navigate('/qnapost');
+    navigate('/qnaposts');
   }
 
   function loginPage() {
@@ -39,8 +39,7 @@ export default function Header() {
       <div className='all-container header-container'>
         <div className='header-left-container'>
           <div className='header-logo-container' onClick={mainPage}>
-            <div className='ice-doctor-character header-character-size'></div>
-            <h1>ICE DOCTOR</h1>
+            <div className="ice-doctor-logo-character header-logo"></div>
           </div>
           {/* PC용 '문의사항' */}
           <p className='header-nav-qna pc-only' onClick={qnaPage}>문의사항</p>
@@ -48,8 +47,8 @@ export default function Header() {
         
         {/* PC 환경에서만 보이는 로그인/회원가입 버튼 */}
         <div className='header-right-container pc-only'>
-          <button type='button' className='header-right-btn' onClick={loginPage}>로그인</button>
-          <button type='button' className='header-right-btn' onClick={registrationPage}>회원가입</button>
+          <button type='button' className='btn-small header-right-btn' onClick={loginPage}>로그인</button>
+          <button type='button' className='btn-small header-right-btn' onClick={registrationPage}>회원가입</button>
         </div>
         
         {/* 모바일 햄버거 버튼 */}
