@@ -1,0 +1,24 @@
+.cleaners-profile-edit-wrapper {
+  margin: 0 auto;
+  border: var(--color-gray) solid 2px;
+  border-radius: 15px;
+  width: 90%;
+}
+
+fieldset.cleaners-profile-edit-fieldset {
+  border: none;
+  padding: 5px 15px 15px 15px;
+  width: 100%;
+}
+
+legend.cleaners-profile-edit-title {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  
+}
+
+.cleaners-profile-edit-place {
+  opacity: 0;
+}

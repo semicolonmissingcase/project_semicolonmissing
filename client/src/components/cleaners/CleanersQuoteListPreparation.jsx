@@ -9,7 +9,7 @@ function CleanersQuoteListPreparation () {
 
     <h3>자주 쓰는 견적서 양식</h3>
 
-    <div calssName="cleaners-quote-list-preparation-wrapper">
+    <div calssName="all-container cleaners-quote-list-preparation-wrapper">
 
       <div className="cleaners-quote-list-preparation-profile">
 

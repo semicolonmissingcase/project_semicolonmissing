@@ -27,7 +27,7 @@ function CleanersQuoteListPreparation () {
 
     <h3>OOO 기사님의 견적서</h3>
 
-    <div className="cleaners-quote-list-preparation-save-wrapper">
+    <div className="all-container cleaners-quote-list-preparation-save-wrapper">
 
       <div className="cleaners-quote-list-preparation-quote-list--filter-dropdown"  >
         <select

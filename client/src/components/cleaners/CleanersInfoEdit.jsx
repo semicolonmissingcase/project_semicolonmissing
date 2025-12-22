@@ -33,7 +33,7 @@ function CleanersInfoEdit () {
 
   return (
     <>
-    <div className="cleaners-info-edit-all-layout-center">
+    <div className="all-container cleaners-info-edit-all-layout-center">
     <div className="cleaners-info-edit-wrapper-cleaners-info-edit"> 
       <span className="cleaners-info-edit-layout-center">
         <p className="cleaners-info-edit-title">정보 수정</p>

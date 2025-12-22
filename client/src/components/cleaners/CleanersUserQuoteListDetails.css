@@ -1,30 +1,28 @@
 .btn-small-custom {
-  width: 180px;
+  width: 150px;
   height: 30px;
   font-size: 16px;
   background-color: var(--color-light-gray);
   white-space: nowrap;
 }
 
-
 .cleaners-user-quote-list-details-container {
   font-size: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-}
+} 
 
-.cleaners-user-quote-list-details-page-info {
+.cleaners-user-quote-list-title-text {
+  font-size: 20px;
+  width: 90%;
   margin: 0 auto;
-  padding: 30px 0;
 }
 
 .cleaners-user-quote-list-details-wrapper {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 30px;
+  margin: 0 auto;
   width: 90%;
   height: auto;
   display: flex;
@@ -35,32 +33,112 @@
 .cleaners-user-quote-list-details-reservation-date-time-wrapper {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
-  padding: 8px 12px;
   margin-bottom: 30px;
+  width: 90%;
   height: auto;
   display: flex;
+}
+
+
+.cleaners-user-quote-list-details-datepicker-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.cleaners-user-quote-list-details-datepicker {
+  padding-left: 8px;
+  width: 270px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.react-datepicker {
+  border: 1px solid var(--color-gray);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.react-datepicker__header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid var(--color-gray);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.react-datepicker__current-month {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.react-datepicker__day-name {
+  color: #666;
+  font-weight: 500;
+}
+
+.react-datepicker__day {
+  width: 32px;
+  line-height: 32px;
+  border-radius: 6px;
+  margin: 2px;
+}
+
+.react-datepicker__day:hover {
+  background-color: #e0e0e0;
+}
+
+.react-datepicker__day--selected {
+  background-color: var(--color-gray);
+  color: #fff;
+}
+
+.react-datepicker__day--today {
+  font-weight: bold;
+  border: 1px solid var(--color-gray);
+}
+
+.datepicker-disabled {
+  background-color: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.react-datepicker__day--disabled {
+  color: #ccc;
+}
+
+.btn-small-custom.btn-active {
+  background-color: var(--color-gray);
+  color: #fff;
 }
 
 fieldset.cleaners-user-quote-list-details-border-none {
   border: none;
   padding: 5px 15px 15px 15px;
+  width: 100%;
 }
 
 legend.cleaners-user-quote-list-details-border-none {
   border: none;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
+
 
 .cleaners-user-quote-list-details-quote-status {
   color: var(--color-blue);
   font-size: 24px;
-  font-weight: bold;
-  white-space: nowrap;
+  font-weight: bold;  
 }
 
 .cleaners-user-quote-list-details-user-info {
   font-size: 20px;
+}
+
+.cleaners-user-quote-list-details-list-reservation-date {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .cleaners-user-quote-list-details-reservation-time {
@@ -73,8 +151,8 @@ legend.cleaners-user-quote-list-details-border-none {
 }
 
 .cleaners-user-quote-list-details-answer {
-  width: fit-content;
-  max-width: 100%;
+  width: 100px;
+  height: 40px;
   white-space: nowrap;
   border: 1px solid var(--color-gray);
   border-radius: 5px;
@@ -101,9 +179,9 @@ legend.cleaners-user-quote-list-details-border-none {
   width: 90px;
   height: 30px;
   font-size: 16px;
-  display: block;
   margin: 10px 0;
   border-radius: 5px;
+  white-space: nowrap;
   border: none;
   text-align: center;
   background-color: var(--color-light-gray);
@@ -117,8 +195,21 @@ legend.cleaners-user-quote-list-details-border-none {
   list-style: none;
 }
 
+.cleaners-user-quote-list-form-width {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .cleaners-user-quote-list-details-answer-binary-layout {
   padding: 10px 0;
+}
+
+.cleaners-user-quote-list-details-input-layout {
+  width: 270px;
+  height: 30px;
+  border-radius: 5px;
 }
 
 .cleaners-user-quote-list-details-radio-ui {
@@ -145,8 +236,8 @@ legend.cleaners-user-quote-list-details-border-none {
 .cleaners-user-quote-list-details-details-wrapper {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
-  padding: 8px 12px;
   margin-bottom: 30px;
+  width: 90%;
   height: auto;
   display: flex;
 }
@@ -154,6 +245,7 @@ legend.cleaners-user-quote-list-details-border-none {
 .cleaners-user-quote-list-details-first-card {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .cleaners-user-quote-list-details-reservation-date {
@@ -174,6 +266,12 @@ legend.cleaners-user-quote-list-details-border-none {
 
 .cleaners-user-quote-list-details-details-option-info {
   color: var(--color-gray);
+}
+
+.cleaners-user-quote-list-details-reservation-date-title {
+  white-space: nowrap;
+  width: 64px;
+
 }
 
 .cleaners-user-quote-list-details-requests-title {
