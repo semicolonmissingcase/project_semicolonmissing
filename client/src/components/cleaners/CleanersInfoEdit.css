@@ -1,18 +1,27 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.cleaners-info-edit-all-layout-center {
+  display: flex;
+  justify-content: center;
 }
 
-.all-container {
-  max-width: 1200px;
-  margin: auto;
+.cleaners-info-edit-wrapper-cleaners-info-edit {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 90%;
+  margin: 40px 0;
 }
 
-.btn-small {
-  width: 90px;
-  height: 30px;
-  font-size: 16px;
+.cleaners-info-edit-layout-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.cleaners-info-edit-title {
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
 .wrapper-cleaners-info-edit {
@@ -24,12 +33,24 @@
   height: auto;
   display: flex;
   justify-self: center;
+  background-color: rgb(189, 189, 143); 
 }
 
 .cleaners-info-edit-form {
   display: flex;
   flex-direction: column; 
   margin: 7px 10px;
+  gap: 15px;
+}
+
+.cleaners-info-edit-id {
+  display: flex;
+  gap: 10px;
+}
+
+.cleaners-info-edit-ps {
+  display: flex;
+  gap: 10px;
 }
 
 .cleaners-info-edit-input-border-radius {
@@ -81,4 +102,14 @@
 .button-direction-row {
   display: flex;
   gap: 20px;
+}
+
+.cleaners-info-edit-check {
+  margin-top: 40px;
+}
+
+.cleaners-info-edit-button-direction-row {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
 }

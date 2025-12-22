@@ -33,17 +33,26 @@ function CleanersInfoEdit () {
 
   return (
     <>
-    <div className="wrapper-cleaners-info-edit">
+    <div className="cleaners-info-edit-all-layout-center">
+    <div className="cleaners-info-edit-wrapper-cleaners-info-edit"> 
+      <span className="cleaners-info-edit-layout-center">
+        <p className="cleaners-info-edit-title">정보 수정</p>
 
-      <form className="cleaners-info-edit-form">
+        <form className="cleaners-info-edit-form">
 
+       
         <label htmlFor="id">아이디(닉네임):</label>
+        <span className="cleaners-info-edit-id">
         <input className="cleaners-info-edit-input-border-radius" id="id" name="id" />
         <button className="btn-small">수정</button>
+        </span>
 
+        
         <label htmlFor="password">비밀번호:</label>
+        <span className="cleaners-info-edit-ps">
         <input className="cleaners-info-edit-input-border-radius" id="password" name="password" />
         <button className="btn-small">수정</button>
+        </span>
 
         <label htmlFor="name">이름:</label>
         <input className="cleaners-info-edit-input-border-radius" id="name" name="name"/>
@@ -118,19 +127,20 @@ function CleanersInfoEdit () {
         onChange={changeNotificationStatus} />
         </span>
 
-        <div className="check" onClick={checkStatus}>
+        <div className="cleaners-info-edit-check" onClick={checkStatus}>
           <img 
           src={!check ? "/icons/checkbox.png" : "/icons/checkbox_checked.png"} 
           onClick={changeCheckStatus} /><span>수정하신 내용을 한 번 더 확인하시고 왼쪽 버튼을 눌러주세요.</span>
         </div>
 
-      <div className="button-direction-row">
+      <div className="cleaners-info-edit-button-direction-row">
       <button className="btn-small" type="button">탈퇴</button>
       <button className="btn-small" type="button">취소</button>
       <button className="btn-small" type="submit">저장</button>
       </div>
       </form>
-
+      </span>
+    </div>
     </div>
     </>
 

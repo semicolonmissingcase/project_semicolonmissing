@@ -6,19 +6,16 @@
   white-space: nowrap;
 }
 
-.btn-small {
-  width: 90px;
-  height: 30px;
-  font-size: 16px;
-  background-color: var(--color-light-gray);
-}
 
 .cleaners-user-quote-list-details-container {
   font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .cleaners-user-quote-list-details-page-info {
-  width: 90%;
   margin: 0 auto;
   padding: 30px 0;
 }
@@ -27,28 +24,21 @@
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
-  width: 90%;
   margin-bottom: 30px;
+  width: 90%;
   height: auto;
   display: flex;
-  justify-self: center;
+  gap: 100px;
+  align-items: center;
 }
 
 .cleaners-user-quote-list-details-reservation-date-time-wrapper {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
-  width: 90%;
   margin-bottom: 30px;
   height: auto;
   display: flex;
-  justify-self: center;
-}
-
-.cleaners-user-quote-list-details-list-reservation-date {
-  margin-top: 10px;
-  display: flex;
-  gap: 20px;
 }
 
 fieldset.cleaners-user-quote-list-details-border-none {
@@ -64,9 +54,13 @@ legend.cleaners-user-quote-list-details-border-none {
 
 .cleaners-user-quote-list-details-quote-status {
   color: var(--color-blue);
-  font-size: 30px;
+  font-size: 24px;
   font-weight: bold;
   white-space: nowrap;
+}
+
+.cleaners-user-quote-list-details-user-info {
+  font-size: 20px;
 }
 
 .cleaners-user-quote-list-details-reservation-time {
@@ -152,11 +146,9 @@ legend.cleaners-user-quote-list-details-border-none {
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
   padding: 8px 12px;
-  width: 90%;
   margin-bottom: 30px;
   height: auto;
   display: flex;
-  justify-self: center;
 }
 
 .cleaners-user-quote-list-details-first-card {

@@ -14,8 +14,8 @@ import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx"
 import CleanersMyPage from "../components/cleaners/CleanersMyPage.jsx";
 import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
-import CleanersUserQuoteList from "../components/cleaners/CleanersUSerQuoteList.jsx";
-import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUSerQuoteListDetails.jsx";
+import CleanersUserQuoteList from "../components/cleaners/CleanersUserQuoteList.jsx";
+import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/auth/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";

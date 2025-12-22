@@ -32,26 +32,28 @@ function CleanersUserQuoteList () {
 
   return (
     <>
-      <div className="cleaners-user-quote-list-details-container">
+      <div className="all-container cleaners-user-quote-list-details-container">
         <h3 className="cleaners-user-quote-list-details-page-info">안녕하세요, 김기사 기사님! 요청 의뢰서입니다.</h3>
-        <span className="cleaners-user-quote-list-details-wrapper">
+        <div className="cleaners-user-quote-list-details-wrapper">
           <span className="cleaners-user-quote-list-details-quote-status">지정</span>
-          <span>남일동 유명한 카페</span>
-          <span>이점주</span>
-          <span>2025년 12월 27일 19시 ~ 20시</span>
-        </span>
+          <div className="cleaners-user-quote-list-details-user-info">
+            <span className="cleaners-user-quote-list-details-place">남일동 유명한 카페</span>
+            <span className="cleaners-user-quote-list-details-user">이점주</span>
+            <span className="cleaners-user-quote-list-details-date">2025년 12월 27일 19시 ~ 20시</span>
+          </div>
+        </div>
 
-      <form>
-        <span className="cleaners-user-quote-list-details-reservation-date-time-wrapper">
-        <span className="cleaners-user-quote-list-details-first-card">
+      <form className="cleaners-user-quote-list-form-width">
+        <div className="cleaners-user-quote-list-details-reservation-date-time-wrapper">
+        <div className="cleaners-user-quote-list-details-first-card">
         <fieldset className="cleaners-user-quote-list-details-border-none">
         <legend className="cleaners-user-quote-list-details-border-none">
         <span className="cleaners-user-quote-list-details-info">예약 정보*</span>
-        <span className="cleaners-user-quote-list-details-list-reservation-date">
+        <div className="cleaners-user-quote-list-details-list-reservation-date">
         <label htmlFor="date">예약날짜</label>
-        <input type="date" id="date" name="date"></input>
+        <input type="date" id="date" name="date" />
         <button className="btn-small-custom" type="button">날짜 협의가 가능해요.</button>
-        </span>
+        </div>
         </legend>
         </fieldset>
         <fieldset className="cleaners-user-quote-list-details-reservation-time-fieldset cleaners-user-quote-list-details-border-none">
@@ -195,8 +197,8 @@ function CleanersUserQuoteList () {
         
         <span>※jpg, jpeg, png, zip 파일만 첨부 가능합니다.</span>
         </fieldset>
-        </span>
-        </span>
+        </div>
+        </div>
 
         <span className="cleaners-user-quote-list-details-details-wrapper">
         <fieldset className="cleaners-user-quote-list-details-border-none">
