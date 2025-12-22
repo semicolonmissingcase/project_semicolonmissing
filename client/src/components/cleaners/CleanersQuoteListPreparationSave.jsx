@@ -1,14 +1,10 @@
 
 import React, { useState } from 'react';
 // import Select from 'react-select';
-<<<<<<< Updated upstream:client/src/components/cleaners/CleanersQuoteListPreparationSave.jsx
+
 import './CleanersQuoteListPreparation.css';
 
 function CleanersQuoteListPreparation () {
-=======
-import './CleanerQuoteListPreparation.css';
->>>>>>> Stashed changes:client/src/components/cleaners/CleanerQuoteListPreparationSave.jsx
-
 
   const options = [
   { value: 'request_date_desc', label: '최신 요청순' },
