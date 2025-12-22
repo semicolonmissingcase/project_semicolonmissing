@@ -1,73 +1,66 @@
 /**
- * @file databases/migrations/20251218-01-create-cleaners.js
- * @description cleaners migration file
+ * @file databases/migrations/20251218-07-create-inquiries.js
+ * @description inquiries migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'cleaners';
+const tableName = 'inquiries';
 
 // 컬럼 정의
 const attributes = {
   id: {
     field: 'id',
     type: DataTypes.BIGINT.UNSIGNED,
-    primaryKey: true, 
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '기사 PK',
+    comment: '문의 PK',
   },
-  name: {
-    field: 'name',
+ ownerId: {
+  field: 'owner_id',
+  type: DataTypes.BIGINT.UNSIGNED,
+  allowNull: false,
+  comment: '점주 PK(nullable 설정해야함)',
+ },
+ cleanerId: {
+  field: 'cleaner_id',
+  type: DataTypes.BIGINT.UNSIGNED,
+  allowNull: false,
+  comment: '기사 PK(nullable 설정해야함)',
+ },
+  title: {
+    field: 'title',
     type: DataTypes.STRING(50),
     allowNull: false,
-    comment: '기사 이름',
+    comment: '제목',
   },
-  gender: {
-    field: 'gender',
-    type: DataTypes.CHAR(1),
-    allowNull: false,
-    comment: '기사 성별',
-  },
-  email: {
-    field: 'email',
-    type: DataTypes.STRING(100),
-    allowNull: false,
-    unique: true,
-    comment: '이메일(로그인ID)',
-  },
-  password: {
-    field: 'password',
-    type: DataTypes.STRING(255),
-    allowNull: false,
-    comment: '비밀번호',
-  },
-  provider: {
-    field: 'provider',
-    type: DataTypes.STRING(10),
-    allowNull: false,
-    comment: '로그인 제공자(NONE, KAKAO, NAVER...)',
-  },
-  phoneNumber: {
-    field: 'phone_number',
-    type: DataTypes.STRING(13),
-    allowNull: false,
-    unique: true,  // 중복 가입 방지
-    comment: '기사 전화번호',
-  },
-  profile: {
-    field: 'profile',
-    type: DataTypes.STRING(100),
-    allowNull: true, 
-    comment: '기사 프로필',
-  },
-  refreshToken: {
-    field: 'refresh_token',
-    type: DataTypes.STRING(255),
+  content: {
+    field: 'content',
+    type: DataTypes.TEXT,
     allowNull: true,
-    comment: '리프레시 토큰',
+    comment: '문의내용',
+  },
+  guestName: {
+    field: 'guest_name',
+    type: DataTypes.STRING(50),
+    allowNull: true,
+    comment: '비회원 이름(nullable 설정해야함)'
+  },
+  guestPassword: {
+    field: 'guest_password',
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    comment: '비회원 비밀번호(nullable)'
+  },
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    defaultValue: 'PENDING',
+    comment: '상태(PENDING, COMPLETED)',
   },
   createdAt: {
     field: 'created_at',

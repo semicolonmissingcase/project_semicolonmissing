@@ -25,6 +25,12 @@ const attributes = {
     allowNull: false,
     comment: '기사 PK',
   },
+  reservationId: {
+    field: 'reservation_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '예약 PK',
+  },
   estimatedAmount: {
     field: 'estimated_amount',
     type: DataTypes.INTEGER,
@@ -49,7 +55,7 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
-  upatedAt: {
+  updatedAt: {
     field: 'updated_at',
     type: DataTypes.DATE,
     allowNull: true,

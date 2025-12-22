@@ -1,73 +1,35 @@
 /**
- * @file databases/migrations/20251218-01-create-cleaners.js
- * @description cleaners migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251219-21-create-locations.js
+ * @description locations migration file
+ * 251219 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'cleaners';
+const tableName = 'locations';
 
 // 컬럼 정의
 const attributes = {
   id: {
     field: 'id',
     type: DataTypes.BIGINT.UNSIGNED,
-    primaryKey: true, 
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '기사 PK',
+    comment: '지역구 PK',
   },
-  name: {
-    field: 'name',
-    type: DataTypes.STRING(50),
+  city: {
+    field: 'city',
+    type: DataTypes.STRING(20),
     allowNull: false,
-    comment: '기사 이름',
+    comment: '시/도',
   },
-  gender: {
-    field: 'gender',
-    type: DataTypes.CHAR(1),
+  district: {
+    field: 'district',
+    type: DataTypes.STRING(30),
     allowNull: false,
-    comment: '기사 성별',
-  },
-  email: {
-    field: 'email',
-    type: DataTypes.STRING(100),
-    allowNull: false,
-    unique: true,
-    comment: '이메일(로그인ID)',
-  },
-  password: {
-    field: 'password',
-    type: DataTypes.STRING(255),
-    allowNull: false,
-    comment: '비밀번호',
-  },
-  provider: {
-    field: 'provider',
-    type: DataTypes.STRING(10),
-    allowNull: false,
-    comment: '로그인 제공자(NONE, KAKAO, NAVER...)',
-  },
-  phoneNumber: {
-    field: 'phone_number',
-    type: DataTypes.STRING(13),
-    allowNull: false,
-    unique: true,  // 중복 가입 방지
-    comment: '기사 전화번호',
-  },
-  profile: {
-    field: 'profile',
-    type: DataTypes.STRING(100),
-    allowNull: true, 
-    comment: '기사 프로필',
-  },
-  refreshToken: {
-    field: 'refresh_token',
-    type: DataTypes.STRING(255),
-    allowNull: true,
-    comment: '리프레시 토큰',
+    comment: '시/군/구',
   },
   createdAt: {
     field: 'created_at',

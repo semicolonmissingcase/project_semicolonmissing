@@ -1,73 +1,59 @@
 /**
- * @file databases/migrations/20251218-01-create-cleaners.js
- * @description cleaners migration file
+ * @file databases/migrations/20251218-06-create-reservations.js
+ * @description reservations migration file
  * 251218 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'cleaners';
+const tableName = 'reservations';
 
 // 컬럼 정의
 const attributes = {
   id: {
     field: 'id',
     type: DataTypes.BIGINT.UNSIGNED,
-    primaryKey: true, 
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '기사 PK',
+    comment: '예약 PK',
   },
-  name: {
-    field: 'name',
-    type: DataTypes.STRING(50),
+  ownerId: {
+    field: 'owner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '기사 이름',
+    comment: '점주 PK',
   },
-  gender: {
-    field: 'gender',
-    type: DataTypes.CHAR(1),
+  storeId: {
+    field: 'store_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '기사 성별',
+    comment: '매장 PK',
   },
-  email: {
-    field: 'email',
-    type: DataTypes.STRING(100),
+  date: {
+    field: 'date',
+    type: DataTypes.DATE,
     allowNull: false,
-    unique: true,
-    comment: '이메일(로그인ID)',
+    comment: '희망 날짜',
   },
-  password: {
-    field: 'password',
-    type: DataTypes.STRING(255),
+  time: {
+    field: 'time',
+    type: DataTypes.TIME,
     allowNull: false,
-    comment: '비밀번호',
+    comment: '희망 시간(nullable 고려중)', 
   },
-  provider: {
-    field: 'provider',
-    type: DataTypes.STRING(10),
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(20),
     allowNull: false,
-    comment: '로그인 제공자(NONE, KAKAO, NAVER...)',
+    comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
   },
-  phoneNumber: {
-    field: 'phone_number',
-    type: DataTypes.STRING(13),
-    allowNull: false,
-    unique: true,  // 중복 가입 방지
-    comment: '기사 전화번호',
-  },
-  profile: {
-    field: 'profile',
-    type: DataTypes.STRING(100),
-    allowNull: true, 
-    comment: '기사 프로필',
-  },
-  refreshToken: {
-    field: 'refresh_token',
-    type: DataTypes.STRING(255),
+  CleanerId: {
+    field: 'cleaner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: true,
-    comment: '리프레시 토큰',
+    comment: '기사 PK(nullable 고려)'
   },
   createdAt: {
     field: 'created_at',
