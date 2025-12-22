@@ -56,6 +56,18 @@ const attributes = {
     allowNull: true,
     comment: '작성일', 
   },
+  updatedAt: {
+    field: 'updated_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '수정일',
+  },
+  deletedAt: {
+    field: 'deleted_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '삭제일',
+  }
 };
 
 // 옵션 

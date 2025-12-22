@@ -29,7 +29,6 @@ const attributes = {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true, 
     comment: '기사 PK',
   },
   estimateId: {
@@ -45,31 +44,43 @@ const attributes = {
     allowNull: false,
     comment: '채팅방 상태',
   },
-  createdAt: {
-    field: 'credated_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    get() {
-      const val = this.getDataValue('createdAt')
-      if(!val) {
-        return null;
-      }
-      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
-  },
-  deletedAt: {
-    field: 'deleted_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    get() {
-      const val = this.getDataValue('deletedAt')
-      if(!val) {
-        return null;
-      }
-      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }    
-  }
-};
+    createdAt: {
+      field: 'created_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('createdAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      } 
+    },
+    updatedAt: {
+      field: 'updated_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('updatedAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      }     
+    },
+    deletedAt: {
+      field: 'deleted_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('deletedAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      }    
+    }
+  };
 
 const options = {
   tableName: 'chat_rooms',  // 실제 DB 테이블명
