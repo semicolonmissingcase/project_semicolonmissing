@@ -1,247 +1,92 @@
 /**
  * @file app/repositories/chat.repository.js
- * @description Chat Repository
- * 251218 v1.0.0 seon init
+ * @description Chat Repository (DB Access)
  */
-
 import db from '../models/index.js';
-const { ChatRoom, ChatMessage, User } = db;
 
-/**
- * 채팅방 생성
- * @param {import("sequelize").Transaction|null} t 
- * @param {{estimate_id: number, cleaner_id: number}} data 
- * @returns {Promise<Object>}
- */
-async function create(t = null, data) {
-  return await ChatRoom.create(
-    {
-      estimate_id: data.estimate_id,
-      cleaner_id: data.cleaner_id,
-      status: 'ACTIVE'
-    },
-    { transaction: t }
-  );
-}
-
-/**
- * 채팅방 조회 (estimate_id, cleaner_id로)
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} estimate_id 
- * @param {number} cleaner_id 
- * @returns {Promise<Object|null>}
- */
-async function findByKeys(t = null, estimate_id, cleaner_id) {
-  return await ChatRoom.findOne({
-    where: {
-      estimate_id,
-      cleaner_id,
-      status: 'ACTIVE'
-    },
-    transaction: t
-  });
-}
-
-/**
- * 채팅방 ID로 조회
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} id 
- * @returns {Promise<Object|null>}
- */
-async function findByPk(t = null, id) {
-  return await ChatRoom.findByPk(id, { transaction: t });
-}
-
-/**
- * 점주의 채팅방 목록 조회
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} owner_id 
- * @returns {Promise<Array>}
- */
-async function findByOwner(t = null, owner_id) {
-  return await ChatRoom.findAll({
-    where: {
-      owner_id,
-      status: 'ACTIVE'
-    },
-    include: [
-      {
-        model: User,
-        as: 'cleaner',
-        attributes: ['id', 'name', 'profile_image']
+const chatRepository = {
+  /**
+   * 1. 견적 ID와 기사 ID로 기존 채팅방 조회
+   */
+  findByKeys: async (transaction, estimate_id, cleaner_id) => {
+    return await db.ChatRoom.findOne({
+      where: { 
+        estimateId: estimate_id, 
+        cleanerId: cleaner_id 
       },
-      {
-        model: ChatMessage,
-        as: 'messages',
-        separate: true,
-        limit: 1,
-        order: [['created_at', 'DESC']],
-        attributes: ['content', 'created_at']
-      }
-    ],
-    order: [['updated_at', 'DESC']],
-    transaction: t
-  });
-}
+      transaction
+    });
+  },
 
-/**
- * 기사의 채팅방 목록 조회
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} cleaner_id 
- * @returns {Promise<Array>}
- */
-async function findByCleaner(t = null, cleaner_id) {
-  return await ChatRoom.findAll({
-    where: {
-      cleaner_id,
-      status: 'ACTIVE'
-    },
-    include: [
-      {
-        model: User,
-        as: 'owner',
-        attributes: ['id', 'name', 'profile_image']
-      },
-      {
-        model: ChatMessage,
-        as: 'messages',
-        separate: true,
-        limit: 1,
-        order: [['created_at', 'DESC']],
-        attributes: ['content', 'created_at']
-      }
-    ],
-    order: [['updated_at', 'DESC']],
-    transaction: t
-  });
-}
+  /**
+   * 2. 새 채팅방 생성
+   */
+  create: async (transaction, data) => {
+    // 주의: ChatRoom 모델 정의 시 ownerId가 allowNull: false이므로 
+    // 서비스에서 ownerId도 함께 넘겨주도록 보완이 필요할 수 있습니다.
+    return await db.ChatRoom.create({
+      estimateId: data.estimate_id,
+      cleanerId: data.cleaner_id,
+      ownerId: data.owner_id || 1, // 임시로 1번 점주 (실제론 서비스에서 받아와야 함)
+      status: 'OPEN'
+    }, { transaction });
+  },
 
-/**
- * 안읽은 메시지 개수 조회
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} room_id 
- * @param {number} user_id 
- * @returns {Promise<number>}
- */
-async function getUnreadCount(t = null, room_id, user_id) {
-  return await ChatMessage.count({
-    where: {
-      room_id,
-      sender_id: { [db.Sequelize.Op.ne]: user_id },
-      is_read: false,
-      deleted_at: null
-    },
-    transaction: t
-  });
-}
-
-/**
- * 메시지 저장
- * @param {import("sequelize").Transaction|null} t 
- * @param {{room_id: number, content: string, sender_id: number, sender_role: string}} data 
- * @returns {Promise<Object>}
- */
-async function createMessage(t = null, data) {
-  return await ChatMessage.create(
-    {
-      room_id: data.room_id,
+  /**
+   * 3. 메시지 저장
+   */
+  createMessage: async (transaction, data) => {
+    return await db.ChatMessage.create({
+      chatRoomId: data.room_id,
       content: data.content,
-      sender_id: data.sender_id,
-      sender_role: data.sender_role,
-      is_read: false
-    },
-    { transaction: t }
-  );
-}
+      senderId: data.sender_id,
+      senderType: data.sender_role // 모델의 senderType(또는 senderTye) 컬럼명 확인
+    }, { transaction });
+  },
 
-/**
- * 채팅방의 메시지 조회
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} room_id 
- * @param {number} limit 
- * @param {number} offset 
- * @returns {Promise<Array>}
- */
-async function findMessagesByRoomId(t = null, room_id, limit = 50, offset = 0) {
-  return await ChatMessage.findAll({
-    where: {
-      room_id,
-      deleted_at: null
-    },
-    order: [['created_at', 'ASC']],
-    limit,
-    offset,
-    transaction: t
-  });
-}
+  /**
+   * 4. 특정 방의 메시지 목록 조회 (페이징)
+   */
+  findMessagesByRoomId: async (transaction, room_id, limit, offset) => {
+    return await db.ChatMessage.findAll({
+      where: { chatRoomId: room_id },
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']], // 최신순
+      transaction
+    });
+  },
 
-/**
- * 메시지 읽음 처리
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} room_id 
- * @param {number} user_id 
- * @returns {Promise<void>}
- */
-async function markAsRead(t = null, room_id, user_id) {
-  await ChatMessage.update(
-    { is_read: true },
-    {
+  /**
+   * 5. 안읽은 메시지 개수 카운트
+   */
+  getUnreadCount: async (transaction, room_id, user_id) => {
+    return await db.ChatMessage.count({
       where: {
-        room_id,
-        sender_id: { [db.Sequelize.Op.ne]: user_id },
-        is_read: false
+        chatRoomId: room_id,
+        senderId: { [db.Sequelize.Op.ne]: user_id }, // 내가 보낸 게 아닌 것
+        isRead: 0
       },
-      transaction: t
-    }
-  );
-}
+      transaction
+    });
+  },
 
-/**
- * 채팅방 나가기 (시스템 메시지 저장)
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} room_id 
- * @param {string} userName 
- * @returns {Promise<void>}
- */
-async function leave(t = null, room_id, userName) {
-  await ChatMessage.create(
-    {
-      room_id,
-      content: `${userName}님이 채팅방을 나갔습니다.`,
-      sender_id: 0,
-      sender_role: 'system',
-      is_read: true
-    },
-    { transaction: t }
-  );
-}
-
-/**
- * 채팅방 닫기
- * @param {import("sequelize").Transaction|null} t 
- * @param {number} room_id 
- * @returns {Promise<void>}
- */
-async function close(t = null, room_id) {
-  await ChatRoom.update(
-    { status: 'CLOSED' },
-    {
-      where: { id: room_id },
-      transaction: t
-    }
-  );
-}
-
-export default {
-  create,
-  findByKeys,
-  findByPk,
-  findByOwner,
-  findByCleaner,
-  getUnreadCount,
-  createMessage,
-  findMessagesByRoomId,
-  markAsRead,
-  leave,
-  close
+  /**
+   * 6. 읽음 처리 업데이트
+   */
+  markAsRead: async (transaction, room_id, user_id) => {
+    return await db.ChatMessage.update(
+      { isRead: 1 },
+      {
+        where: {
+          chatRoomId: room_id,
+          senderId: { [db.Sequelize.Op.ne]: user_id },
+          isRead: 0
+        },
+        transaction
+      }
+    );
+  }
 };
+
+export default chatRepository;

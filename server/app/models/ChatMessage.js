@@ -31,7 +31,7 @@ const attributes = {
     allowNull: false,
     comment: '발신자',
   },
-  senderTye: {
+  senderType: {
     field: 'sender_type',
     type: DataTypes.STRING(20),
     allowNull: false,

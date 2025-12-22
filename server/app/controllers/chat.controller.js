@@ -1,131 +1,73 @@
 /**
  * @file app/controllers/chat.controller.js
- * @description Chat Controller
- * 251219 v1.0.0 seon init
+ * @description Chat controller (DB Access)
+ * 251222 v1.0.0 seon init
  */
-
 import chatService from '../services/chat.service.js';
-import { SUCCESS } from '../../configs/responseCode.config.js';
 
-/**
- * 채팅방 생성 또는 조회
- * POST /api/chat/rooms
- */
-async function createRoom(req, res, next) {
+const createRoom = async (req, res, next) => {
   try {
     const result = await chatService.createOrGetRoom(req.body);
-    
-    res.status(SUCCESS.status).json({
-      code: SUCCESS.code,
-      message: result.isNew ? '채팅방 생성 완료' : '기존 채팅방 조회 완료',
-      data: result.room
-    });
+    res.status(200).json({ success: true, data: result.room, isNew: result.isNew });
   } catch (error) {
-    next(error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
-/**
- * 채팅방 목록 조회
- * GET /api/chat/rooms?userId=123&userRole=owner
- */
-async function getRooms(req, res, next) {
+const getRooms = async (req, res, next) => {
   try {
     const { userId, userRole } = req.query;
-    const rooms = await chatService.getRoomsByUser(parseInt(userId), userRole);
-    
-    res.status(SUCCESS.status).json({
-      code: SUCCESS.code,
-      message: '채팅방 목록 조회 완료',
-      data: rooms
-    });
+    const rooms = await chatService.getRoomsByUser(userId, userRole);
+    res.status(200).json({ success: true, data: rooms });
   } catch (error) {
-    next(error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
-/**
- * 채팅방 메시지 조회
- * GET /api/chat/rooms/:roomId/messages?page=1&limit=50
- */
-async function getMessages(req, res, next) {
+const getMessages = async (req, res, next) => {
   try {
     const { roomId } = req.params;
-    const { page = 1, limit = 50 } = req.query;
-    
-    const messages = await chatService.getMessages(
-      parseInt(roomId),
-      parseInt(page),
-      parseInt(limit)
-    );
-    
-    res.status(SUCCESS.status).json({
-      code: SUCCESS.code,
-      message: '메시지 조회 완료',
-      data: messages
-    });
+    const { page, limit } = req.query;
+    const messages = await chatService.getMessages(roomId, page, limit);
+    res.status(200).json({ success: true, data: messages });
   } catch (error) {
-    next(error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
-/**
- * 메시지 읽음 처리
- * PUT /api/chat/rooms/:roomId/read
- */
-async function markAsRead(req, res, next) {
+// 🌟 추가된 함수들 🌟
+
+const markAsRead = async (req, res, next) => {
   try {
     const { roomId } = req.params;
-    const { userId } = req.body;
-    
-    await chatService.markAsRead(parseInt(roomId), userId);
-    
-    res.status(SUCCESS.status).json({
-      code: SUCCESS.code,
-      message: '읽음 처리 완료'
-    });
+    const { userId } = req.body; 
+    await chatService.markAsRead(roomId, userId);
+    res.status(200).json({ success: true });
   } catch (error) {
-    next(error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
-/**
- * 채팅방 나가기
- * PUT /api/chat/rooms/:roomId/leave
- */
-async function leaveRoom(req, res, next) {
+const leaveRoom = async (req, res, next) => {
   try {
     const { roomId } = req.params;
     const { userName } = req.body;
-    
-    await chatService.leaveRoom(parseInt(roomId), userName);
-    
-    res.status(SUCCESS.status).json({
-      code: SUCCESS.code,
-      message: '채팅방 나가기 완료'
-    });
+    await chatService.leaveRoom(roomId, userName);
+    res.status(200).json({ success: true });
   } catch (error) {
-    next(error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
-/**
- * 채팅방 닫기
- * PUT /api/chat/rooms/:roomId/close
- */
-async function closeRoom(req, res, next) {
+const closeRoom = async (req, res, next) => {
   try {
     const { roomId } = req.params;
-    await chatService.closeRoom(parseInt(roomId));
-    
-    res.status(SUCCESS.status).json({
-      code: SUCCESS.code,
-      message: '채팅방 종료 완료'
-    });
+    await chatService.closeRoom(roomId);
+    res.status(200).json({ success: true });
   } catch (error) {
-    next(error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
 export default {
   createRoom,
