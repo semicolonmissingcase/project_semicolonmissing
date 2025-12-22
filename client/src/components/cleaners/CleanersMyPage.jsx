@@ -1,6 +1,6 @@
 import './CleanersMyPage.css';
 
-function CleanerMyPage () {
+function CleanersMyPage () {
 
   return (
     <>
@@ -56,4 +56,4 @@ function CleanerMyPage () {
   )
 }
 
-export default CleanerMyPage;
+export default CleanersMyPage;

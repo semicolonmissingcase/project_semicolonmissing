@@ -1,15 +1,5 @@
-.all-container {
-  max-width: 1200px;
-  margin: auto;
-}
 
-button {
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.cleaners-quote-list-preparation-save-wrapper {
+.cleaner-quotation-preparation-save-wrapper {
   display: flex;
   flex-direction: column;
 }

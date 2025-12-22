@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./CleanersUserQuoteListDetails.css";
 
-function UserQuoteList () {
+function CleanersUserQuoteList () {}
 
 
   const [answers, setAnswers] = useState({
@@ -472,4 +472,4 @@ function UserQuoteList () {
   )
 }
 
-export default UserQuoteList;
+export default CleanersUserQuoteList;

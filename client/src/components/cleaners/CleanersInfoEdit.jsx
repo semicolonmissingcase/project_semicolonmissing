@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import './CleanersInfoEdit.css';
 
-function CleanerInfoEdit () {
+function CleanersInfoEdit () {
+
+  const [birth, setBirth] = useState("");
 
   const [gender, setGender] = useState('');
 
@@ -62,7 +64,7 @@ function CleanerInfoEdit () {
         }}
         onChange={(e) => 
         {const onlyNumber = (e.target.value.replace(/\D/g, ""));
-        setValue(onlyNumber);
+        setBirth(onlyNumber);
         }} />
 
         <label htmlfor="gender">성별:</label>
@@ -135,4 +137,4 @@ function CleanerInfoEdit () {
   )
 };
 
-export default CleanerInfoEdit;
+export default CleanersInfoEdit;
