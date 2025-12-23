@@ -7,11 +7,15 @@ import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import Result from "./result/Result.jsx";
 // 기사님 관련
-import CleanerAccountEdit from "../components/cleaners/CleanerAccountEdit.jsx";
-import CleanerInfoEdit from "../components/cleaners/CleanerInfoEdit.jsx";
-import CleanerQuoteListPreparation from "../components/cleaners/CleanerQuoteListPreparation.jsx";
-import CleanerQuoteListPreparationSave from "../components/cleaners/CleanerQuoteListPreparationSave.jsx";
-import CleanerMyPage from "../components/cleaners/CleanerMyPage.jsx";
+import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
+import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
+import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
+import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
+import CleanersMyPage from "../components/cleaners/CleanersMyPage.jsx";
+import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
+import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
+import CleanersUserQuoteList from "../components/cleaners/CleanersUSerQuoteList.jsx";
+import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUSerQuoteListDetails.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";
@@ -22,6 +26,7 @@ import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -58,24 +63,49 @@ const router = createBrowserRouter([
         element: <Outlet />,
         children: [
            {
+            // 계좌 수정 페이지
             path: 'accountedit',
-            element: <CleanerAccountEdit />
+            element: <CleanersAccountEdit />
           },
           {
+            // 계좌 저장 페이지
+            path: 'accountsave',
+            element: <CleanersAccountSave />,
+          },
+          {
+            // 정보 수정 페이지
             path: 'infoedit',
-            element: <CleanerInfoEdit />
+            element: <CleanersInfoEdit />
           },
           {
-            path: 'quotelistpreparation',
-            element: <CleanerQuoteListPreparation />,
+            // 프로필 수정 페이지
+            path: 'profileedit',
+            element: <CleanersProfileEdit />,
           },
-          {
-            path: 'quotelistpreparationsave',
-            element: <CleanerQuoteListPreparationSave />,
-          },
-          {
+          { 
+            // 마이페이지
             path: 'mypage',
-            element: <CleanerMyPage />,
+            element: <CleanersMyPage />,
+          },
+          {
+            // 기사 견적 작성 페이지
+            path: 'quotelistpreparation',
+            element: <CleanersQuoteListPreparation />,
+          },
+          {
+            // 기사 견적 작성 임시저장 페이지
+            path: 'quotelistpreparationsave',
+            element: <CleanersQuoteListPreparationSave />,
+          },
+          {
+            // 유저 견적 작성 페이지
+            path: 'userquotelist',
+            eleemnt: <CleanersUserQuoteList />,
+          },
+          {
+            // 유저 견적 작성 페이지 상세
+            path: 'userquotelistdetails',
+            element: <CleanersUserQuoteListDetails />,
           },
         ]
       },

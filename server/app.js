@@ -3,14 +3,46 @@
  * @description Entry Point
  * 251217 v1.0.0 jae
  */
-import express from  'express';
-import './configs/env.config';
+import express from 'express';
+import './configs/env.config.js';
+import authRouter from './routes/auth.router.js';
+
+// 채팅 관련 import
+import { createServer } from 'http'; // HTTP 서버 생성
+import { Server } from 'socket.io';   // 소켓 모듈
+import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
+import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 
 const app = express();
+app.use(express.json());
 
-app.get('/', (req, res, next) => {
-  res.status(200).send('테스트'); 
+// -----------------
+// 라우터 정의
+// -----------------
+app.use('/api/auth', authRouter);
+app.use('/api/chat', chatRouter);
+
+// -----------------
+// Socket.io 설정
+// -----------------
+// 1. Express 앱을 HTTP 서버로 감싸기
+const httpServer = createServer(app);
+
+// 2. Socket.io 서버 객체 생성
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*", // 프론트엔드 주소에 맞춰 설정 (테스트 시 "*" 권장)
+    methods: ["GET", "POST"]
+  }
 });
 
-// 해당 port로 express 실행
-app.listen(3000);
+socketHandler(io);
+
+// -----------------------
+// 서버 실행 (httpServer로 실행해야 소켓이 작동함)
+// -----------------------
+const PORT = parseInt(process.env.APP_PORT) || 3000;
+httpServer.listen(PORT, () => {
+  console.log(`🚀 서버가 ${PORT} 포트에서 실행 중입니다.`);
+  console.log(`💬 실시간 채팅 기능 활성화됨`);
+});

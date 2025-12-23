@@ -1,5 +1,5 @@
 import { useState } from "react";
-import './CleanerAccountEdit.css';
+import './CleanersAccountEdit.css';
 
 function CleanerAccountEdit () {
 
@@ -20,63 +20,64 @@ function CleanerAccountEdit () {
 
   const [selectAddAccount, setSelectAddAccount] = useState(false);
 
-  const AddAccountButtonSmallCat = () => {
-
-    setSelectAddAccount(!selectAddAccount);
-
-  }
+  const toggleAddAccount = (e) => {
+  e.stopPropagation();           // 바깥 토글로 클릭 전파 방지
+  setSelectAddAccount(prev => !prev);
+  };
 
   return (
 
     <>
 
-    <div className="cleaner-account-edit-wrapper">
+    <div className="cleaners-account-edit-wrapper">
 
-    <div className="cleaner-account-edit-account-management">
+    <div className="cleaners-account-edit-account-management">
         
-        <div className="cleaner-account-edit-add-account-wrapper">
+        <div className="cleaners-account-edit-add-account-wrapper">
           
-        <div className="cleaner-account-edit-account-management-title" 
+        <div className="cleaners-account-edit-account-management-title" 
         onClick={toggleMenuNew}>
 
           <img
           src={!toggleNew ? "/icons/toggle_down.png" : "/icons/toggle_up.png"}/>
-          <p className="cleaner-account-edit-new-account-message"> 신규 정산 계좌</p>
+          <p className="cleaners-account-edit-new-account-message"> 신규 정산 계좌</p>
 
         </div>
 
       <div className={
             toggleNew
-              ? "cleaner-account-edit-toggle-updown-new-contents-toggledown" 
-              : "cleaner-account-edit-toggle-updown-new-contents"
+              ? "cleaners-account-edit-toggle-updown-new-contents-toggledown" 
+              : "cleaners-account-edit-toggle-updown-new-contents"
           }
         >
 
-      <div className="cleaner-account-edit-form-edit">
+      <div className="cleaners-account-edit-form-edit">
 
-      <div className="cleaner-account-edit-new-account-title-wrapper">
+      <div className="cleaners-account-edit-new-account-title-wrapper">
 
-          <div className="cleaner-account-edit-add-button"
-            onClick={AddAccountButtonSmallCat}>
+          <div className="cleaners-account-edit-add-button"
+            onClick={toggleAddAccount}>
           <div className={
             selectAddAccount
-              ? "cleaner-account-edit-toggle-updown-form-contents-toggledown" 
-              : "cleaner-account-edit-toggle-updown-form-contents"
+              ? "cleaners-account-edit-toggle-updown-form-contents-toggledown" 
+              : "cleaners-account-edit-toggle-updown-form-contents"
           }
           >
-          <div className="cleaner-account-edit-add-button-text">
-          <img className="cleaner-account-edit-add-button-img" 
+          <div className="cleaners-account-edit-add-button-text">
+          <img className="cleaners-account-edit-add-button-img" 
           src="/icons/add.png"
           />
-          <span className="cleaner-account-edit-new-accounts"> 신규 정산 계좌 추가</span>
+          <span className="cleaners-account-edit-new-accounts"> 신규 정산 계좌 추가</span>
           </div>
-          <p className="cleaner-account-edit-account-message">정산에 사용할 계좌를 선택해 주세요.</p>
+          <p className="cleaners-account-edit-account-message">정산에 사용할 계좌를 선택해 주세요.</p>
         </div>
       </div>
       </div>
 
+      {selectAddAccount && (
+        <div className="cleaners-account-edit-form-wrapper">
         <span>정산 계좌</span>
-        <form className="cleaner-account-edit-form">
+        <form className="cleaners-account-edit-form">
           <label htmlFor="banks">은행</label>
           <select id="banks" name="banks">
             <option value="Woori Bank">우리은행</option>
@@ -95,15 +96,16 @@ function CleanerAccountEdit () {
         <label htmlFor="account-holder">예금주</label>
           <input id="account-holder" name="account-holder">
           </input>
-        <label htmlFor="account-nickname">계좌 별명</label><span className="cleaner-account-edit-option">(선택)</span>
+        <label htmlFor="account-nickname">계좌 별명</label><span className="cleaners-account-edit-option">(선택)</span>
           <input id="account-nickname" name="account-nickname">
           </input>
-        <div className="cleaner-account-edit-button">
+        <div className="cleaners-account-edit-button">
         <button type="button">취소</button>
         <button type="submit">저장</button>
         </div>
         </form>
-      
+        </div>
+        )}
       </div>
       </div>
 
@@ -112,25 +114,25 @@ function CleanerAccountEdit () {
     </div>
 
 
-    <div className="cleaner-account-edit-account-info">
+    <div className="cleaners-account-edit-account-info">
 
-      <div className="cleaner-account-edit-info-account">
+      <div className="cleaners-account-edit-info-account">
         
-        <div className="cleaner-account-edit-account-info-title" onClick={toggleMenuInfo}>
+        <div className="cleaners-account-edit-account-info-title" onClick={toggleMenuInfo}>
 
-          <img className="cleaner-account-edit-toggle-img-info" 
+          <img className="cleaners-account-edit-toggle-img-info" 
           src={!toggleInfo ? "/icons/toggle_down.png" : "/icons/toggle_up.png"}/>
-          <p className="cleaner-account-edit-account-info-message"> 정산 계좌 정보</p>
+          <p className="cleaners-account-edit-account-info-message"> 정산 계좌 정보</p>
 
         </div>
 
         <div className={
             toggleInfo 
-              ? "cleaner-account-edit-toggle-updown-info-contents-toggledown" 
-              : "cleaner-account-edit-toggle-updown-info-contents"
+              ? "cleaners-account-edit-toggle-updown-info-contents-toggledown" 
+              : "cleaners-account-edit-toggle-updown-info-contents"
           }
         >
-        <div className="cleaner-account-edit-accout-settlement-criteria-guide">
+        <div className="cleaners-account-edit-accout-settlement-criteria-guide">
 
           <span>
             정산 기준 안내
@@ -154,7 +156,7 @@ function CleanerAccountEdit () {
       </div>
       </div>
 
-      <div className="cleaner-account-edit-account-modal-page">
+      <div className="cleaners-account-edit-account-modal-page">
         <p>저장하시겠습니까?(임시)</p>
       </div>
 

@@ -50,7 +50,7 @@ const attributes = {
     allowNull: false,
     comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
   },
-  CleanerId: {
+  cleanerId: {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: true,
@@ -96,7 +96,7 @@ const attributes = {
 
 const options = {
   tableName: 'reservations',  // 실제 DB 테이블명
-  timestams: true,             // createdAt, updatedAt를 자동 관리
+  timestamps: true,             // createdAt, updatedAt를 자동 관리
   paranoid: true,              // soft delete 설정 (deletedAt 자동 관리)
 }
 
