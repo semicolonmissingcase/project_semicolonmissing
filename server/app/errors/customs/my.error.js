@@ -1,12 +1,20 @@
 /**
  * @file app/errors/customs/my.error.js
- * @description 공통 에러 객체 생성 함수
+ * @description 커스텀 에러 객체 생성
+ * 251223 v1.0.0 jae init
  */
 
-const myError = (message, statusCode) => {
-  const error = new Error(message);
-  error.statusCode = statusCode || 500;
-  return error;
-};
+import { SYSTEM_ERROR } from "../../../configs/responseCode.config.js"
 
-export default myError;
+/**
+ * 공통 에러 객체 생성
+ * @param {string} msg - 에러 메시지
+ * @param {import("../../../configs/responseCode.config.type.js").ResponseCodeConfig} codeInfo = 응답 코드 정보
+ * @returns
+ */
+
+export default function myError(msg = '', codeInfo = SYSTEM_ERROR) {
+  const err = new Error(msg);
+  err.codeInfo = codeInfo;
+  return err;
+}
