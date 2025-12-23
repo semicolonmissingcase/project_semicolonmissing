@@ -10,9 +10,8 @@ export default function OwnerRegistration() {
   const [formData, setFormData] = useState({
     name: '',
     gender: 'male',
-    birthYear: '',
-    birthMonth: '',
-    birthDay: '',
+    emailLocal: '',
+    emailDomain: '',
     password: '',
     passwordConfirm: '',
     phone: '',
@@ -39,10 +38,18 @@ export default function OwnerRegistration() {
     }
   };
 
-  const handleGenderClick = (gender) => {
+  const handleEmailDomainChange = (e) => {
+    const selectedDomain = e.target.value;
     setFormData(prev => ({
       ...prev,
-      gender
+      emailDomain: selectedDomain
+    }));
+  };
+
+  const handleGenderChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      gender: e.target.value
     }));
   };
 
@@ -62,8 +69,8 @@ export default function OwnerRegistration() {
       newErrors.name = '이름을 입력해주세요';
     }
 
-    if (!formData.birthYear || !formData.birthMonth || !formData.birthDay) {
-      newErrors.birth = '이메일을 입력해주세요';
+    if (!formData.emailLocal || !formData.emailDomain) {
+      newErrors.email = '이메일을 입력해주세요';
     }
 
     if (!formData.password) {
@@ -80,18 +87,6 @@ export default function OwnerRegistration() {
       newErrors.phone = '전화번호를 입력해주세요';
     }
 
-    if (!formData.storeName.trim()) {
-      newErrors.storeName = '매장명을 입력해주세요';
-    }
-
-    if (!formData.storePhone) {
-      newErrors.storePhone = '매장 전화번호를 입력해주세요';
-    }
-
-    if (!formData.address.trim()) {
-      newErrors.address = '주소를 입력해주세요';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -104,12 +99,17 @@ export default function OwnerRegistration() {
     }
 
     try {
+      const submitData = {
+        ...formData,
+        email: `${formData.emailLocal}@${formData.emailDomain}`
+      };
+
       const response = await fetch('/api/auth/register/owner', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(submitData)
       });
 
       if (response.ok) {
@@ -151,20 +151,26 @@ export default function OwnerRegistration() {
           <div className="form-group">
             <label>성별</label>
             <div className="gender-buttons">
-              <button
-                type="button"
-                className={`gender-btn ${formData.gender === 'male' ? 'active' : ''}`}
-                onClick={() => handleGenderClick('male')}
-              >
-                남자
-              </button>
-              <button
-                type="button"
-                className={`gender-btn ${formData.gender === 'female' ? 'active' : ''}`}
-                onClick={() => handleGenderClick('female')}
-              >
-                여자
-              </button>
+              <label className={`gender-checkbox ${formData.gender === 'male' ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  checked={formData.gender === 'male'}
+                  onChange={handleGenderChange}
+                />
+                <span>남자</span>
+              </label>
+              <label className={`gender-checkbox ${formData.gender === 'female' ? 'active' : ''}`}>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  checked={formData.gender === 'female'}
+                  onChange={handleGenderChange}
+                />
+                <span>여자</span>
+              </label>
             </div>
           </div>
 
@@ -174,24 +180,25 @@ export default function OwnerRegistration() {
             <div className="birth-inputs">
               <input
                 type="text"
-                name="birthYear"
-                value={formData.birthYear}
+                name="emailLocal"
+                value={formData.emailLocal}
                 onChange={handleChange}
                 className="birth-input"
+                placeholder="이메일"
               />
               <span className="birth-separator">@</span>
               <input
                 type="text"
-                name="birthMonth"
-                value={formData.birthMonth}
+                name="emailDomain"
+                value={formData.emailDomain}
                 onChange={handleChange}
                 placeholder="직접입력"
                 className="birth-input"
               />
               <select
-                name="emailDomain"
+                name="emailDomainSelect"
                 className="email-domain-select"
-                onChange={handleChange}
+                onChange={handleEmailDomainChange}
               >
                 <option value="">직접입력</option>
                 <option value="naver.com">naver.com</option>
@@ -199,7 +206,7 @@ export default function OwnerRegistration() {
                 <option value="daum.net">daum.net</option>
               </select>
             </div>
-            {errors.birth && <span className="error-text">{errors.birth}</span>}
+            {errors.email && <span className="error-text">{errors.email}</span>}
           </div>
 
           {/* 비밀번호 */}
@@ -247,7 +254,7 @@ export default function OwnerRegistration() {
 
         {/* 매장 정보 */}
         <div className="registration-section">
-          <h2 className="section-title">매장 정보*</h2>
+          <h2 className="section-title">매장 정보</h2>
 
           {/* 매장명 */}
           <div className="form-group">

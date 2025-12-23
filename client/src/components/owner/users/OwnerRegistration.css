@@ -76,14 +76,27 @@
   margin-top: 5px;
 }
 
-/* 성별 버튼 */
+/* 성별 체크박스 (버튼 스타일) */
 .gender-buttons {
   display: flex;
   gap: 10px;
 }
 
-.gender-btn {
+.gender-checkbox {
   flex: 1;
+  position: relative;
+  cursor: pointer;
+}
+
+.gender-checkbox input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.gender-checkbox span {
+  display: block;
   padding: 12px;
   border: 2px solid var(--color-light-gray);
   border-radius: 10px;
@@ -91,21 +104,21 @@
   color: var(--color-gray);
   font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
+  text-align: center;
   transition: all 0.2s ease;
 }
 
-.gender-btn:hover {
+.gender-checkbox:hover span {
   border-color: var(--color-blue);
 }
 
-.gender-btn.active {
+.gender-checkbox.active span {
   background-color: var(--color-dark-blue);
   border-color: var(--color-dark-blue);
   color: var(--color-white);
 }
 
-/* 생년월일 입력 */
+/* 이메일 입력 */
 .birth-inputs {
   display: flex;
   align-items: center;
@@ -211,7 +224,7 @@
     font-size: 13px;
   }
 
-  .gender-btn {
+  .gender-checkbox span {
     padding: 10px;
     font-size: 13px;
   }

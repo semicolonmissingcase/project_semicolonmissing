@@ -1,14 +1,20 @@
 import { useState } from "react";
 import "./AdminNav.css";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminNav() {
+  const navigate = useNavigate();
   const [isDriverOpen, setIsDriverOpen] = useState(false);
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+
+  function mainPage() {
+    navigate('/hospital');
+  }
 
   return (
     <nav className="admin-nav">
       <div className="admin-nav-header">
-        <p className="ice-doctor-logo1 admin-nav-logo"></p>
+        <p className="ice-doctor-logo1 admin-nav-logo" onClick={mainPage}></p>
       </div>
 
       <ul className="admin-nav-menu">
