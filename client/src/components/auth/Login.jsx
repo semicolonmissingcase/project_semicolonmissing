@@ -1,8 +1,28 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import { loginThunk } from "../../store/thunks/authThunk";
 
 export default function Login () {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  async function handleLogin(e) {
+    // 기존 이벤트 취소
+    e.preventDefault();
+
+    try {
+      // 로그인 요청
+      await dispatch(loginThunk({email, password})).unwrap();
+      return navigate('/', { replace: true });
+    } catch(error) {
+      const code = error.response?.data?.code;
+      alert(`로그인 실패했습니다. ${code}`);
+    }
+  }
 
   function registrationPage() {
     navigate('/registration');
@@ -15,15 +35,15 @@ export default function Login () {
       </div>
       <div className="login-container">
         <div className="login-tap">
-          <button type="button" className="btn-medium bg-white">점주님 로그인</button>
-          <button type="button" className="btn-medium bg-white">기사님 로그인</button>
+          <button type="submit" className="btn-medium bg-white">점주님 로그인</button>
+          <button type="submit" className="btn-medium bg-white">기사님 로그인</button>
         </div>
-          <div className="login-form-container">
-            <label className="login-label-text">이메일</label>
+          <form className="login-form-container" onSubmit={handleLogin}>
+            <label className="login-label-text" onChange={ e => {setEmail(e.target.value)}}>이메일</label>
             <input type="text" className="input-medium"/>
-            <label className="login-label-text">비밀번호</label>
+            <label className="login-label-text" onChange={e => {setPassword(e.target.value)}}>비밀번호</label>
             <input type="text" className="input-medium"/>
-            <button type="button" className="login-submit-btn btn-big bg-blue login-bnt-size">로그인</button>
+            <button type="submit" className="login-submit-btn btn-big bg-blue login-bnt-size">로그인</button>
           
             {/* 찾기/회원가입부분 */}
             <div className="login-redirect">
@@ -39,7 +59,7 @@ export default function Login () {
               <hr />
               <button type="button" className="bg-img-kakao login-bnt-size"></button>
             </div>
-          </div> 
+          </form> 
 
       </div>
     </div>    
