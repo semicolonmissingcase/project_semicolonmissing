@@ -6,6 +6,7 @@
 import express from 'express';
 import './configs/env.config.js';
 import authRouter from './routes/auth.router.js';
+import errorHandler from './app/errors/errorHandler.js';
 
 // 채팅 관련 import
 import { createServer } from 'http'; // HTTP 서버 생성
@@ -21,6 +22,9 @@ app.use(express.json());
 // -----------------
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
+
+// 에러 핸들러 등록
+app.use(errorHandler);
 
 // -----------------
 // Socket.io 설정

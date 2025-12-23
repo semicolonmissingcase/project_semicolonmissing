@@ -33,7 +33,7 @@ const attributes = {
   },
   addr1: {
     field: 'addr1',
-    type: DataTypes.STRING(10),
+    type: DataTypes.STRING(20),
     allowNull: false,
     comment: '시/도',
   },
@@ -45,13 +45,13 @@ const attributes = {
   },
   addr3: {
     field: 'addr3',
-    type: DataTypes.STRING(10),
+    type: DataTypes.STRING(100),
     allowNull: false,
     comment: '상세주소',
   },
   phoneNumber: {
     field: 'phone_number',
-    type: DataTypes.STRING(12),
+    type: DataTypes.STRING(13),
     allowNull: true,
     comment: '매장번호',
   },
