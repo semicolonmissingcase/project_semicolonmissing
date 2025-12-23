@@ -31,7 +31,7 @@ const attributes = {
     allowNull: false,
     comment: '발신자',
   },
-  senderTye: {
+  senderType: {
     field: 'sender_type',
     type: DataTypes.STRING(20),
     allowNull: false,
@@ -50,23 +50,47 @@ const attributes = {
     allowNull: false,
     comment: '읽음 여부',
   },
-  createdAt: {
-    field: 'created_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    get() {
-      const val = this.getDataValue('createdAt')
-      if(!val) {
-        return null;
-      }
-      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
-  },
-};
+    createdAt: {
+      field: 'created_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('createdAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      } 
+    },
+    updatedAt: {
+      field: 'updated_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('updatedAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      }     
+    },
+    deletedAt: {
+      field: 'deleted_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('deletedAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      }    
+    }
+  };
 
 const options = {
   tableName: 'chat_messages',  // 실제 DB 테이블명
-  timestams: true,      // createdAt, updatedAt를 자동 관리
+  timestamps: true,      // createdAt, updatedAt를 자동 관리
   paranoid: true,       // soft delete 설정 (deletedAt 자동 관리)
 }
 
@@ -77,7 +101,7 @@ const ChatMessage = {
     return define;
   },
   associate: (db) => {
-    db.ChatMessage.belongsTo(db.ChatRoom, { tragetKey: 'id', foreignKey: 'chatRoomId', as: 'chatRoom'});
+    db.ChatMessage.belongsTo(db.ChatRoom, { targetKey: 'id', foreignKey: 'chatRoomId', as: 'chatRoom'});
   }
 }
 

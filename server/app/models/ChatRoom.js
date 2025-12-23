@@ -29,7 +29,6 @@ const attributes = {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true, 
     comment: '기사 PK',
   },
   estimateId: {
@@ -45,35 +44,47 @@ const attributes = {
     allowNull: false,
     comment: '채팅방 상태',
   },
-  createdAt: {
-    field: 'credated_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    get() {
-      const val = this.getDataValue('createdAt')
-      if(!val) {
-        return null;
-      }
-      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
-  },
-  deletedAt: {
-    field: 'deleted_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    get() {
-      const val = this.getDataValue('deletedAt')
-      if(!val) {
-        return null;
-      }
-      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }    
-  }
-};
+    createdAt: {
+      field: 'created_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('createdAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      } 
+    },
+    updatedAt: {
+      field: 'updated_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('updatedAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      }     
+    },
+    deletedAt: {
+      field: 'deleted_at',
+      type: DataTypes.DATE,
+      allowNull: true,
+      get() {
+        const val = this.getDataValue('deletedAt')
+        if(!val) {
+          return null;
+        }
+        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+      }    
+    }
+  };
 
 const options = {
   tableName: 'chat_rooms',  // 실제 DB 테이블명
-  timestams: true,      // createdAt, updatedAt를 자동 관리
+  timestamps: true,      // createdAt, updatedAt를 자동 관리
   paranoid: true,       // soft delete 설정 (deletedAt 자동 관리)
 }
 
@@ -84,9 +95,9 @@ const ChatRoom = {
     return define;
   },
   associate: (db) => {
-    db.ChatRoom.belongsTo(db.Owner, { tragetKey: 'id', foreignKey: 'ownerId', as: 'owner'});
-    db.ChatRoom.belongsTo(db.Cleaner, { tragetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner'});
-    db.ChatRoom.belongsTo(db.Estimate, { tragetKey: 'id', foreignKey: 'estimateId', as: 'estimate'});
+    db.ChatRoom.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner'});
+    db.ChatRoom.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner'});
+    db.ChatRoom.belongsTo(db.Estimate, { targetKey: 'id', foreignKey: 'estimateId', as: 'estimate'});
     db.ChatRoom.hasMany(db.ChatMessage, { sourceKey: 'id', foreignKey: 'chatRoomId', as: 'chatMessages'}); 
   }
 }
