@@ -101,7 +101,7 @@ const ChatMessage = {
     return define;
   },
   associate: (db) => {
-    db.ChatMessage.belongsTo(db.ChatRoom, { tragetKey: 'id', foreignKey: 'chatRoomId', as: 'chatRoom'});
+    db.ChatMessage.belongsTo(db.ChatRoom, { targetKey: 'id', foreignKey: 'chatRoomId', as: 'chatRoom'});
   }
 }
 

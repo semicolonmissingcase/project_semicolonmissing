@@ -95,9 +95,9 @@ const ChatRoom = {
     return define;
   },
   associate: (db) => {
-    db.ChatRoom.belongsTo(db.Owner, { tragetKey: 'id', foreignKey: 'ownerId', as: 'owner'});
-    db.ChatRoom.belongsTo(db.Cleaner, { tragetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner'});
-    db.ChatRoom.belongsTo(db.Estimate, { tragetKey: 'id', foreignKey: 'estimateId', as: 'estimate'});
+    db.ChatRoom.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner'});
+    db.ChatRoom.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner'});
+    db.ChatRoom.belongsTo(db.Estimate, { targetKey: 'id', foreignKey: 'estimateId', as: 'estimate'});
     db.ChatRoom.hasMany(db.ChatMessage, { sourceKey: 'id', foreignKey: 'chatRoomId', as: 'chatMessages'}); 
   }
 }

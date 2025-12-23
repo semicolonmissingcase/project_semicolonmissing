@@ -1,6 +1,7 @@
 /**
  * @file app/repositories/chat.repository.js
  * @description Chat Repository (DB Access)
+ * 251222 v1.0.0 seon init
  */
 import db from '../models/index.js';
 

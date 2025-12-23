@@ -11,7 +11,7 @@ import authRouter from './routes/auth.router.js';
 import { createServer } from 'http'; // HTTP 서버 생성
 import { Server } from 'socket.io';   // 소켓 모듈
 import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
-import socketHandler from './app/middlewares/socketMiddleware.js'; // 소켓 로직
+import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 
 const app = express();
 app.use(express.json());
