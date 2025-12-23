@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import AdminLayout from "../AdminLayout.jsx";
 import TableUi from "../../posts/table/TableUi.jsx";
 import "./AdminMain.css";
+// 아이콘용
+import { FiCheckCircle,  FiLoader } from "react-icons/fi";
+import { GiCancel } from "react-icons/gi";
 
 export default function AdminMain() {
   const reservationData = useMemo(() => [
@@ -44,7 +47,7 @@ export default function AdminMain() {
 
   return (
     <AdminLayout>
-      <div className="admin-monitoring">
+      <div>
         <h1 className="admin-monitoring-title">통합모니터링</h1>
 
         <div className="admin-monitoring-top">
@@ -54,27 +57,31 @@ export default function AdminMain() {
                 <h2>오늘 신규예약</h2>
                 <p className="admin-summary-date">2025-12-15</p>
                 <button type="button">더보기▶</button>
+                <div>
+                  <span className="admin-count-number">12</span>
+                  <span className="admin-count-unit">건</span>
+                </div>
               </div>
-              <div className="admin-summary-count">
-                <span className="admin-count-number">12</span>
-                <span className="admin-count-unit">건</span>
-              </div>
-            </div>
-            
             <div className="admin-summary-stats">
               <div className="admin-stat-item">
+                <FiCheckCircle style={{ fontSize: '60px', color: '#0C1B41' }} />
                 <div className="admin-stat-label">매칭완료</div>
                 <div className="admin-stat-value">7건</div>
               </div>
               <div className="admin-stat-item">
+                <FiLoader style={{ fontSize: '60px', color: '#7C7F88'}} />
                 <div className="admin-stat-label">미완료</div>
                 <div className="admin-stat-value">3건</div>
               </div>
               <div className="admin-stat-item">
+                <GiCancel style={{ fontSize: '60px', color: '#C01E20'}} />
                 <div className="admin-stat-label">취소</div>
                 <div className="admin-stat-value">2건</div>
               </div>
             </div>
+              
+            </div>
+            
           </div>
 
           <div className="admin-monitoring-revenue">
@@ -86,7 +93,7 @@ export default function AdminMain() {
               <p className="admin-revenue-amount">560,000원</p>
               <p className="admin-revenue-sub">결제건수 12건 90,000원</p>
             </div>
-            <button className="admin-revenue-btn">청산 관리</button>
+            <button className="admin-revenue-btn">정산 관리</button>
           </div>
         </div>
 

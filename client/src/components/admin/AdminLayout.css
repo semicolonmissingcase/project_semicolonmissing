@@ -6,5 +6,7 @@
 .admin-layout-content {
   flex: 1;
   margin-left: 1rem;
-  padding: 2rem;
+  padding: 4rem 2rem 0 5rem;
+  min-height: 100vh;
+  margin-left: 220px;
 }

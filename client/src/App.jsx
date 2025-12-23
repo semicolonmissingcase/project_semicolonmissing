@@ -24,7 +24,7 @@ function App() {
       {!isChatpage && !isAdminpage && <Footer className="desktop-footer"/>}
 
       {/* 모바일 하단 네이게이션 */}
-      <MobileBottomNav />
+      {!isAdminpage && <MobileBottomNav />}
     </div>
   )
 }

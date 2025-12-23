@@ -50,6 +50,7 @@
 }
 
 .login-form-container {
+  width: 25rem;
   padding: 2rem;
   border: 1px solid var(--color-blue);
   border-radius: 15px;

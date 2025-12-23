@@ -2,7 +2,8 @@ import { useState } from "react";
 import "./AdminNav.css";
 
 export default function AdminNav() {
-  const [isReservationOpen, setIsReservationOpen] = useState(false);
+  const [isDriverOpen, setIsDriverOpen] = useState(false);
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
 
   return (
     <nav className="admin-nav">
@@ -19,25 +20,36 @@ export default function AdminNav() {
           예약 관리
         </li>
 
-        <li className="admin-nav-item">
-          가시설관리
-        </li>
-
-        <li className="admin-nav-item">
-          청산 관리
-        </li>
-
         <li 
           className="admin-nav-item admin-nav-item-dropdown"
-          onClick={() => setIsReservationOpen(!isReservationOpen)}
-        >
-          문의 / 리뷰 관리
-          <span className={`admin-nav-arrow ${isReservationOpen ? "open" : ""}`}>
+          onClick={() => setIsDriverOpen(!isDriverOpen)}>
+          기사님 관리
+          <span className={`admin-nav-arrow ${isDriverOpen ? "open" : ""}`}>
             ▼
           </span>
         </li>
 
-        {isReservationOpen && (
+        {isDriverOpen && (
+          <ul className="admin-nav-submenu">
+            <li className="admin-nav-subitem">프로필</li>
+            <li className="admin-nav-subitem">작업 내역</li>
+          </ul>
+        )}
+
+        <li className="admin-nav-item">
+          정산 관리
+        </li>
+
+        <li 
+          className="admin-nav-item admin-nav-item-dropdown"
+          onClick={() => setIsInquiryOpen(!isInquiryOpen)}>
+          문의 / 리뷰 관리
+          <span className={`admin-nav-arrow ${isInquiryOpen ? "open" : ""}`}>
+            ▼
+          </span>
+        </li>
+
+        {isInquiryOpen && (
           <ul className="admin-nav-submenu">
             <li className="admin-nav-subitem">문의 관리</li>
             <li className="admin-nav-subitem">리뷰 관리</li>

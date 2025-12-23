@@ -41,6 +41,10 @@
   align-items: center;
 }
 
+.admin-nav-item:hover { 
+  background-color: #3e4047;
+}
+
 .admin-nav-arrow {
   font-size: 0.6rem;
   transition: transform 0.3s;
@@ -64,4 +68,8 @@
   font-size: 0.9rem;
   color: var(--color-white);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-nav-subitem:hover {
+  background-color: #595c64;
 }

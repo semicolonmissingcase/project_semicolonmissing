@@ -23,6 +23,7 @@ import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
 // 관리자 관련
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
+import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -161,15 +162,20 @@ const router = createBrowserRouter([
         element: <Outlet />,
         children: [
           {
+            // 관리자 로그인
+            path: 'login',
+            element: <AdminLogin />
+          },
+          {
             // 통합모니터링
             path: '',
             element: <AdminMain />
           },
           {
-            // 관리자 로그인
-            path: 'login',
-            element: <AdminLogin />
-          },
+            // 기사 프로필 관리 페이지
+            path: 'cleanerprofile',
+            element: <AdminCleanerProfile />
+          }
         ]
       }
     ]
