@@ -23,8 +23,6 @@ const chatRepository = {
    * 2. 새 채팅방 생성
    */
   create: async (transaction, data) => {
-    // 주의: ChatRoom 모델 정의 시 ownerId가 allowNull: false이므로 
-    // 서비스에서 ownerId도 함께 넘겨주도록 보완이 필요할 수 있습니다.
     return await db.ChatRoom.create({
       estimateId: data.estimate_id,
       cleanerId: data.cleaner_id,

@@ -35,8 +35,6 @@ const getMessages = async (req, res, next) => {
   }
 };
 
-// 🌟 추가된 함수들 🌟
-
 const markAsRead = async (req, res, next) => {
   try {
     const { roomId } = req.params;
@@ -69,11 +67,28 @@ const closeRoom = async (req, res, next) => {
   }
 };
 
+const chatUploadImage = async (req, res, next) => {
+  try {
+    if(!req.file) {
+      return res.status(400).json({success: false, message: "파일이 업로드 되지 않았습니다."})
+    }
+    const fileUrl = `/uploads/chat/${req.file.filename}`;
+
+    res.status(200).json({
+      success: true,
+      url: fileUrl
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message});
+  }
+}
+
 export default {
   createRoom,
   getRooms,
   getMessages,
   markAsRead,
   leaveRoom,
-  closeRoom
+  closeRoom,
+  chatUploadImage
 };

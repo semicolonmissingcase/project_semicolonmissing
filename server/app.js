@@ -7,6 +7,7 @@ import express from 'express';
 import './configs/env.config.js';
 import authRouter from './routes/auth.router.js';
 import errorHandler from './app/errors/errorHandler.js';
+import path from 'path';
 
 // 채팅 관련 import
 import { createServer } from 'http'; // HTTP 서버 생성
@@ -16,6 +17,8 @@ import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 
 const app = express();
 app.use(express.json());
+
+app.use('/uploads', express.static('uploads'));
 
 // -----------------
 // 라우터 정의

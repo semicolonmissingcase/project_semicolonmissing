@@ -1,12 +1,22 @@
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HeaderMenu from "./HeaderMenu";
 
 export default function Header() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // 채팅 사이드바 열림 상태 관리
+  const [isChatSidebarOpen, setIsChatSidebarOpen] = useState(false);
+  useEffect(() => {
+    const handleStatus = (e) => {
+      setIsChatSidebarOpen(e.detail.isOpen);
+    };
+    window.addEventListener("chatSidebarStatus", handleStatus);
+    return () => window.removeEventListener("chatSidebarStatus", handleStatus);
+  })
+  
   // 버튼 네비게이터
   function mainPage() {
     navigate('/');
@@ -53,7 +63,7 @@ export default function Header() {
         
         {/* 모바일 햄버거 버튼 */}
         <div 
-          className={`hamburger-menu-icon ${isMobileMenuOpen ? 'hidden' : ''}`} 
+          className={`hamburger-menu-icon ${isMobileMenuOpen || isChatSidebarOpen ? 'hidden' : ''}`} 
           onClick={toggleMobileMenu}
         >
           <p className='header-hamburger'>&#x2630;</p>
