@@ -76,8 +76,9 @@ function CleanerAccountEdit () {
 
       {selectAddAccount && (
         <div className="cleaners-account-edit-form-wrapper">
-        <span>정산 계좌</span>
+        
         <form className="cleaners-account-edit-form">
+          <label htmlFor="accounts">정산 계좌</label>
           <label htmlFor="banks">은행</label>
           <select id="banks" name="banks">
             <option value="Woori Bank">우리은행</option>

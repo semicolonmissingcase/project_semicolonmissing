@@ -4,7 +4,7 @@ function CleanersMyPage () {
 
   return (
     <>
-    <div className="cleaners-my-page-div">
+    <div className="all-container cleaners-my-page-div">
       <div className="cleaners-my-page-wrapper">
         <span>안녕하세요, 김기사 기사님!</span>
       <h3 className="cleaners-my-page-title">총 정산금액: 3,000,000원</h3>

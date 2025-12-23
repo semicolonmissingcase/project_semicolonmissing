@@ -1,0 +1,38 @@
+.cleaners-user-quote-list-title-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cleaners-user-quote-list-title-small-container {
+  display: flex;
+  gap: 20px;
+}
+
+.cleaners-user-quote-list-title-text {
+  font-size: 20px;
+}
+
+.cleaners-user-quote-list-title-wrapper-1 {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.cleaners-user-quote-list-title-wrapper-2 {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 30px;
+  height:auto;
+}
+
+.cleaners-user-quote-list-title-wrapper-3 {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 30px;
+  height:auto;
+}

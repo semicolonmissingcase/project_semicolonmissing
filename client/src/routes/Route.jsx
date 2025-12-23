@@ -14,8 +14,8 @@ import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx"
 import CleanersMyPage from "../components/cleaners/CleanersMyPage.jsx";
 import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
-import CleanersUserQuoteList from "../components/cleaners/CleanersUSerQuoteList.jsx";
-import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUSerQuoteListDetails.jsx";
+import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
+import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";
@@ -100,7 +100,7 @@ const router = createBrowserRouter([
           {
             // 유저 견적 작성 페이지
             path: 'userquotelist',
-            eleemnt: <CleanersUserQuoteList />,
+            element: <CleanersUserQuoteListTitle />,
           },
           {
             // 유저 견적 작성 페이지 상세

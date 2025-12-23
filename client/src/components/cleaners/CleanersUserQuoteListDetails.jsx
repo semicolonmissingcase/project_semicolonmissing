@@ -1,8 +1,29 @@
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import { ko } from "date-fns/locale";
 import { useState } from "react";
 import "./CleanersUserQuoteListDetails.css";
 
-function CleanersUserQuoteList () {
+function CleanersUserQuoteListDetails () {
 
+  const [date, setDate] = useState(null);
+  const [isDateNegotiable, setIsDateNegotiable] = useState(false);
+
+  const formattedDate = date
+  ? date.toISOString().slice(0, 10)
+  : "";
+
+
+
+  const payload = {
+  cleaningDate: isDateNegotiable
+    ? null
+    : date?.toISOString().slice(0, 10),
+  dateNegotiable: isDateNegotiable,
+  };
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const [answers, setAnswers] = useState({
     time: "",
@@ -32,31 +53,52 @@ function CleanersUserQuoteList () {
 
   return (
     <>
-      <div className="cleaners-user-quote-list-details-container">
-        <h3 className="cleaners-user-quote-list-details-page-info">안녕하세요, 김기사 기사님! 요청 의뢰서입니다.</h3>
-        <span className="cleaners-user-quote-list-details-wrapper">
-          <span className="cleaners-user-quote-list-details-quote-status">지정</span>
-          <span>남일동 유명한 카페</span>
-          <span>이점주</span>
-          <span>2025년 12월 27일 19시 ~ 20시</span>
-        </span>
+      <div className="all-container cleaners-user-quote-list-details-container">
+        
+        <span className="cleaners-user-quote-list-title-text">안녕하세요, 김기사 기사님! 요청 의뢰서입니다.</span>
 
-      <form>
-        <span className="cleaners-user-quote-list-details-reservation-date-time-wrapper">
-        <span className="cleaners-user-quote-list-details-first-card">
+        <div className="cleaners-user-quote-list-details-wrapper">
+          <span className="cleaners-user-quote-list-details-quote-status">지정</span>
+          <div className="cleaners-user-quote-list-details-user-info">
+            <span className="cleaners-user-quote-list-details-place">남일동 유명한 카페</span>
+            <span className="cleaners-user-quote-list-details-user">이점주</span>
+            <span className="cleaners-user-quote-list-details-date">2025년 12월 27일 19시 ~ 20시</span>
+          </div>
+        </div>
+
+      <form className="cleaners-user-quote-list-form-width">
+        <div className="cleaners-user-quote-list-details-reservation-date-time-wrapper">
+        <div className="cleaners-user-quote-list-details-first-card">
+        
         <fieldset className="cleaners-user-quote-list-details-border-none">
+        <span className="cleansers-user-quote-lsit-layout-flex-wrapper">
         <legend className="cleaners-user-quote-list-details-border-none">
         <span className="cleaners-user-quote-list-details-info">예약 정보*</span>
-        <span className="cleaners-user-quote-list-details-list-reservation-date">
-        <label htmlFor="date">예약날짜</label>
-        <input type="date" id="date" name="date"></input>
-        <button className="btn-small-custom" type="button">날짜 협의가 가능해요.</button>
-        </span>
         </legend>
+        <div className="cleaners-user-quote-list-details-list-reservation-date">
+        <legend className="cleaners-user-quote-list-details-reservation-date-title" htmlFor="date">예약날짜</legend>
+        <div className="cleaners-user-quote-list-details-datepicker-wrapper">
+        <DatePicker
+          locale={ko}
+          dateFormat="yyyy년 MM월 dd일 (eee)" 
+          selected={date}
+          onChange={(date) => date && setDate(date)}
+          placeholderText="날짜 선택"
+          minDate={today}
+          className="cleaners-user-quote-list-details-datepicker"
+          popperClassName="datepicker-popper"
+          withPortal
+        />
+        <button className="btn-small-custom" type="button">날짜 협의가 가능해요.</button>
+        </div>
+        </div>
+        </span>
         </fieldset>
+        
         <fieldset className="cleaners-user-quote-list-details-reservation-time-fieldset cleaners-user-quote-list-details-border-none">
           <legend className="cleaners-user-quote-list-details-reservation-time cleaners-user-quote-list-details-border-none">예약시간</legend>
-
+            
+            <span className="cleaners-user-quote-list-details-time-wrapper">
             <input 
             className="cleaners-user-quote-list-details-answer-display-none" 
             name="time" 
@@ -166,6 +208,7 @@ function CleanersUserQuoteList () {
             htmlFor="time19" 
             className={`cleaners-user-quote-list-details-answer 
             ${answers.time === "19" ? "cleaners-user-quote-list-details-answer-selected" : ""}`}>19시 ~ 20시</label>
+            </span>
 
         <label 
         className="cleaners-user-quote-list-details-attachment-btn" 
@@ -195,8 +238,8 @@ function CleanersUserQuoteList () {
         
         <span>※jpg, jpeg, png, zip 파일만 첨부 가능합니다.</span>
         </fieldset>
-        </span>
-        </span>
+        </div>
+        </div>
 
         <span className="cleaners-user-quote-list-details-details-wrapper">
         <fieldset className="cleaners-user-quote-list-details-border-none">
@@ -207,13 +250,13 @@ function CleanersUserQuoteList () {
         
         <label className="cleaners-user-quote-list-details-answer-binary-layout" 
         htmlFor="Q1">Q1. 하루에 제빙기 가동시간은 얼마나 되나요?</label>
-        <input id="Q1" name="Q1" />
+        <input className="cleaners-user-quote-list-details-input-layout" id="Q1" name="Q1" />
         <label className="cleaners-user-quote-list-details-answer-binary-layout" 
         htmlFor="cleaning-interval">Q2. 제빙기 내부 청소 주기는 어떻게 되나요?</label>
-        <input id="Q2" name="Q2" />
+        <input className="cleaners-user-quote-list-details-input-layout"  id="Q2" name="Q2" />
         <label className="cleaners-user-quote-list-details-answer-binary-layout" 
         htmlFor="Q3">Q3. 청소를 할 제빙기는 몇 대 인가요?</label>
-        <input id="Q3" name="Q3" />
+        <input className="cleaners-user-quote-list-details-input-layout" id="Q3" name="Q3" />
         <label className="cleaners-user-quote-list-details-answer-binary-layout" 
         htmlFor="Q4">Q4. 곰팡이 냄새나 악취가 나나요?</label>
           <label 
@@ -459,4 +502,4 @@ function CleanersUserQuoteList () {
   )
 }
 
-export default CleanersUserQuoteList;
+export default CleanersUserQuoteListDetails;
