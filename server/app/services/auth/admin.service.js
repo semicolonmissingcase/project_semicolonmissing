@@ -12,8 +12,9 @@ import jwtUtil from '../../utils/jwt/jwt.util.js';
 import db from '../../models/index.js';
 
 /**
- * 관리자 로그인 서비스
- * @param {object} body - email, password
+ * 관리사 로그인 
+ * @param {{email: string, password: string}} body 
+ * @returns {Promisecimport("../models/Admin.js").Admin}
  */
 async function adminLogin(body) {
   // 트랜잭션 처리

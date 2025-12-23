@@ -28,7 +28,7 @@ async function ownerLogin(req, res, next) {
     // Cookie에 RefreshToken 설정
     cookieUtil.setCookieRefreshToken(res, refreshToken);
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, user}));
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, owner}));
   } catch(error) {
     next(error);
   }

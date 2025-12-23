@@ -12,8 +12,9 @@ import jwtUtil from '../../utils/jwt/jwt.util.js';
 import db from '../../models/index.js';
 
 /**
- * 기사 로그인 서비스
- * @param {object} body - email, password
+ * 기사 로그인 
+ * @param {{email: string, password: string}} body 
+ * @returns {Promisecimport("../models/Cleaner.js").Cleaner}
  */
 async function cleanerLogin(body) {
   // 트랜잭션 처리

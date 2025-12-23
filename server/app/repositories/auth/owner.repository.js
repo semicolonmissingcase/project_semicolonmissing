@@ -15,7 +15,7 @@ const { Owner } = db;
  */
 async function findByEmail(t = null, email) {
   // SELECT = FROM owners WHERE email = ? AND deleted_at IS NULL;
-  return await Owner,findOne(
+  return await Owner.findOne(
     {
       where: {
         email: email
@@ -31,7 +31,7 @@ async function findByEmail(t = null, email) {
  * 점주 모델 인스턴스로 save 처리 
  * @param {import("sequelize").Transaction} t 
  * @param {import("../../models/index.js").Owner} owner 
- * @returns 
+ * @returns {Promise<import("../../models.js").Owner>}
  */
 async function save(t = null, owner) {
   return await owner.save({transaction: t});
