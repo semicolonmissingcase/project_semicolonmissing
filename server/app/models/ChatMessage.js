@@ -43,6 +43,13 @@ const attributes = {
     allowNull: false,
     comment: '내용', 
   },
+  messageType: {
+    field: 'message_type',
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    defaultValue: 'TEXT', 
+    comment: '메시지 유형 (TEXT 또는 IMAGE)',
+  },
   isRead: {
     field: 'is_read',
     type: DataTypes.TINYINT(1),

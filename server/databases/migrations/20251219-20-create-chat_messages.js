@@ -41,7 +41,14 @@ const attributes = {
     field: 'content',
     type: DataTypes.TEXT,
     allowNull: false,
-    comment: '내용', 
+    comment: '내용 (텍스트 또는 이미지 URL)', 
+  },
+  messageType: {
+    field: 'message_type',
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    defaultValue: 'TEXT', 
+    comment: '메시지 유형 (TEXT 또는 IMAGE)',
   },
   isRead: {
     field: 'is_read',
