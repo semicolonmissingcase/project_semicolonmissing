@@ -37,7 +37,18 @@ async function save(t = null, owner) {
   return await owner.save({transaction: t});
 }
 
+/**
+ * 점주id로 점주정보 조회
+ * @param {import("sequelize").Transaction} t 
+ * @param {number} id 
+ * @returns {Promise<import("../../models/Owner.js").Owner>}
+ */
+async function findByPk(t = null, id) {
+  return await Owner.findByPk(id, { transaction: t});
+}
+
 export default {
   findByEmail,
   save,
+  findByPk,
 }

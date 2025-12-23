@@ -37,7 +37,18 @@ async function save(t = null, admin) {
   return await admin.save({transaction: t});
 }
 
+/**
+ * 관리자id로 관리자정보 조회
+ * @param {import("sequelize").Transaction} t 
+ * @param {number} id 
+ * @returns {Promise<import("../../models/Admin.js").Admin>}
+ */
+async function findByPk(t = null, id) {
+  return await Admin.findByPk(id, { transaction: t});
+}
+
 export default {
   findByEmail,
   save,
+  findByPk,
 }

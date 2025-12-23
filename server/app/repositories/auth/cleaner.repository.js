@@ -37,7 +37,18 @@ async function save(t = null, cleaner) {
   return await cleaner.save({transaction: t});
 }
 
+/**
+ * 기사id로 기사정보 조회
+ * @param {import("sequelize").Transaction} t 
+ * @param {number} id 
+ * @returns {Promise<import("../../models/Cleaner.js").Cleaner>}
+ */
+async function findByPk(t = null, id) {
+  return await Cleaner.findByPk(id, { transaction: t});
+}
+
 export default {
   findByEmail,
   save,
+  findByPk,
 }

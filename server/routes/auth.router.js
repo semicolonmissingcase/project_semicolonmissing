@@ -18,5 +18,8 @@ const authRouter = express.Router();
 authRouter.post('/login/owner', ownerLoginValidator, validationHandler, ownerController.ownerLogin);
 authRouter.post('/login/cleaner', cleanerLoginValidator, validationHandler, cleanerController.cleanerLogin);
 authRouter.post('/login/admin', adminLoginValidator, validationHandler, adminController.adminLogin);
+authRouter.post('/reissue/owner', ownerController.reissue);
+authRouter.post('/reissue/cleaner', cleanerController.reissue);
+authRouter.post('/reissue/admin', adminController.reissue);
 
 export default authRouter;
