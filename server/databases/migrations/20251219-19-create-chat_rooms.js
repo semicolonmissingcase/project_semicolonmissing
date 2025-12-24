@@ -60,13 +60,13 @@ const attributes = {
   ownerLeavedAt: {
     field: 'owner_leaved_at',
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
     comment: '점주가 체팅방을 나간 시간',
   },
   cleanerLeavedAt: {
     field: 'cleaner_leaved_at',
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
     comment: '기사가 채팅방을 나간 시간',
   }
 };
