@@ -60,13 +60,13 @@ const attributes = {
   ownerLeavedAt: {
     field: 'owner_leaved_at',
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
     comment: '점주가 체팅방을 나간 시간',
   },
   cleanerLeavedAt: {
     field: 'cleaner_leaved_at',
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
     comment: '기사가 채팅방을 나간 시간',
   }
 };
@@ -74,7 +74,7 @@ const attributes = {
 const options = {
   tableName: 'chat_rooms',  // 실제 DB 테이블명
   timestamps: true,      // createdAt, updatedAt를 자동 관리
-  paranoid: true,       // soft delete 설정 (deletedAt 자동 관리)
+  paranoid: false,       // soft delete 설정 (deletedAt 자동 관리), leaved_at이 관리하고, deleatedAt이 없으므로 false로 바꿈.
 }
 
 const ChatRoom = {
