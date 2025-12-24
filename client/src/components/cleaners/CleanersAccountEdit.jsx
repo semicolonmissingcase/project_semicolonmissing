@@ -25,6 +25,15 @@ function CleanerAccountEdit () {
   setSelectAddAccount(prev => !prev);
   };
 
+  const [selectRemoveAccount, setSelectRemoveAccount] = useState(false);
+
+  const handleRemoveAccount = (e) => {
+  e.stopPropagation();     // 상위 토글 영향 방지
+  setSelectRemoveAccount(true);
+  setSelectAddAccount(false);
+  };
+
+
   return (
 
     <>
@@ -67,7 +76,7 @@ function CleanerAccountEdit () {
           <img className="cleaners-account-edit-add-button-img" 
           src="/icons/add.png"
           />
-          <span className="cleaners-account-edit-new-accounts"> 신규 정산 계좌 추가</span>
+          <span className="cleaners-account-edit-new-accounts">신규 정산 계좌 추가</span>
           </div>
           <p className="cleaners-account-edit-account-message">정산에 사용할 계좌를 선택해 주세요.</p>
         </div>
@@ -75,38 +84,54 @@ function CleanerAccountEdit () {
       </div>
 
       {selectAddAccount && (
-        <div className="cleaners-account-edit-form-wrapper">
-        
-        <form className="cleaners-account-edit-form">
-          <label htmlFor="accounts">정산 계좌</label>
-          <label htmlFor="banks">은행</label>
-          <select id="banks" name="banks">
-            <option value="Woori Bank">우리은행</option>
-            <option value="iM Bank">iM뱅크</option>
-            <option value="Kookmin Bank">국민은행</option>
-            <option value="Shinhan Bank">신한은행</option>
-            <option value="Hana Bank">하나은행</option>
-            <option value="Citibank Korea Inc.">한국시티은행</option>
-            <option value="Nonghyup Bank Co., Ltd.">NH농협</option>
-            <option value="Suhyup Bank">SH수협</option>
-            <option value="Korean Federation of Community Credit Cooperatives">MG새마을금고</option>
-          </select>
-        <label htmlFor="accounts">계좌번호</label>
-          <input id="accounts" name="accounts">
-          </input>
-        <label htmlFor="account-holder">예금주</label>
-          <input id="account-holder" name="account-holder">
-          </input>
-        <label htmlFor="account-nickname">계좌 별명</label><span className="cleaners-account-edit-option">(선택)</span>
-          <input id="account-nickname" name="account-nickname">
-          </input>
-        <div className="cleaners-account-edit-button">
+  <div className="cleaners-account-edit-form-wrapper">
+    <form className="cleaners-account-edit-form">
+
+      <span
+        className="cleaners-account-edit-remove-layout"
+        onClick={handleRemoveAccount}
+      >
+        <label className="cleaners-account-edit-account-title">
+          정산 계좌
+        </label>
+        <img
+          src="/icons/btn-delete.png"
+          className="cleaners-account-edit-delete-img"
+          alt="계좌 삭제"
+        />
+      </span>
+      
+      <span className="cleaners-account-edit-layout-inputs">
+      <label htmlFor="banks">은행</label>
+      <select className="cleaners-account-edit-input-layout" id="banks" name="banks">
+        <option value="Woori Bank">우리은행</option>
+        <option value="iM Bank">iM뱅크</option>
+        <option value="Kookmin Bank">국민은행</option>
+        <option value="Shinhan Bank">신한은행</option>
+        <option value="Hana Bank">하나은행</option>
+        <option value="Citibank Korea Inc.">한국시티은행</option>
+        <option value="Nonghyup Bank Co., Ltd.">NH농협</option>
+        <option value="Suhyup Bank">SH수협</option>
+        <option value="Korean Federation of Community Credit Cooperatives">
+          MG새마을금고
+        </option>
+      </select>
+
+      <label htmlFor="accounts">계좌번호</label>
+      <input className="cleaners-account-edit-input-layout" id="accounts" name="accounts" />
+
+      <label htmlFor="account-holder">예금주</label>
+      <input className="cleaners-account-edit-input-layout" id="account-holder" name="account-holder" />
+      </span>
+      
+      <div className="cleaners-account-edit-button">
         <button type="button">취소</button>
         <button type="submit">저장</button>
-        </div>
-        </form>
-        </div>
-        )}
+      </div>
+
+    </form>
+    </div>
+  )}  
       </div>
       </div>
 
@@ -139,17 +164,10 @@ function CleanerAccountEdit () {
             정산 기준 안내
           </span>
           <p>
-            - 작업 완료 후 영업일 기준 2~3일 이내 입금됩니다.
+            - 월 11일 기준으로 이전달 30(31)일까지의 정산금이 정산됩니다.
           </p>
           <p>
-            - 공휴일/주말은 정산일에 포함되지 않습니다.
-          </p>
-
-          <span>
-            현재 상태
-          </span>
-          <p>
-            - 등록된 계좌 존재
+            - 정산일이 공휴일인 경우 전일에 정산됩니다.
           </p>
 
         </div>

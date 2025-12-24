@@ -1,24 +1,118 @@
+.cleaners-profile-edit-container {
+  display: flex;
+  justify-content: center;
+}
+
 .cleaners-profile-edit-wrapper {
   margin: 0 auto;
   border: var(--color-gray) solid 2px;
-  border-radius: 15px;
+  border-radius: 10px;
+  padding: 8px 12px;
   width: 90%;
-}
-
-fieldset.cleaners-profile-edit-fieldset {
-  border: none;
-  padding: 5px 15px 15px 15px;
-  width: 100%;
-}
-
-legend.cleaners-profile-edit-title {
-  border: none;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  
+  margin: 20px 0;
 }
 
-.cleaners-profile-edit-place {
-  opacity: 0;
+.cleaners-profile-edit-layout{
+  padding: 0 5%;
+}
+
+.cleaners-profile-edit-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-profile-edit-form {
+  display: flex;
+  flex-direction: column; 
+  margin: 7px 10px;
+  gap: 15px;
+}
+
+.cleaenrs-profile-edit-input {
+  border: var(--color-gray) 1px solid;
+  width: 270px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.cleaners-profile-edit-layout-flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cleaners-profile-edit-attachment-btn {
+  width: 90px;
+  height: 30px;
+  font-size: 16px;
+  margin: 10px 0 0 0;
+  border-radius: 5px;
+  white-space: nowrap;
+  border: none;
+  text-align: center;
+  background-color: var(--color-light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cleaners-profile-edit-btn-small-custom2 {
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--color-light-gray);
+  white-space: nowrap;
+}
+
+.cleaners-profile-edit-btns {
+  display: flex;
+  gap: 60px;
+  flex-direction: row;
+  justify-content: end;
+  padding: 0 30px 30px 0;
+}
+
+/* @media (max-width: 500px) {
+  .cleaners-profile-edit-region-panel-body {
+    grid-template-columns: 1fr !important;
+    width: 270px;
+    height: auto;
+  }
+} */
+
+.cleaners-profile-edit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cleaners-profile-edit-modal-box {
+  width: min(360px, 90%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  font-size: 16px;
+}
+
+.cleaners-profile-edit-modal-btn {
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--color-light-gray);
+  white-space: nowrap;
 }

@@ -1,4 +1,103 @@
-.btn-small-custom {
+.cleaners-user-quote-list-details-container {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cleaners-user-quote-list-details-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.cleaners-user-quote-list-details-items-box {
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-base-info {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-around;
+}
+
+.cleaners-user-quote-list-details-like-status {
+  color: var(--color-blue);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.cleaners-user-quote-list-details-icon-set {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-items-box-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-input-box {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.cleaners-user-quote-list-details-input-box > label {
+  width: 60px;
+}
+
+.cleaners-user-quote-list-details-input-box > input {
+  flex: 1;
+}
+
+.cleaners-user-quote-list-details-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-input-layout {
+  padding: 10px;
+  background-color: var(--color-light-gray);
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.cleaners-user-quote-list-details-input-layout:focus {
+  outline: none;
+}
+
+@media (max-width: 820px) {
+  .cleaners-user-quote-list-details-base-info {
+    display: grid;
+    grid-template-columns: 0.5fr 1.5fr;
+    justify-items: center;
+  }
+
+  .cleaners-user-quote-list-details-grid-1 {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+/**
+.cleaners-user-quote-list-details-btn-small-custom {
   width: 150px;
   height: 30px;
   font-size: 16px;
@@ -10,7 +109,7 @@
   font-size: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
 } 
 
 .cleaners-user-quote-list-title-text {
@@ -26,6 +125,7 @@
   width: 90%;
   height: auto;
   display: flex;
+  justify-content: space-evenly;
   gap: 100px;
   align-items: center;
 }
@@ -52,61 +152,7 @@
   border-radius: 5px;
 }
 
-.react-datepicker {
-  border: 1px solid var(--color-gray);
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-.react-datepicker__header {
-  background-color: #f5f5f5;
-  border-bottom: 1px solid var(--color-gray);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-.react-datepicker__current-month {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.react-datepicker__day-name {
-  color: #666;
-  font-weight: 500;
-}
-
-.react-datepicker__day {
-  width: 32px;
-  line-height: 32px;
-  border-radius: 6px;
-  margin: 2px;
-}
-
-.react-datepicker__day:hover {
-  background-color: #e0e0e0;
-}
-
-.react-datepicker__day--selected {
-  background-color: var(--color-gray);
-  color: #fff;
-}
-
-.react-datepicker__day--today {
-  font-weight: bold;
-  border: 1px solid var(--color-gray);
-}
-
-.datepicker-disabled {
-  background-color: #eee;
-  color: #999;
-  cursor: not-allowed;
-}
-
-.react-datepicker__day--disabled {
-  color: #ccc;
-}
-
-.btn-small-custom.btn-active {
+.cleaners-user-quote-list-details-btn-small-custom.btn-active {
   background-color: var(--color-gray);
   color: #fff;
 }
@@ -133,6 +179,8 @@ legend.cleaners-user-quote-list-details-border-none {
 
 .cleaners-user-quote-list-details-user-info {
   font-size: 20px;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .cleaners-user-quote-list-details-list-reservation-date {
@@ -221,8 +269,7 @@ legend.cleaners-user-quote-list-details-border-none {
   display: inline-block;
   margin-right: 10px;
 }
-
-/* 선택되었을 때: label이 selected 상태일 경우, 그 안의 원형만 변경 */
+  
 .cleaners-user-quote-list-details-answer-binary-selected .cleaners-user-quote-list-details-radio-ui {
   background-color: var(--color-gray);
   border-color: var(--color-gray);
@@ -231,6 +278,15 @@ legend.cleaners-user-quote-list-details-border-none {
 
 .cleaners-user-quote-list-details-radio-input {
   display: none;
+}
+
+.cleaenrs-user-quote-list-details-place-wrapper {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  width: 90%;
+  height: auto;
+  display: flex;
 }
 
 .cleaners-user-quote-list-details-details-wrapper {
@@ -271,7 +327,6 @@ legend.cleaners-user-quote-list-details-border-none {
 .cleaners-user-quote-list-details-reservation-date-title {
   white-space: nowrap;
   width: 64px;
-
 }
 
 .cleaners-user-quote-list-details-requests-title {
@@ -281,3 +336,18 @@ legend.cleaners-user-quote-list-details-border-none {
 .cleaners-user-quote-list-details-requests {
   min-height: 200px;
 }
+
+.cleaners-user-quote-list-details-cleaners-quote-list-wrapper {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  height: auto;
+  display: flex;
+}
+
+.cleaners-user-quote-list-details-contents {
+  display: flex;
+  flex-direction: column;
+}
+
+*/

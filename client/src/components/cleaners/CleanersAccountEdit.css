@@ -19,11 +19,6 @@
   align-items: center;
 }
 
-.cleaners-account-edit-new-account-img {
-  width: 17px;
-  height: 8px;
-}
-
 .cleaners-account-edit-new-account-message {
   display: inline-block;
 }
@@ -34,15 +29,18 @@
   align-items: center;
 }
 
-.cleaners-account-edit-new-account-wrapper {
+.cleaners-account-edit-remove-layout {
   display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.cleaners-account-edit-remove-button{
+.cleaners-account-edit-account-title {
+  padding-right: 10px;
+}
+
+.cleaners-account-edit-delete-img {
   display: flex;
-  flex-direction: column;
+  flex-direction: column;;
+  width: 14px;
 }
 
 .cleaners-account-edit-add-button {
@@ -63,10 +61,14 @@
   display: none;
 }
 
-.cleaners-account-edit-form {
-  display: flex;
-  flex-direction: column;
+.cleaners-account-edit-toggle-updown-form-accounts-toggledown {
+  display: none;
 }
+
+.cleaners-account-edit-toggle-updown-form-accounts {
+  display: block;
+}
+
 
 .cleaners-account-edit-toggle-updown-form-contents {
   display: block;
@@ -99,12 +101,9 @@
 }
 
 .cleaners-account-edit-toggle-img-info {
+  display: inline-block;
   width: 17px;
   height: 8px;
-}
-
-.cleaners-account-edit-toggle-img-info {
-  display: inline-block;
 }
 
 .cleaners-account-edit-account-info-message {
@@ -121,4 +120,23 @@
 
 .cleaners-account-edit-account-modal-page {
   display: none;
+}
+
+.cleaners-account-edit-toggle-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.cleaners-account-edit-input-layout {
+  width: 270px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid var(--color-gray)
+}
+
+.cleaners-account-edit-layout-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
 }

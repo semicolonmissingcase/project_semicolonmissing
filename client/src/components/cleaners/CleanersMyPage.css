@@ -21,7 +21,7 @@
   object-fit: contain;
 }
 
-.cleaners-my-page-lists {
+.cleaners-my-page-lists-all-wrapper {
   margin: 0 auto;
   border: var(--color-gray) solid 2px;
   border-radius: 10px;
@@ -29,7 +29,18 @@
   width: 90%;
 }
 
-.cleander-my-page-lists-1 {
+.cleaners-my-page-lists-1 {
+  display: flex;
+  gap: 20px;
+}
+
+.cleaners-my-page-lists-1-layout {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.cleaners-my-page-lists-1-user-info {
   display: flex;
 }
 
@@ -43,5 +54,12 @@
 }
 
 .cleaners-my-page-lists-status {
+  font-size: 20px;
+  color: var(--color-blue);
+}
+
+.cleaners-my-page-lists-1-status {
+  display: flex;
+  align-items: center;
   font-size: 20px;
 }

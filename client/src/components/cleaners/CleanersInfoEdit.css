@@ -8,32 +8,22 @@
   border-radius: 10px;
   padding: 8px 12px;
   width: 90%;
-  margin: 40px 0;
+  margin: 20px 0;
 }
 
 .cleaners-info-edit-layout-center {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
+  padding: 0 5%;
 }
 
 .cleaners-info-edit-title {
   font-size: 18px;
   margin-bottom: 20px;
-}
-
-.wrapper-cleaners-info-edit {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  width: 90%;
-  margin-bottom: 30px;
-  height: auto;
   display: flex;
-  justify-self: center;
-  background-color: rgb(189, 189, 143); 
+  justify-content: center;
+  font-weight: bold;
 }
 
 .cleaners-info-edit-form {
@@ -45,15 +35,16 @@
 
 .cleaners-info-edit-id {
   display: flex;
-  gap: 10px;
+  gap: 30px;
 }
 
 .cleaners-info-edit-ps {
   display: flex;
-  gap: 10px;
+  gap: 30px;
 }
 
 .cleaners-info-edit-input-border-radius {
+  border: var(--color-gray) 1px solid;
   width: 270px;
   height: 30px;
   border-radius: 5px;
@@ -99,17 +90,60 @@
   display: flex;
 }
 
-.button-direction-row {
-  display: flex;
-  gap: 20px;
-}
-
 .cleaners-info-edit-check {
   margin-top: 40px;
 }
 
 .cleaners-info-edit-button-direction-row {
   display: flex;
-  gap: 15px;
+  gap: 60px;
   margin-top: 20px;
+  justify-content: end;
+  padding: 0 30px 30px 0;
+}
+
+.cleaners-info-edit-btn-small-custom2 {
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--color-light-gray);
+  white-space: nowrap;
+}
+
+.cleaners-info-edit-region-picker { position: relative; }
+.cleaners-info-edit-region-picker-trigger { width: 270px; }
+
+.cleaners-info-edit-region-panel {
+  position: absolute;
+  top: 100%;
+  background: white;
+  border-radius: 16px;
+}
+
+.cleaners-info-edit-region-panel-body.one-column {
+  display: grid;
+  grid-template-columns: 270px;
+}
+
+.cleaners-info-edit-region-panel-body.two-column {
+  display: grid;
+  grid-template-columns: 270px minmax(220px, 1fr);
+}
+
+.cleaners-info-edit-region-panel-left {
+  overflow-y: auto;
+  max-height: 240px;
+}
+
+.cleaners-info-edit-region-panel-right {
+  overflow-y: auto;
+  max-height: 240px;
+}
+
+.cleaners-info-edit-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -12,7 +12,6 @@ import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx"
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/CleanersMyPage.jsx";
-import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
 import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
@@ -89,11 +88,6 @@ const router = createBrowserRouter([
             // 마이페이지
             path: 'mypage',
             element: <CleanersMyPage />,
-          },
-          {
-            // 기사 견적 작성 페이지
-            path: 'quotelistpreparation',
-            element: <CleanersQuoteListPreparation />,
           },
           {
             // 기사 견적 작성 임시저장 페이지

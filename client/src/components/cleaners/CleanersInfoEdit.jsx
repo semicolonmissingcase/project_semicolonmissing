@@ -5,12 +5,6 @@ function CleanersInfoEdit () {
 
   const [birth, setBirth] = useState("");
 
-  const [gender, setGender] = useState('');
-
-  function changeGender(e) {
-    setGender(e.target.value);
-  }
-
   const [notification, setNotification] = useState('');
   
   function changeNotificationStatus(e) {
@@ -41,17 +35,16 @@ function CleanersInfoEdit () {
         <form className="cleaners-info-edit-form">
 
        
-        <label htmlFor="id">아이디(닉네임):</label>
+        <label htmlFor="id">이메일:</label>
         <span className="cleaners-info-edit-id">
         <input className="cleaners-info-edit-input-border-radius" id="id" name="id" />
-        <button className="btn-small">수정</button>
         </span>
 
         
         <label htmlFor="password">비밀번호:</label>
         <span className="cleaners-info-edit-ps">
         <input className="cleaners-info-edit-input-border-radius" id="password" name="password" />
-        <button className="btn-small">수정</button>
+        <button className="cleaners-info-edit-btn-small-custom2">수정</button>
         </span>
 
         <label htmlFor="name">이름:</label>
@@ -65,7 +58,7 @@ function CleanersInfoEdit () {
         inputMode="numeric"
         pattern="[0-9]*"
         maxLength={6}
-        placeholder="6자리"
+        placeholder="&nbsp;&nbsp;&nbsp;6자리"
         onBeforeInput={(e) => {
         if (!/^\d*$/.test(e.data)) {
         e.preventDefault();
@@ -75,30 +68,6 @@ function CleanersInfoEdit () {
         {const onlyNumber = (e.target.value.replace(/\D/g, ""));
         setBirth(onlyNumber);
         }} />
-
-        <label htmlfor="gender">성별:</label>
-
-        <span className="cleaners-info-edit-gender">
-        <label 
-        htmlFor="gender-male" 
-        className={`cleaners-info-edit-label ${gender === 'M' ? 'cleaners-info-edit-label-selected' : ''}`}>남자</label>
-        <input 
-        className="cleaners-info-edit-radio"
-        name="gender"
-        id="gender-male" 
-        type="radio" 
-        value="M" 
-        onChange={changeGender} />
-        <label htmlFor="gender-female" 
-        className={`cleaners-info-edit-label ${gender === 'F' ? 'cleaners-info-edit-label-selected' : ''}`}>여자</label>
-        <input 
-        className="cleaners-info-edit-radio"
-         ame="gender" 
-         id="gender-female" 
-         type="radio" 
-         value="F" 
-         onChange={changeGender} />
-        </span>
 
         <label htmlFor="notification">알림:</label>
 
@@ -134,9 +103,9 @@ function CleanersInfoEdit () {
         </div>
 
       <div className="cleaners-info-edit-button-direction-row">
-      <button className="btn-small" type="button">탈퇴</button>
-      <button className="btn-small" type="button">취소</button>
-      <button className="btn-small" type="submit">저장</button>
+      <button className=" cleaners-info-edit-btn-small-custom2" type="button">탈퇴</button>
+      <button className=" cleaners-info-edit-btn-small-custom2" type="button">취소</button>
+      <button className=" cleaners-info-edit-btn-small-custom2" type="submit">저장</button>
       </div>
       </form>
       </span>

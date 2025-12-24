@@ -23,8 +23,8 @@ function CleanersMyPage () {
       </div>
         <button type="button">프로필 편집</button>
         <button type="button">정보 수정</button>
-    </div>
-      <div className="cleaners-my-page-buttons">
+
+        <div className="cleaners-my-page-buttons">
         <div className="cleaners-my-page">
         <button type="button">현재 정산 상태</button>  
         <button type="button">오늘 예정 일정</button>  
@@ -39,19 +39,37 @@ function CleanersMyPage () {
         <button type="button">완료</button>
         </div>
       </div>
-      <div className="cleaners-my-page-lists">
+      <div className="cleaners-my-page-lists-all-wrapper">
+
         <div className="cleaners-my-page-lists-1">
+          <div className="cleaners-my-page-lists-1-layout">
           <span className="cleaners-my-page-lists-1-place">대구 중구 남일동</span>
-        <div className="cleaners-my-page-lists-user-info">
-          <span>이점주</span>
-          <span>유명한 카페</span>
+            <div className="cleaners-my-page-lists-1-user-info">
+              <div><span>이점주</span></div>
+              <div><span>유명한 카페</span></div>
+            </div>
+          </div>
+          <div className="cleaners-my-page-lists-1-status">
+          예약
+          </div>
         </div>
-        <div className="cleaners-my-page-lists-status">
-        예약
+
+        <div className="cleaners-my-page-lists-2">
+          <span className="cleaners-my-page-lists-2-place">대구 중구 남일동</span>
+            <div className="cleaners-my-page-lists-2-user-info">
+              <div><span>이점주</span></div>
+              <div><span>유명한 카페</span></div>
+            </div>
+          <div className="cleaners-my-page-lists-2-status">
+          예약
+          </div>
         </div>
-        </div>
-          
+
       </div>
+
+        
+    </div>
+      
     </>
   )
 }
