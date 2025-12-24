@@ -5,7 +5,7 @@
  */
 
 import { body, param } from "express-validator";
-import PROVIDER from "../../auth/config/provider.enum.js";
+import PROVIDER from "../../auth/configs/provider.enum.js";
 
 const email = body('email')
   .trim()

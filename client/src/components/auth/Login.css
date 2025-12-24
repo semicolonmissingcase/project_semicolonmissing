@@ -50,7 +50,7 @@
 }
 
 .login-form-container {
-  width: 25rem;
+  width: 27rem;
   padding: 2rem;
   border: 1px solid var(--color-blue);
   border-radius: 15px;
@@ -65,12 +65,17 @@
   width: 100%;
 }
 
+.login-submit-btn {
+  margin-top: 1.8rem;
+}
+
 .login-submit-btn:hover {
   background-color: var(--color-dark-blue);
   color: var(--color-white);
 }
 
 .login-redirect > button {
+  width: 7.2rem;
   padding: 0.5rem 0.7rem;
 }
 
