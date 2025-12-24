@@ -12,8 +12,9 @@ import jwtUtil from '../../utils/jwt/jwt.util.js';
 import db from '../../models/index.js';
 
 /**
- * 기사 로그인 서비스
- * @param {object} body - email, password
+ * 기사 로그인 
+ * @param {{email: string, password: string}} body 
+ * @returns {Promisecimport("../models/Cleaner.js").Cleaner}
  */
 async function cleanerLogin(body) {
   // 트랜잭션 처리
@@ -54,6 +55,41 @@ async function cleanerLogin(body) {
   });
 }
 
+/**
+ * 토큰 재발급 처리
+ * @param {string} token 
+ */
+async function reissue(token) {
+  // 토큰 검증 및 점주id 획득
+  const claims = jwtUtil.getClaimsWithVerifyToken(token);
+  const cleanerId = claims.sub;
+
+  return await db.sequelize.transaction(async t => {
+    // 유저 정보 획득
+    const cleaner = await cleanerRepository.findByPk(t, cleanerId);
+
+    // 토큰 일치 검증
+    if(token !== cleaner.refreshToken) {
+      throw myError('리프래시 토큰 불일치', REISSUE_ERROR);
+    }
+
+    // JWT 생성
+    const accessToken = jwtUtil.generateAccessToken(cleaner);
+    const refreshToken = jwtUtil.generateRefreshToken(cleaner);
+
+    // 리프래시 토큰 DB에 저장
+    cleaner.refreshToken = refreshToken;
+    await cleanerRepository.save(t, cleaner);
+
+    return {
+      accessToken,
+      refreshToken,
+      cleaner,
+    }
+  });
+} 
+
 export default {
   cleanerLogin,
+  reissue,
 }

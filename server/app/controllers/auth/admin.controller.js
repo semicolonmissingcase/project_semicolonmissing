@@ -4,7 +4,8 @@
  * 251225 v1.0.0 jae init
  */
 
-import { SUCCESS } from "../../../configs/responseCode.config.js";
+import { REISSUE_ERROR, SUCCESS } from "../../../configs/responseCode.config.js";
+import myError from "../../errors/customs/my.error.js";
 import adminService from "../../services/auth/admin.service.js";
 import cookieUtil from "../../utils/cookie/cookie.util.js";
 import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
@@ -34,9 +35,31 @@ async function adminLogin(req, res, next) {
   }
 }
 
+async function reissue(req, res, next) {
+  try{
+    const token = cookieUtil.getCookieRefreshToken(req);
+
+    // 토큰 존재 여부 확인
+    if(!token) {
+      throw myError('리프래시 토큰 없음', REISSUE_ERROR);
+    }
+
+    // 토큰 재발급 처리
+    const { accessToken, refreshToken, admin } = await adminService.reissue(token);
+
+    // 쿠키에 리프래시 토큰 설정
+    cookieUtil.setCookieRefreshToken(res, refreshToken);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, admin }))
+  } catch(error) {
+    next(error);
+  }
+}
+
 // ------------
 // export 
 // ------------
 export const adminController = {
   adminLogin,
+  reissue,
 };
