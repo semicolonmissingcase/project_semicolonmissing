@@ -4,5 +4,5 @@
  * 251222 v1.0.0 yeon init 
  */
 
-import ownerField from "../../fields/owner.field.js";
-export default [ownerField.email, ownerField.password];
+import userField from "../../fields/user.field.js";
+export default [userField.email, userField.password];

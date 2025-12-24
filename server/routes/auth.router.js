@@ -5,21 +5,17 @@
  */
 
 import express from 'express';
-import ownerLoginValidator from '../app/middlewares/validations/validatiors/auth/ownerLogin.validator.js';
+import loginValidator from '../app/middlewares/validations/validatiors/auth/login.validator.js';
 import validationHandler from '../app/middlewares/validations/validationHandler.js';
-import cleanerLoginValidator from '../app/middlewares/validations/validatiors/auth/cleanerLogin.validator.js';
 import adminLoginValidator from '../app/middlewares/validations/validatiors/auth/adminLogin.validator.js';
-import { ownerController } from '../app/controllers/auth/owner.controller.js';
-import { cleanerController } from '../app/controllers/auth/cleaner.controller.js';
+import { userController } from '../app/controllers/auth/user.controller.js';
 import { adminController } from '../app/controllers/auth/admin.controller.js';
  
 const authRouter = express.Router();
 
-authRouter.post('/login/owner', ownerLoginValidator, validationHandler, ownerController.ownerLogin);
-authRouter.post('/login/cleaner', cleanerLoginValidator, validationHandler, cleanerController.cleanerLogin);
+authRouter.post('/login', loginValidator, validationHandler, userController.login);
 authRouter.post('/login/admin', adminLoginValidator, validationHandler, adminController.adminLogin);
-authRouter.post('/reissue/owner', ownerController.reissue);
-authRouter.post('/reissue/cleaner', cleanerController.reissue);
+authRouter.post('/reissue', userController.reissue);
 authRouter.post('/reissue/admin', adminController.reissue);
 
 export default authRouter;

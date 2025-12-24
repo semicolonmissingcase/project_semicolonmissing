@@ -7,7 +7,6 @@ import { useState } from "react";
 
 // 유저 권한
 const ROLE = {
-  ADMIN: 'ADMIN',
   OWNER: 'OWNER',
   CLEANER: 'CLEANER'
 };
@@ -15,7 +14,7 @@ const { ADMIN, OWNER, CLEANER } = ROLE;
 
 // 인증 및 인가가 필요한 라우트만 정의
 const AUTH_REQUIRED_ROUTES = [
-  { path: /^\/users\/[0-9]+$/, roles: [CLEANER, OWNER] }, // TODO 수정
+  { path: /^\/users\/[0-9]+$/, roles: [CLEANER, OWNER, ADMIN] }, 
 ];
 
 // 비로그인만 접근 허용하는 라우트 정의
@@ -38,7 +37,7 @@ export default function ProtectedRouter() {
         try {
           await dispatch(reissueThunk()).unwrap();
         } catch(error) {
-          console.log('ProtectedRouter 재발급', error);
+          console.log (error);
           dispatch(clearAuth());
         }
       }
@@ -57,7 +56,7 @@ export default function ProtectedRouter() {
 
   if(isGuestRoute) {
     if(isLoggedIn) {
-      return <Navigate to="/posts" replace />;
+      return <Navigate to="/login" replace />;
     }
   } else {
     // 요청에 맞는 권한 규칙 조회
@@ -72,7 +71,7 @@ export default function ProtectedRouter() {
           return <Outlet />;
         } else {
           alert('권한이 부족하여 사용할 수 없습니다.');
-          return <Navigate to="/posts" replace />
+          return <Navigate to="/" replace />;
         }
       } else {
         alert('로그인이 필요한 서비스입니다.');

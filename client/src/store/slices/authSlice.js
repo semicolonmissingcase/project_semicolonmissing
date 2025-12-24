@@ -3,9 +3,7 @@ import { loginThunk, reissueThunk } from "../thunks/authThunk.js";
 
 const initialState = {
   accessToken: null,
-  owner: null,
-  cleaner: null,
-  admin: null,
+  user: null, // 점주, 기사
   isLoggedIn: false,
 }
 
@@ -15,28 +13,30 @@ const slice = createSlice({
   reducers: {
     clearAuth(state) {
       state.accessToken = null;
-      state.owner = null;
-      state.cleaner = null;
-      state.admin = null;
-      state.isLoggedIn = null;
+      state.user = null;
+      state.isLoggedIn = false;
     },
   },
 
   extraReducers: (builder) => {
     builder
       .addCase(loginThunk.fulfilled, (state, action) => {
-        const { accessToken, owner, cleaner, admin } = action.payload.data;
+        const { accessToken, user } = action.payload.data;
         state.accessToken = accessToken;
-        state.owner = owner;
-        state.cleaner = cleaner;
-        state.admin = admin;
+        state.user = user; //  user (점주, 기사)객체 저장
         state.isLoggedIn = true;
-      });
+      })
+      .addCase(reissueThunk.fulfilled, (state, action) => {
+        const { accessToken, user } = action.payload.data;
+        state.accessToken = accessToken;
+        state.user = user;
+        state.isLoggedIn = true;
+      }) 
   },
 });
 
 export const {
   clearAuth,
-} = slice.actions;
+} = slice.actions; // redcuer에서 한 actions를 export, import할 때 구조 분해 해서 사용
 
-export default slice.reducer;
+export default slice.reducer; // slice 자체를 반환, store에서 받아서 사용
