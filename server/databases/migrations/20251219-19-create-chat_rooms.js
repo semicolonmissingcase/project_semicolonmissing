@@ -57,11 +57,17 @@ const attributes = {
     allowNull: true,
     comment: '수정일',
   },
-  deletedAt: {
-    field: 'deleted_at',
+  ownerLeavedAt: {
+    field: 'owner_leaved_at',
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '삭제일',
+    comment: '점주가 체팅방을 나간 시간',
+  },
+  cleanerLeavedAt: {
+    field: 'cleaner_leaved_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '기사가 채팅방을 나간 시간',
   }
 };
 

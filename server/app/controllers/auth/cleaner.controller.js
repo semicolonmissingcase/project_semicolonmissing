@@ -4,10 +4,12 @@
  * 251225 v1.0.0 jae init
  */
 
-import { SUCCESS } from "../../../configs/responseCode.config.js";
+import { REISSUE_ERROR, SUCCESS } from "../../../configs/responseCode.config.js";
+import myError from "../../errors/customs/my.error.js";
 import cleanerService from "../../services/auth/cleaner.service.js";
 import cookieUtil from "../../utils/cookie/cookie.util.js";
 import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
+import jwtUtil from "../../utils/jwt/jwt.util.js";
 
 // ------------------
 // -----public-------
@@ -34,9 +36,31 @@ async function cleanerLogin(req, res, next) {
   }
 }
 
+async function reissue(req, res, next) {
+  try{
+    const token = cookieUtil.getCookieRefreshToken(req);
+
+    // 토큰 존재 여부 확인
+    if(!token) {
+      throw myError('리프래시 토큰 없음', REISSUE_ERROR);
+    }
+
+    // 토큰 재발급 처리
+    const { accessToken, refreshToken, cleaner } = await cleanerService.reissue(token);
+
+    // 쿠키에 리프래시 토큰 설정
+    cookieUtil.setCookieRefreshToken(res, refreshToken);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { accessToken, cleaner }))
+  } catch(error) {
+    next(error);
+  }
+}
+
 // ------------
 // export 
 // ------------
 export const cleanerController = {
   cleanerLogin,
+  reissue,
 };

@@ -8,6 +8,7 @@ import './configs/env.config.js';
 import authRouter from './routes/auth.router.js';
 import errorHandler from './app/errors/errorHandler.js';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
 
@@ -18,8 +19,8 @@ import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
 import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 
 const app = express();
-app.use(express.json());
-
+app.use(express.json()); // JSON 요청 파싱 처리
+app.use(cookieParser()); // 쿠키 파서
 app.use('/uploads', express.static('uploads'));
 
 // -----------------

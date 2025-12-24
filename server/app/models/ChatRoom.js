@@ -29,6 +29,7 @@ const attributes = {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
+    unique: true, 
     comment: '기사 PK',
   },
   estimateId: {
@@ -44,48 +45,36 @@ const attributes = {
     allowNull: false,
     comment: '채팅방 상태',
   },
-    createdAt: {
-      field: 'created_at',
-      type: DataTypes.DATE,
-      allowNull: true,
-      get() {
-        const val = this.getDataValue('createdAt')
-        if(!val) {
-          return null;
-        }
-        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-      } 
-    },
-    updatedAt: {
-      field: 'updated_at',
-      type: DataTypes.DATE,
-      allowNull: true,
-      get() {
-        const val = this.getDataValue('updatedAt')
-        if(!val) {
-          return null;
-        }
-        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-      }     
-    },
-    deletedAt: {
-      field: 'deleted_at',
-      type: DataTypes.DATE,
-      allowNull: true,
-      get() {
-        const val = this.getDataValue('deletedAt')
-        if(!val) {
-          return null;
-        }
-        return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-      }    
-    }
-  };
+  createdAt: {
+    field: 'created_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '작성일', 
+  },
+  updatedAt: {
+    field: 'updated_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '수정일',
+  },
+  ownerLeavedAt: {
+    field: 'owner_leaved_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '점주가 체팅방을 나간 시간',
+  },
+  cleanerLeavedAt: {
+    field: 'cleaner_leaved_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '기사가 채팅방을 나간 시간',
+  }
+};
 
 const options = {
   tableName: 'chat_rooms',  // 실제 DB 테이블명
   timestamps: true,      // createdAt, updatedAt를 자동 관리
-  paranoid: true,       // soft delete 설정 (deletedAt 자동 관리)
+  paranoid: false,       // soft delete 설정 (deletedAt 자동 관리), leaved_at이 관리하고, deleatedAt이 없으므로 false로 바꿈.
 }
 
 const ChatRoom = {
