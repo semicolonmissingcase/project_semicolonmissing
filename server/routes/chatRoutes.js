@@ -7,7 +7,7 @@ const chatRouter = express.Router();
 
 // 채팅방 생성 또는 조회
 chatRouter.post('/rooms', chatController.createRoom);
-// chatRouter.post('/rooms/:roomId/messages', chatController.chatSendMessage);
+chatRouter.post('/rooms/:roomId/messages', chatController.chatSendMessage);
 
 // 채팅방 목록 조회
 chatRouter.get('/rooms', chatController.getRooms);
