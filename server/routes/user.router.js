@@ -7,9 +7,13 @@
 import express from 'express';
 import ownerUserController from "../app/controllers/owner/owner.user.controller.js";
 import validationHandler from "../app/middlewares/validations/validationHandler.js";
+import ownerUserValidators from '../app/middlewares/validations/validatiors/owner/owner.user.validators.js';
 
 const usersRouter = express.Router();
 
-usersRouter.post('/register/owner', validationHandler, ownerUserController);
+// 점주 회원가입
+usersRouter.post('/owner', ownerUserValidators, validationHandler, ownerUserController.registerOwner);
+
+// 여기에 기사님도 하면 될듯
 
 export default usersRouter;

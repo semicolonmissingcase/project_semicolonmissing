@@ -9,6 +9,8 @@ import authRouter from './routes/auth.router.js';
 import errorHandler from './app/errors/errorHandler.js';
 import path from 'path';
 
+import usersRouter from './routes/user.router.js'; // 회원가입 관련
+
 // 채팅 관련 import
 import { createServer } from 'http'; // HTTP 서버 생성
 import { Server } from 'socket.io';   // 소켓 모듈
@@ -25,6 +27,7 @@ app.use('/uploads', express.static('uploads'));
 // -----------------
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/users', usersRouter); // 회원가입 관련
 
 // 에러 핸들러 등록
 app.use(errorHandler);

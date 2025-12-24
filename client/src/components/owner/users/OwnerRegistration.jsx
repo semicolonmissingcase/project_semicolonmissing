@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OwnerRegistration.css';
 import useKakaoPostcode from "../../hooks/useKakaoPostcode.js";
+const DEFAULT_PROFILE_IMAGE_URL = '/icons/default-profile.png';
 
 export default function OwnerRegistration() {
   const navigate = useNavigate();
@@ -14,9 +15,13 @@ export default function OwnerRegistration() {
     emailDomain: '',
     password: '',
     passwordConfirm: '',
-    phone: '',
+    phonePrefix: '010',
+    phoneMiddle: '',
+    phoneLast: '',
     storeName: '',
-    storePhone: '',
+    storePhonePrefix: '02',
+    storePhoneMiddle: '',
+    storePhoneLast: '',
     address: '',
     addressDetail: ''
   });
@@ -38,12 +43,43 @@ export default function OwnerRegistration() {
     }
   };
 
-  const handleEmailDomainChange = (e) => {
-    const selectedDomain = e.target.value;
+  const handlePhoneInput = (e, nextFieldName) => {
+    const { name, value } = e.target;
+    
+    // 숫자만 입력 가능하도록
+    const numericValue = value.replace(/[^0-9]/g, '');
+    
     setFormData(prev => ({
       ...prev,
-      emailDomain: selectedDomain
+      [name]: numericValue
     }));
+
+    // 4자 입력 시 다음 필드로 이동
+    if (numericValue.length === 4 && nextFieldName) {
+      const nextField = document.querySelector(`input[name="${nextFieldName}"]`);
+      if (nextField) {
+        nextField.focus();
+      }
+    }
+
+    // 에러 메시지 초기화
+    if (errors.phone || errors.storePhone) {
+      setErrors(prev => ({
+        ...prev,
+        phone: '',
+        storePhone: ''
+      }));
+    }
+  };
+
+  const handleEmailDomainChange = (e) => {
+    const selectedDomain = e.target.value;
+    if (selectedDomain) {
+      setFormData(prev => ({
+        ...prev,
+        emailDomain: selectedDomain
+      }));
+    }
   };
 
   const handleGenderChange = (e) => {
@@ -83,7 +119,7 @@ export default function OwnerRegistration() {
       newErrors.passwordConfirm = '비밀번호가 일치하지 않습니다';
     }
 
-    if (!formData.phone) {
+    if (!formData.phoneMiddle || !formData.phoneLast) {
       newErrors.phone = '전화번호를 입력해주세요';
     }
 
@@ -101,7 +137,9 @@ export default function OwnerRegistration() {
     try {
       const submitData = {
         ...formData,
-        email: `${formData.emailLocal}@${formData.emailDomain}`
+        email: `${formData.emailLocal}@${formData.emailDomain}`,
+        phone: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
+        storePhone: `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
       };
 
       const response = await fetch('/api/auth/register/owner', {
@@ -130,11 +168,11 @@ export default function OwnerRegistration() {
 
       <form onSubmit={handleSubmit} className="owner-registration-form">
         {/* 회원 정보 */}
-        <div className="registration-section">
-          <h2 className="section-title">회원 정보*</h2>
+        <div className="owner-registration-section">
+          <h2 className="owner-registration-section-title">회원 정보*</h2>
 
           {/* 이름 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label htmlFor="name">이름</label>
             <input
               type="text"
@@ -144,14 +182,14 @@ export default function OwnerRegistration() {
               onChange={handleChange}
               placeholder="이름을 입력하세요"
             />
-            {errors.name && <span className="error-text">{errors.name}</span>}
+            {errors.name && <span className="owner-registration-error-text">{errors.name}</span>}
           </div>
 
           {/* 성별 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label>성별</label>
-            <div className="gender-buttons">
-              <label className={`gender-checkbox ${formData.gender === 'male' ? 'active' : ''}`}>
+            <div className="owner-registration-gender-buttons">
+              <label className={`owner-registration-gender-checkbox ${formData.gender === 'male' ? 'active' : ''}`}>
                 <input
                   type="radio"
                   name="gender"
@@ -161,7 +199,7 @@ export default function OwnerRegistration() {
                 />
                 <span>남자</span>
               </label>
-              <label className={`gender-checkbox ${formData.gender === 'female' ? 'active' : ''}`}>
+              <label className={`owner-registration-gender-checkbox ${formData.gender === 'female' ? 'active' : ''}`}>
                 <input
                   type="radio"
                   name="gender"
@@ -175,42 +213,42 @@ export default function OwnerRegistration() {
           </div>
 
           {/* 이메일 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label>이메일</label>
-            <div className="birth-inputs">
+            <div className="owner-registration-email-inputs">
               <input
                 type="text"
                 name="emailLocal"
                 value={formData.emailLocal}
                 onChange={handleChange}
-                className="birth-input"
+                className="owner-registration-email-input"
                 placeholder="이메일"
               />
-              <span className="birth-separator">@</span>
+              <span className="owner-registration-email-separator">@</span>
               <input
                 type="text"
                 name="emailDomain"
                 value={formData.emailDomain}
                 onChange={handleChange}
                 placeholder="직접입력"
-                className="birth-input"
+                className="owner-registration-email-input"
               />
               <select
-                name="emailDomainSelect"
-                className="email-domain-select"
+                className="owner-registration-email-domain-select"
+                value=""
                 onChange={handleEmailDomainChange}
               >
-                <option value="">직접입력</option>
+                <option value="">선택</option>
                 <option value="naver.com">naver.com</option>
                 <option value="gmail.com">gmail.com</option>
                 <option value="daum.net">daum.net</option>
               </select>
             </div>
-            {errors.email && <span className="error-text">{errors.email}</span>}
+            {errors.email && <span className="owner-registration-error-text">{errors.email}</span>}
           </div>
 
           {/* 비밀번호 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label htmlFor="password">비밀번호</label>
             <input
               type="password"
@@ -220,11 +258,11 @@ export default function OwnerRegistration() {
               onChange={handleChange}
               placeholder="비밀번호를 입력하세요"
             />
-            {errors.password && <span className="error-text">{errors.password}</span>}
+            {errors.password && <span className="owner-registration-error-text">{errors.password}</span>}
           </div>
 
           {/* 비밀번호 확인 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label htmlFor="passwordConfirm">비밀번호 확인</label>
             <input
               type="password"
@@ -234,30 +272,55 @@ export default function OwnerRegistration() {
               onChange={handleChange}
               placeholder="비밀번호를 다시 입력하세요"
             />
-            {errors.passwordConfirm && <span className="error-text">{errors.passwordConfirm}</span>}
+            {errors.passwordConfirm && <span className="owner-registration-error-text">{errors.passwordConfirm}</span>}
           </div>
 
           {/* 전화번호 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label htmlFor="phone">전화번호</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="010-0000-0000"
-            />
-            {errors.phone && <span className="error-text">{errors.phone}</span>}
+            <div className="owner-registration-phone-inputs">
+              <select
+                name="phonePrefix"
+                value={formData.phonePrefix}
+                onChange={handleChange}
+                className="owner-registration-phone-prefix"
+              >
+                <option value="010">010</option>
+                <option value="011">011</option>
+                <option value="016">016</option>
+                <option value="017">017</option>
+                <option value="018">018</option>
+                <option value="019">019</option>
+              </select>
+              <span className="owner-registration-phone-separator">-</span>
+              <input
+                type="tel"
+                name="phoneMiddle"
+                value={formData.phoneMiddle}
+                onChange={(e) => handlePhoneInput(e, 'phoneLast')}
+                className="owner-registration-phone-input"
+                maxLength="4"
+              />
+              <span className="owner-registration-phone-separator">-</span>
+              <input
+                type="tel"
+                name="phoneLast"
+                value={formData.phoneLast}
+                onChange={(e) => handlePhoneInput(e, null)}
+                className="owner-registration-phone-input"
+                maxLength="4"
+              />
+            </div>
+            {errors.phone && <span className="owner-registration-error-text">{errors.phone}</span>}
           </div>
         </div>
 
         {/* 매장 정보 */}
-        <div className="registration-section">
-          <h2 className="section-title">매장 정보</h2>
+        <div className="owner-registration-section">
+          <h2 className="owner-registration-section-title">매장 정보</h2>
 
           {/* 매장명 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label htmlFor="storeName">매장명</label>
             <input
               type="text"
@@ -267,27 +330,63 @@ export default function OwnerRegistration() {
               onChange={handleChange}
               placeholder="매장명을 입력하세요"
             />
-            {errors.storeName && <span className="error-text">{errors.storeName}</span>}
+            {errors.storeName && <span className="owner-registration-error-text">{errors.storeName}</span>}
           </div>
 
           {/* 전화번호 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label htmlFor="storePhone">전화번호</label>
-            <input
-              type="tel"
-              id="storePhone"
-              name="storePhone"
-              value={formData.storePhone}
-              onChange={handleChange}
-              placeholder="매장 전화번호를 입력하세요"
-            />
-            {errors.storePhone && <span className="error-text">{errors.storePhone}</span>}
+            <div className="owner-registration-phone-inputs">
+              <select
+                name="storePhonePrefix"
+                value={formData.storePhonePrefix}
+                onChange={handleChange}
+                className="owner-registration-phone-prefix"
+              >
+                <option value="02">02</option> {/* 서울 */}
+                <option value="031">031</option> {/* 경기 */}
+                <option value="032">032</option> {/* 인천 */}
+                <option value="033">033</option> {/* 강원 */}
+                <option value="041">041</option> {/* 충남 */}
+                <option value="042">042</option> {/* 대전 */}
+                <option value="043">043</option> {/* 충북 */}
+                <option value="044">044</option> {/* 세종 */}
+                <option value="051">051</option> {/* 부산 */}
+                <option value="052">052</option> {/* 울산 */}
+                <option value="053">053</option> {/* 대구 */}
+                <option value="054">054</option> {/* 경뷱 */}
+                <option value="055">055</option> {/* 경남 */}
+                <option value="061">061</option> {/* 전남 */}
+                <option value="062">062</option> {/* 광주 */}
+                <option value="063">063</option> {/* 전북 */}
+                <option value="064">064</option> {/* 제주 */}
+              </select>
+              <span className="owner-registration-phone-separator">-</span>
+              <input
+                type="tel"
+                name="storePhoneMiddle"
+                value={formData.storePhoneMiddle}
+                onChange={(e) => handlePhoneInput(e, 'storePhoneLast')}
+                className="owner-registration-phone-input"
+                maxLength="4"
+              />
+              <span className="owner-registration-phone-separator">-</span>
+              <input
+                type="tel"
+                name="storePhoneLast"
+                value={formData.storePhoneLast}
+                onChange={(e) => handlePhoneInput(e, null)}
+                className="owner-registration-phone-input"
+                maxLength="4"
+              />
+            </div>
+            {errors.storePhone && <span className="owner-registration-error-text">{errors.storePhone}</span>}
           </div>
 
           {/* 주소 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <label htmlFor="address">주소</label>
-            <div className="address-search-wrapper">
+            <div className="owner-registration-address-search-wrapper">
               <input
                 type="text"
                 id="address"
@@ -299,17 +398,17 @@ export default function OwnerRegistration() {
               />
               <button
                 type="button"
-                className="address-search-btn bg-blue btn-small"
+                className="owner-registration-address-search-btn bg-blue btn-small"
                 onClick={handleAddressSearch}
               >
                 검색하기
               </button>
             </div>
-            {errors.address && <span className="error-text">{errors.address}</span>}
+            {errors.address && <span className="owner-registration-error-text">{errors.address}</span>}
           </div>
 
           {/* 상세주소 */}
-          <div className="form-group">
+          <div className="owner-registration-form-group">
             <input
               type="text"
               name="addressDetail"

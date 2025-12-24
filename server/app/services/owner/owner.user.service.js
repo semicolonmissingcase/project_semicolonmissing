@@ -1,6 +1,6 @@
 /**
  * @file app/services/owner/owner.user.service.js
- * @description owner Service
+ * @description owner 회원가입 Service
  * 251223 CK init
  */
 
@@ -13,7 +13,7 @@ import myError from "../../errors/customs/my.error.js";
 import bcrypt from 'bcrypt';
 
 /**
- * 
+ * 회원가입처리
  * @param {object} data 
  * @returns {Promise<object>} 생성된 점주 정보
  */
@@ -41,7 +41,7 @@ async function store(data) {
     }
 
     // 비밀번호 암호화
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // owner데이터 준비 및 생성
     const createdOwner = await ownerUserRepository.create(t, {

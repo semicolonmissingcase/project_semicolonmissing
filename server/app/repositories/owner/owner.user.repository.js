@@ -4,7 +4,7 @@
  * 251223 v1.0.0 ck init
  */
 
-import db from '../models/index.js';
+import db from '../../models/index.js';
 const { Owner } = db;
 
 /**

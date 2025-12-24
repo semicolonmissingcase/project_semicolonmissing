@@ -1,6 +1,6 @@
 /**
  * @file app/controllers/owner/owner.user.controller.js
- * @description 점주 로그인 관련 컨트롤러
+ * @description 점주 회원가입 관련 컨트롤러
  * 251223 v1.0.0 ck init
  */
 
@@ -23,15 +23,16 @@ async function registerOwner(req, res, next) {
       email: req.body.email,
       password: req.body.password,
       phone: req.body.phone,
+      // 매장관련
       storeName: req.body.storeName,
       storePhone: req.body.storePhone,
       address: req.body.address,
       addressDetail: req.body.addressDetail,
-    }
+    };
 
-    await ownerUserService.store(data);
+    const createdOwner = await ownerUserService.store(data);
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS));
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, createdOwner));
   } catch (error) {
     return next(error);
   }
