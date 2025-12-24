@@ -8,6 +8,7 @@ import { CONFLICT_ERROR } from "../../../configs/responseCode.config.js";
 import ownerStoreRepository from "../../repositories/owner/owner.store.repository.js";
 import ownerUserRepository from "../../repositories/owner/owner.user.repository.js";
 import ownerRepository from "../../repositories/auth/owner.repository.js";
+import cleanerRepository from "../../repositories/auth/cleaner.repository.js"
 import db from "../../models/index.js";
 import myError from "../../errors/customs/my.error.js";
 import bcrypt from 'bcrypt';
@@ -32,12 +33,20 @@ async function store(data) {
   
   // 트랜잭션 시작
   const result = await db.sequelize.transaction(async t => {
-    // 가입 유저인지 조회
-    const user = await ownerRepository.findByEmail(t, email);
+    // 가입 점주인지 조회
+    const owner = await ownerRepository.findByEmail(t, email);
   
     // 중복 유저 처리
-    if(user) {
+    if(owner) {
       throw myError('중복된 이메일입니다.', CONFLICT_ERROR);
+    }
+
+    // 가입 기사님인지 조회
+    const cleaner = await cleanerRepository.findByEmail(t, email);
+
+    // 중복 유저 처리
+    if(cleaner) { 
+      throw myError('이미 기사님으로 가입된 이메일입니다.', CONFLICT_ERROR)
     }
 
     // 비밀번호 암호화

@@ -2,11 +2,16 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OwnerRegistration.css';
 import useKakaoPostcode from "../../hooks/useKakaoPostcode.js";
-const DEFAULT_PROFILE_IMAGE_URL = '/icons/default-profile.png';
+import { useDispatch } from "react-redux";
+import { ownerStoreThunk } from "../../../store/thunks/userStore.Thunk.js"
+const DEFAULT_PROFILE_IMAGE_URL = '/icons/default-profile.png'; // 기본 프로필 사진
 
 export default function OwnerRegistration() {
   const navigate = useNavigate();
   const { openPostcode } = useKakaoPostcode();
+  const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
+  const [serverErrors, setServerErrors] = useState({});
 
   const [formData, setFormData] = useState({
     name: '',
@@ -25,8 +30,6 @@ export default function OwnerRegistration() {
     address: '',
     addressDetail: ''
   });
-
-  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -134,31 +137,40 @@ export default function OwnerRegistration() {
       return;
     }
 
+    // 제출 시 기존 서버 에러 초기화
+    setServerErrors({});
+
     try {
       const submitData = {
         ...formData,
         email: `${formData.emailLocal}@${formData.emailDomain}`,
         phone: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
-        storePhone: `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
+        storePhone: `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`,
+        profile: DEFAULT_PROFILE_IMAGE_URL // 프로필 사진 기본이미지
       };
 
-      const response = await fetch('/api/auth/register/owner', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submitData)
-      });
+      await dispatch(ownerStoreThunk(submitData)).unwrap();
 
-      if (response.ok) {
-        alert('회원가입이 완료되었습니다!');
-        navigate('/login');
-      } else {
-        alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-      }
+      // thunk 성공
+      navigate('/result');
+
     } catch (error) {
+      // 실패시 서버에서 받은 에러 메시지 state에 저장
       console.error('회원가입 오류:', error);
-      alert('회원가입 중 오류가 발생했습니다.');
+
+      // 서버 유효성 검사 오류 처리
+      if (error && Array.isArray(error.data)) {
+        const newServerErrors = {};
+        error.data.forEach(err => {
+          // 서버에서 'field: message' 형식으로 에러 받음
+          const [field, ...message] = err.split(': ');
+          newServerErrors[field.trim()] = message.join(': ');
+        });
+        setServerErrors(newServerErrors);
+      } else {
+        // 그 외 일반적인 서버 예러
+        alert(error.msg || '회원가입 중 알 수 없는 오류가 발생했습니다.');
+      }
     }
   };
 
@@ -183,6 +195,7 @@ export default function OwnerRegistration() {
               placeholder="이름을 입력하세요"
             />
             {errors.name && <span className="owner-registration-error-text">{errors.name}</span>}
+            {serverErrors.name && <span className="owner-registration-error-text">{serverErrors.name}</span>}
           </div>
 
           {/* 성별 */}
@@ -210,6 +223,7 @@ export default function OwnerRegistration() {
                 <span>여자</span>
               </label>
             </div>
+            {serverErrors.gender && <span className="owner-registration-error-text">{serverErrors.gender}</span>}
           </div>
 
           {/* 이메일 */}

@@ -33,6 +33,10 @@
   font-size: 1.5rem;
 }
 
+.result-text > p {
+  text-align: center;
+}
+
 .result-btn-containver {
   padding: 2rem;
   display: flex;
