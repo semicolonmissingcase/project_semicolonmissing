@@ -1,13 +1,14 @@
 /**
  * @file app/repositories/chat.repository.js
- * @description Chat Repository (DB Access)
+ * @description Chat Repository
  * 251222 v1.0.0 seon init
  */
 import db from '../models/index.js';
+import { Op } from 'sequelize';
 
 const chatRepository = {
   /**
-   * 1. 견적 ID와 기사 ID로 기존 채팅방 조회
+   * 견적 ID와 기사 ID로 기존 채팅방 조회
    */
   findByKeys: async (transaction, estimate_id, cleaner_id) => {
     return await db.ChatRoom.findOne({
@@ -20,50 +21,91 @@ const chatRepository = {
   },
 
   /**
-   * 2. 새 채팅방 생성
+   * 새 채팅방 생성
    */
   create: async (transaction, data) => {
     return await db.ChatRoom.create({
       estimateId: data.estimate_id,
       cleanerId: data.cleaner_id,
-      ownerId: data.owner_id || 1, // 임시로 1번 점주 (실제론 서비스에서 받아와야 함)
+      ownerId: data.owner_id,
       status: 'OPEN'
     }, { transaction });
   },
 
   /**
-   * 3. 메시지 저장
+   * 사용자별 채팅방 목록 조회
    */
-  createMessage: async (transaction, data) => {
-    return await db.ChatMessage.create({
-      chatRoomId: data.room_id,
-      content: data.content,
-      senderId: data.sender_id,
-      senderType: data.sender_role // 모델의 senderType(또는 senderTye) 컬럼명 확인
-    }, { transaction });
-  },
-
-  /**
-   * 4. 특정 방의 메시지 목록 조회 (페이징)
-   */
-  findMessagesByRoomId: async (transaction, room_id, limit, offset) => {
-    return await db.ChatMessage.findAll({
-      where: { chatRoomId: room_id },
-      limit,
-      offset,
-      order: [['createdAt', 'DESC']], // 최신순
+  findByUser: async (transaction, userId, userRole) => {
+    const isOwner = userRole === 'owner';
+    return await db.ChatRoom.findAll({
+      where: {
+        [isOwner ? 'ownerId' : 'cleanerId']: userId,
+        [isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt']: null
+      },
+      include: [
+        { model: db.Estimate, as: 'estimate' },
+        { model: isOwner ? db.Cleaner : db.Owner, as: isOwner ? 'cleaner' : 'owner' }
+      ],
+      order: [['updatedAt', 'DESC']], // 최근 대화 순
       transaction
     });
   },
 
   /**
-   * 5. 안읽은 메시지 개수 카운트
+   * 메시지 저장 및 방 부활 로직
+   */
+  createMessage: async (transaction, data) => {
+    const message = await db.ChatMessage.create({
+      chatRoomId: data.room_id,
+      content: data.content,
+      senderId: data.sender_id,
+      senderType: data.sender_role,
+      messageType: data.type || 'TEXT'
+    }, { transaction });
+
+    await db.ChatRoom.update(
+        { 
+          ownerLeavedAt: null, 
+          cleanerLeavedAt: null 
+        }, 
+        { where: { id: data.room_id }, transaction }
+      );
+
+    return message;
+  },
+
+  /**
+   * 특정 방의 메시지 목록 조회
+   */
+  findMessagesByRoomId: async (transaction, room_id, limit, offset) => {
+    return await db.ChatMessage.findAll({
+      where: { chatRoomId: room_id },
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [['createdAt', 'DESC']],
+      transaction
+    });
+  },
+
+  /**
+   * 방 나가기
+   */
+  updateLeavedAt: async (transaction, roomId, userRole) => {
+    const field = userRole === 'owner' ? 'ownerLeavedAt' : 'cleanerLeavedAt';
+    return await db.ChatRoom.update(
+      { [field]: new Date() },
+      { where: { id: roomId }, transaction }
+    );
+  },
+
+  /**
+   * 안읽은 메시지 카운트
    */
   getUnreadCount: async (transaction, room_id, user_id) => {
     return await db.ChatMessage.count({
       where: {
         chatRoomId: room_id,
-        senderId: { [db.Sequelize.Op.ne]: user_id }, // 내가 보낸 게 아닌 것
+        senderId: { [Op.ne] : user_id },
         isRead: 0
       },
       transaction
@@ -71,7 +113,7 @@ const chatRepository = {
   },
 
   /**
-   * 6. 읽음 처리 업데이트
+   * 읽음 처리 업데이트
    */
   markAsRead: async (transaction, room_id, user_id) => {
     return await db.ChatMessage.update(
