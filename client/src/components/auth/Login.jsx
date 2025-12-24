@@ -33,12 +33,12 @@ export default function Login () {
       <div className="login-title">
         <div className="ice-doctor-logo1 login-logo"></div>
       </div>
-      <div className="login-container" onSubmit={handleLogin}>
+      <div className="login-container">
         <div className="login-tap">
           <button type="submit" className="btn-medium bg-white">점주님 로그인</button>
           <button type="submit" className="btn-medium bg-white">기사님 로그인</button>
         </div>
-          <form className="login-form-container">
+          <form className="login-form-container" onSubmit={handleLogin}>
             <label className="login-label-text">이메일</label>
             <input type="text" className="input-medium" onChange={e => {setEmail(e.target.value)}}/>
             <label className="login-label-text">비밀번호</label>

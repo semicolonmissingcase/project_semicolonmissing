@@ -56,7 +56,7 @@ export default function ProtectedRouter() {
 
   if(isGuestRoute) {
     if(isLoggedIn) {
-      return <Navigate to="/login" replace />;
+      return <Navigate to="/" replace />;
     }
   } else {
     // 요청에 맞는 권한 규칙 조회

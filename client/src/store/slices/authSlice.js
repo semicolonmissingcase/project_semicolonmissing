@@ -14,7 +14,7 @@ const slice = createSlice({
     clearAuth(state) {
       state.accessToken = null;
       state.user = null;
-      state.isLoggedIn = false;
+      state.isLoggedIn = null;
     },
   },
 
@@ -25,13 +25,21 @@ const slice = createSlice({
         state.accessToken = accessToken;
         state.user = user; //  user (점주, 기사)객체 저장
         state.isLoggedIn = true;
+
+        if(accessToken) {
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('user', JSON.stringify(user));
+        }
       })
       .addCase(reissueThunk.fulfilled, (state, action) => {
         const { accessToken, user } = action.payload.data;
         state.accessToken = accessToken;
         state.user = user;
         state.isLoggedIn = true;
-      }) 
+
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('user', JSON.stringify(user));
+      }); 
   },
 });
 
