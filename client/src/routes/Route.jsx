@@ -11,14 +11,14 @@ import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx"
 import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
-import CleanersMyPage from "../components/cleaners/CleanersMyPage.jsx";
+import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
 import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
 import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
-import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";
+import OwnerMyPage from "../components/owner/maypage/OwnerMyPage.jsx";
 import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
 // 관리자 관련
 import AdminMain from "../components/admin/main/AdminMain.jsx";
