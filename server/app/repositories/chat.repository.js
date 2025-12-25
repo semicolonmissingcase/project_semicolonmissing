@@ -40,19 +40,20 @@ const chatRepository = {
     return await db.ChatRoom.findAll({
       where: {
         [isOwner ? 'ownerId' : 'cleanerId']: userId,
+        // 나간 상태가 아닌(null인) 방만 조회
         [isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt']: null
       },
       include: [
         { model: db.Estimate, as: 'estimate' },
         { model: isOwner ? db.Cleaner : db.Owner, as: isOwner ? 'cleaner' : 'owner' }
       ],
-      order: [['updatedAt', 'DESC']], // 최근 대화 순
+      order: [['updatedAt', 'DESC']], 
       transaction
     });
   },
 
   /**
-   * 메시지 저장 및 방 부활 로직
+   * 메시지 저장 및 방 부활(LeavedAt 초기화)
    */
   createMessage: async (transaction, data) => {
     const message = await db.ChatMessage.create({
@@ -63,13 +64,14 @@ const chatRepository = {
       messageType: data.type || 'TEXT'
     }, { transaction });
 
+    // 어느 한쪽이라도 메시지를 보내면 양쪽 모두 다시 목록에 보여야 하므로 null 처리
     await db.ChatRoom.update(
-        { 
-          ownerLeavedAt: null, 
-          cleanerLeavedAt: null 
-        }, 
-        { where: { id: data.room_id }, transaction }
-      );
+      { 
+        ownerLeavedAt: null, 
+        cleanerLeavedAt: null 
+      }, 
+      { where: { id: data.room_id }, transaction }
+    );
 
     return message;
   },
@@ -77,7 +79,7 @@ const chatRepository = {
   /**
    * 특정 방의 메시지 목록 조회
    */
-  findMessagesByRoomId: async (transaction, room_id, limit, offset) => {
+  findMessagesByRoomId: async (transaction, room_id, limit = 50, offset = 0) => {
     return await db.ChatMessage.findAll({
       where: { chatRoomId: room_id },
       limit: parseInt(limit),
@@ -121,7 +123,7 @@ const chatRepository = {
       {
         where: {
           chatRoomId: room_id,
-          senderId: { [db.Sequelize.Op.ne]: user_id },
+          senderId: { [Op.ne]: user_id },
           isRead: 0
         },
         transaction

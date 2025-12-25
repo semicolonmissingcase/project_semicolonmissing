@@ -17,9 +17,8 @@ export default function(req, res, next) {
     const claims = jwtUtil.getClaimsWithVerifyToken(token);
 
     req.user = {
-      // TODO 나중에 login 수정 완료 시 변경
-      id: 1,
-      role: 'owner'
+      id: parseInt(claims.sub || claims.id),
+      role: claims.role
     };
     return next();
   } catch (error) {
