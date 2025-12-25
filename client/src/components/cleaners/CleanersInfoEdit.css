@@ -1,115 +1,226 @@
-.cleaners-info-edit-all-layout-center {
-  display: flex;
-  justify-content: center;
-}
-
-.cleaners-info-edit-wrapper-cleaners-info-edit {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  width: 90%;
-  margin: 40px 0;
-}
-
-.cleaners-info-edit-layout-center {
+/* 전체 컨테이너 정렬 */
+.cleanerinfoedit-wrapper {
+  max-width: 700px; /* 가로 배치를 고려해 소폭 확장 */
+  margin: 3rem auto;
+  padding: 0 2rem;
   display: flex;
   flex-direction: column;
+}
+
+.cleanerinfoedit-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: var(--color-dark-blue);
+  text-align: center;
+}
+
+/* 폼 섹션 */
+.cleanerinfoedit-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 입력 그룹: ownerinfo의 보더 라인 스타일 적용 */
+.cleanerinfoedit-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1.2rem 0;
+  gap: 1rem;
+}
+
+/* 레이블 영역 고정 (ownerinfo 참고) */
+.cleanerinfoedit-group label {
+  flex: 0 0 100px;
+  font-weight: 500;
+  color: var(--color-black);
+  font-size: 0.95rem;
+}
+
+/* 입력창 및 표시 영역 */
+.cleanerinfoedit-group input,
+.cleanerinfoedit-input-with-btn,
+.cleanerinfoedit-email-display,
+.cleanerinfoedit-phone-container {
+  flex: 1;
+}
+
+/* input 스타일 (ownerinfo 배경색 및 패딩 참고) */
+.cleanerinfoedit-group input {
+  padding: 0.75rem;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.cleanerinfoedit-input-disabled {
+  color: var(--color-gray);
+  cursor: not-allowed;
+}
+
+/* 비밀번호 수정용 인라인 버튼 */
+.cleanerinfoedit-input-with-btn {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cleanerinfoedit-inline-btn {
+  white-space: nowrap;
+  padding: 0 1rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* 이메일 표시 영역 */
+.cleanerinfoedit-email-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cleanerinfoedit-email-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.cleanerinfoedit-social-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* 휴대전화 (ownerinfo 스타일 이식) */
+.cleanerinfoedit-phone-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+/* select와 input의 너비를 동일하게 고정 (이미지 비율 참고) */
+.cleanerinfoedit-phone-container select,
+.cleanerinfoedit-phone-input {
+  width: 90px !important; /* select와 input 너비 통일 */
+  height: 2.5rem;
+  padding: 0.7rem;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  outline: none;
+  flex: none; /* 길어지지 않도록 flex 해제 */
+}
+
+.cleanerinfoedit-phone-container span {
+  color: #999;
+}
+
+/* 하단 푸터 (안내 문구 및 버튼) */
+.cleanerinfoedit-footer {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.cleanerinfoedit-status-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--color-red); /* 기사님 정보 중 요점 강조 */
+}
+
+.cleanerinfoedit-status-desc {
+  font-size: 0.85rem;
+  color: var(--color-gray);
+}
+
+.cleanerinfoedit-confirm-msg {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.cleanerinfoedit-check-icon {
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--color-blue);
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  color: var(--color-blue);
+  font-weight: bold;
+  flex-shrink: 0;
 }
 
-.cleaners-info-edit-title {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
-.wrapper-cleaners-info-edit {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  width: 90%;
-  margin-bottom: 30px;
-  height: auto;
+/* 최종 액션 버튼 (ownerinfo의 btn-container 스타일 참고) */
+.cleanerinfoedit-action-btns {
   display: flex;
-  justify-self: center;
-  background-color: rgb(189, 189, 143); 
+  gap: 1rem;
+  justify-content: center;
 }
 
-.cleaners-info-edit-form {
-  display: flex;
-  flex-direction: column; 
-  margin: 7px 10px;
-  gap: 15px;
-}
-
-.cleaners-info-edit-id {
-  display: flex;
-  gap: 10px;
-}
-
-.cleaners-info-edit-ps {
-  display: flex;
-  gap: 10px;
-}
-
-.cleaners-info-edit-input-border-radius {
-  width: 270px;
-  height: 30px;
-  border-radius: 5px;
-}
-
-.cleaners-info-edit-radio {
-  display: none;
-}
-
-.cleaners-info-edit-label {
-  width: 70px;
-  height: 25px;
-  border: 1px solid var(--color-gray);
+.bg-light-gray {
   background-color: var(--color-light-gray);
-  text-align: center;
 }
 
-.cleaners-info-edit-label-selected {
-  background-color: var(--color-gray);
+/* 미디어 쿼리 - 태블릿 & 모바일 */
+/* 820px 이하 */
+@media (max-width: 820px) {
+  .cleanerinfoedit-wrapper {
+    padding: 1rem;
+  }
 }
 
-.cleaners-info-edit-radio-notification {
-  display: none;
-}
+/* 430px 이하 (모바일) */
+@media (max-width: 430px) {
+  .cleanerinfoedit-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
 
-.cleaners-info-edit-label-notification {
-  width: 70px;
-  height: 25px;
-  border: 1px solid var(--color-gray);
-  background-color: var(--color-light-gray);
-  text-align: center;
-}
+  .cleanerinfoedit-wrapper {
+    padding: 1rem;
+  }
 
-.cleaners-info-edit-lobel-notification-selected {
-  background-color: var(--color-gray);
-}
+  /* 모바일에서는 레이블을 위로, 인풋을 아래로 쌓음 */
+  .cleanerinfoedit-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1rem 0;
+  }
 
-.cleaners-info-edit-gender {
-  display: flex;
-}
+  .cleanerinfoedit-group label {
+    flex: none;
+    width: 100%;
+  }
 
-.cleaners-info-edit-notification {
-  display: flex;
-}
+  .cleanerinfoedit-phone-container select {
+    width: 80px;
+  }
 
-.button-direction-row {
-  display: flex;
-  gap: 20px;
-}
+  .cleanerinfoedit-confirm-msg {
+    flex-direction: row;
+    text-align: left;
+    font-size: 0.8rem;
+  }
 
-.cleaners-info-edit-check {
-  margin-top: 40px;
-}
+  .cleanerinfoedit-action-btns {
+    width: 100%;
+  }
 
-.cleaners-info-edit-button-direction-row {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
+  .cleanerinfoedit-cancel-btn,
+  .cleanerinfoedit-save-btn {
+    flex: 1;
+    width: auto;
+  }
 }
