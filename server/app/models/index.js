@@ -29,9 +29,6 @@ import Payment from './Payment.js';
 import Adjustment from './Adjustment.js';
 
 const db = {}; // 생성할 db 인스턴스 저장용 
-console.log('DB Name:', process.env.DB_MYSQL_DB_NAME);
-console.log('Dialect:', process.env.DB_MYSQL_DIALECT);
-console.log('Port:', parseInt(process.env.DB_MYSQL_PORT));
 // Sequelize 인스턴스 생성
 const sequelize = new Sequelize(
   process.env.DB_MYSQL_DB_NAME        // DB명

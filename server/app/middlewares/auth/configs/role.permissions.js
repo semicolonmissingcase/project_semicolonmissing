@@ -13,6 +13,7 @@ const ROLE_PERMISSIONS = {
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },
+    { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER]} // 둘 다 허용
   ],
   PUT: [
   ],

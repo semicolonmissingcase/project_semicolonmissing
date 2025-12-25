@@ -10,10 +10,12 @@ import validationHandler from '../app/middlewares/validations/validationHandler.
 import adminLoginValidator from '../app/middlewares/validations/validatiors/auth/adminLogin.validator.js';
 import { userController } from '../app/controllers/auth/user.controller.js';
 import { adminController } from '../app/controllers/auth/admin.controller.js';
+import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
  
 const authRouter = express.Router();
 
 authRouter.post('/login', loginValidator, validationHandler, userController.login);
+authRouter.post('/logout', authUserMiddleware, validationHandler, userController.logout);
 authRouter.post('/login/admin', adminLoginValidator, validationHandler, adminController.adminLogin);
 authRouter.post('/reissue', userController.reissue);
 authRouter.post('/reissue/admin', adminController.reissue);

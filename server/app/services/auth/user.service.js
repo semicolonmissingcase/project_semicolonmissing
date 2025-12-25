@@ -71,6 +71,34 @@ async function login(body) {
 }
 
 /**
+ * 로그아웃 처리
+ * @param {*} id 
+ * @returns  
+ */
+async function logout(id) {
+  return await db.sequelize.transaction(async t => {
+    // 1. 점주 (owner) 테이블에서 먼저 로그아웃 시도
+    // [affectedCount] 에서 첫 번째 요소를 구조 분해 할당
+    const [owenrAffectedCount] = await ownerRepository.logout(t, id);
+
+    // 2. 점주 테이블에서 업데이트 행이 있다면 성공 반환
+    if(owenrAffectedCount > 0) {
+      return { success: true, role: ROLE.OWNER};
+    }
+    
+    // 3. 점주가 아니라면 청소 기사(cleaner) 테이블에서 로그아웃 시도
+    const [cleanerAffectedCount] = await cleanerRepository.logout(t, id);
+
+    // 4. 청소 기사 테이블에서 업데이트 성공 시 반환
+    if (cleanerAffectedCount > 0) {
+      return { success: true, role: ROLE.CLEANER};
+    }
+    // 5. 두 테이블 모두 해당 ID가 없는 경우(에러 처리)
+    throw myError('로그아웃 하려는 유저 정보가 존재하지 않습니다.', NOT_REGISTERED_ERROR);
+  });
+}
+
+/**
  * 토큰 재발급 처리
  * @param {string} token 
  */
@@ -130,5 +158,6 @@ async function reissue(token) {
 
 export default {
   login,
+  logout,
   reissue,
 }

@@ -35,6 +35,28 @@ async function login(req, res, next) {
   }
 }
 
+/**
+ * 로그아웃 컨트롤러 처리
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+async function logout(req, res, next) {
+  try {
+    const id = req.user.id;
+
+    // 로그아웃 서비스 호출
+    await userService.logout(id);
+
+    // cookie에 refreshToken 만료
+    cookieUtil.clearCookieRefreshToken(res);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS))
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function reissue(req, res, next) {
   try{
     const token = cookieUtil.getCookieRefreshToken(req);
@@ -61,5 +83,6 @@ async function reissue(req, res, next) {
 // ------------
 export const userController = {
   login,
+  logout,
   reissue,
 };
