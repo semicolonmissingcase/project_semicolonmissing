@@ -44,6 +44,13 @@ export default function OwnerRegistration() {
         [name]: ''
       }));
     }
+    // 서버 에러 메시지도 초기화
+    if (serverErrors[name]) {
+      setServerErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   const handlePhoneInput = (e, nextFieldName) => {
@@ -68,6 +75,14 @@ export default function OwnerRegistration() {
     // 에러 메시지 초기화
     if (errors.phone || errors.storePhone) {
       setErrors(prev => ({
+        ...prev,
+        phone: '',
+        storePhone: ''
+      }));
+    }
+    // 서버 에러 메시지도 초기화
+    if (serverErrors.phone || serverErrors.storePhone) {
+      setServerErrors(prev => ({
         ...prev,
         phone: '',
         storePhone: ''
@@ -168,7 +183,7 @@ export default function OwnerRegistration() {
         });
         setServerErrors(newServerErrors);
       } else {
-        // 그 외 일반적인 서버 예러
+        // 그 외 일반적인 서버 에러
         alert(error.msg || '회원가입 중 알 수 없는 오류가 발생했습니다.');
       }
     }
@@ -259,6 +274,7 @@ export default function OwnerRegistration() {
               </select>
             </div>
             {errors.email && <span className="owner-registration-error-text">{errors.email}</span>}
+            {serverErrors.email && <span className="owner-registration-error-text">{serverErrors.email}</span>}
           </div>
 
           {/* 비밀번호 */}
@@ -273,6 +289,7 @@ export default function OwnerRegistration() {
               placeholder="비밀번호를 입력하세요"
             />
             {errors.password && <span className="owner-registration-error-text">{errors.password}</span>}
+            {serverErrors.password && <span className="owner-registration-error-text">{serverErrors.password}</span>}
           </div>
 
           {/* 비밀번호 확인 */}
@@ -326,6 +343,7 @@ export default function OwnerRegistration() {
               />
             </div>
             {errors.phone && <span className="owner-registration-error-text">{errors.phone}</span>}
+            {serverErrors.phone && <span className="owner-registration-error-text">{serverErrors.phone}</span>}
           </div>
         </div>
 
@@ -345,6 +363,7 @@ export default function OwnerRegistration() {
               placeholder="매장명을 입력하세요"
             />
             {errors.storeName && <span className="owner-registration-error-text">{errors.storeName}</span>}
+            {serverErrors.storeName && <span className="owner-registration-error-text">{serverErrors.storeName}</span>}
           </div>
 
           {/* 전화번호 */}
@@ -368,7 +387,7 @@ export default function OwnerRegistration() {
                 <option value="051">051</option> {/* 부산 */}
                 <option value="052">052</option> {/* 울산 */}
                 <option value="053">053</option> {/* 대구 */}
-                <option value="054">054</option> {/* 경뷱 */}
+                <option value="054">054</option> {/* 경북 */}
                 <option value="055">055</option> {/* 경남 */}
                 <option value="061">061</option> {/* 전남 */}
                 <option value="062">062</option> {/* 광주 */}
@@ -395,6 +414,7 @@ export default function OwnerRegistration() {
               />
             </div>
             {errors.storePhone && <span className="owner-registration-error-text">{errors.storePhone}</span>}
+            {serverErrors.storePhone && <span className="owner-registration-error-text">{serverErrors.storePhone}</span>}
           </div>
 
           {/* 주소 */}
@@ -419,6 +439,7 @@ export default function OwnerRegistration() {
               </button>
             </div>
             {errors.address && <span className="owner-registration-error-text">{errors.address}</span>}
+            {serverErrors.address && <span className="owner-registration-error-text">{serverErrors.address}</span>}
           </div>
 
           {/* 상세주소 */}
@@ -430,6 +451,7 @@ export default function OwnerRegistration() {
               onChange={handleChange}
               placeholder="상세 주소를 입력하세요"
             />
+            {serverErrors.addressDetail && <span className="owner-registration-error-text">{serverErrors.addressDetail}</span>}
           </div>
         </div>
 

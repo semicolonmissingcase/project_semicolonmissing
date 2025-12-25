@@ -8,7 +8,7 @@ import React from 'react';
 
 function App() {
   const Location = useLocation();
-
+  
   const isChatpage = location.pathname.includes('/chatroom');
 
   const isAdminpage = location.pathname.includes('/hospital');

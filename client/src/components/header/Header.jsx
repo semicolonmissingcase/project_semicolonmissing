@@ -2,12 +2,12 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import HeaderMenu from "./HeaderMenu";
-import { useSelector, useDispatch } from "react-redux";
-import { clearAuth } from "../../store/slices/authSlice";
+import { useSelector } from "react-redux";
+// import { clearAuth } from "../../store/slices/authSlice";
 
 export default function Header() {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); 
+  // const dispatch = useDispatch();
 
   // Redux Store에서 로그인 상태 가져오기 
   const { isLoggedIn, user } = useSelector((state) => state.auth);
@@ -24,13 +24,13 @@ export default function Header() {
     return () => window.removeEventListener("chatSidebarStatus", handleStatus);
   })
   
-  // 로그 아웃 처리 함수 
-  function handleLogout() {
-    localStorage.removeItem('accessToken'); // 스토리지 삭제
-    localStorage.removeItem('user');
-    dispatch(clearAuth()); // 리덕스 상태 초기화
-    navigate('/');
-  }
+  // 로그 아웃 처리 함수 (저희는 이거 메뉴바 만듭니다.)
+  //function handleLogout() {
+  //  localStorage.removeItem('accessToken'); // 스토리지 삭제
+  //  localStorage.removeItem('user');
+  //  dispatch(clearAuth()); // 리덕스 상태 초기화
+  //  navigate('/');
+  //}
 
   // 버튼 네비게이터
   function mainPage() {
@@ -49,6 +49,29 @@ export default function Header() {
     navigate('/registration');
   }
 
+  function chatListPage() {
+    navigate('/chatlist');
+  }
+
+  // 점주(owner)
+  function ownerMypage() {
+    navigate('owners/mypage');
+  }
+
+  function ownerQuteList() {
+    navigate('cleaners/userquotelist'); // TODO: 라우트 다시 확인하기
+  }
+
+  // 기사님(cleaners)
+  function cleanerMypage() {
+    navigate('cleaners/mypage');
+  }
+
+  function cleanerQuotelist() {
+    navigate('cleaners/userquotelist');
+  }
+
+  // 모바일 네비게이션 관련
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(prev => !prev);
   };
@@ -74,16 +97,66 @@ export default function Header() {
         <div className='header-right-container pc-only'>
           {isLoggedIn ? (
             <>
-              <span className="header-user-name-tag">{user?.name}님</span>
-              <button type='button' className='btn-small header-right-btn' onClick={handleLogout}>로그아웃</button>
+              {/* 점주(owner): 견적요청, 채팅, 프로필사진 */}
+              {user?.userType === 'owner' && (
+                <>
+                  <button type='button' className='btn-small header-right-btn' onClick={chatListPage}>
+                    채팅
+                  </button>
+                  <button type='button' className='btn-small header-right-btn' onClick={ownerQuteList}>
+                    견적요청
+                  </button>
+                  <div className='header-profile-icon' onClick={ownerMypage}>
+                    {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
+                    {user?.profileImage ? (
+                      <img 
+                        src={user.profileImage} 
+                        alt="프로필" 
+                        className='header-profile-img'
+                      />
+                    ) : (
+                      <div className='header-profile-default'>
+                        {user?.name?.[0] || 'U'}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* 기사님(cleaner): 채팅, 신규요청, 프로필사진 */}
+              {user?.userType === 'cleaner' && (
+                <>
+                  <button type='button' className='btn-small header-right-btn' onClick={chatListPage}>
+                    채팅
+                  </button>
+                  <button type='button' className='btn-small header-right-btn' onClick={cleanerQuotelist}>
+                    신규요청
+                  </button>
+                  <div className='header-profile-icon' onClick={cleanerMypage}>
+                    {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
+                    {user?.profileImage ? (
+                      <img 
+                        src={user.profileImage} 
+                        alt="프로필" 
+                        className='header-profile-img'
+                      />
+                    ) : (
+                      <div className='header-profile-default'>
+                        {user?.name?.[0] || 'U'}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </>
           ) : (
-           <>
-               <button type='button' className='btn-small header-right-btn' onClick={loginPage}>로그인</button>
-               <button type='button' className='btn-small header-right-btn' onClick={registrationPage}>회원가입</button>
-           </>
+            <>
+              {/* 비회원 / 로그아웃 */}
+              <button type='button' className='btn-small header-right-btn' onClick={loginPage}>로그인</button>
+              <button type='button' className='btn-small header-right-btn' onClick={registrationPage}>회원가입</button>
+            </>
           )}
-        </div>
+        </div>        
         
         {/* 모바일 햄버거 버튼 */}
         <div 
