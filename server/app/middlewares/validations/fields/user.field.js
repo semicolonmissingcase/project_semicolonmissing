@@ -1,6 +1,6 @@
 /**
  * @file app/middlewares/validations/fields/owner.field.js
- * @description 점주 정보 유효성 검토 필드
+ * @description 유저 정보 유효성 검토 필드
  * 251222 v1.0.0 yeon init 
  */
 

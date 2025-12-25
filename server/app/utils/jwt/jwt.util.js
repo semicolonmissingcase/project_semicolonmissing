@@ -35,7 +35,7 @@ function generateToken(payload, ttl) {
 // --------------------
 /**
  * 엑세스 토큰 생성
- * @param {import("../../models/index.js").User} user 
+ * @param {{ id: number, role: string }} user 
  * @returns {string} JWT
  */
 function generateAccessToken(user) {
@@ -55,13 +55,14 @@ function generateAccessToken(user) {
    * @returns {string} JWT
    */
 function generateRefreshToken(user) {
-    // 페이로드 설정
-    const payload = {
-      sub: user.id, // payload.sub set (value: user pk)
-    }
+  // 페이로드 설정
+  const payload = {
+    sub: user.id, // payload.sub set (value: user pk)
+    role: user.role // payload.role set (value: user role)
+  }
 
-    // 리프래시토큰 생성
-    return  generateToken(payload, parseInt(process.env.JWT_REFRESH_TOKEN_COOKIE_EXPIRY));
+  // 리프래시토큰 생성
+  return  generateToken(payload, parseInt(process.env.JWT_REFRESH_TOKEN_COOKIE_EXPIRY));
 }
 
 /**

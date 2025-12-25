@@ -6,9 +6,9 @@ export const loginThunk = createAsyncThunk(
   async (args, { rejectWithValue }) => {
     try {
       const url = '/api/auth/login';
-      const { email, password } = args; 
-      
-      const response = await axiosInstance.post(url, {email, password}); 
+      const { email, password } = args;
+
+      const response = await axiosInstance.post(url, {email, password }); 
 
       return response.data;
     } catch (error) {
@@ -23,6 +23,22 @@ export const reissueThunk = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     try {
       const url = '/api/auth/reissue';
+
+      const response = await axiosInstance.post(url);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// 로그 아웃
+export const logoutThunk = createAsyncThunk(
+  'auth/logoutThunk',
+  async (_, {rejectWithValue}) => {
+    try {
+      const url = '/api/auth/logout';
 
       const response = await axiosInstance.post(url);
 
