@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import "./CleanersProfileEdit.css";
+import { RiArrowDropDownFill } from "react-icons/ri";
+import { RiArrowDropUpFill } from "react-icons/ri";
+
 
 /* =========================
    DATA
@@ -37,7 +40,7 @@ const uniq = (arr) => Array.from(new Set(arr));
 /* =========================
    RegionPickerDropdown
 ========================= */
-export function RegionPickerDropdown({ name = "workAreas", label = "작업 지역" }) {
+function RegionPickerDropdown({ name = "workAreas", label = "작업 지역" }) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState([]);
   const [activeRegion, setActiveRegion] = useState(null);
@@ -51,7 +54,6 @@ export function RegionPickerDropdown({ name = "workAreas", label = "작업 지�
 
   const regionList = useMemo(() => Object.keys(REGION), []);
   const activeDetails = useMemo(() => REGION[activeRegion] || [], [activeRegion]);
-
 
   const selectedCountByRegion = useMemo(() => {
     const map = {};
@@ -134,17 +136,23 @@ export function RegionPickerDropdown({ name = "workAreas", label = "작업 지�
 
   return (
     <div className="cleaners-info-edit-region-picker" style={S.wrap} ref={wrapRef}>
-      <div className="cleaners-info-edit-region-picker-label" style={S.topLabel}>{label}</div>
+      <div className="cleaners-info-edit-region-picker-label" style={S.topLabel}>
+        {label}
+      </div>
 
       {/* 선택 칩 */}
       <div className="cleaners-info-edit-region-picker-chips" aria-label="선택된 지역">
         {selected.length === 0 ? (
-          <div className="cleaners-info-edit-region-picker-empty" style={S.chipsEmpty}>선택된 지역 없음</div>
+          <div className="cleaners-info-edit-region-picker-empty" style={S.chipsEmpty}>
+            선택된 지역 없음
+          </div>
         ) : (
           <div className="cleaners-info-edit-region-chip-list" style={S.chips}>
             {selected.map((v) => (
               <div key={v} className="cleaners-info-edit-region-chip" style={S.chip}>
-                <span className="cleaners-info-edit-region-chip-text" style={S.chipText}>{v}</span>
+                <span className="cleaners-info-edit-region-chip-text" style={S.chipText}>
+                  {v}
+                </span>
                 <button
                   type="button"
                   className="cleaners-info-edit-region-chip-remove"
@@ -169,7 +177,9 @@ export function RegionPickerDropdown({ name = "workAreas", label = "작업 지�
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <span className="cleaners-info-edit-region-picker-chevron" style={S.chev}>{open ? "▲" : "▼"}</span>
+        <span className="cleaners-info-edit-region-picker-updown" style={S.chev}>
+          {open ? <RiArrowDropUpFill size={30} /> : <RiArrowDropDownFill size={30} /> }
+        </span>
       </button>
 
       {/* 폼 제출용 */}
@@ -177,15 +187,12 @@ export function RegionPickerDropdown({ name = "workAreas", label = "작업 지�
 
       {/* 패널 */}
       {open && (
-        <div className="cleaners-info-edit-region-panel" style={S.panel} role="dialog" aria-label="지역 선택">
-
-          <div
-            className={`cleaners-profile-edit-region-panel-body ${activeRegion ? "is-split" : "is-left-only"}`}
-            style={{
-              ...S.body,
-              gridTemplateColumns: activeRegion ? "130px minmax(120px, 1fr)" : "270px",
-            }}
-          >
+        <div
+          className={`cleaners-info-edit-region-panel ${activeRegion ? "is-split" : "is-left-only"}`}
+          role="dialog"
+          aria-label="지역 선택"
+        >
+          <div className={`cleaners-profile-edit-region-panel-body ${activeRegion ? "is-split" : "is-left-only"}`}>
             {/* LEFT */}
             <div className="cleaners-info-edit-region-panel-left" style={S.leftCol} aria-label="지역 목록">
               {regionList.map((r) => {
@@ -202,10 +209,12 @@ export function RegionPickerDropdown({ name = "workAreas", label = "작업 지�
                     style={{ ...S.leftItem, ...(isActive ? S.leftItemActive : null) }}
                   >
                     <span className="cleaners-info-edit-region-left-item-text" style={S.leftText}>
-                      {r} <span className="cleaners-info-edit-region-left-item-count" style={S.count}>({total})</span>
+                      {r}{" "}
+                      <span className="cleaners-info-edit-region-left-item-count" style={S.count}>
+                        ({total})
+                      </span>
                     </span>
 
-                    {/* 필요하면 뱃지 다시 살려서 쓰기 */}
                     {selectedCount > 0 && (
                       <span className="cleaners-info-edit-region-left-item-badge" style={S.badge}>
                         {selectedCount}
@@ -240,7 +249,9 @@ export function RegionPickerDropdown({ name = "workAreas", label = "작업 지�
                           onChange={() => toggleDetail(activeRegion, d)}
                           style={S.checkbox}
                         />
-                        <span className="cleaners-info-edit-region-right-text" style={S.rightItemText}>{d}</span>
+                        <span className="cleaners-info-edit-region-right-text" style={S.rightItemText}>
+                          {d}
+                        </span>
                       </label>
                     );
                   })}
@@ -250,40 +261,51 @@ export function RegionPickerDropdown({ name = "workAreas", label = "작업 지�
           </div>
 
           <div className="cleaners-info-edit-region-panel-footer" style={S.footerBtns}>
-            <button type="button" className="cleaners-info-edit-region-panel-btn cleaners-info-edit-region-panel-btn--ghost" onClick={clearAll} style={S.ghostBtn}>
+            <button
+              type="button"
+              className="cleaners-info-edit-region-panel-button cleaners-info-edit-region-panel-button--ghost"
+              onClick={clearAll}
+              style={S.ghostBtn}
+            >
               전체 해제
             </button>
-            <button type="button" className="cleaners-info-edit-region-panel-btn cleaners-info-edit-region-panel-btn--primary" onClick={() => setOpen(false)} style={S.primaryBtn}>
+            <button
+              type="button"
+              className="cleaners-info-edit-region-panel-button cleaners-info-edit-region-panel-button--primary"
+              onClick={() => setOpen(false)}
+              style={S.primaryBtn}
+            >
               닫기
             </button>
           </div>
 
           <LimitModal open={showLimitModal} onClose={closeLimitModal} />
-
         </div>
       )}
-
-       
-
     </div>
-
   );
 }
 
-export function LimitModal({ open, onClose }) {
+function LimitModal({ open, onClose }) {
   if (!open) return null;
 
   return createPortal(
-    <div className="cleaners-profile-edit-modal-backdrop" role="dialog" aria-modal="true">
+    <div className="cleaners-profile-edit-modal-backdrop" 
+    role="dialog" 
+    aria-modal="true">
       <div className="cleaners-profile-edit-modal-box">
-        <div className="cleaners-profile-edit-modal-title">알림</div>
+        <div className="cleaners-profile-edit-modal-text-button">
         <div className="cleaners-profile-edit-modal-text">
-          작업 지역은 최대 {MAX}개까지 선택할 수 있어요.
-        </div>
-        <div className="cleaners-profile-edit-modal-btn-row">
-          <button className="cleaners-profile-edit-modal-btn" type="button" onClick={onClose} autoFocus>
+          작업 지역은 최대 {MAX}개까지 선택할 수 있어요.</div>
+        <div className="cleaners-profile-edit-modal-button-row">
+          <button 
+          className="cleaners-profile-edit-modal-button" 
+          type="button" 
+          style={{border: "1px solid var(--color-gray)", borderRadius: "5px"}}
+          onClick={onClose} autoFocus>
             확인
           </button>
+        </div>
         </div>
       </div>
     </div>,
@@ -291,17 +313,109 @@ export function LimitModal({ open, onClose }) {
   );
 }
 
+function ConfirmModal({ open, message, onClose, onConfirm }) {
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return createPortal(
+    <div
+      className="cleaners-profile-edit-last-modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      onMouseDown={(e) => {
+        // 바깥 클릭 닫기(원하면 제거 가능)
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="cleaners-profile-edit-last-modal-box">
+
+        <div className="cleaners-profile-eidt-modal-cancel-submit-text-button">
+        <div className="cleaners-profile-edit-modal-text">
+          {message}
+        </div>
+
+        <div className="cleaners-profile-edit-modal-button-row">
+          <button
+            className="cleaners-profile-edit-modal-button"
+            type="button"
+            onClick={onClose}
+            style={{background: "var(--color-light-gray", borderRadius: "5px"}}
+          >
+            취소
+          </button>
+
+          <button
+            className="cleaners-profile-edit-modal-button"
+            type="button"
+            onClick={onConfirm}
+            autoFocus
+            style={{background: "var(--color-light-gray", borderRadius: "5px"}}
+          >
+            확인
+          </button>
+        </div>
+        </div>
+
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+
 /* =========================
    STYLE OBJECTS
-   - (원하면 이거도 전부 CSS로 옮겨줄 수 있음)
 ========================= */
 const S = {
-  wrap: { display: "flex", flexDirection: "column" },
+  profileImageWrap: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "10px",
+    marginBottom: "20px",
+  },
+  profileImageContainer: {
+    position: "relative",
+    width: "180px",
+    height: "270px",
+    cursor: "pointer",
+    background: "#BBDCDD",
+    display: "grid",
+    placeItems: "center", 
+    borderRadius: "5px"
+  },
+  profileImage: {
+    width: "70%",
+    height: "70%",
+    objectFit: "cover",
+  },
+  editIcon: {
+    position: "absolute",
+    bottom: "5px",
+    right: "5px",
+    width: "30px",
+    height: "30px",
+    background: "#fff",
+    borderRadius: "50%",
+    padding: "5px",
+    border: "1px solid var(--color-light-gray)",
+  },
+  wrap: { display: "flex", flexDirection: "column", flexWrap: "wrap" },
   topLabel: { fontSize: 16, marginBottom: 8 },
 
   trigger: {
-    width: 270,
-    height: 30,
+    width: "100%",
+    height: 43,
     border: "1px solid var(--color-gray)",
     borderRadius: 5,
     background: "#fff",
@@ -313,22 +427,10 @@ const S = {
   triggerOpen: { border: "1px solid var(--color-gray)", borderRadius: 5 },
   chev: { fontSize: 12, opacity: 0.6 },
 
-  panel: {
-    marginTop: 8,
-    width: "270px",
-    maxWidth: "min(100%, 520px)",
-    background: "#fff",
-    border: "1px solid var(--color-gray)",
-    borderRadius: 15,
-    zIndex: 100,
-    overflow: "hidden",
-  },
-
   tabs: { display: "grid", gridTemplateColumns: "1fr" },
   tabBtn: { height: 40, border: "none", background: "#ffffffff", cursor: "pointer", fontSize: 13, fontWeight: 700 },
   tabBtnActive: { background: "#fff" },
 
-  body: { display: "grid", gridTemplateColumns: "270px minmax(220px, 1fr)" },
   leftCol: { borderRight: "1px solid #eeeeee", padding: 8, overflowY: "auto" },
   rightCol: { padding: 10, overflow: "hidden" },
 
@@ -347,24 +449,65 @@ const S = {
   leftItemActive: { background: "var(--color-light-gray)" },
   leftText: { fontSize: 13, fontWeight: 700 },
   count: { fontWeight: 600, opacity: 0.55 },
-  badge: { minWidth: 20, height: 20, padding: "6px", marginLeft: "6px", borderRadius: 999, background: "#111", color: "#fff", fontSize: 12, display: "inline-flex", alignItems: "center", justifyContent: "center" },
+  badge: {
+    minWidth: 20,
+    height: 20,
+    padding: "6px",
+    marginLeft: "6px",
+    borderRadius: 999,
+    background: "#111",
+    color: "#fff",
+    fontSize: 12,
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
-  rightList: { border: "1px solid #eee", borderRadius: 12, padding: 8, maxHeight: 240, overflowY: "auto" },
-  rightItem: { display: "flex", alignItems: "center", gap: 8, padding: "9px 8px", borderRadius: 15, cursor: "pointer" },
+  rightList: { border: "1px solid #eee", borderRadius: 12, padding: 8, maxHeight: 240, overflowY: "auto", width: "auto" },
+  rightItem: { display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "9px 8px", borderRadius: 15, cursor: "pointer", width: "90px" },
   rightItemChecked: { background: "var(--color-light-gray)" },
-  rightItemText: { fontSize: 13, fontWeight: 700 },
-  checkbox: { width: 14, height: 14, opacity: 0 },
+  rightItemText: { fontSize: 13, fontWeight: 700, textAlign: "center", display: "flex", justifyContent: "center" },
+  checkbox: { width: 14, height: 14, display: "none" },
 
   chipsEmpty: { fontSize: 12, opacity: 0.6, padding: "6px 2px" },
   chips: { display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 },
   chip: { display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 10px", color: "var(--color-gray)", background: "#ffffffff" },
   chipText: { fontSize: 12, fontWeight: 800 },
-  chipX: { width: 22, height: 22, borderRadius: 999, border: "none", background: "#fff", cursor: "pointer", fontSize: 16, lineHeight: "22px", padding: 0, opacity: 0.8 },
+  chipX: {
+    width: 22,
+    height: 22,
+    borderRadius: 999,
+    border: "none",
+    background: "#fff",
+    cursor: "pointer",
+    fontSize: 16,
+    lineHeight: "22px",
+    padding: 0,
+    opacity: 0.8,
+  },
 
   footerBtns: { display: "flex", justifyContent: "space-around", alignItems: "center", padding: 10 },
-  ghostBtn: { border: "1px solid #ffffffff", background: "#fff", borderRadius: 10, padding: "8px 10px", cursor: "pointer", fontSize: 12, fontWeight: 800 },
-  primaryBtn: { border: "1px solid #ffffffff", background: "#ffffffff", color: "#000", borderRadius: 10, padding: "8px 12px", cursor: "pointer", fontSize: 12, fontWeight: 900 },
+  ghostBtn: {
+    border: "1px solid #ffffffff",
+    background: "#fff",
+    borderRadius: 10,
+    padding: "8px 10px",
+    cursor: "pointer",
+    fontSize: 12,
+    fontWeight: 800,
+  },
+  primaryBtn: {
+    border: "1px solid #ffffffff",
+    background: "#ffffffff",
+    color: "#000",
+    borderRadius: 10,
+    padding: "8px 12px",
+    cursor: "pointer",
+    fontSize: 12,
+    fontWeight: 900,
+  },
 };
+
 
 
 /* =========================
@@ -372,6 +515,10 @@ const S = {
 ========================= */
 function CleanersProfileEdit() {
   const [files, setFiles] = useState([]);
+  const [profileImage, setProfileImage] = useState(null);
+  const [profileImageUrl, setProfileImageUrl] = useState("/icons/default-profile.png");
+  const profileImageInput = useRef(null);
+
 
   function handleFileChange(e) {
     const selectedFiles = Array.from(e.target.files).map((file) => ({
@@ -381,74 +528,172 @@ function CleanersProfileEdit() {
     setFiles(selectedFiles);
   }
 
+  function handleProfileImageChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      setProfileImageUrl(URL.createObjectURL(file));
+    }
+  }
+
+  const onProfileImageClick = () => {
+    if (profileImageInput.current) {
+      profileImageInput.current.click();
+    }
+  };
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmType, setConfirmType] = useState(null); // "cancel" | "save"
+
+  const openCancelModal = () => {
+  setConfirmType("cancel");
+  setConfirmOpen(true);
+  };
+
+  const openSaveModal = () => {
+  setConfirmType("save");
+  setConfirmOpen(true);
+};
+
+  const closeConfirmModal = () => {
+  setConfirmOpen(false);
+  setConfirmType(null);
+};
+
+  const onConfirm = () => {
+  if (confirmType === "cancel") {
+    // TODO: 취소 확정 동작 (예: 뒤로가기, 페이지 이동, 상태 초기화 등)
+    // navigate(-1) 여기서 처리
+    closeConfirmModal();
+    return;
+  }
+
+  if (confirmType === "save") {
+    // TODO: 저장 확정 동작 (API 호출, submit 등)
+    // handleSubmit() 여기서 호출
+    closeConfirmModal();
+    return;
+  }
+
+  closeConfirmModal();
+  };
+
+
+
   return (
     <div className="all-container cleaners-profile-edit-container">
-      <div className="cleaners-profile-edit-wrapper">
+      <div className="cleaners-profile-edit-items-box">
+
+        <div className="cleaners-profile-edit-title">
+          <span>프로필 수정</span></div>
+        
+        <div className="cleaners-profile-edit-layout-center">
         <div className="cleaners-profile-edit-layout">
-          <p className="cleaners-profile-edit-title">프로필 수정</p>
+          
 
-          <form className="cleaners-profile-edit-form">
-            <div className="cleaners-profile-edit-layout-flex-column">
-              <label htmlFor="name">이름</label>
-              <input className="cleaenrs-profile-edit-input cleaners-profile-edit-name" id="name" name="name" />
+            {/* <form className="cleaners-profile-edit-form"> */}
+          <div className="cleaners-info-edit-layout-row">
+            <div className="cleaners-profile-edit-profile-title"
+                  style={S.profileImageWrap}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  ref={profileImageInput}
+                  onChange={handleProfileImageChange}
+                />
+                <div style={S.profileImageContainer} onClick={onProfileImageClick}>
+                  <img src={profileImageUrl} alt="Profile" style={S.profileImage} />
+                  <img src="/icons/edit-icon.png" alt="Edit" style={S.editIcon} />
+                </div>
+              </div>
+
+            <div className="cleaners-info-edit-profile">
+              <div className="cleaners-profile-edit-layout-flex-column">
+                <label htmlFor="name">이름</label>
+                <input className="cleaners-profile-edit-input cleaners-profile-edit-name" id="name" name="name" value="&nbsp;&nbsp;&nbsp;김기사" readOnly/>
+              </div>
+
+              <div className="cleaners-profile-edit-layout-flex-column">
+                <label htmlFor="tagline">한 줄 소개</label>
+                <input className="cleaners-profile-edit-input cleaners-profile-edit-tagline" id="tagline" name="tagline" value="&nbsp;&nbsp;&nbsp;15년 경력의 믿음직한 제빙기 청소기사 김기사입니다." readOnly/>
+              </div>
+
+              <div className="cleaners-profile-edit-layout-flex-column">
+                <RegionPickerDropdown name="workAreas" label="작업 지역" />
+              </div>
+
+              <div className="cleaners-profile-edit-layout-flex-column">
+                <label htmlFor="career">경력</label>
+                <input className="cleaners-profile-edit-input cleaners-profile-edit-career" id="career" name="career" value="&nbsp;&nbsp;&nbsp;15년" readOnly/>
+              </div>
+
+
+            <div className="cleaners-profile-edit-attachment">  
+              <label className="cleaners-profile-edit-attachment-button" htmlFor="file">업로드</label>
+              <input
+                className="cleaners-profile-edit-attachment-input"
+                type="file"
+                id="file"
+                name="file"
+                accept=".jpg,.jpeg,.png"
+                multiple
+                onChange={handleFileChange}
+              />
+            
+              <ul className="cleaners-user-quote-list-details-ul-title">
+                {files.map((file, idx) => (
+                  <li className="cleaners-user-quote-list-details-li-contents" key={idx}>
+                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                      {file.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              <span className="cleaners-profile-edit-file-hint">
+                ※jpg, jpeg, png 파일만 첨부 가능합니다.
+                <br />
+                &nbsp;&nbsp;&nbsp;관리자 제출용입니다.
+              </span>
+
+              <span className="cleaners-profile-edit-buttons">
+                <button type="button" className="cleaners-profile-edit-button-small-custom2" onClick={openCancelModal} >취소</button>
+                <button type="submit" className="cleaners-profile-edit-button-small-custom2" onClick={openSaveModal} >완료</button>
+              </span>
+            {/* </form> */}
             </div>
-
-            <div className="cleaners-profile-edit-layout-flex-column">
-              <label htmlFor="tagline">한 줄 소개</label>
-              <input className="cleaenrs-profile-edit-input cleaners-profile-edit-tagline" id="tagline" name="tagline" />
-            </div>
-
-            <div className="cleaners-profile-edit-layout-flex-column">
-              <RegionPickerDropdown name="workAreas" label="작업 지역" />
-            </div>
-
-            <div className="cleaners-profile-edit-layout-flex-column">
-              <label htmlFor="career">경력</label>
-              <input className="cleaenrs-profile-edit-input cleaners-profile-edit-career" id="career" name="career" />
-            </div>
-
-            <label className="cleaners-profile-edit-attachment-btn" htmlFor="file">업로드</label>
-            <input
-              className="cleaners-profile-edit-attachment-input"
-              type="file"
-              id="file"
-              name="file"
-              accept=".jpg,.jpeg,.png"
-              multiple
-              onChange={handleFileChange}
-            />
-
-            <ul className="cleaners-user-quote-list-details-ul-title">
-              {files.map((file, idx) => (
-                <li className="cleaners-user-quote-list-details-li-contents" key={idx}>
-                  <a href={file.url} target="_blank" rel="noopener noreferrer">
-                    {file.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            <span className="cleaners-profile-edit-file-hint">
-              ※jpg, jpeg, png 파일만 첨부 가능합니다.
-              <br />
-              &nbsp;&nbsp;&nbsp;관리자 제출용입니다.
-            </span>
-
-            <span className="cleaners-profile-edit-btns">
-              <button type="button" className="cleaners-profile-edit-btn-small-custom2">취소</button>
-              <button type="submit" className="cleaners-profile-edit-btn-small-custom2">완료</button>
-            </span>
-          </form>
+            </div>     
+          </div>
 
 
-        </div>
+          </div>
 
-
+         </div>
       </div>
        
+     <ConfirmModal
+  open={confirmOpen}
+  message={
+    confirmType === "cancel" ? (
+      <>
+        수정 내용이 삭제됩니다.
+        <br />
+        작성을 취소하시겠습니까?
+      </>
+    ) : (
+      <>
+        정보를 수정하시겠습니까?
+      </>
+    )
+  }
+  onClose={closeConfirmModal}
+  onConfirm={onConfirm}
+/>    
 
     </div>
   );
 }
 
 export default CleanersProfileEdit;
+
