@@ -5,7 +5,7 @@ import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
-import Result from "./result/Result.jsx";
+import Result from "../components/result/Result.jsx";
 // 기사님 관련
 import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
 import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
