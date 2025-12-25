@@ -47,8 +47,28 @@ async function findByPk(t = null, id) {
   return await Owner.findByPk(id, { transaction: t});
 }
 
+async function create(t = null, data) {
+  return await Owner.create(data, {transaction: t});
+}
+
+async function logout(t = null, id) {
+  return await Owner.update(
+    {
+      refreshToken: null
+    },
+    {
+      where: {
+        id: id
+      },
+      transaction: t
+    }
+  );
+}
+
 export default {
   findByEmail,
   save,
   findByPk,
+  create,
+  logout,
 }

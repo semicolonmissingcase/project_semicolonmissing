@@ -39,10 +39,10 @@ export default function Login () {
           <button type="submit" className="btn-medium bg-white">기사님 로그인</button>
         </div>
           <form className="login-form-container" onSubmit={handleLogin}>
-            <label className="login-label-text" onChange={ e => {setEmail(e.target.value)}}>이메일</label>
-            <input type="text" className="input-medium"/>
-            <label className="login-label-text" onChange={e => {setPassword(e.target.value)}}>비밀번호</label>
-            <input type="text" className="input-medium"/>
+            <label className="login-label-text">이메일</label>
+            <input type="text" className="input-medium" onChange={e => {setEmail(e.target.value)}}/>
+            <label className="login-label-text">비밀번호</label>
+            <input type="password" className="input-medium"  onChange={e => {setPassword(e.target.value)}}/>
             <button type="submit" className="login-submit-btn btn-big bg-blue login-bnt-size">로그인</button>
           
             {/* 찾기/회원가입부분 */}

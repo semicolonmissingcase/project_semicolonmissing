@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import dayjs from 'dayjs';
+import { reissueThunk } from '../store/thunks/authThunk.js';
 
 // store 저장용 변수
 let store = null;
