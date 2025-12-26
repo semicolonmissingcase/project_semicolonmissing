@@ -24,6 +24,10 @@ export default function Login () {
     }
   }
 
+  function handleSocial(provider) {
+    window.location.replace(`/api/auth/social/${provider}`);
+  }
+
   function registrationPage() {
     navigate('/registration');
   }
@@ -57,7 +61,7 @@ export default function Login () {
             {/* 소셜로그인 */}
             <div className="login-social">
               <hr />
-              <button type="button" className="bg-img-kakao login-bnt-size"></button>
+              <button type="button" className="bg-img-kakao login-bnt-size" onClick={() => {handleSocial('kakao')}}></button>
             </div>
           </form> 
 
