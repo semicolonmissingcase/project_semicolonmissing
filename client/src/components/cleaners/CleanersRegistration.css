@@ -1,11 +1,11 @@
-.cleaners-profile-edit-container {
+.cleaners-reservation-container {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.cleaners-profile-edit-items-box {
+.cleaners-reservation-items-box {
   border: 1px solid var(--color-gray);
   border-radius: 15px;
   padding: 1rem;
@@ -15,11 +15,11 @@
   width: 100%;
 }
 
-.cleaners-profile-edit-layout{
+.cleaners-reservation-layout{
   display: grid;
 }
 
-.cleaners-profile-edit-title {
+.cleaners-reservation-title {
   font-size: 1.5rem;
   font-weight: bold;
   display: flex;
@@ -27,18 +27,19 @@
   align-items: center;
 }
 
-.cleaners-profile-edit-layout-row {
+
+.cleaners-reservation-layout-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: 1rem;
 }
 
-.cleaners-profile-edit-profile-title {
+.cleaners-reservation-profile-title {
   display: flex;
   margin-top: 1rem;
 }
 
-.cleaners-profile-edit-input {
+.cleaners-reservation-input {
   width: 100%;
   height: 43px;
   border: 1px solid var(--color-gray);
@@ -46,14 +47,14 @@
   border-radius: 5px;
 }
 
-.cleaners-profile-edit-layout-flex-column {
+.cleaners-reservation-layout-flex-column {
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.cleaners-profile-edit-layout-flex-column > label {
+.cleaners-reservation-layout-flex-column > label {
   border: soild 1px var(--color-gray);
   border: none;
   font-size: 18px;
@@ -61,13 +62,13 @@
   width: 270px;
 }
 
-.cleaners-profile-edit-attachment {
+.cleaners-reservation-attachment {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.cleaners-profile-edit-attachment-button {
+.cleaners-reservation-attachment-button {
   margin-top: 1rem;
   width: 90px;
   height: 30px;
@@ -82,11 +83,11 @@
   justify-content: center;
 }
 
-.cleaners-profile-edit-attachment-input {
+.cleaners-reservation-attachment-input {
   display: none;
 }
 
-.cleaners-profile-edit-button-small-custom2 {
+.cleaners-reservation-button-small-custom2 {
   width: 80px;
   height: 30px;
   border-radius: 5px;
@@ -95,18 +96,18 @@
   white-space: nowrap;
 }
 
-.cleaners-profile-edit-buttons {
+.cleaners-reservation-buttons {
   display: flex;
   gap: 60px;
   justify-content: end;
   padding: 0 30px 30px 0;
 }
 
-.cleaenrs-profile-edit-region-picker {
+.cleaners-reservation-region-picker {
   position: relative;
 }
 
-.cleaenrs-profile-edit-region-panel {
+.cleaners-reservation-region-panel {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -118,30 +119,30 @@
   transition: width 0.3s ease;
 }
 
-.cleaenrs-profile-edit-region-panel.is-left-only {
+.cleaners-reservation-region-panel.is-left-only {
   width: 160px;
 }
 
-.cleaenrs-profile-edit-region-panel.is-split {
+.cleaners-reservation-region-panel.is-split {
   width: 520px;
   max-width: 90vw;
   min-width: 270px;
 }
 
-.cleaners-profile-edit-region-panel-body {
+.cleaners-reservation-region-panel-body {
   display: grid;
   height: 100%;
 }
 
-.cleaners-profile-edit-region-panel-body.is-split {
+.cleaners-reservation-region-panel-body.is-split {
   grid-template-columns: 130px 1fr;
 }
 
-.cleaners-profile-edit-region-panel-body.is-left-only {
+.cleaners-reservation-region-panel-body.is-left-only {
   grid-template-columns: 1fr;
 }
 
-.cleaners-profile-edit-modal-text-button {
+.cleaners-reservation-modal-text-button {
   margin-top: 3rem;
   display: flex;
   flex-direction: column;
@@ -150,7 +151,7 @@
   gap: 1rem;
 }
 
-.cleaners-profile-edit-modal-backdrop {
+.cleaners-reservation-modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.5);
@@ -160,7 +161,7 @@
   z-index: 9999;  
 }
 
-.cleaners-profile-edit-last-modal-backdrop {
+.cleaners-reservation-last-modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.5);
@@ -170,7 +171,7 @@
   z-index: 9999;    
 }
 
-.cleaners-profile-edit-modal-box {
+.cleaners-reservation-modal-box {
   width: min(360px, 90%);
   height: min(200px, 90%);
   background: #fff;
@@ -182,7 +183,7 @@
   font-size: 16px;
 }
 
-.cleaners-profile-edit-last-modal-box {
+.cleaners-reservation-last-modal-box {
   width: min(360px, 90%);
   height: min(200px, 90%);
   background: #fff;
@@ -194,7 +195,7 @@
   font-size: 16px;
 }
 
-.cleaners-profile-edit-modal-button {
+.cleaners-reservation-modal-button {
   width: 80px;
   height: 30px;
   border-radius: 5px;
@@ -203,7 +204,7 @@
   white-space: nowrap;
 }
 
-.cleaners-profile-eidt-modal-cancel-submit-text-button {
+.cleaners-registration-modal-cancel-submit-text-button {
   padding-top: 3rem;
   display: flex;
   flex-direction: column;
@@ -212,73 +213,73 @@
   gap: 1rem;
 }
 
-.cleaners-profile-edit-modal-button-row {
+.cleaners-reservation-modal-button-row {
   display: flex;
   gap: 12px;
   justify-content: center;
   width: 100%;
 }
 
-.cleaners-user-quote-list-details-ul-title {
+.cleaners-registration-ul-title {
   list-style: none;
 }
 
 @media (min-width: 1200px) {
 
-  .cleaenrs-profile-edit-region-panel.is-left-only {                                                              
+  .cleaners-reservation-region-panel.is-left-only {                                                              
   width: 250px;    
   }
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
+  .cleaners-reservation-region-panel.is-split {                                                                  
   width: 420px !important;  
   }
 }
 
 @media (max-width: 1200px) and (min-width: 830px) {
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
+  .cleaners-reservation-region-panel.is-split {                                                                  
   width: 360px !important;      
 }   
 }
 
 @media (max-width: 830px) and (min-width: 745px) {
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
+  .cleaners-reservation-region-panel.is-split {                                                                  
   width: 500px !important;      
 }   
 }
 
 @media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
-  .cleaenrs-profile-edit-region-panel.is-left-only {                                                              
+  .cleaners-reservation-region-panel.is-left-only {                                                              
   width: 270px;                                                                                              
 }
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
+  .cleaners-reservation-region-panel.is-split {                                                                  
   width: 420px !important;  
 }                                                                                             
 }                                                                                           
                                                                                                             
 @media ( max-width: 536px ) {  
 
-  .cleaenrs-profile-edit-region-picker-trigger,
-  .cleaners-profile-edit-input {                                                                  
+  .cleaners-reservation-region-picker-trigger,
+  .cleaners-reservation-input {                                                                  
   width: 95% !important;                                                                                             
   }    
   
-  .cleaenrs-profile-edit-layout-row {
+  .cleaners-reservation-layout-row {
     grid-template-columns: 1fr;
   }
 
-  .cleaners-profile-edit-layout-center {
+  .cleaners-reservation-layout-center {
     display: grid;
     place-items: center;
   }
 }                                                                                                                
              
 @media (max-width: 535px) {                                              
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
+  .cleaners-reservation-region-panel.is-split {                                                                  
   width: 250px;           
   }
 }
 
 @media (max-width: 370px) {
-.cleaenrs-profile-edit-region-panel.is-split {                                                                  
+.cleaners-reservation-region-panel.is-split {                                                                  
   width: 210px;           
   }
 }

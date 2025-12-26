@@ -7,6 +7,7 @@ import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import Result from "../components/result/Result.jsx";
 // 기사님 관련
+import CleanersRegistration from "../components/cleaners/CleanersRegistration.jsx";
 import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
 import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
@@ -27,6 +28,7 @@ import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.j
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
+
 
 
 
@@ -63,6 +65,11 @@ const router = createBrowserRouter([
         path: '/cleaners',
         element: <Outlet />,
         children: [
+           {
+            // 회원가입 페이지
+            path: 'registration',
+            element: <CleanersRegistration />
+           },
            {
             // 계좌 수정 페이지
             path: 'accountedit',

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import "./CleanersProfileEdit.css";
+import "./CleanersRegistration.css";
 import { RiArrowDropDownFill } from "react-icons/ri";
 import { RiArrowDropUpFill } from "react-icons/ri";
 
@@ -135,27 +135,27 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
   };
 
   return (
-    <div className="cleaners-profile-edit-region-picker" style={S.wrap} ref={wrapRef}>
-      <div className="cleaners-profile-edit-region-picker-label" style={{ ...S.topLabel, ...labelStyle }}>
+    <div className="cleaners-reservation-region-picker" style={S.wrap} ref={wrapRef}>
+      <div className="cleaners-reservation-region-picker-label" style={{ ...S.topLabel, ...labelStyle }}>
         {label}
       </div>
 
       {/* 선택 칩 */}
-      <div className="cleaners-profile-edit-region-picker-chips" aria-label="선택된 지역">
+      <div className="cleaners-reservation-region-picker-chips" aria-label="선택된 지역">
         {selected.length === 0 ? (
-          <div className="cleaners-profile-edit-region-picker-empty" style={S.chipsEmpty}>
+          <div className="cleaners-reservation-region-picker-empty" style={S.chipsEmpty}>
             선택된 지역 없음
           </div>
         ) : (
-          <div className="cleaners-profile-edit-region-chip-list" style={S.chips}>
+          <div className="cleaners-reservation-region-chip-list" style={S.chips}>
             {selected.map((v) => (
-              <div key={v} className="cleaners-profile-edit-region-chip" style={S.chip}>
-                <span className="cleaners-profile-edit-region-chip-text" style={S.chipText}>
+              <div key={v} className="cleaners-reservation-region-chip" style={S.chip}>
+                <span className="cleaners-reservation-region-chip-text" style={S.chipText}>
                   {v}
                 </span>
                 <button
                   type="button"
-                  className="cleaners-profile-edit-region-chip-remove"
+                  className="cleaners-reservation-region-chip-remove"
                   onClick={() => removeChip(v)}
                   style={S.chipX}
                   aria-label={`${v} 삭제`}
@@ -171,13 +171,13 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
       {/* 트리거 */}
       <button
         type="button"
-        className={`cleaners-profile-edit-region-picker-trigger ${open ? "is-open" : ""}`}
+        className={`cleaners-reservationregion-picker-trigger ${open ? "is-open" : ""}`}
         style={{ ...S.trigger, ...(open ? S.triggerOpen : null) }}
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <span className="cleaners-profile-edit-region-picker-updown" style={S.chev}>
+        <span className="cleaners-reservation-region-picker-updown" style={S.chev}>
           {open ? <RiArrowDropUpFill size={30} /> : <RiArrowDropDownFill size={30} /> }
         </span>
       </button>
@@ -188,13 +188,13 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
       {/* 패널 */}
       {open && (
         <div
-          className={`cleaners-profile-edit-region-panel ${activeRegion ? "is-split" : "is-left-only"}`}
+          className={`cleaners-reservation-region-panel ${activeRegion ? "is-split" : "is-left-only"}`}
           role="dialog"
           aria-label="지역 선택"
         >
-          <div className={`cleaners-profile-edit-region-panel-body ${activeRegion ? "is-split" : "is-left-only"}`}>
+          <div className={`cleaners-reservation-region-panel-body ${activeRegion ? "is-split" : "is-left-only"}`}>
             {/* LEFT */}
-            <div className="cleaners-profile-edit-region-panel-left" style={S.leftCol} aria-label="지역 목록">
+            <div className="cleaners-reservation-region-panel-left" style={S.leftCol} aria-label="지역 목록">
               {regionList.map((r) => {
                 const total = (REGION[r] || []).length;
                 const selectedCount = selectedCountByRegion[r] || 0;
@@ -204,19 +204,19 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
                   <button
                     key={r}
                     type="button"
-                    className={`cleaners-profile-edit-region-left-item ${isActive ? "is-active" : ""}`}
+                    className={`cleaners-reservation-region-left-item ${isActive ? "is-active" : ""}`}
                     onClick={() => changeRegionKeepScroll(r)}
                     style={{ ...S.leftItem, ...(isActive ? S.leftItemActive : null) }}
                   >
-                    <span className="cleaners-profile-edit-region-left-item-text" style={S.leftText}>
+                    <span className="cleaners-reservation-region-left-item-text" style={S.leftText}>
                       {r}{" "}
-                      <span className="cleaners-profile-edit-region-left-item-count" style={S.count}>
+                      <span className="cleaners-reservation-region-left-item-count" style={S.count}>
                         ({total})
                       </span>
                     </span>
 
                     {selectedCount > 0 && (
-                      <span className="cleaners-profile-edit-region-left-item-badge" style={S.badge}>
+                      <span className="cleaners-reservation-region-left-item-badge" style={S.badge}>
                         {selectedCount}
                       </span>
                     )}
@@ -227,8 +227,8 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
 
             {/* RIGHT */}
             {activeRegion ? (
-              <div className="cleaners-profile-edit-region-panel-right" style={S.rightCol} aria-label="상세 지역 목록">
-                <div className="cleaners-profile-edit-region-right-list" style={S.rightList} ref={rightListRef}>
+              <div className="cleaners-reservation-region-panel-right" style={S.rightCol} aria-label="상세 지역 목록">
+                <div className="cleaners-reservation-region-right-list" style={S.rightList} ref={rightListRef}>
                   {activeDetails.map((d) => {
                     const v = makeValue(activeRegion, d);
                     const checked = selected.includes(v);
@@ -236,7 +236,7 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
                     return (
                       <label
                         key={v}
-                        className={`cleaners-profile-edit-region-right-item ${checked ? "is-checked" : ""}`}
+                        className={`cleaners-reservation-region-right-item ${checked ? "is-checked" : ""}`}
                         style={{
                           ...S.rightItem,
                           ...(checked ? S.rightItemChecked : null),
@@ -244,12 +244,12 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
                       >
                         <input
                           type="checkbox"
-                          className="cleaners-profile-edit-region-right-checkbox"
+                          className="cleaners-reservation-region-right-checkbox"
                           checked={checked}
                           onChange={() => toggleDetail(activeRegion, d)}
                           style={S.checkbox}
                         />
-                        <span className="cleaners-profile-edit-region-right-text" style={S.rightItemText}>
+                        <span className="cleaners-reservation-region-right-text" style={S.rightItemText}>
                           {d}
                         </span>
                       </label>
@@ -260,10 +260,10 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
             ) : null}
           </div>
 
-          <div className="cleaners-profile-edit-region-panel-footer" style={S.footerBtns}>
+          <div className="cleaners-reservation-region-panel-footer" style={S.footerBtns}>
             <button
               type="button"
-              className="cleaners-profile-edit-region-panel-button cleaners-profile-edit-region-panel-button--ghost"
+              className="cleaners-reservation-region-panel-button cleaners-reservationregion-panel-button--ghost"
               onClick={clearAll}
               style={S.ghostBtn}
             >
@@ -271,7 +271,7 @@ function RegionPickerDropdown({ name = "workAreas", label = "작업 지역", lab
             </button>
             <button
               type="button"
-              className="cleaners-profile-edit-region-panel-button cleaners-profile-edit-region-panel-button--primary"
+              className="cleaners-reservation-region-panel-button cleaners-reservation-region-panel-button--primary"
               onClick={() => setOpen(false)}
               style={S.primaryBtn}
             >
@@ -290,16 +290,16 @@ function LimitModal({ open, onClose }) {
   if (!open) return null;
 
   return createPortal(
-    <div className="cleaners-profile-edit-modal-backdrop" 
+    <div className="cleaners-reservation-modal-backdrop" 
     role="dialog" 
     aria-modal="true">
-      <div className="cleaners-profile-edit-modal-box">
-        <div className="cleaners-profile-edit-modal-text-button">
-        <div className="cleaners-profile-edit-modal-text">
+      <div className="cleaners-reservation-modal-box">
+        <div className="cleaners-reservation-modal-text-button">
+        <div className="cleaners-reservation-modal-text">
           작업 지역은 최대 {MAX}개까지 선택할 수 있어요.</div>
-        <div className="cleaners-profile-edit-modal-button-row">
+        <div className="cleaners-reservation-modal-button-row">
           <button 
-          className="cleaners-profile-edit-modal-button" 
+          className="cleaners-reservation-modal-button" 
           type="button" 
           style={{border: "1px solid var(--color-gray)", borderRadius: "5px"}}
           onClick={onClose} autoFocus>
@@ -329,7 +329,7 @@ function ConfirmModal({ open, message, onClose, onConfirm }) {
 
   return createPortal(
     <div
-      className="cleaners-profile-edit-last-modal-backdrop"
+      className="cleaners-reservation-last-modal-backdrop"
       role="dialog"
       aria-modal="true"
       onMouseDown={(e) => {
@@ -337,16 +337,16 @@ function ConfirmModal({ open, message, onClose, onConfirm }) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="cleaners-profile-edit-last-modal-box">
+      <div className="cleaners-reservation-last-modal-box">
 
-        <div className="cleaners-profile-eidt-modal-cancel-submit-text-button">
-        <div className="cleaners-profile-edit-modal-text">
+        <div className="cleaners-reservation-modal-cancel-submit-text-button">
+        <div className="cleaners-reservation-modal-text">
           {message}
         </div>
 
-        <div className="cleaners-profile-edit-modal-button-row">
+        <div className="cleaners-reservation-modal-button-row">
           <button
-            className="cleaners-profile-edit-modal-button"
+            className="cleaners-reservation-modal-button"
             type="button"
             onClick={onClose}
             style={{background: "var(--color-light-gray", borderRadius: "5px"}}
@@ -355,7 +355,7 @@ function ConfirmModal({ open, message, onClose, onConfirm }) {
           </button>
 
           <button
-            className="cleaners-profile-edit-modal-button"
+            className="cleaners-reservation-modal-button"
             type="button"
             onClick={onConfirm}
             autoFocus
@@ -513,7 +513,7 @@ const S = {
 /* =========================
    PAGE
 ========================= */
-function CleanersProfileEdit() {
+function CleanersRegistration() {
   const [files, setFiles] = useState([]);
   const [profileImage, setProfileImage] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState("/icons/default-profile.png");
@@ -581,19 +581,19 @@ function CleanersProfileEdit() {
 
 
   return (
-    <div className="all-container cleaners-profile-edit-container">
-      <div className="cleaners-profile-edit-items-box">
+    <div className="all-container cleaners-reservation-container">
+      <div className="cleaners-reservation-items-box">
 
-        <div className="cleaners-profile-edit-title">
-          <span>프로필 수정</span></div>
+        <div className="cleaners-reservation-title">
+          <span>기사님 회원가입</span></div>
         
-        <div className="cleaners-profile-edit-layout-center">
-        <div className="cleaners-profile-edit-layout">
+        <div className="cleaners-reservation-layout-center">
+        <div className="cleaners-reservation-layout">
           
 
-            {/* <form className="cleaners-profile-edit-form"> */}
-          <div className="cleaners-profile-edit-layout-row">
-            <div className="cleaners-profile-edit-profile-title"
+            {/* <form className="cleaners-reservation-form"> */}
+          <div className="cleaners-reservation-layout-row">
+            <div className="cleaners-reservation-profile-title"
                   style={S.profileImageWrap}>
                 <input
                   type="file"
@@ -608,31 +608,43 @@ function CleanersProfileEdit() {
                 </div>
               </div>
 
-            <div className="cleaners-profile-edit-profile">
-              <div className="cleaners-profile-edit-layout-flex-column">
+            <div className="cleaners-reservationprofile">
+
+              <div className="cleaners-reservation-layout-flex-column">
                 <label htmlFor="name">이름</label>
-                <input className="cleaners-profile-edit-input cleaners-profile-edit-name" id="name" name="name" value="&nbsp;&nbsp;&nbsp;김기사" readOnly/>
+                <input className="cleaners-reservation-input cleaners-reservation-name" id="name" name="name" value="&nbsp;&nbsp;&nbsp;김기사" readOnly/>
               </div>
 
-              <div className="cleaners-profile-edit-layout-flex-column">
+              <div className="cleaners-reservation-layout-flex-column">
+                <label htmlFor="gender">성별</label>
+                <input className="cleaners-reservation-input cleaners-reservation-gender" id="gender" name="gender" value="&nbsp;&nbsp;&nbsp;남성" readOnly/>
+                <input className="cleaners-reservation-input cleaners-reservation-gender" id="gender" name="gender" value="&nbsp;&nbsp;&nbsp;여성" readOnly/>
+              </div>
+
+              <div className="cleaners-reservation-layout-flex-column">
+                <label htmlFor="email">이메일</label>
+                <input className="cleaners-reservation-input cleaners-reservation-email" id="email" name="email" value="&nbsp;&nbsp;&nbsp;kimkisa@cleaner.com" readOnly/>
+              </div>
+
+              <div className="cleaners-reservation-layout-flex-column">
                 <label htmlFor="tagline">한 줄 소개</label>
-                <input className="cleaners-profile-edit-input cleaners-profile-edit-tagline" id="tagline" name="tagline" value="&nbsp;&nbsp;&nbsp;15년 경력의 믿음직한 제빙기 청소기사 김기사입니다." readOnly/>
+                <input className="cleaners-reservation-input cleaners-reservation-tagline" id="tagline" name="tagline" value="&nbsp;&nbsp;&nbsp;15년 경력의 믿음직한 제빙기 청소기사 김기사입니다." readOnly/>
               </div>
 
-              <div className="cleaners-profile-edit-layout-flex-column">
+              <div className="cleaners-reservation-layout-flex-column">
                 <RegionPickerDropdown name="workAreas" label="작업 지역" labelStyle={{ fontSize: "18px" }}/>
               </div>
 
-              <div className="cleaners-profile-edit-layout-flex-column">
+              <div className="cleaners-reservation-layout-flex-column">
                 <label htmlFor="career">경력</label>
-                <input className="cleaners-profile-edit-input cleaners-profile-edit-career" id="career" name="career" value="&nbsp;&nbsp;&nbsp;15년" readOnly/>
+                <input className="cleaners-reservation-input cleaners-reservation-career" id="career" name="career" value="&nbsp;&nbsp;&nbsp;15년" readOnly/>
               </div>
 
 
-            <div className="cleaners-profile-edit-attachment">  
-              <label className="cleaners-profile-edit-attachment-button" htmlFor="file">업로드</label>
+            <div className="cleaners-reservation-attachment">  
+              <label className="cleaners-reservation-attachment-button" htmlFor="file">업로드</label>
               <input
-                className="cleaners-profile-edit-attachment-input"
+                className="cleaners-reservation-attachment-input"
                 type="file"
                 id="file"
                 name="file"
@@ -641,9 +653,9 @@ function CleanersProfileEdit() {
                 onChange={handleFileChange}
               />
             
-              <ul className="cleaners-profile-edit-ul-title">
+              <ul className="cleaners-registration-ul-title">
                 {files.map((file, idx) => (
-                  <li className="cleaners-profile-edit-li-contents" key={idx}>
+                  <li className="cleaners-registration-li-contents" key={idx}>
                     <a href={file.url} target="_blank" rel="noopener noreferrer">
                       {file.name}
                     </a>
@@ -651,15 +663,15 @@ function CleanersProfileEdit() {
                 ))}
               </ul>
 
-              <span className="cleaners-profile-edit-file-hint">
+              <span className="cleaners-reservation-file-hint">
                 ※jpg, jpeg, png 파일만 첨부 가능합니다.
                 <br />
                 &nbsp;&nbsp;&nbsp;관리자 제출용입니다.
               </span>
 
-              <span className="cleaners-profile-edit-buttons">
-                <button type="button" className="cleaners-profile-edit-button-small-custom2" onClick={openCancelModal} >취소</button>
-                <button type="submit" className="cleaners-profile-edit-button-small-custom2" onClick={openSaveModal} >완료</button>
+              <span className="cleaners-reservation-buttons">
+                <button type="button" className="cleaners-reservation-button-small-custom2" onClick={openCancelModal} >취소</button>
+                <button type="submit" className="cleaners-reservation-button-small-custom2" onClick={openSaveModal} >완료</button>
               </span>
             {/* </form> */}
             </div>
@@ -673,27 +685,27 @@ function CleanersProfileEdit() {
       </div>
        
      <ConfirmModal
-  open={confirmOpen}
-  message={
-    confirmType === "cancel" ? (
-      <>
-        수정 내용이 삭제됩니다.
-        <br />
-        작성을 취소하시겠습니까?
-      </>
-    ) : (
-      <>
-        정보를 수정하시겠습니까?
-      </>
-    )
-  }
-  onClose={closeConfirmModal}
-  onConfirm={onConfirm}
-/>    
-
+      open={confirmOpen}
+      message={
+        confirmType === "cancel" ? (
+          <>
+            수정 내용이 삭제됩니다.
+            <br />
+            작성을 취소하시겠습니까?
+          </>
+          ) : (
+            <>
+              정보를 수정하시겠습니까?
+            </>
+          )
+        }
+        onClose={closeConfirmModal}
+        onConfirm={onConfirm}
+      />    
+<input type="radio" name="test" />
     </div>
   );
 }
 
-export default CleanersProfileEdit;
+export default CleanersRegistration;
 

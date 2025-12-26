@@ -25,8 +25,6 @@ function CleanersQuoteListPreparation() {
     },
   ];
 
-  const [filter, setFilter] = useState(options[0].value);
-
 
   const saves = [
     {
@@ -43,7 +41,7 @@ function CleanersQuoteListPreparation() {
     },
     {
       id: 3,
-      price: 170000,
+      price: 90000,
       status: "임시 저장",
       explain: "프리미엄 제빙기 청소 서비스의 으뜸을 말합니다... 프리미엄 제빙기 청소 서비스의 으뜸을 말합니다...프리미엄 제빙기 청소 서비스의 으뜸을 말합니다... 프리미엄 제빙기 청소 서비스의 으뜸을 말합니다...",
     },
@@ -55,7 +53,7 @@ function CleanersQuoteListPreparation() {
     },
     {
       id: 5,
-      price: 170000,
+      price: 90000,
       status: "임시 저장",
       explain: "프리미엄 제빙기 청소 서비스의 으뜸을 말합니다... 프리미엄 제빙기 청소 서비스의 으뜸을 말합니다...프리미엄 제빙기 청소 서비스의 으뜸을 말합니다... 프리미엄 제빙기 청소 서비스의 으뜸을 말합니다...",
     },
