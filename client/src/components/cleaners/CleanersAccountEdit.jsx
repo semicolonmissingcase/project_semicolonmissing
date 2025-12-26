@@ -275,7 +275,7 @@ function CleanerAccountEdit () {
               : "cleaners-account-edit-toggle-updown-info-contents"
           }
         >
-        <div className="cleaners-account-edit-accout-settlement-criteria-guide">
+        <div className="cleaners-account-edit-account-settlement-criteria-guide">
 
           <span>
             정산 기준 안내
