@@ -5,20 +5,25 @@ import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
-import Result from "./result/Result.jsx";
+import Result from "../components/result/Result.jsx";
 // 기사님 관련
 import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
 import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
-import CleanersMyPage from "../components/cleaners/CleanersMyPage.jsx";
+import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
 import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
 import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
 // 점주님 관련
-import OwnerRegistration from "../components/owner/auth/OwnerRegistration.jsx";
-import OwnerMyPage from "../components/owner/maypage/MyPage.jsx";
+import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
+import OwnerMyPage from "../components/owner/maypage/OwnerMyPage.jsx";
+import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
+// 관리자 관련
+import AdminMain from "../components/admin/main/AdminMain.jsx";
+import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
+import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -36,14 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <Outlet />,
-        children: [
-          {
-            // 로그인 페이지
-            path: '',
-            element: <Login />,
-          },
-        ]
+        element: <Login />
       },
       {
         path: '/registration',
@@ -113,13 +111,19 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: '/owner',
+        path: '/owners',
         element: <Outlet />,
         children: [
           {
-            path: 'mypage/:id',
-          element: <OwnerMyPage />
+            // 점주 마이페이지
+            path: 'mypage',
+            element: <OwnerMyPage />
           },
+          {
+            // 점주 정보 수정페이지
+            path: 'info',
+            element: <OwnerInfo />
+          }
         ]
       },
       {
@@ -148,9 +152,32 @@ const router = createBrowserRouter([
         element: <ChatList />
       },
       {
+        // 결과 페이지(ex. 문의가 등록되었습니다!)
         path: '/result',
         element: <Result />
       },
+      {
+        // 관리자페이지
+        path: '/hospital',
+        element: <Outlet />,
+        children: [
+          {
+            // 관리자 로그인
+            path: 'login',
+            element: <AdminLogin />
+          },
+          {
+            // 통합모니터링
+            path: '',
+            element: <AdminMain />
+          },
+          {
+            // 기사 프로필 관리 페이지
+            path: 'cleanerprofile',
+            element: <AdminCleanerProfile />
+          }
+        ]
+      }
     ]
   }]
 );

@@ -1,0 +1,193 @@
+.ownerinfo-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.ownerinfo-profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ownerinfo-profile-img {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #B8D4D4;
+}
+
+.ownerinfo-profile-container h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ownerinfo-profile-container > p {
+  color: var(--color-gray);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.ownerinfo-profile-setting-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.ownerinfo-phone-num-container {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ownerinfo-phone-num-container label {
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.ownerinfo-phone-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.ownerinfo-phone-inputs select,
+.ownerinfo-phone-inputs input {
+  padding: 0.7rem;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.ownerinfo-phone-inputs select {
+  width: 100px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23333' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.ownerinfo-phone-inputs input {
+  width: 100px;
+}
+
+.ownerinfo-phone-inputs > span {
+  color: #999;
+}
+
+.ownerinfo-store-info-container {
+  padding: 1.5rem 0;
+}
+
+.ownerinfo-store-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.ownerinfo-store-info-header p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.ownerinfo-store-info-header > button {
+  width: 9rem;
+}
+
+.bg-blue:hover {
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
+}
+
+.ownerinfo-store-info-card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ownerinfo-store-card {
+  border: 1px solid var(--color-blue);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: var(--color-white);
+}
+
+.ownerinfo-store-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ownerinfo-store-card-header span {
+  font-weight: 500;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.delete-btn:hover {
+  opacity: 0.7;
+}
+
+.ownerinfo-store-field {
+  margin-bottom: 1rem;
+}
+
+.ownerinfo-store-field:last-child {
+  margin-bottom: 0;
+}
+
+.ownerinfo-store-field label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.ownerinfo-store-field p {
+  margin: 0;
+  padding: 0.7rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.store-name {
+  font-weight: 500;
+}
+
+.ownerinfo-btn-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bg-light:hover {
+  color: var(--color-white);
+  background-color: var(--color-gray);
+}

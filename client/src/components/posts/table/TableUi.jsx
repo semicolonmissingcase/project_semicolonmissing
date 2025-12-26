@@ -9,7 +9,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 
-function TableUi({ 
+export default function TableUi({ 
   data, 
   columns, 
   showSearch = true,
@@ -181,5 +181,3 @@ function TableUi({
     </div>
   );
 }
-
-export default TableUi;
