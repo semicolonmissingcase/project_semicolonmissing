@@ -22,7 +22,6 @@ export default function PostCreate() {
     '서비스 문의',
     '기술 지원',
     '불만/개선사항',
-    '기타'
   ];
 
   // 입력 필드 변경 처리
