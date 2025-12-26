@@ -1,36 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axiosInstance from '../../api/axiosInstance';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import './ChatList.css';
 
 const ChatList = () => {
   const navigate = useNavigate();
-  // 탭 상태 관리 (전체 / 고용)
   const [activeTab, setActiveTab] = useState('all');
+  const [chatRooms, setChatRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // 임시 데이터 (DB의 chat_rooms와 cleaner 정보 결합 형태)
-  const chatRooms = [
-    {
-      id: 1,
-      cleanerName: "곽효선",
-      location: "대구 달서구",
-      lastMessage: "네네, 일정변경 가능합니다.",
-      time: "오후 12:14",
-      isDeleted: false
-    },
-    {
-      id: 2,
-      cleanerName: "탈퇴한 회원입니다",
-      location: "삭제된 회원",
-      lastMessage: "네네, 일정변경 가능합니다.",
-      time: "오후 12:14",
-      isDeleted: true
+  const { user } = useSelector((state) => state.auth);
+
+  const fetchRooms = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get('/api/chat/rooms');
+      setChatRooms(response.data.data);
+    } catch (error) {
+      console.error("채팅 목록 로딩 실패:", error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
 
   const handleRoomClick = (roomId) => {
-    console.log("클릭된 방 ID", roomId);
     navigate(`/chatroom/${roomId}`);
-  }
+  };
+
+  if (loading) return <div className="chatlist-container">로딩 중...</div>;
 
   return (
     <div className="chatlist-container">
@@ -39,43 +43,71 @@ const ChatList = () => {
       {/* 검색창 */}
       <div className="chatlist-search-box">
         <input type="text" placeholder="이름을 검색해 주세요." />
-        <span className="search-icon">🔍</span>
+        <span className="chatlist-search-icon">🔍</span>
       </div>
 
       {/* 탭 메뉴 */}
       <div className="chatlist-tabs">
         <button 
-          className={activeTab === 'all' ? 'active' : ''} 
+          className={activeTab === 'all' ? 'chatlist-active' : ''} 
           onClick={() => setActiveTab('all')}
         >전체</button>
         <button 
-          className={activeTab === 'hire' ? 'active' : ''} 
+          className={activeTab === 'hire' ? 'chatlist-active' : ''} 
           onClick={() => setActiveTab('hire')}
         >고용</button>
       </div>
 
       {/* 채팅방 리스트 영역 */}
       <div className="chatlist-items-wrapper">
-        {chatRooms.map((room) => (
-          <div key={room.id} className="chatlist-item" onClick={() => handleRoomClick(room.id)}>
-            <div className="chatlist-avatar">
-              {/* 이미지 시안의 아이콘 형태 */}
-              <div className="avatar-icon">🧊</div>
-            </div>
-            <div className="chatlist-info">
-              <div className="info-top">
-                <span className={`cleaner-name ${room.isDeleted ? 'deleted' : ''}`}>
-                  {room.cleanerName}
-                </span>
-                <span className="cleaner-location">{room.location}</span>
+        {chatRooms.length === 0 ? (
+          <p className="chatlist-no-data">진행 중인 채팅이 없습니다.</p>
+        ) : (
+          chatRooms.map((room) => {
+            const isDeleted = room.opponentName === "알 수 없는 사용자" || room.opponentName === "탈퇴한 회원";
+
+            return (
+              <div 
+                key={room.id} 
+                className="chatlist-item" 
+                onClick={() => handleRoomClick(room.id)}
+              >
+                <div className="chatlist-avatar">
+                  <div className="chatlist-avatar-icon">
+                    {room.opponentProfileImg ? (
+                      <img src={room.opponentProfileImg} alt="profile" className="chatlist-profile-img" />
+                    ) : '🧊'}
+                  </div>
+                </div>
+                
+                <div className="chatlist-info">
+                  <div className="chatlist-info-top">
+                    <span className={`chatlist-cleaner-name ${isDeleted ? 'chatlist-deleted' : ''}`}>
+                      {room.opponentName}
+                    </span>
+                    <span className="chatlist-cleaner-location">
+                      {room.opponentAddress || ""}
+                    </span>
+                  </div>
+                  
+                  <div className="chatlist-info-bottom">
+                    <p className="chatlist-last-message">
+                      {room.lastMessage}
+                    </p>
+                    <div className="chatlist-meta">
+                      <span className="chatlist-last-time">
+                        {dayjs(room.lastMessageTime).format('A h:mm')}
+                      </span>
+                      {room.unreadCount > 0 && (
+                        <span className="chatlist-unread-badge">{room.unreadCount}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="info-bottom">
-                <p className="last-message">{room.lastMessage}</p>
-                <span className="last-time">{room.time}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+            );
+          })
+        )}
       </div>
     </div>
   );

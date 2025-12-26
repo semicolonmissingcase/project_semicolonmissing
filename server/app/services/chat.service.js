@@ -15,59 +15,61 @@ import db from '../models/index.js';
 
 /**
  * 채팅방 생성 또는 조회
- * @param {{estimate_id: number, cleaner_id: number}} body 
- * @returns {Promise<{room: Object, isNew: boolean}>}
  */
 async function createOrGetRoom(body) {
   return await db.sequelize.transaction(async t => {
-    const { estimate_id, cleaner_id, owner_id } = body;
+    const rooms = await chatRepository.findByUser( t, userId, userRole );
 
-    // 기존 채팅방 확인
-    let room = await chatRepository.findByKeys(t, estimate_id, cleaner_id);
+    return rooms.map(room => {
+      const roomPlain = room.get ({plain: true});
 
-    if (room) {
-      return { room, isNew: false };
-    }
+      const isOwner = userRole === 'owner';
+      const opponent = isOwner ? roomPlain.cleaner : roomPlain.owner;
 
-    // 새 채팅방 생성
-    room = await chatRepository.create(t, { estimate_id, cleaner_id, owner_id, status: 'OPEN' });
-    return { room, isNew: true };
+      return {
+        ...roomPlain,
+        opponentName: opponent?.name || "탈퇴한 회원",
+        lastMessage: roomPlain.chatMessages?.[0]?.content || "메시지가 없습니다.",
+        lastMessageTime: roomPlain.chatMessages?.[0]?.createdAt || roomPlain.createdAt
+      }
+    })
   });
 }
 
 /**
  * 사용자의 채팅방 목록 조회
- * @param {number} userId 
- * @param {string} userRole - 'owner' | 'cleaner'
- * @returns {Promise<Array>}
  */
 async function getRoomsByUser(userId, userRole) {
   return await db.sequelize.transaction(async t => {
-    let rooms;
+    const rooms = await chatRepository.findByUser(t, userId, userRole);
     
-    if (userRole === 'owner') {
-      rooms = await chatRepository.findByOwner(t, userId);
-    } else if (userRole === 'cleaner') {
-      rooms = await chatRepository.findByCleaner(t, userId);
-    } else {
-      throw myError('잘못된 사용자 역할', BAD_REQUEST_ERROR);
-    }
+    // 데이터 가공
+    const roomsWithDetails = await Promise.all(rooms.map(async (room) => {
+      const roomPlain = room.get({ plain: true });
+      const isOwner = /OWNER/i.test(String(userRole))
+      
+      // 상대방 객체 선택 (기존 include 구조 활용)
+      const opponent = isOwner ? roomPlain.cleaner : roomPlain.owner;
+      console.log(`[확인] 상대방 존재여부: ${!!opponent}, 이름: ${opponent?.name}`);
+      // 최신 메시지 추출
+      const lastMsgObj = roomPlain.chatMessages?.[0];
 
-    // 각 채팅방의 안읽은 메시지 개수 추가
-    for (let room of rooms) {
-      room.unreadCount = await chatRepository.getUnreadCount(t, room.id, userId);
-    }
+      return {
+        ...roomPlain,
+        opponentName: opponent?.name || "탈퇴한 회원",
+        opponentAddress: isOwner ? opponent?.region : opponent?.address,
+        lastMessage: roomPlain.chatMessages?.[0]?.content || "메시지가 없습니다.",
+        lastMessageTime: roomPlain.chatMessages?.[0]?.createdAt || roomPlain.updatedAt,
+        unreadCount: await chatRepository.getUnreadCount(t, roomPlain.id, userId)
+      };
+    }));
 
-    return rooms;
+    return roomsWithDetails;
   });
 }
 
 /**
- * 채팅방 메시지 조회
- * @param {number} room_id 
- * @param {number} page 
- * @param {number} limit 
- * @returns {Promise<Array>}
+ * 채팅방 메시지 내역 조회 (페이징)
  */
 async function getMessages(room_id, page = 1, limit = 50) {
   return await db.sequelize.transaction(async t => {
@@ -77,34 +79,43 @@ async function getMessages(room_id, page = 1, limit = 50) {
 }
 
 /**
- * 메시지 저장 (Socket.io에서 호출)
- * @param {{room_id: number, content: string, sender_id: number, sender_role: string}} data 
- * @returns {Promise<Object>}
+ * 메시지 저장
  */
 async function saveMessage(data) {
+  if(!data.sender_role) {
+    data.sender_role = data.role;
+  }
   return await db.sequelize.transaction(async t => {
-    const { room_id, content, sender_id, sender_role } = data;
+    const { room_id, content, sender_id, sender_role, type = 'TEXT' } = data;
 
-    // 빈 메시지 체크
-    if (!content || !content.trim()) {
-      throw myError('메시지를 입력해주세요', BAD_REQUEST_ERROR);
+    if (!content || (type === 'TEXT' && !content.trim())) {
+      throw myError('메시지 내용을 입력해주세요', BAD_REQUEST_ERROR);
     }
 
-    // 메시지 저장
-    return await chatRepository.createMessage(t, {
+    const newMessage = await chatRepository.createMessage(t, {
       room_id,
       content,
       sender_id,
-      sender_role
+      sender_role,
+      type
     });
+
+    await db.ChatRoom.update(
+      {
+        owner_leaved_at: null,
+        cleaner_leaved_at: null
+      },
+      {
+        where: { id: room_id },
+        transaction: t
+      }
+    );
+    return newMessage;
   });
 }
 
 /**
  * 메시지 읽음 처리
- * @param {number} room_id 
- * @param {number} user_id 
- * @returns {Promise<void>}
  */
 async function markAsRead(room_id, user_id) {
   return await db.sequelize.transaction(async t => {
@@ -113,36 +124,23 @@ async function markAsRead(room_id, user_id) {
 }
 
 /**
- * 채팅방 정보 조회
- * @param {number} room_id 
- * @returns {Promise<Object|null>}
+ * 채팅방 나가기 (나에게만 삭제 처리)
  */
-async function getRoomInfo(room_id) {
+async function leaveRoom(room_id, userRole) {
   return await db.sequelize.transaction(async t => {
-    return await chatRepository.findByPk(t, room_id);
+    await chatRepository.updateLeavedAt(t, room_id, userRole);
   });
 }
 
 /**
- * 채팅방 나가기 (시스템 메시지)
- * @param {number} room_id 
- * @param {string} userName 
- * @returns {Promise<void>}
- */
-async function leaveRoom(room_id, userName) {
-  return await db.sequelize.transaction(async t => {
-    await chatRepository.leave(t, room_id, userName);
-  });
-}
-
-/**
- * 채팅방 닫기
- * @param {number} room_id 
- * @returns {Promise<void>}
+ * 채팅방 닫기 (의뢰 기간 마감이나 견적 종료 시 닫는 처리)
  */
 async function closeRoom(room_id) {
   return await db.sequelize.transaction(async t => {
-    await chatRepository.close(t, room_id);
+    await db.ChatRoom.update(
+      { status: 'CLOSED' },
+      { where: { id: room_id }, transaction: t }
+    );
   });
 }
 
@@ -152,7 +150,6 @@ export default {
   getMessages,
   saveMessage,
   markAsRead,
-  getRoomInfo,
   leaveRoom,
   closeRoom
 };

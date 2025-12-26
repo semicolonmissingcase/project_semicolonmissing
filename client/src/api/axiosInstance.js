@@ -36,7 +36,7 @@ axiosInstance.interceptors.request.use(async (config) => { // confing에 리퀘�
 
       if(now >= expTime) {
         config._retry = true;
-        console.log('만료되서 엑세스 토큰 재발급');
+        console.log('만료돼서 엑세스 토큰 재발급');
         const response =  await store.dispatch(reissueThunk()).unwrap(); 
         accessToken = response.data.accessToken;
       }
