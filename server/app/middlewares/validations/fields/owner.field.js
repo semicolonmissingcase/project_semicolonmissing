@@ -1,7 +1,7 @@
 /**
  * @file app/middlewares/validations/fields/owner.field.js
- * @description 유저 정보 유효성 검토 필드
- * 251222 v1.0.0 yeon init 
+ * @description 오너 정보 유효성 검토 필드
+ * 251226 v1.0.0 ck init 
  */
 
 import { body, param } from "express-validator";

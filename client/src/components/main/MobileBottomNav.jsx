@@ -8,19 +8,16 @@ export default function MobileBottomNav() {
   const navItems = [
     {
       icon: '◀',
-      label: '뒤로가기',
       action: () => window.history.back(),
       path: null
     },
     {
       icon: '🏠',
-      label: '홈',
       action: () => navigate('/'),
       path: '/'
     },
     {
       icon: '👤',
-      label: '마이페이지',
       action: () => navigate('/mypage'),
       path: '/mypage'
     }

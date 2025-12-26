@@ -1,0 +1,75 @@
+.admin-nav {
+  width: 220px;
+  height: 100vh;
+  background-color: var(--color-gray);
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.admin-nav-header {
+  padding: 1.5rem 1.5rem;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.admin-nav-logo {
+  width: 100%;
+  aspect-ratio: 70 / 9;
+  margin: 2rem 0 4rem 0;
+}
+
+.admin-nav-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-nav-item {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--color-white);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-nav-item-dropdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-nav-item:hover { 
+  background-color: #3e4047;
+}
+
+.admin-nav-arrow {
+  font-size: 0.6rem;
+  transition: transform 0.3s;
+  display: inline-block;
+}
+
+.admin-nav-arrow.open {
+  transform: rotate(180deg);
+}
+
+.admin-nav-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.admin-nav-subitem {
+  padding: 0.8rem 1.5rem 0.8rem 2.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--color-white);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-nav-subitem:hover {
+  background-color: #595c64;
+}

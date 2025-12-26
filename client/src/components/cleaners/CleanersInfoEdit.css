@@ -1,6 +1,10 @@
-.cleaners-info-edit-all-layout-center {
+/* 전체 컨테이너 정렬 */
+.cleanerinfoedit-wrapper {
+  max-width: 700px; /* 가로 배치를 고려해 소폭 확장 */
+  margin: 3rem auto;
+  padding: 0 2rem;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .cleaners-info-edit-wrapper-cleaners-info-edit {
@@ -8,43 +12,60 @@
   border-radius: 10px;
   padding: 8px 12px;
   width: 90%;
-  margin: 20px 0;
+  margin: 40px 0;
 }
 
-.cleaners-info-edit-layout-center {
+/* 폼 섹션 */
+.cleanerinfoedit-form {
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 0 5%;
 }
 
 .cleaners-info-edit-title {
   font-size: 18px;
   margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  font-weight: bold;
 }
 
-.cleaners-info-edit-form {
+.wrapper-cleaners-info-edit {
+  border: var(--color-gray) solid 2px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 90%;
+  margin-bottom: 30px;
+  height: auto;
   display: flex;
-  flex-direction: column; 
-  margin: 7px 10px;
-  gap: 15px;
+  justify-self: center;
+  background-color: rgb(189, 189, 143); 
 }
 
-.cleaners-info-edit-id {
+/* 이메일 표시 영역 */
+.cleanerinfoedit-email-display {
   display: flex;
-  gap: 30px;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-.cleaners-info-edit-ps {
+.cleanerinfoedit-email-row {
   display: flex;
-  gap: 30px;
+  gap: 10px;
+}
+
+.cleanerinfoedit-social-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* 휴대전화 (ownerinfo 스타일 이식) */
+.cleanerinfoedit-phone-container {
+  display: flex;
+  gap: 10px;
 }
 
 .cleaners-info-edit-input-border-radius {
-  border: var(--color-gray) 1px solid;
   width: 270px;
   height: 30px;
   border-radius: 5px;
@@ -62,32 +83,52 @@
   text-align: center;
 }
 
-.cleaners-info-edit-label-selected {
-  background-color: var(--color-gray);
+.cleanerinfoedit-phone-container span {
+  color: #999;
 }
 
-.cleaners-info-edit-radio-notification {
-  display: none;
-}
-
-.cleaners-info-edit-label-notification {
-  width: 70px;
-  height: 25px;
-  border: 1px solid var(--color-gray);
-  background-color: var(--color-light-gray);
-  text-align: center;
-}
-
-.cleaners-info-edit-lobel-notification-selected {
-  background-color: var(--color-gray);
-}
-
-.cleaners-info-edit-gender {
+/* 하단 푸터 (안내 문구 및 버튼) */
+.cleanerinfoedit-footer {
+  margin-top: 2rem;
   display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.cleaners-info-edit-notification {
+.cleanerinfoedit-status-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--color-red); /* 기사님 정보 중 요점 강조 */
+}
+
+.cleanerinfoedit-status-desc {
+  font-size: 0.85rem;
+  color: var(--color-gray);
+}
+
+.cleanerinfoedit-confirm-msg {
   display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.cleanerinfoedit-check-icon {
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--color-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-blue);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.button-direction-row {
+  display: flex;
+  gap: 20px;
 }
 
 .cleaners-info-edit-check {
@@ -96,54 +137,6 @@
 
 .cleaners-info-edit-button-direction-row {
   display: flex;
-  gap: 60px;
+  gap: 15px;
   margin-top: 20px;
-  justify-content: end;
-  padding: 0 30px 30px 0;
-}
-
-.cleaners-info-edit-btn-small-custom2 {
-  width: 80px;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: var(--color-light-gray);
-  white-space: nowrap;
-}
-
-.cleaners-info-edit-region-picker { position: relative; }
-.cleaners-info-edit-region-picker-trigger { width: 270px; }
-
-.cleaners-info-edit-region-panel {
-  position: absolute;
-  top: 100%;
-  background: white;
-  border-radius: 16px;
-}
-
-.cleaners-info-edit-region-panel-body.one-column {
-  display: grid;
-  grid-template-columns: 270px;
-}
-
-.cleaners-info-edit-region-panel-body.two-column {
-  display: grid;
-  grid-template-columns: 270px minmax(220px, 1fr);
-}
-
-.cleaners-info-edit-region-panel-left {
-  overflow-y: auto;
-  max-height: 240px;
-}
-
-.cleaners-info-edit-region-panel-right {
-  overflow-y: auto;
-  max-height: 240px;
-}
-
-.cleaners-info-edit-modal-backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

@@ -1,0 +1,262 @@
+/* 기본 레이아웃 */
+.cleanermypage-container {
+  margin: 0 auto; 
+  padding: 2rem 1rem;
+  max-width: 60rem; 
+  display: flex;
+  flex-direction: column;
+}
+
+/* 상단 프로필 헤더 */
+.cleanermypage-profile-header {
+  background-color: var(--color-light-blue);
+  border-radius: 1.25rem; 
+  padding: 2.5rem; 
+  color: var(--color-white);
+  position: relative;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+/* 회원정보 수정 버튼 */
+.cleanermypage-edit-info-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: var(--color-white);
+  border: none;
+  border-radius: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  color: var(--color-gray);
+  cursor: pointer;
+  z-index: 5;
+}
+
+.cleanermypage-profile-main {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+}
+
+/* 기사님 프로필 이미지 - 네모 스타일 */
+.cleanermypage-profile-image-container {
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  flex-shrink: 0;
+}
+
+.cleanermypage-profile-placeholder-img {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 1rem; /* 네모 반듯하면서 모서리만 둥글게 */
+  background-size: cover;
+  background-position: center;
+  display: block;
+  background-color: var(--color-light-gray); /* 기본 배경 */
+}
+
+/* 연필 아이콘 (파일 업로드 라벨) */
+.cleanermypage-profile-edit-badge {
+  position: absolute;
+  bottom: -0.5rem; /* 네모 밖으로 살짝 걸치게 */
+  right: -0.5rem;
+  background: var(--color-white);
+  border: 0.1rem solid var(--color-black);
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  background-image: url("/icons/edit-icon.png");
+  background-position: center;
+  background-size: 60%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cleanermypage-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cleanermypage-profile-info h2 {
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.cleanermypage-profile-info p {
+  font-size: 0.9rem;
+  margin: 0.2rem 0 0 0;
+  opacity: 0.9;
+}
+
+/* 기사님 통계 영역 */
+.cleanermypage-stats-container {
+  display: flex;
+  gap: 4rem; /* 기사님은 텍스트가 길 수 있어 조절 */
+}
+
+.cleanermypage-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cleanermypage-stat-item p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.cleanermypage-action-btn-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cleanermypage-action-btn {
+  color: var(--color-dark-blue);
+  background-color: var(--color-white);
+  border-radius: 5px;
+  padding: 0.1rem 0.3rem;
+  margin: 0.2rem;
+}
+
+/* 탭 메뉴 (점주님 레이아웃 계승) */
+.cleanermypage-tabs {
+  display: flex;
+  margin-bottom: -1px;
+  z-index: 1;
+}
+
+.cleanermypage-tab-item {
+  flex: 1;
+  padding: 1rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-blue);
+  border-radius: 10px 10px 0 0; 
+  cursor: pointer;
+  color: var(--color-bark-blue);
+  font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.cleanermypage-tab-item.cleanermypage-active {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+.cleanermypage-tab-content-wrapper {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-blue);
+  border-radius: 0 0 0.625rem 0.625rem; 
+  padding: 2.5rem;
+  min-height: 25rem;
+}
+
+/* 미디어 쿼리 - 태블릿 (Max 820px) */
+@media (max-width: 820px) {
+  .cleanermypage-profile-header {
+    padding: 1.5rem;
+  }
+
+  .cleanermypage-profile-main {
+    gap: 2rem;
+  }
+
+  .cleanermypage-profile-image-container,
+  .cleanermypage-profile-placeholder-img {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .cleanermypage-profile-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .cleanermypage-stats-container {
+    gap: 1.5rem;
+  }
+
+  .cleanermypage-tab-item {
+    font-size: 0.75rem;
+    padding: 0.8rem 0.4rem;
+  }
+
+  .cleanermypage-stat-item p {
+    font-size: 0.85rem;
+  }
+}
+
+/* 미디어 쿼리 - 모바일 (Max 430px) */
+@media (max-width: 430px) {  
+  .cleanermypage-profile-header {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .cleanermypage-edit-info-btn {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .cleanermypage-profile-main {
+    gap: 1rem;
+  }
+
+  .cleanermypage-profile-image-container,
+  .cleanermypage-profile-placeholder-img {
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 0.8rem;
+  }
+
+  .cleanermypage-profile-edit-badge {
+    width: 1.6rem;
+    height: 1.6rem;
+    bottom: -0.3rem;
+    right: -0.3rem;
+  }
+
+  .cleanermypage-info-container {
+    gap: 0.6rem;
+  }
+
+  .cleanermypage-profile-info h2 {
+    font-size: 1rem;
+  }
+
+  .cleanermypage-profile-info p {
+    font-size: 0.65rem;
+  }
+
+  .cleanermypage-action-btn {
+    font-size: 0.75rem;
+  }
+
+  .cleanermypage-stats-container {
+    gap: 0.8rem; 
+    justify-content: center;
+  }
+
+  .cleanermypage-stat-item p {
+    font-size: 0.65rem; 
+  }
+
+  .cleanermypage-tab-item {
+    font-size: 0.65rem;
+    padding: 0.7rem 0.2rem;
+  }
+
+  .cleanermypage-tab-content-wrapper { 
+    padding: 1rem;
+    min-height: 15rem;
+  }
+}
