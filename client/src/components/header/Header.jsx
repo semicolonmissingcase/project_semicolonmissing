@@ -1,13 +1,18 @@
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import HeaderMenu from "./HeaderMenu";
 import { useSelector } from "react-redux";
+import HeaderDropdown from "./HeaderDropdown.jsx";
 // import { clearAuth } from "../../store/slices/authSlice";
 
 export default function Header() {
   const navigate = useNavigate();
   // const dispatch = useDispatch();
+
+  // 드롭다운용
+  const [isDropDown, setIsDropDown] = useState(false);
+  const dropdownRef = useRef(null);
 
   // Redux Store에서 로그인 상태 가져오기 
   const { isLoggedIn, user } = useSelector((state) => state.auth);
@@ -22,6 +27,21 @@ export default function Header() {
     };
     window.addEventListener("chatSidebarStatus", handleStatus);
     return () => window.removeEventListener("chatSidebarStatus", handleStatus);
+  }, [dropdownRef]);
+
+  // 드롭다운 외부 클릭 시 닫기
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if(dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropDown(false);
+      }
+    }
+    // 이벤트 리스너 등록
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // 컨포넌트 unmount 시 이벤트 리스터 해제
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
   })
   
   // 로그 아웃 처리 함수 (저희는 이거 메뉴바 만듭니다.)
@@ -54,19 +74,11 @@ export default function Header() {
   }
 
   // 점주(owner)
-  function ownerMypage() {
-    navigate('owners/mypage');
-  }
-
   function ownerQuteList() {
     navigate('cleaners/userquotelistdetails'); // TODO: 라우트 다시 확인하기
   }
 
   // 기사님(cleaners)
-  function cleanerMypage() {
-    navigate('cleaners/mypage');
-  }
-
   function cleanerQuotelist() {
     navigate('cleaners/userquotelist');
   }
@@ -98,7 +110,7 @@ export default function Header() {
           {isLoggedIn ? (
             <>
               {/* 점주(owner): 견적요청, 채팅, 프로필사진 */}
-              
+              {user?.role ==='OWNER' && (
                 <>
                   <button type='button' className='btn-small header-right-btn' onClick={chatListPage}>
                     채팅
@@ -106,25 +118,34 @@ export default function Header() {
                   <button type='button' className='btn-small header-right-btn' onClick={ownerQuteList}>
                     견적요청
                   </button>
-                  <div className='header-profile-icon' onClick={ownerMypage}>
-                    {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
-                    {/* {user?.profileImage ? (
-                      <img 
-                        src={user.profileImage} 
-                        alt="프로필" 
-                        className='header-profile-img'
-                      />
-                    ) : (
-                      <div className='header-profile-default'>
-                        {user?.name?.[0] || 'U'}
-                      </div>
-                    )} */}
+                  <div className="header-profile-container" ref={dropdownRef}>
+                    <div className='header-profile-icon'
+                      onClick={() => setIsDropDown((prev) => !prev)}>
+                      {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
+                      {user?.profileImage ? (
+                        <img 
+                          src={user.profileImage} 
+                          alt="프로필" 
+                          className='header-profile-img'
+                        />
+                      ) : (
+                        <div className='header-profile-default'>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 드롭다운 컴포넌트 */}
+                    <HeaderDropdown 
+                      isOpen={isDropDown}
+                      onClose={() => setIsDropDown(false)}
+                      user={user} />
                   </div>
                 </>
+              )}
               
 
               {/* 기사님(cleaner): 채팅, 신규요청, 프로필사진 */}
-              {user?.userType === 'cleaner' && (
+              {user?.role === 'CLEANER' && (
                 <>
                   <button type='button' className='btn-small header-right-btn' onClick={chatListPage}>
                     채팅
@@ -132,19 +153,27 @@ export default function Header() {
                   <button type='button' className='btn-small header-right-btn' onClick={cleanerQuotelist}>
                     신규요청
                   </button>
-                  <div className='header-profile-icon' onClick={cleanerMypage}>
-                    {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
-                    {user?.profileImage ? (
-                      <img 
-                        src={user.profileImage} 
-                        alt="프로필" 
-                        className='header-profile-img'
-                      />
-                    ) : (
-                      <div className='header-profile-default'>
-                        {user?.name?.[0] || 'U'}
-                      </div>
-                    )}
+                  <div className="header-profile-container" ref={dropdownRef}>
+                    <div className='header-profile-icon'
+                      onClick={() => setIsDropDown((prev) => !prev)}>
+                      {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
+                      {user?.profileImage ? (
+                        <img 
+                          src={user.profileImage} 
+                          alt="프로필" 
+                          className='header-profile-img'
+                        />
+                      ) : (
+                        <div className='header-profile-default'>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* 드롭다운 컴포넌트 */}
+                    <HeaderDropdown 
+                      isOpen={isDropDown}
+                      onClose={() => setIsDropDown(false)}
+                      user={user} />
                   </div>
                 </>
               )}

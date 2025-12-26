@@ -62,10 +62,17 @@ async function login(body) {
     user.refreshToken = refreshToken;
     await user.save({transaction: t});
 
+    // 8. DB에서 가져온 순수 데이터만 추출 
+    const userResponse = user.toJSON();
+
+    // DB에는 없는 'role' 정보를 수동으로 주입 (프론트 권한 체크용)
+    userResponse.role = payloadData.role;
+
     return {
       accessToken,
       refreshToken,
       user,
+      user: userResponse,
     }
   });
 }
