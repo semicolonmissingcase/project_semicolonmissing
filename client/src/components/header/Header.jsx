@@ -59,7 +59,7 @@ export default function Header() {
   }
 
   function ownerQuteList() {
-    navigate('cleaners/userquotelist'); // TODO: 라우트 다시 확인하기
+    navigate('cleaners/userquotelistdetails'); // TODO: 라우트 다시 확인하기
   }
 
   // 기사님(cleaners)
@@ -98,7 +98,7 @@ export default function Header() {
           {isLoggedIn ? (
             <>
               {/* 점주(owner): 견적요청, 채팅, 프로필사진 */}
-              {user?.userType === 'owner' && (
+              
                 <>
                   <button type='button' className='btn-small header-right-btn' onClick={chatListPage}>
                     채팅
@@ -108,7 +108,7 @@ export default function Header() {
                   </button>
                   <div className='header-profile-icon' onClick={ownerMypage}>
                     {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
-                    {user?.profileImage ? (
+                    {/* {user?.profileImage ? (
                       <img 
                         src={user.profileImage} 
                         alt="프로필" 
@@ -118,10 +118,10 @@ export default function Header() {
                       <div className='header-profile-default'>
                         {user?.name?.[0] || 'U'}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </>
-              )}
+              
 
               {/* 기사님(cleaner): 채팅, 신규요청, 프로필사진 */}
               {user?.userType === 'cleaner' && (
