@@ -1,10 +1,28 @@
 import React, { useMemo, useState } from "react";
+import Select from 'react-select';
 import "./CleanersQuoteListPreparationSave.css";
+import { RiArrowDropDownFill } from "react-icons/ri";
+import { RiArrowDropUpFill } from "react-icons/ri";
 
 function CleanersQuoteListPreparation() {
+
   const options = [
-    { value: "price_desc", label: "견적금액 ↓" },
-    { value: "price_asc", label: "견적금액 ↑" },
+  { 
+    value: "price_desc", 
+    // JSX를 사용하여 아이콘과 텍스트를 함께 배열에 넣습니다.
+    label: (
+      <>
+        견적금액 <RiArrowDropDownFill size={30} style={{ verticalAlign: "middle" }} />
+      </>
+    )
+  },
+  { value: "price_asc", 
+    label: (
+      <>
+        견적금액 <RiArrowDropUpFill size={30} style={{ verticalAlign: "middle" }} />
+      </>
+    ) 
+    },
   ];
 
   const [filter, setFilter] = useState(options[0].value);
@@ -43,23 +61,29 @@ function CleanersQuoteListPreparation() {
     },
   ];
 
-  function handleFilterChange(e) {
-    setFilter(e.target.value);
-  }
+  const [selectedOption, setSelectedOption] = useState(options[0]);
 
-  // filter에 따라 정렬된 배열 만들기
+  const handleSelectChange = (selectedOption) => {
+    setSelectedOption(selectedOption);
+  };
+  
   const sortedSaves = useMemo(() => {
-    const copy = [...saves];
-
-    switch (filter) {
-      case "price_asc":
-        return copy.sort((a, b) => a.price - b.price);
-      case "price_desc":
-        return copy.sort((a, b) => b.price - a.price);
-      default:
-        return copy;
-    }
-  }, [filter]); // saves가 서버에서 오면 [filter, saves]로
+   
+  const copy = [...saves];  
+  
+  switch (selectedOption.value) { 
+  case "price_asc":
+   
+  return copy.sort((a, b) => a.price - b.price);
+  case "price_desc":
+ 
+ return copy.sort((a, b) => b.price - a.price);
+ default:
+ 
+ return copy;
+  }
+  }, [selectedOption.value, saves]);
+ 
 
   const formatPrice = (n) => n.toLocaleString("ko-KR");
 
@@ -68,18 +92,16 @@ function CleanersQuoteListPreparation() {
       <h3 className="cleaners-quote-list-preparation-save-title">자주 쓰는 견적서 양식</h3>
 
       <div className="cleaners-quote-list-preparation-wrapper">
-        <div className="cleaners-quote-list-preparation-quote-list--filter-dropdown">
-          <select
-            value={filter}
-            onChange={handleFilterChange}
-            className="cleaners-quote-list-preparation-quote-list-select"
-          >
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+        <div className="cleaners-quote-list-preparation-quote-list-filter-dropdown">
+          <Select
+          value={selectedOption}
+          onChange={handleSelectChange}
+          options={options}
+          // 👇 이전 답변에서 제시한, JSX 렌더링을 위한 핵심 속성
+          formatOptionLabel={(option) => option.label} 
+          className="cleaners-quote-list-preparation-quote-list-select-container" // 스타일링을 위한 클래스
+          classNamePrefix="cleaners-select" // react-select 내부 요소 스타일링을 위한 prefix
+        />
         </div>
 
         {sortedSaves.map((item) => (

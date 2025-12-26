@@ -92,7 +92,6 @@
 
 .cleaners-account-edit-cancel-button,
 .cleaners-account-edit-submit-button {
-  border: 1px solid var(--color-gray);
   width: 110px;
   padding: 10px;
   border-radius: 5px;

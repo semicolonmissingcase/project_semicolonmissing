@@ -28,8 +28,8 @@
   font-size: 1.2rem;
 }
 
-.cleaners-quote-list-preparation-quote-list-select {
-  border: none;
+.cleaners-quote-list-preparation-quote-list-select-container {
+  width: 200px;
   padding: 5px;
 }
 

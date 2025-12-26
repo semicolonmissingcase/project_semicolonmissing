@@ -1,6 +1,4 @@
 import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
-import { ko } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import "./CleanersUserQuoteListDetails.css";
 import { CiUser } from "react-icons/ci";
@@ -35,10 +33,10 @@ function CleanersUserQuoteListDetails () {
 
 
 
-  const changeAnswerStatus = (e) => {
-    const { name, value } = e.target;   
-    setAnswers((prev) => ({ ...prev, [name]: value }));
-  };
+  // const changeAnswerStatus = (e) => {
+  //   const { name, value } = e.target;   
+  //   setAnswers((prev) => ({ ...prev, [name]: value }));
+  // };
     
   const [files, setFiles] = useState([]);
 
@@ -69,14 +67,14 @@ const handleFileChange = (e) => {
     setToggleDetails(!toggleDetails)
   };
 
-  // '날짜 협의가 가능해요.' 버튼 클릭 핸들러 (isDateNegotiable 상태 토글)
-  const handleDateNegotiableToggle = () => {
-    setIsDateNegotiable(prev => !prev);
-    // 날짜 협의 가능 시, 선택된 날짜는 무시하도록 할 수 있습니다. (필요에 따라 로직 추가)
-    if (!isDateNegotiable) {
-      setDate(null);
-    }
-  };
+  // // '날짜 협의가 가능해요.' 버튼 클릭 핸들러 (isDateNegotiable 상태 토글)
+  // const handleDateNegotiableToggle = () => {
+  //   setIsDateNegotiable(prev => !prev);
+  //   // 날짜 협의 가능 시, 선택된 날짜는 무시하도록 할 수 있습니다. (필요에 따라 로직 추가)
+  //   if (!isDateNegotiable) {
+  //     setDate(null);
+  //   }
+  // };
 
 
   const changeTemporaryAnswerStatus = (e) => {
