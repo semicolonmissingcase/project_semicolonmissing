@@ -18,15 +18,21 @@ import db from '../models/index.js';
  */
 async function createOrGetRoom(body) {
   return await db.sequelize.transaction(async t => {
-    const { estimate_id, cleaner_id, owner_id } = body;
+    const rooms = await chatRepository.findByUser( t, userId, userRole );
 
-    // 기존 채팅방 확인
-    let room = await chatRepository.findByKeys(t, estimate_id, cleaner_id);
-    if (room) return { room, isNew: false };
+    return rooms.map(room => {
+      const roomPlain = room.get ({plain: true});
 
-    // 새 채팅방 생성 (기본 상태 'OPEN')
-    room = await chatRepository.create(t, { estimate_id, cleaner_id, owner_id });
-    return { room, isNew: true };
+      const isOwner = userRole === 'owner';
+      const opponent = isOwner ? roomPlain.cleaner : roomPlain.owner;
+
+      return {
+        ...roomPlain,
+        opponentName: opponent?.name || "탈퇴한 회원",
+        lastMessage: roomPlain.chatMessages?.[0]?.content || "메시지가 없습니다.",
+        lastMessageTime: roomPlain.chatMessages?.[0]?.createdAt || roomPlain.createdAt
+      }
+    })
   });
 }
 
@@ -36,12 +42,29 @@ async function createOrGetRoom(body) {
 async function getRoomsByUser(userId, userRole) {
   return await db.sequelize.transaction(async t => {
     const rooms = await chatRepository.findByUser(t, userId, userRole);
-    const roomsWithUnread = await Promise.all(rooms.map(async (room) => {
-      const unreadCount = await chatRepository.getUnreadCount(t, room.id, userId);
-      return { ...room.get({ plain: true }), unreadCount };
+    
+    // 데이터 가공
+    const roomsWithDetails = await Promise.all(rooms.map(async (room) => {
+      const roomPlain = room.get({ plain: true });
+      const isOwner = /OWNER/i.test(String(userRole))
+      
+      // 상대방 객체 선택 (기존 include 구조 활용)
+      const opponent = isOwner ? roomPlain.cleaner : roomPlain.owner;
+      console.log(`[확인] 상대방 존재여부: ${!!opponent}, 이름: ${opponent?.name}`);
+      // 최신 메시지 추출
+      const lastMsgObj = roomPlain.chatMessages?.[0];
+
+      return {
+        ...roomPlain,
+        opponentName: opponent?.name || "탈퇴한 회원",
+        opponentAddress: isOwner ? opponent?.region : opponent?.address,
+        lastMessage: roomPlain.chatMessages?.[0]?.content || "메시지가 없습니다.",
+        lastMessageTime: roomPlain.chatMessages?.[0]?.createdAt || roomPlain.updatedAt,
+        unreadCount: await chatRepository.getUnreadCount(t, roomPlain.id, userId)
+      };
     }));
 
-    return roomsWithUnread;
+    return roomsWithDetails;
   });
 }
 
@@ -59,6 +82,9 @@ async function getMessages(room_id, page = 1, limit = 50) {
  * 메시지 저장
  */
 async function saveMessage(data) {
+  if(!data.sender_role) {
+    data.sender_role = data.role;
+  }
   return await db.sequelize.transaction(async t => {
     const { room_id, content, sender_id, sender_role, type = 'TEXT' } = data;
 

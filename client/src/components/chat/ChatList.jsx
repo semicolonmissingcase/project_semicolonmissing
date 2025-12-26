@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../api/axiosInstance';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import './ChatList.css';
 
 const ChatList = () => {
@@ -11,9 +12,7 @@ const ChatList = () => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Redux에서 내 정보 가져오기
   const { user } = useSelector((state) => state.auth);
-  const isOwner = user?.role === 'owner';
 
   const fetchRooms = async () => {
     try {
@@ -65,9 +64,7 @@ const ChatList = () => {
           <p className="chatlist-no-data">진행 중인 채팅이 없습니다.</p>
         ) : (
           chatRooms.map((room) => {
-            // 내가 점주면 기사 정보를, 내가 기사면 점주 정보를 표시
-            const opponent = isOwner ? room.cleaner : room.owner;
-            const isDeleted = !opponent; // 상대방 정보가 없으면 탈퇴 회원 처리
+            const isDeleted = room.opponentName === "알 수 없는 사용자" || room.opponentName === "탈퇴한 회원";
 
             return (
               <div 
@@ -77,27 +74,29 @@ const ChatList = () => {
               >
                 <div className="chatlist-avatar">
                   <div className="chatlist-avatar-icon">
-                    {opponent?.profileImageUrl ? (
-                      <img src={opponent.profileImageUrl} alt="profile" className="chatlist-profile-img" />
+                    {room.opponentProfileImg ? (
+                      <img src={room.opponentProfileImg} alt="profile" className="chatlist-profile-img" />
                     ) : '🧊'}
                   </div>
                 </div>
+                
                 <div className="chatlist-info">
                   <div className="chatlist-info-top">
                     <span className={`chatlist-cleaner-name ${isDeleted ? 'chatlist-deleted' : ''}`}>
-                      {isDeleted ? "탈퇴한 회원입니다" : opponent?.name}
+                      {room.opponentName}
                     </span>
                     <span className="chatlist-cleaner-location">
-                      {isDeleted ? "삭제된 회원" : (isOwner ? opponent?.region : opponent?.address)}
+                      {room.opponentAddress || ""}
                     </span>
                   </div>
+                  
                   <div className="chatlist-info-bottom">
                     <p className="chatlist-last-message">
-                      {room.lastMessage || "메시지가 없습니다."}
+                      {room.lastMessage}
                     </p>
                     <div className="chatlist-meta">
                       <span className="chatlist-last-time">
-                        {dayjs(room.updatedAt).format('A h:mm')}
+                        {dayjs(room.lastMessageTime).format('A h:mm')}
                       </span>
                       {room.unreadCount > 0 && (
                         <span className="chatlist-unread-badge">{room.unreadCount}</span>

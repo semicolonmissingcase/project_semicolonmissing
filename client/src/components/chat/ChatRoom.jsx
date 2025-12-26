@@ -1,101 +1,106 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import axiosInstance from '../../api/axiosInstance'; 
 import dayjs from 'dayjs';
-import 'dayjs/locale/ko'; // 한국어 설정
+import 'dayjs/locale/ko';
 import './ChatRoom.css';
 import { FaRegFileImage } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 
-const ChatRoom = ({ roomId, onOpenSidebar, isSidebarOpen, socket }) => {
+import { getChatRoomDetail, getChatMessages, markMessageAsRead, sendChatMessage, uploadChatImage } from '../../api/axiosChat.js';
+
+const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) => {
   const [messageList, setMessageList] = useState([]);
   const [inputText, setInputText] = useState("");
   const [opponentName, setOpponentName] = useState("채팅방");
   const scrollRef = useRef(null);
   const fileInputRef = useRef(null);
   
-  // Redux Store에서 내 정보 가져오기
   const { user } = useSelector((state) => state.auth);
-  const myId = user?.id;
-  const isOwner = user?.role === 'owner';
+  const myId = user?.id ? Number(user.id) : null;
 
-  // 1. 방 정보 및 초기 메시지 로드
+  // [수정 포인트 1] user 객체 내 role이 없을 경우를 대비한 판별 로직
+  // 만약 DB 구조상 점주/기사의 ID가 모두 1이라면, 이 역할 판별이 매우 중요합니다.
+  const userRole = user?.role || (user?.email?.includes('cleaner') ? 'CLEANER' : 'OWNER');
+  const isCleanerUser = String(userRole).toUpperCase().includes('CLEANER');
+
+  const roomId = rawRoomId ? String(rawRoomId).replace(/[^0-9]/g, '') : null;
+
+  // [수정 포인트 2] 유연한 스크롤 함수
+  const scrollToBottom = useCallback((behavior = 'smooth') => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: behavior // smooth: 부드럽게, auto: 즉시
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const fetchChatRoomData = async () => {
       if (!roomId) return;
       try {
-        // 방 상세 정보 조회 (헤더 이름용)
-        const roomRes = await axiosInstance.get(`/chat/rooms/${roomId}`);
+        const roomRes = await getChatRoomDetail(roomId);
         const roomData = roomRes.data.data;
-        const opponent = isOwner ? roomData.cleaner : roomData.owner;
-        setOpponentName(opponent?.name || "탈퇴한 회원");
-
-        // 메시지 내역 조회
-        const msgRes = await axiosInstance.get(`/chat/rooms/${roomId}/messages`);
-        // DESC로 오는 데이터를 ASC(과거->현재) 순서로 뒤집어서 저장
-        setMessageList(msgRes.data.data.reverse());
-
-        // 읽음 처리 알림 (상대방이 보낸 메시지를 내가 읽었음을 서버에 알림)
-        await axiosInstance.patch(`/chat/rooms/${roomId}/read`);
-      } catch (error) {
-        console.error("채팅방 로드 실패:", error);
+        // 내 역할에 따라 상대방 정보를 다르게 가져옴
+        const opponent = isCleanerUser ? roomData.owner : roomData.cleaner;
+        setOpponentName(opponent?.name || "상대방");
+      } catch (err) {
+        console.error("방 정보 조회 실패:", err);
       }
+
+      try {
+        const msgRes = await getChatMessages(roomId);
+        if (msgRes.data && msgRes.data.data) {
+          setMessageList(msgRes.data.data.reverse());
+          // 초기 로딩 시에는 스크롤을 즉시(auto) 하단으로
+          setTimeout(() => scrollToBottom('auto'), 100);
+        }
+      } catch (err) {
+        console.error("메시지 내역 조회 실패:", err);
+      }
+
+      markMessageAsRead(roomId).catch(() => {});
     };
-
+    
     fetchChatRoomData();
-  }, [roomId, isOwner]);
+  }, [roomId, isCleanerUser, scrollToBottom]);
 
-  // 2. 실시간 메시지 수신 (Socket.io)
+  // 실시간 메시지 수신
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !roomId) return;
 
     const handleReceiveMessage = (newMsg) => {
-      // 현재 내가 보고 있는 방의 메시지인 경우에만 목록에 추가
-      if (newMsg.chatRoomId === parseInt(roomId)) {
+      if (String(newMsg.chatRoomId) === String(roomId)) {
         setMessageList((prev) => [...prev, newMsg]);
-        // 수신 시점에 내가 방에 있다면 즉시 읽음 처리 API 호출 (선택 사항)
-        axiosInstance.patch(`/chat/rooms/${roomId}/read`).catch(() => {});
+        markMessageAsRead(roomId).catch(() => {});
       }
     };
 
     socket.on("receive_message", handleReceiveMessage);
-    return () => socket.off("receive_message");
+    return () => socket.off("receive_message", handleReceiveMessage);
   }, [socket, roomId]);
 
-  // 3. 메시지 추가 시 스크롤을 항상 하단으로
+  // 메시지 리스트 변경 시 부드럽게 스크롤
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    if (messageList.length > 0) {
+      scrollToBottom('smooth');
     }
-  }, [messageList]);
+  }, [messageList, scrollToBottom]);
 
-  // 4. 메시지 전송 (텍스트)
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
-
     try {
-      const msgData = {
-        room_id: roomId,
-        content: inputText,
-        sender_id: myId,
-        sender_role: user.role,
-        type: 'TEXT'
-      };
-
-      // API 전송 후 DB 저장된 객체 받기
-      const res = await axiosInstance.post(`/chat/rooms/${roomId}/messages`, msgData);
-      const savedMsg = res.data.data;
-
-      // 소켓으로 상대방에게 전송 및 내 화면 업데이트
-      socket.emit("send_message", savedMsg);
-      setMessageList((prev) => [...prev, savedMsg]);
+      const msgData = { content: inputText, type: 'TEXT' };
+      const res = await sendChatMessage(roomId, msgData);
+      
+      socket.emit("send_message", res.data.data);
+      setMessageList((prev) => [...prev, res.data.data]);
       setInputText("");
     } catch (error) {
-      console.error("전송 실패:", error);
+      console.error("메시지 전송 실패:", error);
     }
   };
 
-  // 5. 이미지 업로드 전송
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -104,26 +109,13 @@ const ChatRoom = ({ roomId, onOpenSidebar, isSidebarOpen, socket }) => {
     formData.append('image', file);
 
     try {
-      // 이미지 서버 업로드 (Multer 처리기 필요)
-      const uploadRes = await axiosInstance.post('/chat/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const uploadRes = await uploadChatImage(roomId, formData);
       const imageUrl = uploadRes.data.url;
+      const msgData = { content: imageUrl, type: 'IMAGE' };
+      const res = await sendChatMessage(roomId, msgData);
 
-      // 업로드된 URL을 내용으로 하는 IMAGE 타입 메시지 전송
-      const msgData = {
-        room_id: roomId,
-        content: imageUrl,
-        sender_id: myId,
-        sender_role: user.role,
-        type: 'IMAGE'
-      };
-
-      const res = await axiosInstance.post(`/chat/rooms/${roomId}/messages`, msgData);
-      const savedMsg = res.data.data;
-
-      socket.emit("send_message", savedMsg);
-      setMessageList((prev) => [...prev, savedMsg]);
+      socket.emit("send_message", res.data.data);
+      setMessageList((prev) => [...prev, res.data.data]);
     } catch (error) {
       console.error("이미지 전송 실패:", error);
     }
@@ -131,34 +123,37 @@ const ChatRoom = ({ roomId, onOpenSidebar, isSidebarOpen, socket }) => {
 
   return (
     <div className='chatroom-container'>
-      {/* 헤더 영역 */}
       <div className='chatroom-header'>
         <div className='chatroom-header-left'>
-          <span className='chatroom-back-btn'>←</span>
+          <span className='chatroom-back-btn' onClick={() => window.history.back()}>←</span>
           <h3 className='chatroom-cleaner-name'>{opponentName}</h3>
         </div>
-        
         <div className='chatroom-header-right'>
           <button className='chatroom-detail-btn' onClick={onOpenSidebar}>상세보기</button>
           <button className='chatroom-book-btn'>예약하기</button>
         </div>
       </div>
 
-      {/* 메시지 리스트 영역 */}
       <div className='chatroom-message-list' ref={scrollRef}>
         {messageList.map((msg) => {
-          // 내가 보낸 것인지 여부에 따라 CSS 클래스 분기
-          const isMe = msg.senderId === myId;
-          const roleClass = isMe ? 'owner' : 'cleaner';
+          // [수정 포인트 3] ID + Role(Type) 교차 검증
+          // 1. ID 일치 여부
+          // 2. 현재 로그인 유저가 기사이고 메시지 타입이 CLEANER이거나, 
+          //    현재 로그인 유저가 점주이고 메시지 타입이 OWNER일 때만 mine
+          const isMe = Number(msg.senderId) === myId && (
+            (isCleanerUser && msg.senderType === 'CLEANER') ||
+            (!isCleanerUser && msg.senderType === 'OWNER')
+          );
 
           return (
-            <div key={msg.id} className={`chatroom-message-item ${roleClass}`}>
-              <div className='chatroom-bubble-container' 
-                   style={{ display: 'flex', flexDirection: isMe ? 'row-reverse' : 'row', alignItems: 'flex-end' }}>
+            <div 
+              key={msg.id} 
+              className={`chatroom-message-item ${isMe ? 'mine' : 'other'}`}
+            >
+              <div className='chatroom-bubble-container'>
                 <div className='chatroom-bubble'>
                   {msg.messageType === 'IMAGE' ? (
-                    <img src={msg.content} alt="chat-attachment" className="chat-image-content" 
-                         style={{ maxWidth: '100%', borderRadius: '8px', display: 'block' }} />
+                    <img src={msg.content} alt="chat" className="chat-image-content" />
                   ) : (
                     msg.content
                   )}
@@ -172,7 +167,6 @@ const ChatRoom = ({ roomId, onOpenSidebar, isSidebarOpen, socket }) => {
         })}
       </div>
 
-      {/* 입력창 영역 */}
       <div className='chatroom-input'>
         <input 
           type="file" 

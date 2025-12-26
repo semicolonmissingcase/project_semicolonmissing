@@ -1,8 +1,21 @@
-import axiosInstance from './axiosInstance';
+import axiosInstance from './axiosInstance.js';
 
-// 채팅방 목록 가져오기
-export const getChatRooms = () => axiosInstance.get('/api/chat/rooms');
+const CHAT_API_URL = '/api/chat';
+const cleanId = (id) => String(id).replace(/[^0-9]/g, '');
 
-// 특정 방 메시지 가져오기
+export const getChatRoomDetail = (roomId) => 
+  axiosInstance.get(`${CHAT_API_URL}/rooms/${cleanId(roomId)}`);
+
 export const getChatMessages = (roomId, page = 1) => 
-  axiosInstance.get(`/api/chat/rooms/${roomId}/messages?page=${page}`);
+  axiosInstance.get(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/messages?page=${page}`);
+
+export const sendChatMessage = (roomId, msgData) => 
+  axiosInstance.post(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/messages`, msgData);
+
+export const uploadChatImage = (roomId, formData) => 
+  axiosInstance.post(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/upload`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+
+export const markMessageAsRead = (roomId) => 
+  axiosInstance.patch(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/read`);

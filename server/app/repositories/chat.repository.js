@@ -35,22 +35,27 @@ const chatRepository = {
   /**
    * 사용자별 채팅방 목록 조회
    */
-  findByUser: async (transaction, userId, userRole) => {
-    const isOwner = userRole === 'owner';
-    return await db.ChatRoom.findAll({
-      where: {
-        [isOwner ? 'ownerId' : 'cleanerId']: userId,
-        // 나간 상태가 아닌(null인) 방만 조회
-        [isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt']: null
-      },
-      include: [
-        { model: db.Estimate, as: 'estimate' },
-        { model: isOwner ? db.Cleaner : db.Owner, as: isOwner ? 'cleaner' : 'owner' }
-      ],
-      order: [['updatedAt', 'DESC']], 
-      transaction
-    });
-  },
+findByUser: async (transaction, userId, userRole) => {
+  const isOwner = /OWNER/i.test(String(userRole));
+  return await db.ChatRoom.findAll({
+    where: {
+      [isOwner ? 'ownerId' : 'cleanerId']: userId,
+      [isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt']: null
+    },
+    include: [
+      { model: db.Estimate, as: 'estimate' },
+      { model: isOwner ? db.Cleaner : db.Owner, as: isOwner ? 'cleaner' : 'owner' },
+      {
+        model: db.ChatMessage,
+        as: 'chatMessages',
+        limit: 1,
+        order: [['createdAt', 'DESC']]
+      }
+    ],
+    order: [['updatedAt', 'DESC']], 
+    transaction
+  });
+},
 
   /**
    * 메시지 저장 및 방 부활(LeavedAt 초기화)
