@@ -1,24 +1,281 @@
-.cleaners-profile-edit-wrapper {
-  margin: 0 auto;
-  border: var(--color-gray) solid 2px;
-  border-radius: 15px;
-  width: 90%;
-}
-
-fieldset.cleaners-profile-edit-fieldset {
-  border: none;
-  padding: 5px 15px 15px 15px;
-  width: 100%;
-}
-
-legend.cleaners-profile-edit-title {
-  border: none;
+.cleaners-profile-edit-container {
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  
+  gap: 1.5rem;
 }
 
-.cleaners-profile-edit-place {
-  opacity: 0;
+.cleaners-profile-edit-items-box {
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cleaners-profile-edit-layout{
+  display: grid;
+}
+
+.cleaners-profile-edit-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.cleaners-info-edit-layout-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1rem;
+}
+
+.cleaners-profile-edit-profile-title {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.cleaners-profile-edit-input {
+  width: 100%;
+  height: 43px;
+  border: 1px solid var(--color-gray);
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.cleaners-profile-edit-layout-flex-column {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cleaners-profile-edit-layout-flex-column > label {
+  border: soild 1px var(--color-gray);
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  width: 270px;
+}
+
+.cleaners-profile-edit-attachment {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cleaners-profile-edit-attachment-button {
+  margin-top: 1rem;
+  width: 90px;
+  height: 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  white-space: nowrap;
+  border: none;
+  text-align: center;
+  background-color: var(--color-light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cleaners-profile-edit-attachment-input {
+  display: none;
+}
+
+.cleaners-profile-edit-button-small-custom2 {
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--color-light-gray);
+  white-space: nowrap;
+}
+
+.cleaners-profile-edit-buttons {
+  display: flex;
+  gap: 60px;
+  justify-content: end;
+  padding: 0 30px 30px 0;
+}
+
+.cleaners-info-edit-region-picker {
+  position: relative;
+}
+
+.cleaners-info-edit-region-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: #fff;
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  z-index: 100;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.cleaners-info-edit-region-panel.is-left-only {
+  width: 160px;
+}
+
+.cleaners-info-edit-region-panel.is-split {
+  width: 520px;
+  max-width: 90vw;
+  min-width: 270px;
+}
+
+.cleaners-profile-edit-region-panel-body {
+  display: grid;
+  height: 100%;
+}
+
+.cleaners-profile-edit-region-panel-body.is-split {
+  grid-template-columns: 130px 1fr;
+}
+
+.cleaners-profile-edit-region-panel-body.is-left-only {
+  grid-template-columns: 1fr;
+}
+
+.cleaners-profile-edit-modal-text-button {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cleaners-profile-edit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;     
+  justify-content: center; 
+  z-index: 9999;  
+}
+
+.cleaners-profile-edit-last-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;     
+  justify-content: center; 
+  z-index: 9999;    
+}
+
+.cleaners-profile-edit-modal-box {
+  width: min(360px, 90%);
+  height: min(200px, 90%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  font-size: 16px;
+}
+
+.cleaners-profile-edit-last-modal-box {
+  width: min(360px, 90%);
+  height: min(200px, 90%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  font-size: 16px;
+}
+
+.cleaners-profile-edit-modal-button {
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--color-light-gray);
+  white-space: nowrap;
+}
+
+.cleaners-profile-eidt-modal-cancel-submit-text-button {
+  padding-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cleaners-profile-edit-modal-button-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+
+  .cleaners-info-edit-region-panel.is-left-only {                                                              
+  width: 250px;    
+  }
+  .cleaners-info-edit-region-panel.is-split {                                                                  
+  width: 420px !important;  
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 830px) {
+  .cleaners-info-edit-region-panel.is-split {                                                                  
+  width: 360px !important;      
+}   
+}
+
+@media (max-width: 830px) and (min-width: 745px) {
+  .cleaners-info-edit-region-panel.is-split {                                                                  
+  width: 500px !important;      
+}   
+}
+
+@media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
+  .cleaners-info-edit-region-panel.is-left-only {                                                              
+  width: 270px;                                                                                              
+}
+  .cleaners-info-edit-region-panel.is-split {                                                                  
+  width: 420px !important;  
+}                                                                                             
+}                                                                                           
+                                                                                                            
+@media ( max-width: 536px ) {  
+
+  .cleaners-info-edit-region-picker-trigger,
+  .cleaners-profile-edit-input {                                                                  
+  width: 95% !important;                                                                                             
+  }    
+  
+  .cleaners-info-edit-layout-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cleaners-profile-edit-layout-center {
+    display: grid;
+    place-items: center;
+  }
+}                                                                                                                
+             
+@media (max-width: 535px) {                                              
+  .cleaners-info-edit-region-panel.is-split {                                                                  
+  width: 250px;           
+  }
+}
+
+@media (max-width: 370px) {
+.cleaners-info-edit-region-panel.is-split {                                                                  
+  width: 210px;           
+  }
 }
