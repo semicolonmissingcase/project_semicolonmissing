@@ -75,7 +75,7 @@ function CleanersMyPage () {
 
       {/* 2. 기사님 전용 탭 메뉴 */}
       <nav className="cleanermypage-tabs">
-        {['정산 대기', '예약 완료', '오늘 작업', '취소·미방문', '완료 작업'].map(tab => (
+        {['예약 완료', '오늘 작업', '정산 대기', '취소·미방문', '완료 작업'].map(tab => (
           <button 
             key={tab}
             className={`cleanermypage-tab-item ${activeTab === tab ? 'cleanermypage-active' : ''}`}

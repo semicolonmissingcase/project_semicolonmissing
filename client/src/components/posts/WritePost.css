@@ -73,3 +73,9 @@
     width: 100% !important;
   }
 }
+
+@media (max-width: 430px) {
+  .smart-editor-wrapper {
+    width: 100%;
+  }
+}

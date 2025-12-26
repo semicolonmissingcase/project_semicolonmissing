@@ -1,38 +1,184 @@
 .cleaners-user-quote-list-title-container {
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-.cleaners-user-quote-list-title-small-container {
-  display: flex;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .cleaners-user-quote-list-title-text {
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 20px 0;
 }
 
-.cleaners-user-quote-list-title-wrapper-1 {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 30px;
-  height:auto;
+.cleaners-user-quote-list-title-status-selected {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+  color: var(--color-blue);
 }
 
-.cleaners-user-quote-list-title-wrapper-2 {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 30px;
-  height:auto;
+.cleaners-user-quote-list-title-small-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 90%;
 }
 
-.cleaners-user-quote-list-title-wrapper-3 {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 30px;
-  height:auto;
+.cleaners-user-quote-list-title-wrapper-selected {
+  background-color: #FFFDF9;
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cleaners-user-quote-list-title-vertical-line-selected-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cleaners-user-quote-list-title-location-selected-location {
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-user-quote-list-title-place-selected-place {
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-user-quote-list-title-user-selected-user {
+  display: flex;
+  justify-content: center;
+}
+
+
+.cleaners-user-quote-list-title-date-select-date {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.cleaners-user-quote-list-title-img-frame {
+  width: 80%;
+  height: 60%;
+  background-color: #BBDCDD;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+}
+
+.cleaners-user-quote-list-title-img-selected {
+  width: 150px;
+  height: 150px;
+}
+
+.cleaners-user-quote-list-title-wrapper-rejected {
+  background-color: #F9F9FB;
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cleaners-user-quote-list-title-status-rejected {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+  color: var(--color-red);
+}
+
+
+.cleaners-user-quote-list-title-vertical-line-rejected-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cleaners-user-quote-list-title-location-rejected-location {
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-user-quote-list-title-place-rejected-place {
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-user-quote-list-title-user-rejected-user {
+  display: flex;
+  justify-content: center;
+}
+
+
+.cleaners-user-quote-list-title-date-rejected-date {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+
+.cleaners-user-quote-list-title-wrapper-pending {
+  background-color: #F9F9FB;
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cleaners-user-quote-list-title-status-pending {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+  color: var(--color-gray);
+}
+
+.cleaners-user-quote-list-title-vertical-line-pending-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cleaners-user-quote-list-title-location-pending-location {
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-user-quote-list-title-place-pending-place {
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-user-quote-list-title-user-pending-user {
+  display: flex;
+  justify-content: center;
+}
+
+
+.cleaners-user-quote-list-title-date-pending-date {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
 }

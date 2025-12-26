@@ -19,7 +19,7 @@ export default function OwnerRegistration() {
     emailLocal: '',
     emailDomain: '',
     password: '',
-    passwordConfirm: '',
+    passwordChk: '',
     phonePrefix: '010',
     phoneMiddle: '',
     phoneLast: '',
@@ -133,8 +133,8 @@ export default function OwnerRegistration() {
       newErrors.password = '비밀번호는 8자 이상이어야 합니다';
     }
 
-    if (formData.password !== formData.passwordConfirm) {
-      newErrors.passwordConfirm = '비밀번호가 일치하지 않습니다';
+    if (formData.password !== formData.passwordChk) {
+      newErrors.passwordChk = '비밀번호가 일치하지 않습니다';
     }
 
     if (!formData.phoneMiddle || !formData.phoneLast) {
@@ -157,12 +157,27 @@ export default function OwnerRegistration() {
 
     try {
       const submitData = {
-        ...formData,
+        name: formData.name,
+        gender: formData.gender,
         email: `${formData.emailLocal}@${formData.emailDomain}`,
+        password: formData.password,
+        passwordChk: formData.passwordChk,
         phone: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
-        storePhone: `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`,
-        profile: DEFAULT_PROFILE_IMAGE_URL // 프로필 사진 기본이미지
-      };
+        profile: DEFAULT_PROFILE_IMAGE_URL, // 프로필 사진 기본이미지
+      }
+
+      // 매장 이름이 입력된 경우에만 store 추가
+      if (formData.storeName || formData.address || (formData.storePhoneMiddle && formData.storePhoneLast)) {
+        submitData.store = {
+          name: formData.storeName,
+          addr1: formData.address,
+          addr2: formData.addressDetail,
+          addr3: '',
+          phoneNumber: formData.storePhoneMiddle && formData.storePhoneLast 
+            ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
+            : '', // 매장 전화번호가 필수가 아닐 경우 빈문자열 전송
+        };
+      }
 
       await dispatch(ownerStoreThunk(submitData)).unwrap();
 
@@ -294,16 +309,16 @@ export default function OwnerRegistration() {
 
           {/* 비밀번호 확인 */}
           <div className="owner-registration-form-group">
-            <label htmlFor="passwordConfirm">비밀번호 확인</label>
+            <label htmlFor="passwordChk">비밀번호 확인</label>
             <input
               type="password"
-              id="passwordConfirm"
-              name="passwordConfirm"
-              value={formData.passwordConfirm}
+              id="passwordChk"
+              name="passwordChk"
+              value={formData.passwordChk}
               onChange={handleChange}
               placeholder="비밀번호를 다시 입력하세요"
             />
-            {errors.passwordConfirm && <span className="owner-registration-error-text">{errors.passwordConfirm}</span>}
+            {errors.passwordChk && <span className="owner-registration-error-text">{errors.passwordChk}</span>}
           </div>
 
           {/* 전화번호 */}

@@ -1,216 +1,204 @@
-.btn-small-custom {
-  width: 150px;
-  height: 30px;
-  font-size: 16px;
-  background-color: var(--color-light-gray);
-  white-space: nowrap;
-}
-
 .cleaners-user-quote-list-details-container {
-  font-size: 16px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-} 
-
-.cleaners-user-quote-list-title-text {
-  font-size: 20px;
-  width: 90%;
-  margin: 0 auto;
+  gap: 1.5rem;
 }
 
-.cleaners-user-quote-list-details-wrapper {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  margin: 0 auto;
-  width: 90%;
-  height: auto;
+.cleaners-user-quote-list-details-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.cleaners-user-quote-list-details-items-box {
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
   display: flex;
-  gap: 100px;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-items-box-column {
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-base-info {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-around;
+}
+
+.cleaners-user-quote-list-details-like-status {
+  color: var(--color-blue);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.cleaners-user-quote-list-details-icon-set {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-items-box-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-input-box {
+  display: flex;
+  gap: 0.8rem;
   align-items: center;
 }
 
-.cleaners-user-quote-list-details-reservation-date-time-wrapper {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  width: 90%;
-  height: auto;
-  display: flex;
+.cleaners-user-quote-list-details-input-box > label {
+  width: 60px;
 }
 
-
-.cleaners-user-quote-list-details-datepicker-wrapper {
-  display: flex;
+.cleaners-user-quote-list-details-input-box > input {
   width: 100%;
 }
 
-.cleaners-user-quote-list-details-datepicker {
-  padding-left: 8px;
-  width: 270px;
-  height: 30px;
-  border-radius: 5px;
+.cleaners-user-quote-list-details-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.react-datepicker {
-  border: 1px solid var(--color-gray);
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-.react-datepicker__header {
-  background-color: #f5f5f5;
-  border-bottom: 1px solid var(--color-gray);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-.react-datepicker__current-month {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.react-datepicker__day-name {
-  color: #666;
-  font-weight: 500;
-}
-
-.react-datepicker__day {
-  width: 32px;
-  line-height: 32px;
-  border-radius: 6px;
-  margin: 2px;
-}
-
-.react-datepicker__day:hover {
-  background-color: #e0e0e0;
-}
-
-.react-datepicker__day--selected {
-  background-color: var(--color-gray);
-  color: #fff;
-}
-
-.react-datepicker__day--today {
-  font-weight: bold;
-  border: 1px solid var(--color-gray);
-}
-
-.datepicker-disabled {
-  background-color: #eee;
-  color: #999;
-  cursor: not-allowed;
-}
-
-.react-datepicker__day--disabled {
-  color: #ccc;
-}
-
-.btn-small-custom.btn-active {
-  background-color: var(--color-gray);
-  color: #fff;
-}
-
-fieldset.cleaners-user-quote-list-details-border-none {
-  border: none;
-  padding: 5px 15px 15px 15px;
-  width: 100%;
-}
-
-legend.cleaners-user-quote-list-details-border-none {
-  border: none;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-
-.cleaners-user-quote-list-details-quote-status {
-  color: var(--color-blue);
-  font-size: 24px;
-  font-weight: bold;  
-}
-
-.cleaners-user-quote-list-details-user-info {
-  font-size: 20px;
-}
-
-.cleaners-user-quote-list-details-list-reservation-date {
-  margin-top: 20px;
-  display: flex;
-  gap: 20px;
-}
-
-.cleaners-user-quote-list-details-reservation-time {
-  display: flex;
-  flex-direction: row;
-}
-
-.cleaners-user-quote-list-details-answer-display-none {
-  display: none;
-}
-
-.cleaners-user-quote-list-details-answer {
-  width: 100px;
-  height: 40px;
-  white-space: nowrap;
-  border: 1px solid var(--color-gray);
-  border-radius: 5px;
+.cleaners-user-quote-list-details-input-layout {
+  padding: 10px;
   background-color: var(--color-light-gray);
-  text-align: center;
-  line-height: 2;
-  padding: 2px 10px;
-  margin: 7px 10px;
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  flex: 1;
 }
 
-.cleaners-user-quote-list-details-answer-selected {
-  width: 100px;
-  height: 40px;
+.cleaners-user-quote-list-details-input-layout-full-width {
+  padding: 10px;
+  background-color: var(--color-light-gray);
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  flex: 1;
+}
+
+.cleaners-user-quote-list-details-input-layout:focus {
+  outline: none;
+}
+
+.cleaners-user-quote-list-details-attachment-button {
+  width: 7rem;
+  background-color: var(--color-light-gray);
   border: 1px solid var(--color-gray);
   border-radius: 5px;
-  background-color: var(--color-gray);
+  display: flex;
+  justify-content: center;
   text-align: center;
-  line-height: 2;
-  padding: 2px 10px;
-  margin: 7px 10px;
+  padding: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
 }
 
-.cleaners-user-quote-list-details-attachment-btn {
-  width: 90px;
-  height: 30px;
-  font-size: 16px;
-  margin: 10px 0;
-  border-radius: 5px;
-  white-space: nowrap;
-  border: none;
-  text-align: center;
-  background-color: var(--color-light-gray);
+.cleaners-user-quote-list-attachment-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 .cleaners-user-quote-list-details-attachment {
   display: none;
 }
 
+.cleaners-user-quote-list-detail-attachment-img {
+  cursor: pointer;
+}
+
+.cleaeners-user-list-details-ul-wrapper {
+  display: flex;
+}
+
 .cleaners-user-quote-list-details-ul-title {
+  display: grid;
+  place-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 3rem;
+}
+
+.cleaners-user-quote-list-details-border-none {
+  border: none;
+}
+
+.cleaners-user-quote-list-detail-li {
+  display: flex;
   list-style: none;
 }
 
-.cleaners-user-quote-list-form-width {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.cleaners-user-quote-list-details-toggle-details-wrapper {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-details-option-info {
+  margin-bottom: 0.5rem;
 }
 
 .cleaners-user-quote-list-details-answer-binary-layout {
-  padding: 10px 0;
+  display: grid;
 }
 
-.cleaners-user-quote-list-details-input-layout {
-  width: 270px;
-  height: 30px;
-  border-radius: 5px;
+.cleaners-user-quote-list-details-contents {
+  display: grid;
 }
+
+.cleaners-user-quote-list-details-answer-layout {
+  display: flex;
+}
+
+.cleaners-user-quote-list-details-input-box-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 1rem 0;
+}
+
+.cleaners-user-quote-list-details-answers {
+  display: grid;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-input-box-details-answer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-input-details-box {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.cleaners-user-quote-list-details-input-box-details > label {
+  width: 350px;
+}
+
+.cleaners-user-quote-list-details-input-box-details > input {
+  flex: 1;
+}
+
 
 .cleaners-user-quote-list-details-radio-ui {
   width: 16px;
@@ -221,8 +209,7 @@ legend.cleaners-user-quote-list-details-border-none {
   display: inline-block;
   margin-right: 10px;
 }
-
-/* 선택되었을 때: label이 selected 상태일 경우, 그 안의 원형만 변경 */
+  
 .cleaners-user-quote-list-details-answer-binary-selected .cleaners-user-quote-list-details-radio-ui {
   background-color: var(--color-gray);
   border-color: var(--color-gray);
@@ -233,51 +220,96 @@ legend.cleaners-user-quote-list-details-border-none {
   display: none;
 }
 
-.cleaners-user-quote-list-details-details-wrapper {
-  border: var(--color-gray) solid 2px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  width: 90%;
-  height: auto;
-  display: flex;
-}
-
-.cleaners-user-quote-list-details-first-card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.cleaners-user-quote-list-details-reservation-date {
-  display: flex;
-}
-
-.cleaners-user-quote-list-details-info {
-  padding-top: 15px;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.cleaners-user-quote-list-details-details {
-  padding-top: 15px;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.cleaners-user-quote-list-details-details-option-info {
-  color: var(--color-gray);
-}
-
-.cleaners-user-quote-list-details-reservation-date-title {
-  white-space: nowrap;
-  width: 64px;
-
-}
-
-.cleaners-user-quote-list-details-requests-title {
-  margin: 10px 0;
+.cleaners-user-quote-list-details-request {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .cleaners-user-quote-list-details-requests {
-  min-height: 200px;
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 10px;
+  font-size: 18px;
 }
+
+.cleaners-user-quote-list-details-answer-binary-column {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cleaners-profile-edit-button-small-custom3 {
+  width: 130px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--color-light-gray);
+  white-space: nowrap;
+  margin: 0 auto;
+}
+
+
+@media (max-width: 820px) {
+
+  .cleaners-user-quote-list-details-base-info {
+    display: grid;
+    grid-template-columns: 0.5fr 1.5fr;
+    justify-items: center;
+  }
+
+  .cleaners-user-quote-list-details-grid-1 {
+    grid-template-columns: 1fr;
+  }
+  
+}
+
+
+@media ( max-width: 720px ) {
+  
+  .cleaners-user-quote-list-details-contents {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  }
+
+  .cleaners-user-quote-list-details-contents .cleaners-user-quote-list-details-requests {
+    width: 100%;
+  }
+
+  .cleaners-user-quote-list-details-answer-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 1rem;
+  }
+
+    .cleaners-user-quote-list-details-input-layout-full-width {
+      width: 100%;
+    }
+  }
+
+
+@media ( max-width: 410px ) {
+ .cleaners-user-quote-list-details-items-box-column .cleaners-user-quote-list-details-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+ }
+
+
+.cleaners-user-quote-list-details-input-layout-column {
+  width: 100%;
+}
+
+.cleaners-user-quote-list-details-answer-layout .cleaners-user-quote-list-details-input-layout {
+  width: 100%;
+}
+
+.cleaners-user-quote-list-details-answer-layout {
+  width: 100%;
+  background-color: aliceblue;
+}
+}
+
+
+

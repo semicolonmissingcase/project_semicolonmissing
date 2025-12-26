@@ -6,13 +6,13 @@ import PostCreate from "../components/posts/PostCreate.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import Result from "../components/result/Result.jsx";
+import SocialLoginInfo from "../components/auth/SocialLoginInfo.jsx"; // 카카오 회원가입 후 가는 유저타입선택 페이지
 // 기사님 관련
 import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
 import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
-import CleanersQuoteListPreparation from "../components/cleaners/CleanersQuoteListPreparation.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
 import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
@@ -42,6 +42,11 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />
+      },
+      {
+        // 카카오 회원가입 후 가는 유저타입선택 페이지
+        path: '/socialinfo',
+        element: <SocialLoginInfo />
       },
       {
         path: '/registration',
@@ -87,11 +92,6 @@ const router = createBrowserRouter([
             // 마이페이지
             path: 'mypage',
             element: <CleanersMyPage />,
-          },
-          {
-            // 기사 견적 작성 페이지
-            path: 'quotelistpreparation',
-            element: <CleanersQuoteListPreparation />,
           },
           {
             // 기사 견적 작성 임시저장 페이지

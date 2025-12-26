@@ -45,7 +45,7 @@ export default function HeaderDropdown({ isOpen, onClose, user }) {
         {/* 메뉴 리스트 */}
         <div className="headerdropdown-menu-list">
           {/* 점주(owner) 메뉴 */}
-          {user?.userType === 'owner' && (
+          {user?.role === 'OWNER' && (
             <>
             <div className="headerdropdown-menu-item" onClick={ownerMyPage}>
               마이페이지
@@ -54,16 +54,13 @@ export default function HeaderDropdown({ isOpen, onClose, user }) {
           )}
 
           {/* 기사님(cleaner) 메뉴 */}
-          {user?.userType === 'cleaner' && (
+          {user?.role === 'CLEANER' && (
             <>
             <div className="headerdropdown-menu-item" onClick={cleanerMyPage}>
               마이페이지
             </div>
             </>
           )}
-
-          {/* 구분선 */}
-          <div className="headerdropdown-divider"></div>
 
           {/* 로그아웃 */}
           <div className="headerdropdown-menu-item headerdropdown-logout" onClick={handleLogout}>

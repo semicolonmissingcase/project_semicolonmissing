@@ -8,7 +8,7 @@
 }
 
 /* 헤더 왼쪽 */
-.header-left-container {
+.header-left-container {  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,9 +45,23 @@
   width: 5rem;
 }
 
-/* PC 전용 요소 (모바일에서 숨김) */
-.pc-only {
-  display: block; 
+.header-profile-default {
+  background-image: url("/icons/default-profile.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+}
+
+/* 드롭다운 부분 */
+.header-profile-container {
+  position: relative; 
+  display: flex;
+  align-items: center;
 }
 
 /* 모바일 햄버거 */
@@ -73,7 +87,7 @@
 @media (max-width: 820px) {  
   /* PC 전용 요소 숨기기 */
   .pc-only {
-    display: none !important;
+    display: none;
   }
 
   /* 햄버거 아이콘 보이기 */
