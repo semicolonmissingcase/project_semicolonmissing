@@ -64,29 +64,13 @@
   margin-bottom: 15px;
 }
 
-/* 기사(cleaner)는 왼쪽 정렬 */
-.chatroom-message-item.cleaner {
-  justify-content: flex-start;
-}
-
-/* 점주(owner)는 오른쪽 정렬 */
-.chatroom-message-item.owner {
+.chatroom-message-item.mine {
   justify-content: flex-end;
 }
 
-/* 기사 메시지 (왼쪽) 말풍선 */
-.chatroom-message-item.cleaner .chatroom-bubble {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-light-gray);
-  color: var(--color-black);
-  border-radius: 0 12px 12px 12px;
-}
-
-/* 점주 메시지 (오른쪽) 말풍선 */
-.chatroom-message-item.owner .chatroom-bubble {
+.chatroom-message-item.mine .chatroom-bubble {
   background-color: var(--color-light-blue);
-  color: var(--color-white);
-  border-radius: 12px 0 12px 12px;
+  border-radius: 15px 0px 15px 15px;
 }
 
 .chatroom-bubble {
@@ -94,6 +78,19 @@
   padding: 10px 15px;
   font-size: 14px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  word-break: break-word;
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+.chatroom-message-item.other {
+  justify-content: flex-start;
+}
+
+.chatroom-message-item.other .chatroom-bubble {
+  background-color: #ffffff; /* 흰색 */
+  border-radius: 0px 15px 15px 15px;
+  border: 1px solid #ddd;
 }
 
 /* 메세지 전송 시간 */

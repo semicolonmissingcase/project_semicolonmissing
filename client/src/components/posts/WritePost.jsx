@@ -4,7 +4,6 @@ export default function SmartEditor({ onContentChange }) {
   const editorRef = useRef([]);
 
   useEffect(() => {
-    console.log("1. useEffect 시작");
     
     const script = document.createElement('script');
     script.src = '/smarteditor2/dist/js/service/HuskyEZCreator.js';
@@ -12,10 +11,8 @@ export default function SmartEditor({ onContentChange }) {
     script.charset = 'utf-8';
     
     script.onload = () => {
-      console.log("2. 스크립트 로드 완료!");
       
       if (window.nhn && window.nhn.husky) {
-        console.log("4. 에디터 초기화 시작");
         
         // 화면 너비에 따라 에디터 높이 설정
         const isMobile = window.innerWidth <= 820;
@@ -33,7 +30,6 @@ export default function SmartEditor({ onContentChange }) {
           },
           fCreator: "createSEditor2",
           fOnAppLoad: function () {
-            console.log("5. 에디터 로드 완료!");
 
             // 모바일에서 에디터 높이 조정
             const editorFrame = document.querySelector('iframe[id*="smartEditor"]');

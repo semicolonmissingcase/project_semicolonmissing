@@ -9,6 +9,7 @@ import authRouter from './routes/auth.router.js';
 import errorHandler from './app/errors/errorHandler.js';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
 
@@ -19,6 +20,11 @@ import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
 import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 
 const app = express();
+app.use(cors({
+  origin: "http://localhost:5173", // 프론트 주소
+  credentials: true,
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
+}));
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
 app.use('/uploads', express.static('uploads'));
@@ -42,8 +48,9 @@ const httpServer = createServer(app);
 // 2. Socket.io 서버 객체 생성
 const io = new Server(httpServer, {
   cors: {
-    origin: "*", // 프론트엔드 주소에 맞춰 설정 (테스트 시 "*" 권장)
-    methods: ["GET", "POST"]
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
@@ -54,6 +61,5 @@ socketHandler(io);
 // -----------------------
 const PORT = parseInt(process.env.APP_PORT) || 3000;
 httpServer.listen(PORT, () => {
-  console.log(`🚀 서버가 ${PORT} 포트에서 실행 중입니다.`);
   console.log(`💬 실시간 채팅 기능 활성화됨`);
 });

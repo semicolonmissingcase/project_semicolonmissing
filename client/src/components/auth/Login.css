@@ -7,7 +7,7 @@
 }
 
 .login-logo {
-  width: 480px;
+  width: 100%;
   aspect-ratio: 70 / 9;
   margin: 2rem 0 4rem 0;
 }
@@ -79,7 +79,7 @@
 /* 태블릿 크기 (820px ~ 431px) */
 @media (max-width: 820px) {
   .login-logo {
-    width: 90%;
+    width: 100%;
     max-width: 400px;
     aspect-ratio: 70 / 9;
     margin: 2rem 0 3rem 0;

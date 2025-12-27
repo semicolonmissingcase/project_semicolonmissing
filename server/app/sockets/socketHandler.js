@@ -5,91 +5,106 @@
  */
 
 import chatService from '../services/chat.service.js';
+import jwtUtil from '../utils/jwt/jwt.util.js';
 
 export default (io) => {
-  // 연결된 사용자 추적
   const connectedUsers = new Map();
 
   io.on('connection', (socket) => {
-    console.log('✅ 새 사용자 연결:', socket.id);
+    console.log('✅ 새 소켓 연결:', socket.id);
 
-    // 사용자 인증
-    socket.on('authenticate', (userId) => {
-      connectedUsers.set(userId, socket.id);
-      socket.userId = userId;
-      console.log(`👤 사용자 ${userId} 인증 완료`);
+    /**
+     * 사용자 인증 (토큰 기반)
+     */
+    socket.on('authenticate', (data) => {
+      try {
+        const { token } = data;
+        if (!token) throw new Error('토큰이 없습니다.');
+
+        const claims = jwtUtil.getClaimsWithVerifyToken(token);
+        const userId = parseInt(claims.sub);
+        const userRole = claims.role;
+
+        // 소켓 객체에 유저 정보 저장
+        socket.userId = userId;
+        socket.userRole = userRole;
+        
+        connectedUsers.set(userId, socket.id);
+        console.log(`👤 사용자 ${userId}(${userRole}) 인증 완료`);
+        
+        socket.emit('authenticated', { success: true });
+      } catch (error) {
+        console.error('소켓 인증 실패:', error.message);
+        socket.emit('error', { message: '인증에 실패하였습니다.' });
+      }
     });
 
-    // 채팅방 입장
+    /**
+     * 채팅방 입장 (읽음 처리 연동)
+     */
     socket.on('join_room', async (roomId) => {
       try {
+        if (!socket.userId) throw new Error('인증되지 않은 사용자입니다.');
+
         socket.join(roomId);
         console.log(`🚪 ${socket.userId}가 방 ${roomId}에 입장`);
 
-        // 읽음 처리
+        // 읽음 처리 업데이트 및 상대방에게 알림
         await chatService.markAsRead(roomId, socket.userId);
-        socket.to(roomId).emit('messages_read', { roomId });
+        socket.to(roomId).emit('messages_read', { roomId, userId: socket.userId });
       } catch (error) {
-        console.error('채팅방 입장 오류:', error);
         socket.emit('error', { message: '채팅방 입장 실패' });
       }
     });
 
-    // 메시지 전송
+    /**
+     * 메시지 전송 (DB 저장 및 부활 로직 포함)
+     */
     socket.on('send_message', async (data) => {
       try {
-        const { roomId, content, senderId, senderRole } = data;
+        if (!socket.userId) throw new Error('인증 필요');
 
-        // 메시지 저장
+        const { roomId, content, type = 'TEXT' } = data;
         const newMessage = await chatService.saveMessage({
           room_id: roomId,
           content: content,
-          sender_id: senderId,
-          sender_role: senderRole
+          sender_id: socket.userId,
+          sender_role: socket.userRole,
+          type: type
         });
 
-        // 같은 방에 있는 모든 사용자에게 전송
+        // 방 전체에 실시간 메시지 전송
         io.to(roomId).emit('receive_message', newMessage);
 
-        console.log(`💬 메시지 전송: ${senderId} → 방 ${roomId}`);
       } catch (error) {
-        console.error('메시지 전송 오류:', error);
-        socket.emit('error', { message: error.message || '메시지 전송 실패' });
+        socket.emit('error', { message: error.message });
       }
     });
 
-    // 채팅방 나가기
+    /**
+     * 채팅방 나가기
+     */
     socket.on('leave_room', async (data) => {
       try {
-        const { roomId, userName } = data;
+        const { roomId } = data;
+        if (!socket.userId) return;
+
+        // DB에 개별 나가기 시간(leavedAt) 기록
+        await chatService.leaveRoom(roomId, socket.userRole);
         
-        // 시스템 메시지 저장
-        await chatService.leaveRoom(roomId, userName);
-        
-        // 방에 있는 다른 사람들에게 알림
-        io.to(roomId).emit('user_left', {
-          message: `${userName}님이 채팅방을 나갔습니다.`,
-          roomId
-        });
-        
-        // 소켓 방 나가기
+        // 소켓 방 퇴장
         socket.leave(roomId);
-        console.log(`🚪 ${userName}가 방 ${roomId}에서 퇴장`);
+        console.log(`🚪 ${socket.userId}가 방 ${roomId}에서 나감 (leavedAt 기록)`);
+        
+        socket.emit('left_room', { roomId, success: true });
       } catch (error) {
-        console.error('채팅방 나가기 오류:', error);
-        socket.emit('error', { message: '채팅방 나가기 실패' });
+        socket.emit('error', { message: '방 나가기 처리 실패' });
       }
     });
 
-    // 타이핑 중 알림
-    socket.on('typing', (data) => {
-      socket.to(data.roomId).emit('user_typing', {
-        userId: socket.userId,
-        isTyping: data.isTyping
-      });
-    });
-
-    // 연결 해제
+    /**
+     * 연결 해제
+     */
     socket.on('disconnect', () => {
       if (socket.userId) {
         connectedUsers.delete(socket.userId);
