@@ -1,285 +1,283 @@
-.cleaners-reservation-container {
-  padding: 1.5rem;
+.cleaners-registration-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-}
-
-.cleaners-reservation-items-box {
-  border: 1px solid var(--color-gray);
-  border-radius: 15px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-}
-
-.cleaners-reservation-layout{
-  display: grid;
-}
-
-.cleaners-reservation-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
+  
 }
 
-
-.cleaners-reservation-layout-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 1rem;
+.ice-doctor-logo1 {
+  width: 35rem;
+  aspect-ratio: 70 / 9;
+  margin: 2rem 0 4rem 0;
 }
 
-.cleaners-reservation-profile-title {
-  display: flex;
-  margin-top: 1rem;
+.cleaners-registration-form {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.cleaners-reservation-input {
+/* 섹션 */
+.cleaners-registration-section {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-light-gray);
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  
+}
+
+.cleaners-registration-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-dark-blue);
+  margin: 0 0 25px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-light-gray);
+}
+
+/* 폼 그룹 */
+.cleaners-registration-form-group {
+  margin-bottom: 20px;
+}
+
+.cleaners-registration-form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-dark-blue);
+  margin-bottom: 8px;
+}
+
+.cleaners-registration-form-group input,
+.cleaners-registration-form-group select {
   width: 100%;
-  height: 43px;
-  border: 1px solid var(--color-gray);
-  font-size: 18px;
-  border-radius: 5px;
+  padding: 12px 15px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
 }
 
-.cleaners-reservation-layout-flex-column {
-  padding: 10px;
+.cleaners-registration-form-group input:focus,
+.cleaners-registration-form-group select:focus {
+  outline: none;
+  border-color: var(--color-blue);
+}
+
+.cleaners-registration-form-group input::placeholder {
+  color: var(--color-gray);
+}
+
+/* 에러 텍스트 */
+.cleaners-registration-error-text {
+  display: block;
+  color: var(--color-red);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* 성별 체크박스 (버튼 스타일) */
+.cleaners-registration-gender-buttons {
   display: flex;
-  flex-direction: column;
   gap: 10px;
 }
 
-.cleaners-reservation-layout-flex-column > label {
-  border: soild 1px var(--color-gray);
-  border: none;
-  font-size: 18px;
-  border-radius: 5px;
-  width: 270px;
-}
-
-.cleaners-reservation-attachment {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.cleaners-reservation-attachment-button {
-  margin-top: 1rem;
-  width: 90px;
-  height: 30px;
-  font-size: 16px;
-  border-radius: 5px;
-  white-space: nowrap;
-  border: none;
-  text-align: center;
-  background-color: var(--color-light-gray);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cleaners-reservation-attachment-input {
-  display: none;
-}
-
-.cleaners-reservation-button-small-custom2 {
-  width: 80px;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: var(--color-light-gray);
-  white-space: nowrap;
-}
-
-.cleaners-reservation-buttons {
-  display: flex;
-  gap: 60px;
-  justify-content: end;
-  padding: 0 30px 30px 0;
-}
-
-.cleaners-reservation-region-picker {
+.cleaners-registration-gender-checkbox {
+  flex: 1;
   position: relative;
+  cursor: pointer;
 }
 
-.cleaners-reservation-region-panel {
+.cleaners-registration-gender-checkbox input[type="radio"] {
   position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  background: #fff;
-  border: 1px solid var(--color-gray);
-  border-radius: 15px;
-  z-index: 100;
-  overflow: hidden;
-  transition: width 0.3s ease;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-.cleaners-reservation-region-panel.is-left-only {
-  width: 160px;
+.cleaners-registration-gender-checkbox span {
+  display: block;
+  padding: 12px;
+  border: 2px solid var(--color-light-gray);
+  border-radius: 10px;
+  background-color: var(--color-white);
+  color: var(--color-gray);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
 }
 
-.cleaners-reservation-region-panel.is-split {
-  width: 520px;
-  max-width: 90vw;
-  min-width: 270px;
+.cleaners-registration-gender-checkbox:hover span {
+  border-color: var(--color-blue);
 }
 
-.cleaners-reservation-region-panel-body {
+.cleaners-registration-gender-checkbox.active span {
+  background-color: var(--color-dark-blue);
+  border-color: var(--color-dark-blue);
+  color: var(--color-white);
+}
+
+/* 이메일 입력 */
+.cleaners-registration-email-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cleaners-registration-email-input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.cleaners-registration-email-separator {
+  font-size: 18px;
+  color: var(--color-gray);
+  font-weight: 600;
+}
+
+.cleaners-registration-email-domain-select {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 전화번호 입력 */
+.cleaners-registration-phone-inputs {
   display: grid;
-  height: 100%;
-}
-
-.cleaners-reservation-region-panel-body.is-split {
-  grid-template-columns: 130px 1fr;
-}
-
-.cleaners-reservation-region-panel-body.is-left-only {
-  grid-template-columns: 1fr;
-}
-
-.cleaners-reservation-modal-text-button {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: 100px auto 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.cleaners-reservation-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;     
-  justify-content: center; 
-  z-index: 9999;  
-}
-
-.cleaners-reservation-last-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;     
-  justify-content: center; 
-  z-index: 9999;    
-}
-
-.cleaners-reservation-modal-box {
-  width: min(360px, 90%);
-  height: min(200px, 90%);
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  font-size: 16px;
-}
-
-.cleaners-reservation-last-modal-box {
-  width: min(360px, 90%);
-  height: min(200px, 90%);
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  font-size: 16px;
-}
-
-.cleaners-reservation-modal-button {
-  width: 80px;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: var(--color-light-gray);
-  white-space: nowrap;
-}
-
-.cleaners-registration-modal-cancel-submit-text-button {
-  padding-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.cleaners-reservation-modal-button-row {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
+  gap: 8px;
   width: 100%;
 }
 
-.cleaners-registration-ul-title {
-  list-style: none;
+.cleaners-registration-phone-prefix {
+  padding: 12px 15px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: var(--color-white);
+  width: 100%;
 }
 
-@media (min-width: 1200px) {
+.cleaners-registration-phone-input {
+  padding: 12px 15px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+}
 
-  .cleaners-reservation-region-panel.is-left-only {                                                              
-  width: 250px;    
+.cleaners-registration-phone-separator {
+  font-size: 18px;
+  color: var(--color-gray);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 주소 검색 */
+.cleaners-registration-address-search-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.cleaners-registration-address-search-wrapper input {
+  flex: 1;
+}
+
+.cleaners-registration-address-search-btn {
+  white-space: nowrap;
+  border-radius: 10px;
+}
+
+/* 회원가입 버튼 */
+.cleaners-registration-form > .btn-big {
+  width: 100%;
+  margin: 1rem 0 2rem 0;
+}
+
+/* 반응형 */
+@media (max-width: 820px) {
+  .cleaners-registration-background {
+    padding: 20px 10px;
+    padding-bottom: 100px; /* 모바일 하단 네비게이션 공간 */
   }
-  .cleaners-reservation-region-panel.is-split {                                                                  
-  width: 420px !important;  
+
+  .cleaners-registration-container {
+    padding: 30px 20px;
+  }
+
+  .cleaners-registration-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  .cleaners-registration-section {
+    padding: 20px;
+  }
+
+  .cleaners-registration-section-title {
+    font-size: 18px;
   }
 }
 
-@media (max-width: 1200px) and (min-width: 830px) {
-  .cleaners-reservation-region-panel.is-split {                                                                  
-  width: 360px !important;      
-}   
-}
-
-@media (max-width: 830px) and (min-width: 745px) {
-  .cleaners-reservation-region-panel.is-split {                                                                  
-  width: 500px !important;      
-}   
-}
-
-@media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
-  .cleaners-reservation-region-panel.is-left-only {                                                              
-  width: 270px;                                                                                              
-}
-  .cleaners-reservation-region-panel.is-split {                                                                  
-  width: 420px !important;  
-}                                                                                             
-}                                                                                           
-                                                                                                            
-@media ( max-width: 536px ) {  
-
-  .cleaners-reservation-region-picker-trigger,
-  .cleaners-reservation-input {                                                                  
-  width: 95% !important;                                                                                             
-  }    
-  
-  .cleaners-reservation-layout-row {
-    grid-template-columns: 1fr;
+@media (max-width: 480px) {
+  .cleaners-registration-background {
+    padding: 15px 10px;
   }
 
-  .cleaners-reservation-layout-center {
-    display: grid;
-    place-items: center;
+  .cleaners-registration-container {
+    padding: 20px 15px;
+    border-radius: 10px;
   }
-}                                                                                                                
-             
-@media (max-width: 535px) {                                              
-  .cleaners-reservation-region-panel.is-split {                                                                  
-  width: 250px;           
-  }
-}
 
-@media (max-width: 370px) {
-.cleaners-reservation-region-panel.is-split {                                                                  
-  width: 210px;           
+  .cleaners-registration-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .cleaners-registration-section {
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .cleaners-registration-section-title {
+    font-size: 16px;
+  }
+
+  .cleaners-registration-form-group input,
+  .cleaners-registration-form-group select {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .cleaners-registration-gender-checkbox span {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .cleaners-registration-email-inputs {
+    flex-wrap: wrap;
+  }
+
+  .cleaners-registration-phone-inputs {
+    flex-wrap: wrap;
+  }
+
+  .cleaners-registration-address-search-wrapper {
+    flex-direction: column;
+  }
+
+  .cleaners-registration-address-search-btn {
+    width: 100%;
   }
 }

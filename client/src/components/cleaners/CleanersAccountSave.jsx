@@ -1,69 +1,13 @@
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
+import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal";
 import './CleanersAccountSave.css';
+import { IoMdAddCircleOutline } from "react-icons/io";
 import { RiArrowDropDownFill } from "react-icons/ri";
 import { RiArrowDropUpFill } from "react-icons/ri";
 
 
-function ConfirmModal({ open, message, onClose, onConfirm }) {
 
-  useEffect(() => {
-    if (!open) return;
 
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.    removeEventListener("keydown", onKeyDown);
-  }, [open, onClose]);
-
-  if (!open) return null;
-
-  return createPortal(
-    <div
-      className="cleaners-profile-edit-last-modal-backdrop"
-      role="dialog"
-      aria-modal="true"
-      onMouseDown={(e) => {
-        // 바깥 클릭 닫기(원하면 제거 가능)
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div className="cleaners-profile-edit-last-modal-box">
-
-        <div className="cleaners-profile-eidt-modal-cancel-submit-text-button">
-        <div className="cleaners-profile-edit-modal-text">
-          {message}
-        </div>
-
-        <div className="cleaners-profile-edit-modal-button-row">
-          <button
-            className="cleaners-profile-edit-modal-button"
-            type="button"
-            onClick={onClose}
-            style={{background: "var(--color-light-gray", borderRadius: "5px"}}
-          >
-            취소
-          </button>
-
-          <button
-            className="cleaners-profile-edit-modal-button"
-            type="button"
-            onClick={onConfirm}
-            autoFocus
-            style={{background: "var(--color-light-gray", borderRadius: "5px"}}
-          >
-            확인
-          </button>
-        </div>
-        </div>
-
-      </div>
-    </div>,
-    document.body
-  );
-}
 
 function CleanerAccountEdit () {
 
@@ -168,7 +112,26 @@ function CleanerAccountEdit () {
 
       <div className="cleaners-account-save-form-edit">
 
-      
+      <div className="cleaners-account-save-new-account-title-wrapper">
+
+          <div className="cleaners-account-save-add-button"
+            onClick={toggleAddAccount}>
+          <div className={
+            selectAddAccount
+              ? "cleaners-account-save-toggle-updown-form-contents-toggledown" 
+              : "cleaners-account-save-toggle-updown-form-contents"
+          }
+          >
+          <div className="cleaners-account-save-add-button-text">
+          <IoMdAddCircleOutline size={20} />
+          <span className="cleaners-account-save-new-accounts">신규 정산 계좌 추가</span>
+          </div>
+          <p className="cleaners-account-save-account-message">정산에 사용할 계좌를 선택해 주세요.</p>
+        </div>
+      </div>
+      </div>
+
+      {selectAddAccount && (
   <div className="cleaners-account-save-form-wrapper">
     <form className="cleaners-account-save-form">
 
@@ -219,7 +182,7 @@ function CleanerAccountEdit () {
 
     </form>
     </div>
-
+  )}  
       </div>
       </div>
 
@@ -235,6 +198,7 @@ function CleanerAccountEdit () {
       <div className="cleaners-account-save-info-account">
         
         <div className="cleaners-account-save-account-info-title" onClick={toggleMenuInfo}>
+
           <button
             type="button"
           >
@@ -255,12 +219,13 @@ function CleanerAccountEdit () {
           }
         >
         <div className="cleaners-account-save-account-settlement-criteria-guide">
+
           <span>
             정산 기준 안내
           </span>
           
           <p>
-            - 매월 11일 기준으로 이전달 30(31)일까지의 정산금이 지급됩니다.
+            - 매월 11일 기준으로 이전달 30(31)일까지의 정산금이 지급됩니다.(임시)
           </p>
           <p>
             - 정산일이 공휴일인 경우 전일에 지급됩니다.
@@ -271,13 +236,9 @@ function CleanerAccountEdit () {
       </div>
       </div>
 
-      <div className="cleaners-account-save-account-modal-page">
-        <p>저장하시겠습니까?(임시)</p>
       </div>
 
-      </div>
-
-       <ConfirmModal
+       <CleanersModalConfirmModal
           open={confirmOpen}
           message={
             confirmType === "cancel" ? (
@@ -286,7 +247,7 @@ function CleanerAccountEdit () {
                 <br />
                 작성을 취소하시겠습니까?
               </>
-            ) : (
+            ) : ( 
               <>
                 계좌 정보를 수정하시겠습니까?
               </>

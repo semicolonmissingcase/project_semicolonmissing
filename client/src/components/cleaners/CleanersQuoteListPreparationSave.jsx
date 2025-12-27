@@ -6,6 +6,20 @@ import { RiArrowDropUpFill } from "react-icons/ri";
 
 function CleanersQuoteListPreparation() {
 
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      border: 0,
+      // This line disable the blue border
+      boxShadow: 'none'
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: 'transparent', // Remove blue on focus/hover and selection
+      color: '#000', // Ensure text color is black
+    }),
+  };
+
   const options = [
   { 
     value: "price_desc", 
@@ -92,6 +106,7 @@ function CleanersQuoteListPreparation() {
       <div className="cleaners-quote-list-preparation-wrapper">
         <div className="cleaners-quote-list-preparation-quote-list-filter-dropdown">
           <Select
+          styles={customStyles}
           value={selectedOption}
           onChange={handleSelectChange}
           options={options}

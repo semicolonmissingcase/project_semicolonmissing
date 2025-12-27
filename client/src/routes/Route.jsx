@@ -64,17 +64,17 @@ const router = createBrowserRouter([
             path: 'owners',
             element: <OwnerRegistration />,
           },
+           {
+            // 기사 회원가입 페이지
+            path: 'cleaners',
+            element: <CleanersRegistration />
+           },
         ]
       },
       {
         path: '/cleaners',
         element: <Outlet />,
         children: [
-           {
-            // 회원가입 페이지
-            path: 'registration',
-            element: <CleanersRegistration />
-           },
            {
             // 계좌 수정 페이지
             path: 'accountedit',

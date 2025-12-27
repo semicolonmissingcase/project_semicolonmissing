@@ -15,21 +15,34 @@
   width: 100%;
 }
 
-.cleaners-profile-edit-layout{
+.cleaners-profile-edit-layout {
   display: grid;
 }
+
 
 .cleaners-profile-edit-title {
   font-size: 1.5rem;
   font-weight: bold;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  cursor: pointer;
+}
+
+.cleaners-profile-edit-image {
+  display: grid;
+  border-radius: 5px;
+}
+
+.cleaners-profile-edit-image-edit {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .cleaners-profile-edit-layout-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
 }
 
@@ -51,6 +64,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 
 .cleaners-profile-edit-layout-flex-column > label {
@@ -58,7 +72,7 @@
   border: none;
   font-size: 18px;
   border-radius: 5px;
-  width: 270px;
+  width: 100%;
 }
 
 .cleaners-profile-edit-attachment {
@@ -102,11 +116,11 @@
   padding: 0 30px 30px 0;
 }
 
-.cleaenrs-profile-edit-region-picker {
+.cleaners-profile-edit-region-picker {
   position: relative;
 }
 
-.cleaenrs-profile-edit-region-panel {
+.cleaners-profile-edit-region-panel {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -118,11 +132,11 @@
   transition: width 0.3s ease;
 }
 
-.cleaenrs-profile-edit-region-panel.is-left-only {
+.cleaners-profile-edit-region-panel.is-left-only {
   width: 160px;
 }
 
-.cleaenrs-profile-edit-region-panel.is-split {
+.cleaners-profile-edit-region-panel.is-split {
   width: 520px;
   max-width: 90vw;
   min-width: 270px;
@@ -203,7 +217,7 @@
   white-space: nowrap;
 }
 
-.cleaners-profile-eidt-modal-cancel-submit-text-button {
+.cleaners-profile-edit-modal-cancel-submit-text-button {
   padding-top: 3rem;
   display: flex;
   flex-direction: column;
@@ -219,66 +233,70 @@
   width: 100%;
 }
 
-.cleaners-user-quote-list-details-ul-title {
+.cleaners-profile-edit-ul-title {
   list-style: none;
 }
 
 @media (min-width: 1200px) {
 
-  .cleaenrs-profile-edit-region-panel.is-left-only {                                                              
+  .cleaners-profile-edit-region-panel.is-left-only {                                                              
   width: 250px;    
   }
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
   width: 420px !important;  
   }
 }
 
 @media (max-width: 1200px) and (min-width: 830px) {
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
   width: 360px !important;      
 }   
 }
 
-@media (max-width: 830px) and (min-width: 745px) {
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
-  width: 500px !important;      
+@media (max-width: 830px) and (min-width: 714px) {
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 320px !important;      
 }   
 }
 
-@media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
-  .cleaenrs-profile-edit-region-panel.is-left-only {                                                              
-  width: 270px;                                                                                              
+@media (max-width: 714px) {
+  .cleaners-profile-edit-profile-title {
+    justify-content: center;
+  }
+
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 80% !important;    
+ }  
 }
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
-  width: 420px !important;  
-}                                                                                             
+
+@media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
+  .cleaners-profile-edit-region-panel.is-left-only {                                                              
+  width: 270px;                                                                                              
+} 
+
+.cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 80% !important;    
+}  
+
 }                                                                                           
                                                                                                             
-@media ( max-width: 536px ) {  
-
-  .cleaenrs-profile-edit-region-picker-trigger,
+ @media ( max-width: 534px ) {
+  .cleaners-profile-edit-region-picker-trigger,
   .cleaners-profile-edit-input {                                                                  
-  width: 95% !important;                                                                                             
+  width: 100%;                                                                                             
   }    
   
-  .cleaenrs-profile-edit-layout-row {
+  .cleaners-profile-edit-layout-row {
     grid-template-columns: 1fr;
   }
 
-  .cleaners-profile-edit-layout-center {
-    display: grid;
-    place-items: center;
-  }
-}                                                                                                                
-             
-@media (max-width: 535px) {                                              
-  .cleaenrs-profile-edit-region-panel.is-split {                                                                  
-  width: 250px;           
-  }
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 250px; 
+  }           
 }
 
 @media (max-width: 370px) {
-.cleaenrs-profile-edit-region-panel.is-split {                                                                  
-  width: 210px;           
+.cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 200px !important;           
   }
 }

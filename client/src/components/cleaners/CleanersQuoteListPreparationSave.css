@@ -1,4 +1,3 @@
-
 .cleaners-quote-list-preparation-save-container {
   padding: 1.5rem;
   display: flex;
@@ -77,4 +76,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.cleaners-select__option:active {
+  background-color: var(--color-light-gray) !important;
 }

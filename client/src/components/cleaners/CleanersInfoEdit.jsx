@@ -1,7 +1,7 @@
-import React from 'react';
-import './CleanersInfoEdit.css';
-import { useState } from "react";
 
+import { useState } from "react";
+import { CleanersModalConfirmModal } from './cleaners-modal/CleanersModalConfirmModal';
+import './CleanersInfoEdit.css';
 
 function CleanersInfoEdit () {
 
@@ -25,6 +25,42 @@ function CleanersInfoEdit () {
 
   };
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmType, setConfirmType] = useState(null); // "cancel" | "save"
+
+  const openCancelModal = () => {
+    setConfirmType("cancel");
+    setConfirmOpen(true);
+  };
+
+  const openSaveModal = () => {
+    setConfirmType("save");
+    setConfirmOpen(true);
+  };
+
+  const closeConfirmModal = () => {
+    setConfirmOpen(false);
+    setConfirmType(null);
+  };
+
+  const onConfirm = () => {
+    if (confirmType === "cancel") {
+      // TODO: 취소 확정 동작 (예: 뒤로가기, 페이지 이동, 상태 초기화 등)
+      // navigate(-1) 여기서 처리
+      closeConfirmModal();
+      return;
+    }
+
+    if (confirmType === "save") {
+      // TODO: 저장 확정 동작 (API 호출, submit 등)
+      // handleSubmit() 여기서 호출
+      closeConfirmModal();
+      return;
+    }
+
+    closeConfirmModal();
+  };
+
 
 
   return (
@@ -32,7 +68,7 @@ function CleanersInfoEdit () {
       <div className="cleanerinfoedit-wrapper">
         <h1 className="cleanerinfoedit-title">정보 수정</h1>
 
-        <section className="cleanerinfoedit-form">
+        <form className="cleanerinfoedit-form">
           {/* 아이디 (읽기 전용) */}
           <div className="cleanerinfoedit-group">
             <label>아이디:</label>
@@ -134,14 +170,14 @@ function CleanersInfoEdit () {
 
       <div className="cleaners-info-edit-button-direction-row">
       <button className=" cleaners-info-edit-btn-small-custom2" type="button">탈퇴</button>
-      <button className=" cleaners-info-edit-btn-small-custom2" type="button">취소</button>
-      <button className=" cleaners-info-edit-btn-small-custom2" type="submit">저장</button>
+      <button className=" cleaners-info-edit-btn-small-custom2" type="button" onClick={openCancelModal}>취소</button>
+      <button className=" cleaners-info-edit-btn-small-custom2" type="submit" onClick={openSaveModal}>저장</button>
       </div>
           {/* 휴대전화 (선택-4자리-4자리) */}
           <div className="cleanerinfoedit-group">
             <label>휴대전화:</label>
             <div className="cleanerinfoedit-phone-container">
-              <select value={phonePrefix} onChange={(e) => setPhonePrefix(e.target.value)}>
+              <select>
                 <option value="010">010</option>
                 <option value="011">011</option>
                 <option value="016">016</option>
@@ -169,14 +205,34 @@ function CleanersInfoEdit () {
             </div>
 
             <div className="cleanerinfoedit-action-btns">
-              <button type="button" className="btn-medium bg-light-gray">수정 취소</button>
-              <button type="button" className="btn-medium bg-blue">수정 완료</button>
+              <button type="button" onClick={openCancelModal}>수정 취소</button>
+        <button type="submit" onClick={openSaveModal}>수정 완료</button>
             </div>
           </div>
-        </section>
+        </form>
 
           
       </div>
+
+       <CleanersModalConfirmModal
+                open={confirmOpen}
+                message={
+                  confirmType === "cancel" ? (
+                    <>
+                      수정 내용이 삭제됩니다.
+                      <br />
+                      작성을 취소하시겠습니까?
+                    </>
+                  ) : ( 
+                    <>
+                      계좌 정보를 수정하시겠습니까?
+                    </>
+                  )
+                }
+                onClose={closeConfirmModal}
+                onConfirm={onConfirm}
+              />           
+
     </div>
   );
 }
