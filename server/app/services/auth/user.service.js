@@ -4,6 +4,7 @@
  * 251222 jae init
  */
 
+import axios from 'axios';
 import bcrypt from 'bcrypt';
 import ROLE from '../../middlewares/auth/configs/role.enum.js'
 import ownerRepository from '../../repositories/auth/owner.repository.js';
@@ -152,7 +153,7 @@ async function reissue(token) {
     await user.save({transaction: t});
 
     // 8. DB에서 가져온 순수 데이터만 추출 
-    const userResponse = user.toJson();
+    const userResponse = user.toJSON();
 
     // DB에는 없는 'role' 정보를 수동으로 주입 (프론트 권한 체크용)
     userResponse.role = payloadData.role;
@@ -167,6 +168,7 @@ async function reissue(token) {
 } 
 
 async function socialKakao(code) {
+ try {
   // 1. 토큰 획득 요청 
   const tokenRequest = socialKakaoUtil.getTokenRequest(code);
   const resultToken = await axios.post(
@@ -182,9 +184,14 @@ async function socialKakao(code) {
     { headers: userRequst.headers}
   );
 
+  const kakaoAccount = resultUser.data.kakao_account;
   const email = resultUser.data.kakao_account.email;
   const profile = resultUser.data.kakao_account.profile.thumbnail_image_url;
   const nick = resultUser.data.kakao_account.profile.nickname;
+
+  if (!email) {
+    throw myError('카카오 계정에 이메일 정보가 없습니다.', NOT_REGISTERED_ERROR);
+  }
 
   // 2. 양쪽 Repository에서 유저 찾기
     let user = await ownerRepository.findByEmail(null, email);
@@ -200,18 +207,13 @@ async function socialKakao(code) {
   if(!user) {
     return {
       isRegistered: false, // 아직 우리 DB에 점주/기사로 등록 안 됨
-      kakaoInfo: {
-        email,
-        profile,
-        nick,
-        provider: PROVIDER.KAKAO
-      }
+      kakaoInfo: { email, profile, nick, provider: PROVIDER.KAKAO }
     };
   }
 
   // 4. 기존 유저인 경우 (로그인 처리)
   const result = await db.sequelize.transaction(async t => {
-    const payloadData = { id: user_id, role: currentRole };
+    const payloadData = { id: user.id, role: currentRole };
     const accessToken = jwtUtil.generateAccessToken(payloadData);
     const refreshToken = jwtUtil.generateRefreshToken(payloadData);
 
@@ -221,7 +223,7 @@ async function socialKakao(code) {
     // sequelize 객체의 메서드 사용(reissue 코드 스타일 반영)
     await user.save({transaction: t});
 
-    const userResponse = user.toJson();
+    const userResponse = user.toJSON();
     userResponse.role = currentRole;
 
     return {
@@ -233,6 +235,18 @@ async function socialKakao(code) {
   });
   
   return result;
+} catch (error) {
+    // 🔥 이 부분이 핵심입니다! 터미널에 찍히는 내용을 확인하세요.
+    if (error.response) {
+      console.error("===== 카카오 API 에러 상세 =====");
+      console.error("상태 코드:", error.response.status); // 401
+      console.error("에러 내용:", error.response.data);   // 여기에 KOE320 같은 코드가 찍힙니다.
+      console.error("================================");
+    } else {
+      console.error("일반 에러 발생:", error.message);
+    }
+    throw error; // 에러를 다시 던져서 컨트롤러에서도 알 수 있게 합니다.
+  }
 }
 
 async function completeSocialSignup(signupData) {

@@ -9,7 +9,7 @@ import { application } from "express";
 function getAuthorizeURL() {
   const params = {
     client_id: process.env.SOCIAL_KAKAO_REST_API_KEY,
-    redirct_uri: `${process.env.APP_URL}${process.env.SOCIAL_KAKAO_CALLBACK_URL}`,
+    redirect_uri: `${process.env.APP_URL}${process.env.SOCIAL_KAKAO_CALLBACK_URL}`,
     response_type: 'code',
     // prompt: 'login', 
     // 테스트 용이성을 위해서 잠시 지워둠.
@@ -27,7 +27,7 @@ function getTokenRequest(code) {
   const params = {
     grant_type: 'authorization_code',
     client_id: process.env.SOCIAL_KAKAO_REST_API_KEY,
-    redirct_uri: `${process.env.APP_URL}${process.env.SOCIAL_KAKAO_CALLBACK_URL}`,
+    redirect_uri: `${process.env.APP_URL}${process.env.SOCIAL_KAKAO_CALLBACK_URL}`,
     code: code
   }
 
