@@ -27,7 +27,11 @@ export default function ReservationCompletedList() {
           {/* 매장명 */}
           <div className="reservation-completedlist-card-row">
             <span className="reservation-completedlist-card-label">매장명</span>
-            <span className="reservation-completedlist-card-value">스벅동성로</span>
+            <div className="completedjoblist-card-place">
+              <FaMapMarkerAlt style={{ fontSize: '1rem', color: '#7C7F88', cursor: "pointer" }}
+              onClick={openKakaoMap}/>
+              <span className="completedjoblist-card-value">스벅동성로</span>
+            </div>
           </div>
 
           {/* 시간 */}
@@ -40,9 +44,6 @@ export default function ReservationCompletedList() {
           <div className="reservation-completedlist-card-row">
             <span className="reservation-completedlist-card-label">위치</span>
             <span className="reservation-completedlist-card-value">대구 광역시 중구 어쩌구</span>
-            <FaMapMarkerAlt style={{ fontSize: '1rem', color: '#7C7F88' }}
-              onClick={openKakaoMap}
-            />
           </div>
 
           {/* 점주 이름 */}

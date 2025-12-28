@@ -12,11 +12,22 @@ function CleanersProfileEdit() {
 
 
   function handleFileChange(e) {
-    const selectedFiles = Array.from(e.target.files).map((file) => ({
+    const selectedFiles = Array.from(e.target.files);
+    const allowedMimeTypes = ["image/jpeg", "image/png"];
+
+    const validFiles = selectedFiles.filter(file => {
+      return allowedMimeTypes.includes(file.type);
+    });
+
+    if (validFiles.length < selectedFiles.length) {
+      alert("jpg, jpeg, png 파일만 첨부 가능합니다.");
+    }
+    
+    const filesForState = validFiles.map((file) => ({
       name: file.name,
       url: URL.createObjectURL(file),
     }));
-    setFiles(selectedFiles);
+    setFiles(filesForState);
   }
 
   function handleProfileImageChange(e) {

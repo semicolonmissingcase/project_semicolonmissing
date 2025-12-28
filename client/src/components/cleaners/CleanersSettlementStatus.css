@@ -1,0 +1,389 @@
+
+.cs-box-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+/* --- Top Summary Box --- */
+.cs-top-summary {
+  margin-bottom: 24px;
+  text-align: center;
+}
+.cs-top-summary-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4a5568;
+  margin: 0;
+}
+.cs-top-summary-date {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 8px 0 16px 0;
+}
+.cs-top-summary-amounts {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  font-size: 18px;
+}
+.cs-top-summary-amount-item {
+  display: flex;
+  gap: 8px;
+}
+.cs-top-summary-amount-item dt {
+  color: #718096;
+  font-weight: 500;
+}
+.cs-top-summary-amount-item dd {
+  font-weight: 600;
+}
+
+
+/* --- Monthly Summary --- */
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr; /* Give calendar more space */
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* --- Calendar (Left) --- */
+.cs-caption {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 10px;
+}
+.cs-nav-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #4a5568;
+}
+.cs-caption-center { text-align: center; }
+.cs-caption-year { font-size: 18px; font-weight: 600; }
+.cs-caption-month { font-size: 24px; font-weight: 700; }
+
+/* DayPicker specific styles */
+.rdp {
+  width: 100%;
+  max-width: 380px;
+}
+.rdp-root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.rdp-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+}
+table.rdp-month_grid {
+  width: 360px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+.rdp-months {
+  display: flex;
+  width: 100%;
+}
+nav.rdp-nav {
+  display: none;
+}
+tr.rdp-weekdays {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 2.2rem;
+}
+tbody.rdp-weeks {
+  display: inline-block;
+  margin: 0 auto;
+}
+/* 주의 배경색과 호버 */
+.rdp-week {
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative; /* 배지 기준점 */
+}
+
+.cs-week-total-badge {
+  background-color: #000000;
+  color: white;
+  font-size: 13px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 4px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.rdp-day {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  transition: all 0.15s ease-out;
+  border: 2px solid transparent;
+  color: #000; 
+  background-color: var(--color-light-gray);
+  margin: 0.5rem 0;
+  z-index: 10;
+}
+.rdp-day:not([disabled]) {
+  cursor: pointer;
+}
+
+/* 행 전체 스타일링 */
+tr.rdp-week {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 999px; /* 주간 선택 시 둥근 배경 */
+  transition: background-color 0.2s;
+}
+
+/* Level colors */
+.cs-lv1 { background-color: var(--color-light-blue); }
+.cs-lv2 { background-color: var(--color-blue); color: #fff; }
+.cs-lv3 { background-color: var(--color-dark-blue); color: #fff; }
+
+/* Modifier-based day styling for job counts */
+.rdp-day.cs-lv1 { background-color: var(--color-light-blue); color: #000; }
+.rdp-day.cs-lv2 { background-color: var(--color-blue); color: #000; }
+.rdp-day.cs-lv3 { background-color: var(--color-dark-blue); color: #ffffff; }
+
+/* Ensure selected state overrides level colors for border/shadow, but keeps background */
+.rdp-day_button[aria-selected="true"].cs-lv1 {
+  color: #000;
+  background-color: var(--color-light-gray);
+  border: solid 1px var(--color-light-blue);
+}
+
+.rdp-day_button[aria-selected="true"].cs-lv2 {
+  color: #000;
+  background-color: var(--color-light-gray);
+  border: solid 1px var(--color-blue);
+}
+
+.rdp-day_button[aria-selected="true"].cs-lv3 {
+  color: #fff;
+  background-color: var(--color-light-gray);
+  border: solid 1px var(--color-dark-blue);
+}
+
+.rdp-day[aria-selected="true"] .rdp-day_button.cs-lv1,
+.rdp-day_button[aria-selected="true"].cs-lv1 { 
+  color: #000;
+  background-color: var(--color-light-gray);
+  border: solid 1px var(--color-blue);
+ }
+
+.rdp-day[aria-selected="true"] .rdp-day_button.cs-lv2,
+.rdp-day_button[aria-selected="true"].cs-lv2 { 
+  color: #000;
+  background-color: var(--color-light-gray);
+  border: solid 1px var(--color-blue);
+ }
+
+.rdp-day[aria-selected="true"] .rdp-day_button.cs-lv3,
+.rdp-day_button[aria-selected="true"].cs-lv3 { 
+  color: #000;
+  background-color: var(--color-light-gray);
+  border: solid 1px var(--color-dark-blue);
+ }
+
+/* 부모 section에서 배지가 잘리지 않도록 설정 */
+.cs-left {
+  overflow: visible !important;
+  position: relative;
+}
+
+/* DayPicker 테이블 구조 확인 */
+.rdp-table {
+  overflow: visible !important;
+}
+
+/* 행 전체 스타일 */
+.rdp-week {
+  position: relative !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.rdp-week:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* 주간 선택 시 효과 */
+.cs-week-selected {
+  background-color: rgba(74, 163, 255, 0.1) !important;
+  box-shadow: inset 0 0 0 1px #4aa3ff;
+  border-radius: 8px;
+}
+/* rdp-week 자체에 배지를 그려버림 (DOM 깨짐 없음) */
+tr.rdp-week {
+  position: relative;
+}
+
+/* --- Legend --- */
+.cs-legend {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+}
+.cs-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cs-legend-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+.cs-legend-item .cs-lv1-legend { background-color: var(--color-light-blue); }
+.cs-legend-item .cs-lv2-legend { background-color: var(--color-blue); }
+.cs-legend-item .cs-lv3-legend { background-color: var(--color-dark-blue); }
+
+
+/* day 버튼 기본 */
+.rdp-day_button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border: 2px solid transparent;
+  background: var(--color-light-gray);
+  color: #000;
+}
+
+/* 레벨 색칠 (button 기준) */
+.rdp-day_button.cs-lv1 { background-color: var(--color-light-blue); color: #000; }
+.rdp-day_button.cs-lv2 { background-color: var(--color-blue); color: #fff; }
+.rdp-day_button.cs-lv3 { background-color: var(--color-dark-blue); color: #fff; }
+
+
+.rdp-day_button[aria-selected="true"] {
+  box-shadow: 0 0 0 2px #0ea5e9;
+  border-color: #0ea5e9;
+}
+
+/* --- Details (Right) --- */
+.cs-right-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.cs-right-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.cs-filter select {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-weight: 600;
+}
+.cs-list { display: flex; flex-direction: column; gap: 12px; }
+.cs-empty {
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Job Item */
+.cs-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cs-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+.cs-item-title {
+  font-weight: 600;
+}
+.cs-item-toggle {
+  width: 20px;
+  height: 20px;
+  border: none;
+  transition: transform 0.2s;
+}
+
+.cs-item-body {
+  padding: 16px;
+  background-color: #f8fafc;
+  font-size: 14px;
+}
+.cs-item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+.cs-item-label {
+  color: #475569;
+}
+.cs-item-value {
+  font-weight: 600;
+}
+
+.ws-dot {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 700;
+  background: #111;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ws-lv1 { background: var(--color-light-blue); color: #000; }
+.ws-lv2 { background: var(--color-blue); color: #fff; }
+.ws-lv3 { background: var(--color-dark-blue); color: #fff; }
+
+/* --- Responsive --- */
+@media (max-width: 920px) {
+  .cs-grid {
+    grid-template-columns: 1fr;
+  }
+}

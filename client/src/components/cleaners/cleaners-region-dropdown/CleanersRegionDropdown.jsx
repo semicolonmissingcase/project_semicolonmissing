@@ -8,6 +8,7 @@ import styles from "./CleanersRegionDropdown.module.css";
 /* =========================
    DATA
 ========================= */
+
 const REGION = {
   서울: ["종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"],
   경기: ["수원시", "용인시", "화성시", "성남시", "부천시", "안산시", "평택시", "안양시", "시흥시", "김포시", "광주시", "하남시", "광명시", "군포시", "오산시", "이천시", "안성시", "의왕시", "양평군", "여주시", "과천시", "고양시", "남양주시", "파주시", "의정부시", "양주시", "구리시", "포천시", "동두천시", "가평군", "연천군"],
@@ -279,7 +280,6 @@ export function CleanersRegionDropdown({ name = "workAreas", label = "작업 지
 /* =========================
    LimitModal 작업 지역 개수 제한 모달
 ========================= */
-
 export function LimitModal({ open, onClose }) {
   if (!open) return null;
 
@@ -310,7 +310,6 @@ export function LimitModal({ open, onClose }) {
 /* =========================
    ConfirmModal 취소 완료
 ========================= */
-
 export function ConfirmModal({ open, message, onClose, onConfirm }) {
   useEffect(() => {
     if (!open) return;
@@ -331,6 +330,7 @@ export function ConfirmModal({ open, message, onClose, onConfirm }) {
       role="dialog"
       aria-modal="true"
       onMouseDown={(e) => {
+
         // 바깥 클릭 닫기(원하면 제거 가능)
         if (e.target === e.currentTarget) onClose();
       }}

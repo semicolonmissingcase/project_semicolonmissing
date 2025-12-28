@@ -14,6 +14,8 @@ import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx"
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
+import CleanersSettlementStatus from "../components/cleaners/CleanersSettlementStatus.jsx";
+import CleanersTodaySchedule from "../components/cleaners/CleanersTodaySchedule.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
 import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
@@ -76,29 +78,39 @@ const router = createBrowserRouter([
         element: <Outlet />,
         children: [
            {
-            // 계좌 수정 페이지
+            // 기사 계좌 수정 페이지
             path: 'accountedit',
             element: <CleanersAccountEdit />
           },
           {
-            // 계좌 저장 페이지
+            // 기사 계좌 저장 페이지
             path: 'accountsave',
             element: <CleanersAccountSave />,
           },
           {
-            // 정보 수정 페이지
+            // 기사 정보 수정 페이지
             path: 'infoedit',
             element: <CleanersInfoEdit />
           },
           {
-            // 프로필 수정 페이지
+            // 기사 프로필 수정 페이지
             path: 'profileedit',
             element: <CleanersProfileEdit />,
           },
           { 
-            // 마이페이지
+            // 기사 마이 페이지
             path: 'mypage',
             element: <CleanersMyPage />,
+          },
+          // 기사 마이 페이지 > 현재 정산 상태 페이지
+          {
+            path: 'settlementstatus',
+            element: <CleanersSettlementStatus />,
+          },
+          // 기사 마이 페이지 > 오늘 예정 일정 버튼 페이지
+          {
+            path: 'todayschedule',
+            element: <CleanersTodaySchedule />,
           },
           {
             // 기사 견적 작성 임시저장 페이지
