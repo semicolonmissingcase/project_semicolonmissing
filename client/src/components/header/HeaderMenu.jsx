@@ -1,37 +1,24 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { setCredentials } from "../../store/slices/authSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logoutThunk } from "../../store/thunks/authThunk.js";
 import "./HeaderMenu.css";
 
 export default function HeaderMenu({ isOpen, onClose }) {
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
 
- useEffect(() => {
-  const params = new URLSearchParams(location.search);
-  const token = params.get('token');
-  const userJson = params.get('user');
-
-  if (token && userJson) {
-    try {
-      const parseUser = JSON.parse(decodeURIComponent(userJson));
-
-      dispatch(setCredentials({
-        accessToken: token,
-        user: parseUser
-      }));
-
-      localStorage.setItem('user', JSON.stringify(parseUser));
-      localStorage.setItem('accessToken', token);
-
-      navigate(location.pathname, { replace: true});
+  const handleLogout = async () => {
+    try{
+      await dispatch(logoutThunk()).unwrap();
+      alert("로그아웃 되었습니다.");
+      onClose();
+      navigate('/');
     } catch (error) {
-      console.error("소셜 로그인 데이터 처리 중 오류 발생", error)
+      console.error("로그아웃 실패", error);
     }
-  }
- }, []);
+  };
 
   if (!isOpen) return null;
 
@@ -55,6 +42,8 @@ export default function HeaderMenu({ isOpen, onClose }) {
     navigate('/registration');
     onClose();
   }
+
+
 
   return (
     <div className='header-menu-mobile-menu-overlay'>
@@ -85,7 +74,7 @@ export default function HeaderMenu({ isOpen, onClose }) {
         <div className="header-menu-mobile-menu-bottom-logout">
           <button 
             className='header-menu-mobile-menu-logout-btn' 
-            onClick={mainPage}>
+            onClick={handleLogout}>
             로그아웃
           </button>
         </div>

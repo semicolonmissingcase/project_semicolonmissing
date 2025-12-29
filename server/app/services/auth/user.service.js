@@ -75,7 +75,6 @@ async function login(body) {
     return {
       accessToken,
       refreshToken,
-      user,
       user: userResponse,
     }
   });
@@ -313,10 +312,28 @@ async function completeSocialSignup(signupData) {
   });
 }
 
+async function getMe(id, role) {
+    let user = null;
+    if (role === ROLE.OWNER) {
+      user = await ownerRepository.findByPk(null, id);
+    } else {
+      user = await cleanerRepository.findByPk(null, id);
+    }
+
+    if (!user) {
+      throw myError('유저 정보를 찾을 수 없습니다.', NOT_REGISTERED_ERROR);
+    }
+    
+    const userResponse = user.toJSON();
+    userResponse.role = role;
+    return userResponse;
+}
+
 export default {
   login,
   logout,
   reissue,
   socialKakao,
   completeSocialSignup,
+  getMe,
 }

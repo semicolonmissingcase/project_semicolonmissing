@@ -23,33 +23,14 @@ const axiosInstance = axios.create({
 });
 // 서버에 요청 보내기 전 만료 확인 
 axiosInstance.interceptors.request.use(async (config) => { // confing에 리퀘스트 객체의 옵션을 가져옴.
-  const noRetry = /^\/api\/auth\/reissue$/; // 리트라이 제외 URL 설정
-  let { accessToken } = store.getState().auth; // auth state 획득 
 
-  try {
-    // 엑세스 토큰 있음 && 리트라이 제외 URL 아님
-    if(accessToken && !noRetry.test(config.url)) {
-      // 엑세스 토큰 만료 확인
-      const claims = jwtDecode(accessToken);
-      const now = dayjs().unix();
-      const expTime = dayjs.unix(claims.exp).add(-5, 'minute').unix();
-
-      if(now >= expTime) {
-        config._retry = true;
-        console.log('만료돼서 엑세스 토큰 재발급');
-        const response =  await store.dispatch(reissueThunk()).unwrap(); 
-        accessToken = response.data.accessToken;
-      }
-  
-      config.headers["Authorization"] = `Bearer ${accessToken}`; // Header 셋팅
-    }
-  
     return config;
-  } catch (error) {
-    console.log('axios interceptor', error);
+  },
+  (error)  => {
+    console.log('axios interceptor error', error);
     return Promise.reject(error);
   }
-});
+);
 
 
 export default axiosInstance;

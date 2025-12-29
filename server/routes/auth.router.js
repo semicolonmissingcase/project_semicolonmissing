@@ -23,5 +23,6 @@ authRouter.post('/reissue/admin', adminController.reissue);
 authRouter.get('/social/:provider', socialValidator, validationHandler, userController.social);
 authRouter.get('/callback/:provider', userController.socialCallback);
 authRouter.post('/signup/complete', userController.completeSignup);
+authRouter.get('/me', authUserMiddleware, userController.getMe);
 
 export default authRouter;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom"; // URL 파라미터 읽기 위해 추가
-import { reissueThunk } from "../../store/thunks/authThunk.js";
+import { getMeThunk } from "../../store/thunks/authThunk.js";
 
 export default function Social() {
   const navigate = useNavigate();
@@ -28,8 +28,7 @@ export default function Social() {
 
       // 3. 기존 유저 처리 (기존 코드 유지)
       try {
-        // 백엔드에서 이미 쿠키에 RefreshToken을 구워줬으므로 reissue 시도
-        await dispatch(reissueThunk()).unwrap(); 
+        await dispatch(getMeThunk()).unwrap(); 
         navigate('/', { replace: true });
       } catch (error) {
         console.log('Social', error);

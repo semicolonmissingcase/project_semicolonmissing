@@ -1,13 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginThunk, reissueThunk } from "../thunks/authThunk.js";
-
-const savedUser = localStorage.getItem('user');
-const savedToken = localStorage.getItem('accessToken');
+import { loginThunk, reissueThunk, getMeThunk, logoutThunk } from "../thunks/authThunk.js";
 
 const initialState = {
-  accessToken: savedToken || null,
-  user: savedUser ? JSON.parse(savedUser) : null, 
-  isLoggedIn: !!savedToken,
+ user: null,
+ isLoggedIn: false,
+ isLoading: true,
 }
 
 const slice = createSlice({
@@ -15,49 +12,56 @@ const slice = createSlice({
   initialState,
   reducers: {
     clearAuth(state) {
-      state.accessToken = null;
       state.user = null;
-      state.isLoggedIn = null;
-
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
+      state.isLoggedIn = false;
+      state.isLoading = false;
     },
 
     setCredentials(state, action) {
-      const { accessToken, user } = action.payload;
-      state.accessToken = accessToken;
+      const { user } = action.payload;
       state.user = user;
-      state.isLoggedIn = true;
+      state.isLoggedIn = !!user;
+      state.isLoading = false;
     }
   },
 
   extraReducers: (builder) => {
     builder
       .addCase(loginThunk.fulfilled, (state, action) => {
-        const { accessToken, user } = action.payload.data;
-        state.accessToken = accessToken;
+        const { user } = action.payload.data;
         state.user = user; //  user (점주, 기사)객체 저장
         state.isLoggedIn = true;
-
-        if(accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-          localStorage.setItem('user', JSON.stringify(user));
-        }
+        state.isLoading = false;
       })
+      .addCase(getMeThunk.fulfilled, (state, action) => {
+      const { user } = action.payload.data; // 서버 응답 구조에 맞게 조정 (data.user 등)
+      state.user = user;
+      state.isLoggedIn = true;
+      state.isLoading = false;
+      })
+      // getMeThunk 실패 시 (토큰이 없거나 만료된 경우)
+      .addCase(getMeThunk.rejected, (state) => {
+      state.user = null;
+      state.isLoggedIn = false;
+      state.isLoading = false;
+       })
+      // 토큰 재발급 성공 시
       .addCase(reissueThunk.fulfilled, (state, action) => {
-        const { accessToken, user } = action.payload.data;
-        state.accessToken = accessToken;
+        const { user } = action.payload.data;
         state.user = user;
         state.isLoggedIn = true;
-
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('user', JSON.stringify(user));
-      }); 
+        state.isLoading = false;
+      })
+      .addCase(logoutThunk.fulfilled, (state) => {
+        state.user = null;
+        state.isLoggedIn = false;
+        state.isLoading = false;
+      }) 
   },
 });
 
 export const {
-  clearAuth, setCredentials
-} = slice.actions; // redcuer에서 한 actions를 export, import할 때 구조 분해 해서 사용
+  clearAuth, setCredentials, setLoading
+} = slice.actions;
 
 export default slice.reducer; // slice 자체를 반환, store에서 받아서 사용
