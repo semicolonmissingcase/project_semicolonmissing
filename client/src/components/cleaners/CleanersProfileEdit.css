@@ -47,8 +47,24 @@
 }
 
 .cleaners-profile-edit-profile-title {
-  display: flex;
+  display: grid;
   margin-top: 1rem;
+  grid-template-columns: 1fr 1fr; /* 2개의 동일한 너비 열 */
+  grid-template-rows: 150px 150px; /* 2개의 동일한 높이 행 */
+  gap: 10px; /* 셀 간 간격 */
+}
+
+.cleaners-profile-edit-profile-title > input {
+  grid-area: 1 / 3 ; /* 모든 이미지가 1행1열부터 3행3열 영역을 차지 (겹침) */
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* 기본 쌓임 순서 */
+}
+
+.cleaners-profile-edit-profile-title > img:last-child {
+  grid-area: 1 / 1 / -1 / -1; /* 두 번째 이미지는 2행 2열 셀만 차지 */
+  z-index: 2; /* 더 높은 z-index로 겹쳐 보이게 함 */
+  /* 원하는 모양으로 크기 조절 가능 */
 }
 
 .cleaners-profile-edit-input {

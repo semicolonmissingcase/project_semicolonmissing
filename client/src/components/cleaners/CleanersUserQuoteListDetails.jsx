@@ -28,7 +28,35 @@ const dummyQuestions = [
       { id: 5, correct: '2주일 이하'},
       { id: 6, correct: '1달 이상'},
     ]
-  }
+  },
+  {
+    id: 3,
+    code: 'Q03',
+    content: '청소를 할 제빙기는 몇 대 인가요?',
+    questionChoices: [
+      { id: 7, correct: '1대(임시)'},
+      { id: 8, correct: '2대(임시)'},
+      { id: 9, correct: '3대 이상(임시)'},
+    ]
+  },
+  {
+    id: 4,
+    code: 'Q04',
+    content: '곰팡이 냄새나 악취가 나나요?',
+    questionChoices: [
+      { id: 10, correct: '네, 악취가 나요.'},
+      { id: 11, correct: '아니요. 안 나요.'},
+    ]
+  },
+  {
+    id: 4,
+    code: 'Q05',
+    content: '얼음이 탁한가요?',
+    questionChoices: [
+      { id: 10, correct: '네, 탁해요.'},
+      { id: 11, correct: '아니요. 괜찮아요.'},
+    ]
+  },
 ];
 
 
@@ -123,11 +151,10 @@ function CleanersUserQuoteListDetails () {
           </div>
         </div>
 
-        <form onClick={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {/* 추가 정보 */}
           <div className="cleaners-user-quote-list-details-items-box-column">
             <span className="cleaners-user-quote-list-details-items-box-title cleaners-user-quote-list-details-toggle-question" onClick={toggleMenuDetails}>추가 정보{ toggleDetails ? <RiArrowDropUpFill size={20} /> : <RiArrowDropDownFill size={20} /> }</span>
-
             {
               (dummyQuestions && answerStatus) && dummyQuestions.map(question => {
                 return (
@@ -153,39 +180,23 @@ function CleanersUserQuoteListDetails () {
 
           {/* 기사님 견적서 */}
           <div className="cleaners-user-quote-list-details-items-box-column">
-            <span className="cleaners-user-quote-list-details-items-box-title">기사님 견적서</span>
+            <div className="cleaners-user-quote-list-details-items-box-title-box">
+              <span className="cleaners-user-quote-list-details-items-box-title">기사님 견적서</span>
+              <button type="button" className="cleaners-user-quote-list-details-btn">임시 저장 견적서 불러오기</button>
+            </div>
+            <div className="cleaners-user-quote-list-details-input-box">
+              <label htmlFor="estimatedAmount">견적 금액</label>
+              <input type="number" className="cleaners-user-quote-list-details-input-layout input-remove-arrows" id="estimatedAmount" />
+            </div>
+            <div className="cleaners-user-quote-list-details-textarea-box">
+              <label htmlFor="description">견적 설명</label>
+              <textarea id="description" className="cleaners-user-quote-list-details-textarea"></textarea>
+            </div>
           </div>
 
           <button type="submit" className="btn-medium bg-light">요청 수락하기</button>
         </form>
-
-
-             
-        
-           
-        </div>      
-
-        <div className="cleaners-user-quote-list-details-items-box-column">
-            <span className="cleaners-user-quote-list-details-items-box-title">기사님 견적서</span>
-              <div className="">
-                <div className="">
-                  <span className="cleaners-user-quote-list-details-items-box-sub-title">견적 금액</span>
-                </div>
-                <div className="">
-                  <input className="" value="100,000원" readOnly />
-                </div>
-              </div>
-              <div className="">
-                <div className="">
-                  <span className="cleaners-user-quote-list-details-items-box-sub-title">견적 설명</span>
-                </div>
-                <div className="">
-                  <input  className="cleaners-user-quote-list-details-input-layout-full-width" value="제빙기 청소 전문입니다. 믿고 맡겨주세요!" readOnly />
-                </div>
-              </div>
-        </div>         
-
-        <button className="cleaners-profile-edit-button-small-custom3" type="submit">요청 수락하기</button>
+      </div> 
     </>
   )
 }

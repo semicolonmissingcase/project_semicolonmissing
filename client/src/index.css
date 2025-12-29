@@ -148,6 +148,12 @@ button {
   border-radius: 10px;
 }
 
+.input-remove-arrows::-webkit-outer-spin-button,
+.input-remove-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* 캐릭터 관련 */
 .ice-doctor-character {
   background-image: url('/icons/ice-doctor-character.svg');

@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
+import { CleanersRegionDropdown, ConfirmModal } from "./cleaners-region-dropdown/CleanersRegionDropdown";
 import "./CleanersProfileEdit.css";
 import styles from "./CleanersProfileEdit.module.css";
-import { CleanersRegionDropdown, ConfirmModal } from "./cleaners-region-dropdown/CleanersRegionDropdown";
+
 
 
 function CleanersProfileEdit() {
@@ -86,8 +87,7 @@ function CleanersProfileEdit() {
     <div className="all-container cleaners-profile-edit-container">
       <div className="cleaners-profile-edit-items-box">
 
-        <div className="cleaners-profile-edit-title">
-          <span>프로필 수정</span></div>
+        <div className="cleaners-profile-edit-title"><span>프로필 수정</span></div>
         
         <div className="cleaners-profile-edit-layout-center">
         <div className="cleaners-profile-edit-layout">

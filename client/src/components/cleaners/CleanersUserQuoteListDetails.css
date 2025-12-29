@@ -36,6 +36,18 @@
   gap: 1rem;
 }
 
+.cleaners-user-quote-list-details-items-box-title-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cleaners-user-quote-list-details-btn {
+  padding: 5px;
+  background-color: var(--color-gray);
+  border-radius: 10px;
+  color: var(--color-white);
+}
+
 .cleaners-user-quote-list-details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -89,11 +101,30 @@
 }
 
 .cleaners-user-quote-list-details-input-box > label {
-  width: 60px;
+  width: 70px;
 }
 
 .cleaners-user-quote-list-details-input-box > input {
   width: 100%;
+}
+
+.cleaners-user-quote-list-details-textarea-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-textarea {
+  height: 100px;
+  outline: none;
+  padding: 5px;
+  resize: none;
+  border-radius: 10px;
+  -ms-overflow-style: none;
+}
+
+.cleaners-user-quote-list-details-textarea::-webkit-scrollbar{
+  display:none;
 }
 
 .cleaners-user-quote-list-details-grid-1 {
@@ -183,6 +214,17 @@
   
   .cleaners-user-quote-list-details-items-box-images {
     grid-template-columns: 1fr 1fr;
+  }
+  
+  .cleaners-user-quote-list-details-items-box-question {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  .cleaners-user-quote-list-details-items-box-question-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
   }
 }
 
