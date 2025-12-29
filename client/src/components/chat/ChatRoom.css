@@ -69,6 +69,7 @@
 }
 
 .chatroom-message-item.mine .chatroom-bubble {
+  color: var(--color-white);
   background-color: var(--color-light-blue);
   border-radius: 15px 0px 15px 15px;
 }
