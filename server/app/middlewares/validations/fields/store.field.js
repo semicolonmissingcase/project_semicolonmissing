@@ -4,7 +4,18 @@
  * 251224 v1.0.0 ck init 
  */
 
-import { body } from "express-validator";
+import { body, param } from "express-validator";
+
+// 매장 PK
+const id = param('storeId')
+  .trim()
+  .notEmpty()
+  .withMessage('필수 항목입니다.')
+  .bail()
+  .isNumeric()
+  .withMessage('숫자만 허용합니다.')
+  .toInt()
+;
 
 const storeName = body('store.name')
   .optional() // 이 필드는 선택 사항입니다.
@@ -54,6 +65,7 @@ const storePhoneNumber = body('store.phoneNumber')
 ;
 
 export default {
+  id,
   storeName,
   storeAddr1,
   storeAddr2,

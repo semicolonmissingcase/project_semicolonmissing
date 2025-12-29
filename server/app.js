@@ -12,6 +12,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
+import storesRouter from './routes/store.router.js'; // 매장 관리 관련
 
 // 채팅 관련 import
 import { createServer } from 'http'; // HTTP 서버 생성
@@ -35,6 +36,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/users', usersRouter); // 회원가입 관련
+app.use('/api/stores', storesRouter); // 매장관리 관련
 
 // 에러 핸들러 등록
 app.use(errorHandler);

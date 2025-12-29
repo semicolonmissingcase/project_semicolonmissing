@@ -141,6 +141,12 @@ export default function OwnerRegistration() {
       newErrors.phone = '전화번호를 입력해주세요';
     }
 
+    if (formData.storeName || formData.address || (formData.storePhoneMiddle && formData.storePhoneLast)) {
+      if (!formData.addressDetail.trim()) {
+        newErrors.addressDetail = '매장 상세주소를 입력해주세요';
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -167,15 +173,36 @@ export default function OwnerRegistration() {
       }
 
       // 매장 이름이 입력된 경우에만 store 추가
-      if (formData.storeName || formData.address || (formData.storePhoneMiddle && formData.storePhoneLast)) {
+      if (formData.storeName || formData.address || formData.addressDetail || (formData.storePhoneMiddle && formData.storePhoneLast)) {
+        // 주소 가공
+        let processedAddr1 = ''; // 시/도
+        let processedAddr2 = ''; // 군/구/읍/면/동
+        let processedAddr3 = ''; // 상세주소
+
+        // kakao에서 받은 주소 분리, 상세주소 조합
+        if(formData.address) {
+          const addressParts = formData.address.split(' ');
+          if(addressParts.length > 0) processedAddr1 = addressParts[0]; // 시/도
+          if(addressParts.length > 1) processedAddr2 = addressParts.slice(1).join(' '); // 군/구/읍/면/동
+
+          processedAddr3 = formData.addressDetail.trim(); // 상세주소
+        }
+
+        const constructedPhoneNumber = formData.storePhoneMiddle && formData.storePhoneLast
+          ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
+          : '';
+
+        console.log("Constructed Phone Number:", constructedPhoneNumber, "Length:", constructedPhoneNumber.length)
+
         submitData.store = {
           name: formData.storeName,
-          addr1: formData.address,
-          addr2: formData.addressDetail,
-          addr3: '',
-          phoneNumber: formData.storePhoneMiddle && formData.storePhoneLast 
-            ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
-            : '', // 매장 전화번호가 필수가 아닐 경우 빈문자열 전송
+          addr1: processedAddr1,
+          addr2: processedAddr2,
+          addr3: processedAddr3,
+          phoneNumber: constructedPhoneNumber,
+          // phoneNumber: formData.storePhoneMiddle && formData.storePhoneLast 
+          //   ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
+          //   : '', // 매장 전화번호가 필수가 아닐 경우 빈문자열 전송
         };
       }
 
@@ -189,14 +216,16 @@ export default function OwnerRegistration() {
       console.error('회원가입 오류:', error);
 
       // 서버 유효성 검사 오류 처리
-      if (error && Array.isArray(error.data)) {
+      if (error && error.data && Array.isArray(error.data.message)) {
         const newServerErrors = {};
-        error.data.forEach(err => {
+        error.data.message.forEach(err => {
           // 서버에서 'field: message' 형식으로 에러 받음
           const [field, ...message] = err.split(': ');
           newServerErrors[field.trim()] = message.join(': ');
         });
         setServerErrors(newServerErrors);
+      } else if (error && error.data && typeof error.data.message === 'string'){
+        alert(error.data.message);
       } else {
         // 그 외 일반적인 서버 에러
         alert(error.msg || '회원가입 중 알 수 없는 오류가 발생했습니다.');

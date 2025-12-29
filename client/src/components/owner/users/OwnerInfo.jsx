@@ -1,19 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./OwnerInfo.css";
 import OwnerStoreInfo from "./OwnerStoreInfo";
+import { useDispatch, useSelector } from "react-redux";
+import { storeGetThunk } from "../../../store/thunks/storeGetThunk.js";
+import { storeCreateThunk } from "../../../store/thunks/storeCreateThunk.js";
+import { storeDeleteThunk } from "../../../store/thunks/storeDeleteThunk.js";
 
 export default function OwnerInfo() {
+  const dispatch = useDispatch();
+  const { stores, status, error } = useSelector((state) => state.store);
   const [phonePrefix, setPhonePrefix] = useState("010");
-  const [stores, setStores] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 매장 목록 불러오기
+  useEffect(() => {
+    if(status === 'idle') {
+      dispatch(storeGetThunk());
+    }
+  }, [dispatch, status]); 
+
   const handleAddStore = (newStore) => {
-    setStores([...stores, { ...newStore, id: Date.now() }]);
-    setIsModalOpen(false);
+    console.log("Adding store via Redux thunk:", newStore); // Placeholder for debugging
+    dispatch(storeCreateThunk(newStore)); // 매장 생성
+    setIsModalOpen(false); // 모달 닫기
   };
 
   const removeStore = (id) => {
-    setStores(stores.filter(store => store.id !== id));
+    console.log("Removing store via Redux thunk:", id);
+    dispatch(storeDeleteThunk(id)); // 매장 삭제
   };
 
   return (
@@ -57,7 +71,12 @@ export default function OwnerInfo() {
             </div>
             
             <div className="ownerinfo-store-info-card-container">
-              {stores.map((store) => (
+              {/* 매장 정보 로딩 및 에러 상태 표시 */}
+              {status === 'loading' && <p>매장 정보를 불러오는 중...</p>}
+              {status === 'failed' && <p>매장 정보를 불러오는데 실패했습니다: {error}</p>}
+              {/* 매장 목록 렌더링 */}
+              {status === 'succeeded' && stores.length === 0 && <p>등록된 매장이 없습니다.</p>}
+              {status === 'succeeded' && stores.map((store) => (
                 <div key={store.id} className="ownerinfo-store-card">
                   <div className="ownerinfo-store-card-header">
                     <span className="store-name">{store.name || "매장명"}</span>
@@ -67,16 +86,17 @@ export default function OwnerInfo() {
                   </div>
                   <div className="ownerinfo-store-field">
                     <label>전화번호</label>
-                    <p>{store.phone}</p>
+                    <p>{store.phoneNumber}</p> {/* 데이터베이스 스키마에 맞춰 phoneNumber 사용 */}
                   </div>
                   <div className="ownerinfo-store-field">
                     <label>주소</label>
-                    <p>{store.address}</p>
+                    {/* addr1, addr2, addr3를 조합하여 전체 주소 표시 */}
+                    <p>{`${store.addr1} ${store.addr2} ${store.addr3}`}</p>
                   </div>
-                  <div className="ownerinfo-store-field">
+                  {/* <div className="ownerinfo-store-field">
                     <label>상세주소</label>
                     <p>{store.detailAddress}</p>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

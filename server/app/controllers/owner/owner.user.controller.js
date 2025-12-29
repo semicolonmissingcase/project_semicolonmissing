@@ -23,12 +23,17 @@ async function registerOwner(req, res, next) {
       email: req.body.email,
       password: req.body.password,
       phone: req.body.phone,
-      // 매장관련
-      storeName: req.body.storeName,
-      storePhone: req.body.storePhone,
-      address: req.body.address,
-      addressDetail: req.body.addressDetail,
     };
+
+    if(req.body.store) {
+      data.store = {
+        name: req.body.store.name,
+        addr1: req.body.store.addr1,
+        addr2: req.body.store.addr2,
+        addr3: req.body.store.addr3,
+        phoneNumber: req.body.store.phoneNumber,
+      };
+    }
 
     const createdOwner = await ownerUserService.store(data);
 
