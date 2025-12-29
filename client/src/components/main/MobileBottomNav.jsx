@@ -1,5 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import './MobileBottomNav.css';
+import { IoHome, IoPersonCircle, IoCaretBackSharp } from "react-icons/io5"
+
 
 export default function MobileBottomNav() {
   const navigate = useNavigate();
@@ -7,17 +9,17 @@ export default function MobileBottomNav() {
 
   const navItems = [
     {
-      icon: '◀',
+      icon: <IoCaretBackSharp style={{ fontSize: '2rem', color: '#0C1B41'}} />,
       action: () => window.history.back(),
       path: null
     },
     {
-      icon: '🏠',
+      icon: <IoHome style={{ fontSize: '2rem', color: '#0C1B41'}} />,
       action: () => navigate('/'),
       path: '/'
     },
     {
-      icon: '👤',
+      icon: <IoPersonCircle style={{ fontSize: '2rem', color: '#0C1B41'}} />,
       action: () => navigate('/mypage'),
       path: '/mypage'
     }
