@@ -121,16 +121,25 @@ async function socialCallback(req, res, next) {
     // 가입되지 않은 신규 유저인 경우
     if (!result.isRegistered) {
       const { email, nick, profile }= result.kakaoInfo;
+      console.log("email", email);
+      console.log("nick", nick);
+      console.log("profile", profile);
 
       // env에 설정한 추가 정보 입력 페이지로 리다이렉트 
       const extraInfoUrl = `${process.env.SOCIAL_CLIENT_EXTRA_INFO_URL}?email=${email}&nick=${encodeURIComponent(nick)}&profile=${profile}`;
+      console.log("완성된 리다이렉트 주소", extraInfoUrl);
 
       return res.redirect(extraInfoUrl);
     }   
     // 3. 기존 유저인 경우 (로그인 처리)
     cookieUtil.setCookieRefreshToken(res, result.refreshToken);
+    const accessToken = result.accessToken;
+    const userJson = encodeURIComponent(JSON.stringify(result.user));
 
-    return res.redirect(process.env.SOCIAL_CLIENT_CALLBACK_URL);
+    const encodedUser = encodeURIComponent(userJson);
+
+    const redirectUrl = `${process.env.SOCIAL_CLIENT_CALLBACK_URL}?token=${accessToken}&user=${userJson}`;
+    return res.redirect(redirectUrl);
   } catch(error) {
     next(error);
   }

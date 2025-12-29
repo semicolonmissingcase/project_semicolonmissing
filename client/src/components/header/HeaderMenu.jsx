@@ -1,8 +1,37 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { setCredentials } from "../../store/slices/authSlice.js";
 import "./HeaderMenu.css";
 
 export default function HeaderMenu({ isOpen, onClose }) {
+  const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+ useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const token = params.get('token');
+  const userJson = params.get('user');
+
+  if (token && userJson) {
+    try {
+      const parseUser = JSON.parse(decodeURIComponent(userJson));
+
+      dispatch(setCredentials({
+        accessToken: token,
+        user: parseUser
+      }));
+
+      localStorage.setItem('user', JSON.stringify(parseUser));
+      localStorage.setItem('accessToken', token);
+
+      navigate(location.pathname, { replace: true});
+    } catch (error) {
+      console.error("소셜 로그인 데이터 처리 중 오류 발생", error)
+    }
+  }
+ }, []);
 
   if (!isOpen) return null;
 
@@ -39,7 +68,7 @@ export default function HeaderMenu({ isOpen, onClose }) {
         {/* 프로필 부분 */}
         <div className='mobile-menu-profile'>
           <div className='mobile-menu-profile-img' style={{ backgroundImage: `url('/icons/default-profile.png')` }}></div>
-          <p className='mobile-menu-profile-name'>OOO점주님</p>
+          <p className='mobile-menu-profile-name'></p>
         </div>
 
         {/* 메뉴 항목 */}

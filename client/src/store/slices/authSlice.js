@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginThunk, reissueThunk } from "../thunks/authThunk.js";
 
+const savedUser = localStorage.getItem('user');
+const savedToken = localStorage.getItem('accessToken');
+
 const initialState = {
-  accessToken: null,
-  user: null, // 점주, 기사
-  isLoggedIn: false,
+  accessToken: savedToken || null,
+  user: savedUser ? JSON.parse(savedUser) : null, 
+  isLoggedIn: !!savedToken,
 }
 
 const slice = createSlice({
@@ -15,7 +18,17 @@ const slice = createSlice({
       state.accessToken = null;
       state.user = null;
       state.isLoggedIn = null;
+
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
     },
+
+    setCredentials(state, action) {
+      const { accessToken, user } = action.payload;
+      state.accessToken = accessToken;
+      state.user = user;
+      state.isLoggedIn = true;
+    }
   },
 
   extraReducers: (builder) => {
@@ -44,7 +57,7 @@ const slice = createSlice({
 });
 
 export const {
-  clearAuth,
+  clearAuth, setCredentials
 } = slice.actions; // redcuer에서 한 actions를 export, import할 때 구조 분해 해서 사용
 
 export default slice.reducer; // slice 자체를 반환, store에서 받아서 사용

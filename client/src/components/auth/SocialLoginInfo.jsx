@@ -1,13 +1,17 @@
+import axios from 'axios';
 import { useState } from "react";
 import "./SocialLoginInfo.css";
 import useKakaoPostcode from "../hooks/useKakaoPostcode.js";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../store/slices/authSlice.js';
 
 export default function SocialLoginInfo() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   const [selectedRole, setSelectedRole] = useState(null); // 'OWNER' 또는 'CLEANER'
   const { openPostcode } = useKakaoPostcode();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({ 
     name: "",
     phonePrefix: "010",
     phoneMiddle: "",
@@ -20,30 +24,47 @@ export default function SocialLoginInfo() {
     addressDetail: ""
   });
 
+
   const handleSubmit = async () => {
-    // 1. 데이터 가공 (전화번호 합치기 등)
+    const email = searchParams.get('email');
+    const nick = searchParams.get('nick');
+    const profile = searchParams.get('profile');
+
+    if(!email || !selectedRole) {
+      alert("이메일 정보가 없거나 역할을 선택하지 않으셨습니다.");
+      return;
+    }
+
     const finalData = {
-      ...formData,
-      role: selectedRole,
-      phone: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
-      storePhone: selectedRole === 'OWNER' 
-        ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}` 
-        : null,
-      // 중요: 백엔드에서 필요한 이메일이나 카카오 고유 ID 등도 포함되어야 함
-      email: "kakao@kakao" // 실제로는 이전 단계에서 받아온 값을 넣어줘야 함
+      email: email,
+      name: formData.name || nick, // 입력 안 했으면 카카오 닉네임 사용
+      provider: 'KAKAO',
+      phoneNumber: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
+      profile: profile,
+      role: selectedRole // 'OWNER' 또는 'CLEANER'
     };
+
+    console.log(finalData);
 
     try {
       // 2. 백엔드 API 호출
-      const response = await axios.post('/api/auth/signup/complete', finalData);
+      const response = await axios.post('http://localhost:3000/api/auth/signup/complete', finalData);
 
-      if (response.status === 200) {
+      if (response.status === 200) {    
+        const { accessToken, user } = response.data;
+      
+        if(accessToken && user) {
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('user', JSON.stringify(user));
+
+          dispatch(setCredentials({ accessToken, user}));
+        }
         alert("회원가입이 완료되었습니다!");
-        // 3. 홈화면으로 리다이렉트
-        navigate('/'); 
+
+        window.location.href = '/';
       }
     } catch (error) {
-      console.error("등록 실패:", error);
+      console.error("등록 실패:", error.response?.data);
       alert("등록 중 오류가 발생했습니다.");
     }
   };
