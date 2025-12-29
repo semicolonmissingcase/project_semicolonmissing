@@ -63,6 +63,12 @@ const attributes = {
     allowNull: true, 
     comment: '기사 프로필',
   },
+  introduction: {
+    field: 'introduction',
+    type: DataTypes.STRING(200),
+    allowNull: true,
+    comment: '한줄 소개', 
+  },
   refreshToken: {
     field: 'refresh_token',
     type: DataTypes.STRING(255),
