@@ -138,7 +138,7 @@
   background-color: var(--color-white);
   border: 1px solid var(--color-blue);
   border-radius: 0 0 0.625rem 0.625rem; 
-  padding: 2.5rem;
+  padding: 1rem;
   min-height: 25rem;
 }
 
