@@ -12,7 +12,7 @@ export const loginThunk = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -28,7 +28,7 @@ export const reissueThunk = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -44,7 +44,20 @@ export const logoutThunk = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// 내 정보 가져오기 Thunk (새로고침 시 필수)
+export const getMeThunk = createAsyncThunk(
+  'auth/getMeThunk',
+  async(_, {rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.get('/api/auth/me');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

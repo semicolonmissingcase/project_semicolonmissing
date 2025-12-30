@@ -19,12 +19,12 @@ import dayjs from 'dayjs';
  * @param {boolean} secureFlg 
  * @param {string|null} path
  */
-function setCookie(res, cookieName, cookieValue, ttl, httpOnlyFlg = true, secureFlg = false, path = null) {
+function setCookie(res, cookieName, cookieValue, ttl, httpOnlyFlg = true, secureFlg = true, path = null) {
   const options = {
     expires: dayjs().add(ttl, 'second').toDate(),
     httpOnly: httpOnlyFlg,
-    secure: secureFlg,
-    sameSite:'none',
+    secure: false,
+    sameSite:'lax',
   }
 
   if(path) {
@@ -58,12 +58,13 @@ function getCookie(req, cookieName) {
  * @param {boolean} secureFlg 
  * @param {string|null} path
  */
-function clearCookie(res, cookieName, httpOnlyFlg = true, secureFlg = false, path = null) {
+function clearCookie(res, cookieName, httpOnlyFlg = true, secureFlg = true, path = null) {
   const options = {
     httpOnly: httpOnlyFlg,
-    secure: secureFlg,
-    sameSite: 'none',
-  }
+    secure: false,
+    sameSite: 'lax',
+    path: path || '/'
+  };
 
   if(path) {
     options.path = path;
@@ -88,7 +89,7 @@ function setCookieRefreshToken(res, refreshToken) {
     parseInt(process.env.JWT_REFRESH_TOKEN_COOKIE_EXPIRY),
     true,
     true,
-    process.env.JWT_REISS_URI
+    '/'
   );
 }
 
@@ -110,12 +111,38 @@ function clearCookieRefreshToken(res) {
     process.env.JWT_REFRESH_TOKEN_COOKIE_NAME,
     true,
     true,
-    process.env.JWT_REISS_URI
+    '/'
   );
+}
+
+/**
+ * 액세스 ㅌ토큰 쿠키 설정
+ * @param {import("express").Response} res 
+ * @param {string} accessToken 
+ */
+function setCookieAccessToken(res, accessToken) {
+  setCookie(
+    res,
+    'accessToken',
+    accessToken,
+    3600, // 1시간 
+    true, // httpOnly
+    true, // secure
+    '/'   // 모든 경로에서 쿠키 전송
+  ); 
+}
+
+/**
+ * 액세스 토큰 쿠키 제거 
+ */
+function clearCookieAccessToken(res) {
+  clearCookie(res, 'accessToken', true, true, '/');
 }
 
 export default {
   setCookieRefreshToken,
   getCookieRefreshToken,
   clearCookieRefreshToken,
+  setCookieAccessToken,
+  clearCookieAccessToken,
 }

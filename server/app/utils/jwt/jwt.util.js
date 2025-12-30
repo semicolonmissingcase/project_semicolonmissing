@@ -70,22 +70,19 @@ function generateRefreshToken(user) {
  * @param {import("express").Request} req
  * @returns {string} token 
  */
-function getBearerToken(req) {
-  // 베어러 토큰 획득
-  const bearerToken = req.headers[process.env.JWT_HEADER_KEY];
+function extractToken(req) {
+  const cookieToken = req.cookies?.accessToken;
+  if (cookieToken) return cookieToken;
 
-  // 베어러 토큰 미존재
-  if(!bearerToken) {
-    throw myError('베어러 토큰 없음', UNAUTHORIZED_ERROR);
-  }
-  
-  // 베어러 토큰 형식 검증
-  const tokenParts = bearerToken.split(' ');
-  if(tokenParts.length !== 2 || tokenParts[0] !== process.env.JWT_SCHEME) {
-    throw myError('베어러 토큰 형식 이상', INVALID_TOKEN_ERROR);
-  }
+  const bearerToken = req.headers[process.env.JWT_HEADER_KEY || 'authorization'];
 
-  return tokenParts[1]; // string , 토큰 부분만 반환
+  if(bearerToken) {
+    const tokenParts = bearerToken.split(' ');
+    if (tokenParts.length === 2 && tokenParts[0] === (process.env.JWT_SCHEME || 'Bearer')) {
+      return tokenParts[1];
+    }
+  }
+  return null;
 }
 
 /**
@@ -111,6 +108,6 @@ function getClaimsWithVerifyToken(token) {
 export default {
   generateAccessToken,
   generateRefreshToken,
-  getBearerToken,
+  extractToken,
   getClaimsWithVerifyToken,
 };

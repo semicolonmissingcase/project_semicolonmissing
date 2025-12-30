@@ -2,19 +2,28 @@ import "./HeaderDropdown.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearAuth } from "../../store/slices/authSlice";
+import { logoutThunk } from "../../store/thunks/authThunk";
 
 export default function HeaderDropdown({ isOpen, onClose, user }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // 로그아웃 처리 함수
-  function handleLogout() {
-    localStorage.removeItem('accessToken'); // 스토리지 삭제
-    localStorage.removeItem('user');
-    dispatch(clearAuth()); // 리덕스 상태 초기화
-    navigate('/');
-    onClose(); // 드롭다운 닫기
-  }
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutThunk()).unwrap();
+
+      alert("로그아웃 되었습니다.");
+      navigate('/');
+      onClose(); // 드롭다운 닫기
+      
+    } catch(error) {
+      console.error("로그아웃 실패.", error);
+      dispatch(clearAuth()); // 리덕스 상태 초기화
+      navigate('/');
+      onClose();
+    }
+  };
 
   // 마이페이지로 이동
   function ownerMyPage() {

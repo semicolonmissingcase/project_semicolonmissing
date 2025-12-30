@@ -21,7 +21,7 @@ function getAuthorizeURL() {
 
 function getTokenRequest(code) {
   const headers = {
-    'Contetn_Type': 'Content-Type: application/x-www-form-urlencoded;charset=utf-8'
+    'Content_Type': 'application/x-www-form-urlencoded;charset=utf-8'
   };
 
   const params = {

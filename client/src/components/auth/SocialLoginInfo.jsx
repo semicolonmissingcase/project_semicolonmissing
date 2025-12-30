@@ -1,13 +1,19 @@
+import axios from 'axios';
 import { useState } from "react";
 import "./SocialLoginInfo.css";
 import useKakaoPostcode from "../hooks/useKakaoPostcode.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../store/slices/authSlice.js';
+import axiosInstance from '../../api/axiosInstance.js';
 
 export default function SocialLoginInfo() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedRole, setSelectedRole] = useState(null); // 'OWNER' 또는 'CLEANER'
   const { openPostcode } = useKakaoPostcode();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({ 
     name: "",
     phonePrefix: "010",
     phoneMiddle: "",
@@ -20,33 +26,43 @@ export default function SocialLoginInfo() {
     addressDetail: ""
   });
 
-  const handleSubmit = async () => {
-    // 1. 데이터 가공 (전화번호 합치기 등)
-    const finalData = {
-      ...formData,
-      role: selectedRole,
-      phone: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
-      storePhone: selectedRole === 'OWNER' 
-        ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}` 
-        : null,
-      // 중요: 백엔드에서 필요한 이메일이나 카카오 고유 ID 등도 포함되어야 함
-      email: "kakao@kakao" // 실제로는 이전 단계에서 받아온 값을 넣어줘야 함
-    };
 
-    try {
-      // 2. 백엔드 API 호출
-      const response = await axios.post('/api/auth/signup/complete', finalData);
+const handleSubmit = async () => {
 
-      if (response.status === 200) {
+  try {
+    const response = await axiosInstance.post('/api/auth/signup/complete', finalData);
+
+    // response.data 전체를 먼저 출력해서 구조를 확인해보세요
+    console.log("서버 전체 응답:", response.data);
+
+    if (response.status === 200 || response.status === 201) {
+      // 서버 응답 구조가 response.data.data.user 인지 확인이 필요합니다.
+      // 만약 구조가 다르다면 아래처럼 안전하게 추출하세요.
+      const user = response.data?.data?.user || response.data?.user;
+
+      if (user) {
+        dispatch(setCredentials({ user }));
         alert("회원가입이 완료되었습니다!");
-        // 3. 홈화면으로 리다이렉트
-        navigate('/'); 
+        //  성공 시에만 페이지 이동
+        navigate('/', { replace: true });
+      } else {
+        // 유저 정보가 없으면 수동으로라도 이동 시키거나 로그인을 다시 유도
+        console.warn("유저 정보가 응답에 없습니다.");
+        navigate('/login');
       }
-    } catch (error) {
-      console.error("등록 실패:", error);
-      alert("등록 중 오류가 발생했습니다.");
     }
-  };
+  } catch (error) {
+    // 에러가 났을 때 어떤 에러인지 상세히 출력
+    console.error("handleSubmit 에러 발생:", error);
+    
+    // 네트워크 탭의 'me' 401 에러 때문일 가능성이 큽니다.
+    const errorMessage = error.response?.data?.message || "등록은 되었으나 로그인 정보를 가져오지 못했습니다. 다시 로그인해주세요.";
+    alert(`등록 알림: ${errorMessage}`);
+    
+    // 저장은 되었으니 로그인 페이지로 보내버리는 것도 방법입니다.
+    navigate('/login');
+  }
+};
 
   // 입력 핸들러
   const handleChange = (e) => {
