@@ -112,12 +112,12 @@ const router = createBrowserRouter([
           },
           {
             // 유저 견적 작성 페이지
-            path: 'userquotelist',
+            path: 'quotations',
             element: <CleanersUserQuoteListTitle />,
           },
           {
             // 유저 견적 작성 페이지 상세
-            path: 'userquotelistdetails/:id',
+            path: 'quotations/:id',
             element: <CleanersUserQuoteListDetails />,
           },
         ]
