@@ -44,7 +44,6 @@ const router = createBrowserRouter([
         element: <Login />
       },
       {
-        // 카카오 회원가입 후 가는 유저타입선택 페이지
         path: '/socialinfo',
         element: <SocialLoginInfo />
       },

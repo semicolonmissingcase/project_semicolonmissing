@@ -19,8 +19,10 @@ export default function Login () {
       await dispatch(loginThunk({email, password})).unwrap();
       return navigate('/', { replace: true });
     } catch(error) {
-      const code = error.response?.data?.code;
-      alert(`로그인 실패했습니다. ${code}`);
+      console.error("Login Error", error);
+      const errorMessage = error.message || "로그인에 실패했습니다.";
+      const errorCode = error.code ? `(${error.code})` : "";
+      alert(`${errorMessage} ${errorCode}`);
     }
   }
 

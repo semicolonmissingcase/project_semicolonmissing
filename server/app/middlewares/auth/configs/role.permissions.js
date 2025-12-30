@@ -10,6 +10,7 @@ const { ADMIN, OWNER, CLEANER } = ROLE;
 // 인증 및 인가가 필요한 요청만 정의
 const ROLE_PERMISSIONS = {
   GET: [
+    {path: /^\/api\/auth\/me$/, roles: [OWNER, CLEANER],}
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },

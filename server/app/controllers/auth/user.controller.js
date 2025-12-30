@@ -26,12 +26,13 @@ async function login(req, res, next) {
     const body = req.body;
 
     // 로그인 서비스 호출
-    const { accessToken, refreshToken, user }= await userService.login(body);
+    const { accessToken, refreshToken, user } = await userService.login(body);
     
     // Cookie에 RefreshToken 설정
     cookieUtil.setCookieRefreshToken(res, refreshToken);
+    cookieUtil.setCookieAccessToken(res, accessToken);
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, user}));
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { user }));
   } catch(error) {
     next(error);
   }
@@ -45,17 +46,20 @@ async function login(req, res, next) {
  */
 async function logout(req, res, next) {
   try {
-    const id = req.user.id;
+    // 💡 변경: req.user가 없더라도 에러를 내지 않고 쿠키만 지우고 응답합니다.
+    const userId = req.user?.id; 
 
-    // 로그아웃 서비스 호출
-    await userService.logout(id);
+    if (userId) {
+      await userService.logout(userId);
+    }
 
-    // cookie에 refreshToken 만료
+    // DB 처리 여부와 상관없이 브라우저의 쿠키는 무조건 지웁니다.
     cookieUtil.clearCookieRefreshToken(res);
+    cookieUtil.clearCookieAccessToken(res);
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS))
+    return res.status(200).send(createBaseResponse(SUCCESS));
   } catch (error) {
-    return next(error);
+    next(error);
   }
 }
 
@@ -79,8 +83,9 @@ async function reissue(req, res, next) {
 
     // 쿠키에 리프래시 토큰 설정
     cookieUtil.setCookieRefreshToken(res, refreshToken);
+    cookieUtil.setCookieAccessToken(res, accessToken);
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, user }))
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { user }))
   } catch(error) {
     next(error);
   }
@@ -124,13 +129,19 @@ async function socialCallback(req, res, next) {
 
       // env에 설정한 추가 정보 입력 페이지로 리다이렉트 
       const extraInfoUrl = `${process.env.SOCIAL_CLIENT_EXTRA_INFO_URL}?email=${email}&nick=${encodeURIComponent(nick)}&profile=${profile}`;
-
       return res.redirect(extraInfoUrl);
     }   
+
     // 3. 기존 유저인 경우 (로그인 처리)
     cookieUtil.setCookieRefreshToken(res, result.refreshToken);
+   
+    // 이 함수가 실행되면 브라우저 쿠키에 'accessToken'이라는 이름을 저장
+    cookieUtil.setCookieAccessToken(res, result.accessToken);
 
-    return res.redirect(process.env.SOCIAL_CLIENT_CALLBACK_URL);
+    const redirectUrl = `${process.env.SOCIAL_CLIENT_CALLBACK_URL}`;
+
+    return res.redirect(redirectUrl);
+
   } catch(error) {
     next(error);
   }
@@ -146,14 +157,34 @@ async function completeSignup(req, res, next) {
 
     // 가입 완료 후 발급된 리프레시 토큰을 쿠키에 저장
     cookieUtil.setCookieRefreshToken(res, result.refreshToken);
+    cookieUtil.setCookieAccessToken(res, result.accessToken);
 
     // 프론트엔드에 성공 응답 (액세스 토큰 전달)
     return res.status(200).json({
       success: true,
-      accessToken: result.accessToken,
       user: result.user
     });
   } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * 내 정보 조회 컨트롤러 (새로고침 시 로그인 유지용)
+ */
+async function getMe(req, res, next) {
+  try {
+    // 1. 미들웨어에서 넘겨준 유저 정보 추출
+    const { id, role } = req.user;
+
+    // 2. [확인] 여기서 userService.logout(id)가 절대 호출되면 안 됩니다!
+    // 오직 정보를 가져오는 userService.getMe(id, role)만 호출해야 합니다.
+    const user = await userService.getMe(id, role); 
+
+    // 3. 성공 응답 (기존 SUCCESS 변수와 createBaseResponse 함수 사용)
+    return res.status(200).send(createBaseResponse(SUCCESS, { user }));
+  } catch (error) {
+    console.error("getMe 컨트롤러 에러 발생:", error);
     next(error);
   }
 }
@@ -168,5 +199,6 @@ export const userController = {
   reissue,
   social,
   socialCallback,
-  completeSignup
+  completeSignup,
+  getMe,
 };

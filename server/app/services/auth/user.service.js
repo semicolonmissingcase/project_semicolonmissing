@@ -75,7 +75,6 @@ async function login(body) {
     return {
       accessToken,
       refreshToken,
-      user,
       user: userResponse,
     }
   });
@@ -252,7 +251,7 @@ async function socialKakao(code) {
 async function completeSocialSignup(signupData) {
   // 프론트에서 넘어온 데이터 구조 분해
   const { 
-    role, email, nick, profile, provider,
+    role, email, name, profile, provider,
     phoneNumber, // 카카오가 안 줘서 새로 입력받은 번호
     storeName, storePhone, storeAddress, // 점주용 추가 정보
     regions // 기사용 추가 정보 (배열 형태 예상)
@@ -264,7 +263,7 @@ async function completeSocialSignup(signupData) {
     // 공통 데이터 설정 
     const commonData = {
       email,
-      nick, // 사용자가 수정한 닉네임
+      name, 
       profile,
       phoneNumber,
       provider,
@@ -313,10 +312,28 @@ async function completeSocialSignup(signupData) {
   });
 }
 
+async function getMe(id, role) {
+    let user = null;
+    if (role === ROLE.OWNER) {
+      user = await ownerRepository.findByPk(null, id);
+    } else {
+      user = await cleanerRepository.findByPk(null, id);
+    }
+
+    if (!user) {
+      throw myError('유저 정보를 찾을 수 없습니다.', NOT_REGISTERED_ERROR);
+    }
+    
+    const userResponse = user.toJSON();
+    userResponse.role = role;
+    return userResponse;
+}
+
 export default {
   login,
   logout,
   reissue,
   socialKakao,
   completeSocialSignup,
+  getMe,
 }

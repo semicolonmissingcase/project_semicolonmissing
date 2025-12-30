@@ -4,7 +4,7 @@
  * 251223 v1.0.0 jae init
  */
 
-import { FORBIDDEN_ERROR } from "../../../configs/responseCode.config.js";
+import { FORBIDDEN_ERROR, UNAUTHORIZED_ERROR } from "../../../configs/responseCode.config.js";
 import myError from "../../errors/customs/my.error.js";
 import jwtUtil from "../../utils/jwt/jwt.util.js";
 import ROLE_PERMISSIONS from "./configs/role.permissions.js";
@@ -16,10 +16,10 @@ function authenticate(req) {
   // 1. 토큰 획득 (req에서 토큰을 추출하는 로직이 jwtUtil.getToken(req) 형태라고 가정)
   // 기존 코드에 jwtUtil.generateAccessToken(req)라고 되어있는데, 
   // 검증 시에는 보통 getToken이나 추출 로직이 와야 합니다.
-  const token = jwtUtil.extractToken(req); 
+  const token = jwtUtil.extractToken(req);
 
   if (!token) {
-    throw myError('인증 토큰이 없습니다.', AUTH_ERROR);
+    throw myError('인증 토큰이 없습니다.', UNAUTHORIZED_ERROR);
   }
 
   // 2. 토큰 검증 및 페이로드 획득
@@ -27,7 +27,7 @@ function authenticate(req) {
 
   // 3. Request 객체에 사용자 정보를 통합해서 추가 (req.owner -> req.user)
   req.user = {
-    id: parseInt(claims.id || claims.sub),
+    id: claims.id || claims.sub,
     role: claims.role // 토큰 생성 시 넣었던 ROLE.OWNER 또는 ROLE.CLEANER
   };
 }

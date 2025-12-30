@@ -2,13 +2,14 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import HeaderMenu from "./HeaderMenu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import HeaderDropdown from "./HeaderDropdown.jsx";
+import { getMeThunk } from "../../store/thunks/authThunk.js";
 // import { clearAuth } from "../../store/slices/authSlice";
 
 export default function Header() {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // 드롭다운용
   const [isDropDown, setIsDropDown] = useState(false);
@@ -16,7 +17,19 @@ export default function Header() {
 
   // Redux Store에서 로그인 상태 가져오기 
   const { isLoggedIn, user } = useSelector((state) => state.auth);
-
+ 
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        await dispatch(getMeThunk()).unwrap();
+      } catch (error) {
+        console.log("비로그인 상태입니다.");
+      }
+    }
+   
+    initAuth();
+  }, []);
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
 
   // 채팅 사이드바 열림 상태 관리
