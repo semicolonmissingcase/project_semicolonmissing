@@ -18,6 +18,8 @@ import { createServer } from 'http'; // HTTP 서버 생성
 import { Server } from 'socket.io';   // 소켓 모듈
 import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
 import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
+// import cleanersRouter from './routes/cleaners.router.js'; // TODO: 추후 코멘트 해제
+import ownersRouter from './routes/owners.routes.js';
 
 const app = express();
 app.use(cors({
@@ -35,6 +37,8 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/users', usersRouter); // 회원가입 관련
+app.use('/api/owners', ownersRouter);
+// app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 
 // 에러 핸들러 등록
 app.use(errorHandler);
