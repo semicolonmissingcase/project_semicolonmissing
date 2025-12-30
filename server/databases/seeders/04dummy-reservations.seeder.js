@@ -32,6 +32,15 @@ export default {
         status: '승인',
         cleanerId: null,
       },
+      {
+        id: 3,
+        ownerId: 1,
+        storeId: 3,
+        date: '2025-12-26',
+        time: '12:00:00',
+        status: '완료',
+        cleanerId: 1,
+      },
     ];
 
     // 데이터 생성: 모델의 bulkCreate 사용
