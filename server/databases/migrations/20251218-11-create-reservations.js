@@ -33,7 +33,7 @@ const attributes = {
   },
   date: {
     field: 'date',
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
     comment: '희망 날짜',
   },

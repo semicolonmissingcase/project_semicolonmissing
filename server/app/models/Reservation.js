@@ -34,9 +34,16 @@ const attributes = {
   },
   date: {
     field: 'date',
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
     comment: '희망 날짜',
+    get() {
+      const val = this.getDataValue('date')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD');
+    }  
   },
   time: {
     field: 'time',
@@ -117,6 +124,7 @@ const Reservation = {
     db.Reservation.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
     db.Reservation.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
     db.Reservation.belongsTo(db.Store, { targetKey: 'id', foreignKey: 'storeId', as: 'store' });
+    db.Reservation.hasMany(db.Submission, { sourcKey: 'id', foreignKey: 'reservationId', as: 'submission' });
   }
 }
 

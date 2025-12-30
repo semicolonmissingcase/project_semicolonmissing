@@ -22,14 +22,26 @@ const attributes = {
   questionId: {
     field: 'question_id',
     type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
+    allowNull: true,
     comment: '질문 PK',
+  },
+  reservationId: {
+    field: 'reservation_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '예약 PK',
+  },
+  questionOptionId: {
+    field: 'question_option_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: true,
+    comment: '질문 선다 PK(객관식 답변)',
   },
   answerText: {
     field: 'answer_text',
     type: DataTypes.TEXT,
     allowNull: true,
-    comment: '점주가 작성한 실제 답변 내용',
+    comment: '추가 요청 사항 답변',
   },
   createdAt: {
     field: 'created_at',

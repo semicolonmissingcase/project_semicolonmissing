@@ -131,7 +131,6 @@ const Owner = {
   associate: (db) => {
     db.Owner.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'ownerId', as: 'chatRooms'});
     db.Owner.hasMany(db.Store, { sourceKey: 'id', foreignKey: 'ownerId', as: 'stores'});
-    db.Owner.hasMany(db.Question, { sourceKey: 'id', foreignKey: 'ownerId', as: 'questions'});
     db.Owner.hasMany(db.PushSubscription, { sourceKey: 'id', foreignKey: 'ownerId', as: 'pushSubscriptions'});
     db.Owner.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'ownerId', as: 'reviews'});
     db.Owner.hasMany(db.Like, { sourceKey: 'id', foreignKey: 'ownerId', as: 'likes'});
