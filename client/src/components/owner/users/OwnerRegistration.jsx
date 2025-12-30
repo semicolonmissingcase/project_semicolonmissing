@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './OwnerRegistration.css';
 import useKakaoPostcode from "../../hooks/useKakaoPostcode.js";
 import { useDispatch } from "react-redux";
-import { ownerStoreThunk } from "../../../store/thunks/userStore.Thunk.js"
+import { ownerStoreThunk } from "../../../store/thunks/userStore.Thunk.js";
 const DEFAULT_PROFILE_IMAGE_URL = '/icons/default-profile.png'; // 기본 프로필 사진
 
 export default function OwnerRegistration() {
@@ -188,21 +188,21 @@ export default function OwnerRegistration() {
           processedAddr3 = formData.addressDetail.trim(); // 상세주소
         }
 
-        const constructedPhoneNumber = formData.storePhoneMiddle && formData.storePhoneLast
-          ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
-          : '';
+        // const constructedPhoneNumber = formData.storePhoneMiddle && formData.storePhoneLast
+        //   ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
+        //   : '';
 
-        console.log("Constructed Phone Number:", constructedPhoneNumber, "Length:", constructedPhoneNumber.length)
+        // console.log("Constructed Phone Number:", constructedPhoneNumber, "Length:", constructedPhoneNumber.length)
 
         submitData.store = {
           name: formData.storeName,
           addr1: processedAddr1,
           addr2: processedAddr2,
           addr3: processedAddr3,
-          phoneNumber: constructedPhoneNumber,
-          // phoneNumber: formData.storePhoneMiddle && formData.storePhoneLast 
-          //   ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`
-          //   : '', // 매장 전화번호가 필수가 아닐 경우 빈문자열 전송
+          // phoneNumber: constructedPhoneNumber,
+          phoneNumber: formData.storePhoneMiddle && formData.storePhoneLast 
+            ? `${formData.storePhonePrefix}${formData.storePhoneMiddle}${formData.storePhoneLast}`
+            : '', // 매장 전화번호가 필수가 아닐 경우 빈문자열 전송
         };
       }
 

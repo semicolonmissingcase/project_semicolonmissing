@@ -5,7 +5,7 @@ import { storeDeleteThunk } from "../thunks/storeDeleteThunk.js";
 
 
 const initialState = {
-  store: [],
+  stores: [],
   status: 'idle',
   error: null,
 };

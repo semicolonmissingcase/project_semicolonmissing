@@ -60,8 +60,8 @@ const storeAddr3 = body('store.addr3')
 const storePhoneNumber = body('store.phoneNumber')
   .optional({ checkFalsy: true }) // 빈 문자열도 optional로 처리
   .trim()
-  .matches(/^\d{2,3}-\d{3,4}-\d{4}$/)
-  .withMessage('유효한 전화번호 형식이 아닙니다. (예: 02-1234-5678)')
+  .matches(/^\d{2,3}\d{3,4}\d{4}$/)
+  .withMessage('유효한 전화번호 형식이 아닙니다. (예: 0212345678)')
 ;
 
 export default {
