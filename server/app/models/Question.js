@@ -19,29 +19,24 @@ const attributes = {
     autoIncrement: true,
     comment: '질문 PK',
   },
-  ownerId: {
-    field: 'owner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
+  code: {
+    field: 'code',
+    type: DataTypes.CHAR(3),
     allowNull: false,
-    comment: '점주 PK',
-  },
-  questionType: {
-    field : 'question_type',
-    type: DataTypes.STRING(20),
-    allowNull: false,
-    comment: '질문 출처 구분(시스템 제공, 직접 입력)'
+    comment: '객관식 질문 코드(Q01, Q02, Q03...)',
   },
   content: {
     field: 'content',
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(100),
     allowNull: false,
-    comment: '내용(유저가 직접 쓴 텍스트 또는 시스템 질문 내용)'
+    comment: '객관식 질문 내용'
   },
   isActive: {
     field: 'is_active',
     type: DataTypes.BOOLEAN,
-    default: true, 
-    comment: '현재 이 질문을 사용 중인지 여부',
+    allowNull: false,
+    defaultValue: 1, 
+    comment: '질문 활성화 여부',
   },
   createdAt: {
     field: 'created_at',
@@ -101,7 +96,8 @@ const Question = {
     return define;
   },
   associate: (db) => {
-    db.Question.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
+    db.Question.hasMany(db.QuestionOption, { sourcKey: 'id', foreignKey: 'questionId', as: 'questionOptions' });
+    db.Question.hasMany(db.Submission, { sourcKey: 'id', foreignKey: 'questionId', as: 'submissions' });
   }
 }
 

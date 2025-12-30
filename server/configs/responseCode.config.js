@@ -149,6 +149,18 @@ const BAD_FILE_ERROR = {
 Object.freeze(BAD_FILE_ERROR);
 
 /**
+ * BAD_FILE_ERROR 코드 설정
+ * @type {ResponseCodeConfig}
+ */
+const ALREADY_PROCESSED_ERROR = {
+  code: 'E30', 
+  msg: 'Already Processed', 
+  info: '이미 처리된 요청입니다.', 
+  status: 409 
+};
+Object.freeze(ALREADY_PROCESSED_ERROR);
+
+/**
  * DB 에러 응답 코드 설정
  * @type {ResponseCodeConfig}
  */
@@ -185,6 +197,7 @@ export {
   NOT_FOUND_ERROR,
   BAD_REQUEST_ERROR,
   BAD_FILE_ERROR,
+  ALREADY_PROCESSED_ERROR,
   DB_ERROR,
   SYSTEM_ERROR,
 };

@@ -9,11 +9,13 @@ import Registration from "../components/users/Registration.jsx";
 import Result from "../components/result/Result.jsx";
 import SocialLoginInfo from "../components/auth/SocialLoginInfo.jsx"; // 카카오 회원가입 후 가는 유저타입선택 페이지
 // 기사님 관련
+import CleanersRegistration from "../components/cleaners/CleanersRegistration.jsx";
 import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
 import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
+import CleanersSettlementStatus from "../components/cleaners/CleanersSettlementStatus.jsx";
 import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
 import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
@@ -28,6 +30,7 @@ import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.j
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
+
 
 
 
@@ -62,6 +65,11 @@ const router = createBrowserRouter([
             path: 'owners',
             element: <OwnerRegistration />,
           },
+           {
+            // 기사 회원가입 페이지
+            path: 'cleaners',
+            element: <CleanersRegistration />
+           },
         ]
       },
       {
@@ -69,29 +77,34 @@ const router = createBrowserRouter([
         element: <Outlet />,
         children: [
            {
-            // 계좌 수정 페이지
+            // 기사 계좌 수정 페이지
             path: 'accountedit',
             element: <CleanersAccountEdit />
           },
           {
-            // 계좌 저장 페이지
+            // 기사 계좌 저장 페이지
             path: 'accountsave',
             element: <CleanersAccountSave />,
           },
           {
-            // 정보 수정 페이지
+            // 기사 정보 수정 페이지
             path: 'infoedit',
             element: <CleanersInfoEdit />
           },
           {
-            // 프로필 수정 페이지
+            // 기사 프로필 수정 페이지
             path: 'profileedit',
             element: <CleanersProfileEdit />,
           },
           { 
-            // 마이페이지
+            // 기사 마이 페이지
             path: 'mypage',
             element: <CleanersMyPage />,
+          },
+            // 기사 마이 페이지 > 현재 정산 상태 페이지(아래 카테고리 안에 넣을 예정)
+          {
+            path: 'settlementstatus',
+            element: <CleanersSettlementStatus />,
           },
           {
             // 기사 견적 작성 임시저장 페이지
@@ -100,12 +113,12 @@ const router = createBrowserRouter([
           },
           {
             // 유저 견적 작성 페이지
-            path: 'userquotelist',
+            path: 'quotations',
             element: <CleanersUserQuoteListTitle />,
           },
           {
             // 유저 견적 작성 페이지 상세
-            path: 'userquotelistdetails',
+            path: 'quotations/:id',
             element: <CleanersUserQuoteListDetails />,
           },
         ]

@@ -5,9 +5,18 @@
   gap: 1.5rem;
 }
 
+.cleaners-user-quote-list-details-container > form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cleaners-user-quote-list-details-container > form > button {
+  align-self: center;
+}
+
 .cleaners-user-quote-list-details-title {
   font-size: 1.5rem;
-  font-weight: bold;
 }
 
 .cleaners-user-quote-list-details-items-box {
@@ -25,6 +34,18 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-items-box-title-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cleaners-user-quote-list-details-btn {
+  padding: 5px;
+  background-color: var(--color-gray);
+  border-radius: 10px;
+  color: var(--color-white);
 }
 
 .cleaners-user-quote-list-details-grid {
@@ -53,8 +74,24 @@
 
 .cleaners-user-quote-list-details-items-box-title {
   font-size: 1.2rem;
-  font-weight: bold;
   margin-bottom: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-items-box-sub-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-items-box-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-items-box-image {
+  padding-top: 70%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .cleaners-user-quote-list-details-input-box {
@@ -64,11 +101,30 @@
 }
 
 .cleaners-user-quote-list-details-input-box > label {
-  width: 60px;
+  width: 70px;
 }
 
 .cleaners-user-quote-list-details-input-box > input {
   width: 100%;
+}
+
+.cleaners-user-quote-list-details-textarea-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cleaners-user-quote-list-details-textarea {
+  height: 100px;
+  outline: none;
+  padding: 5px;
+  resize: none;
+  border-radius: 10px;
+  -ms-overflow-style: none;
+}
+
+.cleaners-user-quote-list-details-textarea::-webkit-scrollbar{
+  display:none;
 }
 
 .cleaners-user-quote-list-details-grid-1 {
@@ -99,158 +155,53 @@
   outline: none;
 }
 
-.cleaners-user-quote-list-details-attachment-button {
-  width: 7rem;
-  background-color: var(--color-light-gray);
-  border: 1px solid var(--color-gray);
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  padding: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 10px;
-}
-
-.cleaners-user-quote-list-attachment-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.cleaners-user-quote-list-details-attachment {
-  display: none;
-}
-
-.cleaners-user-quote-list-detail-attachment-img {
+.cleaners-user-quote-list-details-toggle-question {
   cursor: pointer;
+  user-select: none;
+}
+.cleaners-user-quote-list-details-toggle-question::after {
+  content: '(필수 사항이 아닌 선택 사항입니다. 하지만 입력해주시면 기사님들이 빠른 진단을 해주실 수 있어요!)';
+  font-size: 0.9rem;
+  color: var(--color-gray);
 }
 
-.cleaeners-user-list-details-ul-wrapper {
-  display: flex;
-}
-
-.cleaners-user-quote-list-details-ul-title {
-  display: grid;
-  place-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 3rem;
-}
-
-.cleaners-user-quote-list-details-border-none {
-  border: none;
-}
-
-.cleaners-user-quote-list-detail-li {
-  display: flex;
-  list-style: none;
-}
-
-.cleaners-user-quote-list-details-toggle-details-wrapper {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.cleaners-user-quote-list-details-details-option-info {
-  margin-bottom: 0.5rem;
-}
-
-.cleaners-user-quote-list-details-answer-binary-layout {
-  display: grid;
-}
-
-.cleaners-user-quote-list-details-contents {
-  display: grid;
-}
-
-.cleaners-user-quote-list-details-answer-layout {
-  display: flex;
-}
-
-.cleaners-user-quote-list-details-input-box-details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin: 1rem 0;
-}
-
-.cleaners-user-quote-list-details-answers {
-  display: grid;
-  gap: 1rem;
-}
-
-.cleaners-user-quote-list-details-input-box-details-answer {
+/* 추가 질문 관련 */
+.cleaners-user-quote-list-details-items-box-question {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.cleaners-user-quote-list-details-input-details-box {
+.cleaners-user-quote-list-details-items-box-question-answers {
   display: flex;
-  gap: 0.8rem;
+  gap: 1rem;
+}
+
+.cleaners-user-quote-list-details-items-box-question-answer {
+  display: flex;
   align-items: center;
-}
-
-.cleaners-user-quote-list-details-input-box-details > label {
-  width: 350px;
-}
-
-.cleaners-user-quote-list-details-input-box-details > input {
-  flex: 1;
+  gap: 0.5rem;
 }
 
 
+/* 라디오 관련 */
 .cleaners-user-quote-list-details-radio-ui {
   width: 16px;
   height: 16px;
   border-radius: 50%;
   border: 1.5px solid var(--color-gray);
   background-color: var(--color-light-gray);
-  display: inline-block;
-  margin-right: 10px;
 }
-  
-.cleaners-user-quote-list-details-answer-binary-selected .cleaners-user-quote-list-details-radio-ui {
+
+.cleaners-user-quote-list-details-radio-ui:checked {
   background-color: var(--color-gray);
   border-color: var(--color-gray);
-  display: inline-block;
-}
-
-.cleaners-user-quote-list-details-radio-input {
-  display: none;
-}
-
-.cleaners-user-quote-list-details-request {
-  margin-top: 1rem;
-  display: grid;
-  gap: 1rem;
-}
-
-.cleaners-user-quote-list-details-requests {
-  border: 1px solid var(--color-gray);
-  border-radius: 15px;
-  padding: 10px;
-  font-size: 18px;
-}
-
-.cleaners-user-quote-list-details-answer-binary-column {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.cleaners-profile-edit-button-small-custom3 {
-  width: 130px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: var(--color-light-gray);
-  white-space: nowrap;
-  margin: 0 auto;
 }
 
 
+
+/* 이하 확인 필요 */
 @media (max-width: 820px) {
-
   .cleaners-user-quote-list-details-base-info {
     display: grid;
     grid-template-columns: 0.5fr 1.5fr;
@@ -261,11 +212,24 @@
     grid-template-columns: 1fr;
   }
   
+  .cleaners-user-quote-list-details-items-box-images {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .cleaners-user-quote-list-details-items-box-question {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  .cleaners-user-quote-list-details-items-box-question-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
 }
 
 
 @media ( max-width: 720px ) {
-  
   .cleaners-user-quote-list-details-contents {
   display: grid;
   grid-template-columns: 1fr;
@@ -283,33 +247,11 @@
     gap: 1rem;
   }
 
-    .cleaners-user-quote-list-details-input-layout-full-width {
-      width: 100%;
-    }
+  .cleaners-user-quote-list-details-input-layout-full-width {
+    width: 100%;
   }
-
-
-@media ( max-width: 410px ) {
- .cleaners-user-quote-list-details-items-box-column .cleaners-user-quote-list-details-grid-1 {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
- }
-
-
-.cleaners-user-quote-list-details-input-layout-column {
-  width: 100%;
 }
 
-.cleaners-user-quote-list-details-answer-layout .cleaners-user-quote-list-details-input-layout {
-  width: 100%;
-}
-
-.cleaners-user-quote-list-details-answer-layout {
-  width: 100%;
-  background-color: aliceblue;
-}
-}
 
 
 

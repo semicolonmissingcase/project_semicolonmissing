@@ -7,6 +7,14 @@
 import { body, param } from "express-validator";
 import PROVIDER from "../../auth/configs/provider.enum.js";
 
+const id = param('id')
+  .trim()
+  .notEmpty()
+  .withMessage('필수 항목입니다.')
+  .bail()
+  .matches(/^[0-9]+$/)
+  .withMessage('유효한 값이 아닙니다.')
+
 const email = body('email')
   .trim()
   .notEmpty()
@@ -71,6 +79,7 @@ const provider = param('provider')
 ;
 
 export default {
+  id,
   email,
   password,
   passwordChk,

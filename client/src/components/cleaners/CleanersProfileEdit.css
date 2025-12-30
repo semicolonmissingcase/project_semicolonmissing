@@ -15,28 +15,56 @@
   width: 100%;
 }
 
-.cleaners-profile-edit-layout{
+.cleaners-profile-edit-layout {
   display: grid;
 }
+
 
 .cleaners-profile-edit-title {
   font-size: 1.5rem;
   font-weight: bold;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  cursor: pointer;
 }
 
-
-.cleaners-info-edit-layout-row {
+.cleaners-profile-edit-image {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  border-radius: 5px;
+}
+
+.cleaners-profile-edit-image-edit {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.cleaners-profile-edit-layout-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
 }
 
 .cleaners-profile-edit-profile-title {
-  display: flex;
+  display: grid;
   margin-top: 1rem;
+  grid-template-columns: 1fr 1fr; /* 2개의 동일한 너비 열 */
+  grid-template-rows: 150px 150px; /* 2개의 동일한 높이 행 */
+  gap: 10px; /* 셀 간 간격 */
+}
+
+.cleaners-profile-edit-profile-title > input {
+  grid-area: 1 / 3 ; /* 모든 이미지가 1행1열부터 3행3열 영역을 차지 (겹침) */
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* 기본 쌓임 순서 */
+}
+
+.cleaners-profile-edit-profile-title > img:last-child {
+  grid-area: 1 / 1 / -1 / -1; /* 두 번째 이미지는 2행 2열 셀만 차지 */
+  z-index: 2; /* 더 높은 z-index로 겹쳐 보이게 함 */
+  /* 원하는 모양으로 크기 조절 가능 */
 }
 
 .cleaners-profile-edit-input {
@@ -52,6 +80,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 
 .cleaners-profile-edit-layout-flex-column > label {
@@ -59,7 +88,7 @@
   border: none;
   font-size: 18px;
   border-radius: 5px;
-  width: 270px;
+  width: 100%;
 }
 
 .cleaners-profile-edit-attachment {
@@ -103,11 +132,11 @@
   padding: 0 30px 30px 0;
 }
 
-.cleaners-info-edit-region-picker {
+.cleaners-profile-edit-region-picker {
   position: relative;
 }
 
-.cleaners-info-edit-region-panel {
+.cleaners-profile-edit-region-panel {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -119,11 +148,11 @@
   transition: width 0.3s ease;
 }
 
-.cleaners-info-edit-region-panel.is-left-only {
+.cleaners-profile-edit-region-panel.is-left-only {
   width: 160px;
 }
 
-.cleaners-info-edit-region-panel.is-split {
+.cleaners-profile-edit-region-panel.is-split {
   width: 520px;
   max-width: 90vw;
   min-width: 270px;
@@ -204,7 +233,7 @@
   white-space: nowrap;
 }
 
-.cleaners-profile-eidt-modal-cancel-submit-text-button {
+.cleaners-profile-edit-modal-cancel-submit-text-button {
   padding-top: 3rem;
   display: flex;
   flex-direction: column;
@@ -220,62 +249,70 @@
   width: 100%;
 }
 
+.cleaners-profile-edit-ul-title {
+  list-style: none;
+}
+
 @media (min-width: 1200px) {
 
-  .cleaners-info-edit-region-panel.is-left-only {                                                              
+  .cleaners-profile-edit-region-panel.is-left-only {                                                              
   width: 250px;    
   }
-  .cleaners-info-edit-region-panel.is-split {                                                                  
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
   width: 420px !important;  
   }
 }
 
 @media (max-width: 1200px) and (min-width: 830px) {
-  .cleaners-info-edit-region-panel.is-split {                                                                  
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
   width: 360px !important;      
 }   
 }
 
-@media (max-width: 830px) and (min-width: 745px) {
-  .cleaners-info-edit-region-panel.is-split {                                                                  
-  width: 500px !important;      
+@media (max-width: 830px) and (min-width: 714px) {
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 320px !important;      
 }   
 }
 
-@media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
-  .cleaners-info-edit-region-panel.is-left-only {                                                              
-  width: 270px;                                                                                              
+@media (max-width: 714px) {
+  .cleaners-profile-edit-profile-title {
+    justify-content: center;
+  }
+
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 80% !important;    
+ }  
 }
-  .cleaners-info-edit-region-panel.is-split {                                                                  
-  width: 420px !important;  
-}                                                                                             
+
+@media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
+  .cleaners-profile-edit-region-panel.is-left-only {                                                              
+  width: 270px;                                                                                              
+} 
+
+.cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 80% !important;    
+}  
+
 }                                                                                           
                                                                                                             
-@media ( max-width: 536px ) {  
-
-  .cleaners-info-edit-region-picker-trigger,
+ @media ( max-width: 534px ) {
+  .cleaners-profile-edit-region-picker-trigger,
   .cleaners-profile-edit-input {                                                                  
-  width: 95% !important;                                                                                             
+  width: 100%;                                                                                             
   }    
   
-  .cleaners-info-edit-layout-row {
+  .cleaners-profile-edit-layout-row {
     grid-template-columns: 1fr;
   }
 
-  .cleaners-profile-edit-layout-center {
-    display: grid;
-    place-items: center;
-  }
-}                                                                                                                
-             
-@media (max-width: 535px) {                                              
-  .cleaners-info-edit-region-panel.is-split {                                                                  
-  width: 250px;           
-  }
+  .cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 250px; 
+  }           
 }
 
 @media (max-width: 370px) {
-.cleaners-info-edit-region-panel.is-split {                                                                  
-  width: 210px;           
+.cleaners-profile-edit-region-panel.is-split {                                                                  
+  width: 200px !important;           
   }
 }

@@ -44,6 +44,12 @@
   min-width: 3rem; /* 최소 너비로 정렬 맞추기 */
 }
 
+/* 카카오맵 URL 스킴 위치 변경 */
+.completedjoblist-card-place {
+  display: flex;
+  align-items: center;
+}
+
 /* 값 (실제 데이터) */
 .completedjoblist-card-value {
   color: #1f2937; /* 진한 회색 */

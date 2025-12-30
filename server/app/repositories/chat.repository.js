@@ -1,7 +1,6 @@
 /**
  * @file app/repositories/chat.repository.js
- * @description Chat Repository
- * 251222 v1.0.0 seon init
+ * @description Chat Repository - 기사/점주 목록 조회 및 메시지 관리
  */
 import db from '../models/index.js';
 import { Op } from 'sequelize';
@@ -34,31 +33,40 @@ const chatRepository = {
 
   /**
    * 사용자별 채팅방 목록 조회
+   * [수정] 목록이 안 뜨는 문제를 방지하기 위해 LeavedAt 조건을 제거하거나 
+   * null뿐만 아니라 빈 값도 허용하도록 안전하게 조회합니다.
    */
-findByUser: async (transaction, userId, userRole) => {
-  const isOwner = /OWNER/i.test(String(userRole));
-  return await db.ChatRoom.findAll({
-    where: {
-      [isOwner ? 'ownerId' : 'cleanerId']: userId,
-      [isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt']: null
-    },
-    include: [
-      { model: db.Estimate, as: 'estimate' },
-      { model: isOwner ? db.Cleaner : db.Owner, as: isOwner ? 'cleaner' : 'owner' },
-      {
-        model: db.ChatMessage,
-        as: 'chatMessages',
-        limit: 1,
-        order: [['createdAt', 'DESC']]
-      }
-    ],
-    order: [['updatedAt', 'DESC']], 
-    transaction
-  });
-},
+  findByUser: async (transaction, userId, userRole) => {
+    const roleStr = String(userRole || '').toUpperCase();
+    const isOwner = roleStr.includes('OWNER');
+    
+    return await db.ChatRoom.findAll({
+      where: {
+        [isOwner ? 'ownerId' : 'cleanerId']: userId,
+        // 기사님 목록이 안 뜨는 주범인 조건을 주석 처리하거나 null로 엄격히 제한 해제
+        // [isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt']: null 
+      },
+      include: [
+        { model: db.Estimate, as: 'estimate', required: false },
+        { 
+          model: isOwner ? db.Cleaner : db.Owner, 
+          as: isOwner ? 'cleaner' : 'owner',
+          required: false 
+        },
+        {
+          model: db.ChatMessage,
+          as: 'chatMessages',
+          limit: 1,
+          order: [['createdAt', 'DESC']]
+        }
+      ],
+      order: [['updatedAt', 'DESC']], 
+      transaction
+    });
+  },
 
   /**
-   * 메시지 저장 및 방 부활(LeavedAt 초기화)
+   * 메시지 저장 및 방 부활 (LeavedAt 초기화)
    */
   createMessage: async (transaction, data) => {
     const message = await db.ChatMessage.create({
@@ -69,13 +77,17 @@ findByUser: async (transaction, userId, userRole) => {
       messageType: data.type || 'TEXT'
     }, { transaction });
 
-    // 어느 한쪽이라도 메시지를 보내면 양쪽 모두 다시 목록에 보여야 하므로 null 처리
+    // 어느 한쪽이라도 메시지를 보내면 양쪽 모두 다시 목록에 보여야 하므로 명시적 null 처리
     await db.ChatRoom.update(
       { 
         ownerLeavedAt: null, 
-        cleanerLeavedAt: null 
+        cleanerLeavedAt: null,
+        updatedAt: new Date() // 목록 최상단 노출을 위해 수동 갱신
       }, 
-      { where: { id: data.room_id }, transaction }
+      { 
+        where: { id: data.room_id }, 
+        transaction 
+      }
     );
 
     return message;
@@ -85,20 +97,26 @@ findByUser: async (transaction, userId, userRole) => {
    * 특정 방의 메시지 목록 조회
    */
   findMessagesByRoomId: async (transaction, room_id, limit = 50, offset = 0) => {
-    return await db.ChatMessage.findAll({
+    // 1. 먼저 최신 메시지를 기준으로 50개를 가져옵니다. (DESC)
+    const messages = await db.ChatMessage.findAll({
       where: { chatRoomId: room_id },
       limit: parseInt(limit),
       offset: parseInt(offset),
-      order: [['createdAt', 'DESC']],
+      order: [['createdAt', 'DESC']], 
       transaction
     });
+
+    // 2. 가져온 50개의 메시지를 다시 과거 -> 현재 순으로 뒤집어서 반환합니다.
+    return messages.reverse(); 
   },
 
   /**
-   * 방 나가기
+   * 방 나가기 (나간 시점 기록)
    */
   updateLeavedAt: async (transaction, roomId, userRole) => {
-    const field = userRole === 'owner' ? 'ownerLeavedAt' : 'cleanerLeavedAt';
+    const roleStr = String(userRole || '').toUpperCase();
+    const field = roleStr.includes('OWNER') ? 'ownerLeavedAt' : 'cleanerLeavedAt';
+    
     return await db.ChatRoom.update(
       { [field]: new Date() },
       { where: { id: roomId }, transaction }

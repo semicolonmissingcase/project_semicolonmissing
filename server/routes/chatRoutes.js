@@ -21,6 +21,12 @@ chatRouter.get('/rooms/:roomId/messages', chatController.getMessages);
 // 채팅방에 메시지 보내기
 chatRouter.post('/rooms/:roomId/messages', chatController.chatSendMessage);
 
+// 사이드바 기본 정보 조회 (기사 프로필 / 의뢰 요약)
+chatRouter.get('/rooms/:roomId/sidebar', chatController.getSidebarInfo);
+
+// 사이드바 리뷰 목록 조회 (페이징 및 정렬)
+chatRouter.get('/rooms/:roomId/reviews', chatController.getSidebarReviews);
+
 // 이미지 업로드
 chatRouter.post('/rooms/:roomId/upload', chatUpload.single('image'), chatController.chatUploadImage);
 

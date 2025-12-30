@@ -1,22 +1,22 @@
 /**
- * @file databases/migrations/20251221-22-fk-questions-owner_id.js
- * @description Add on questions.owner_id
- * 251221 v1.0.0 jae init
+ * @file databases/migrations/20251229-03-fk-submissions-reservation_id.js
+ * @description Add on submissions-reservation_id
+ * 251229 v1.0.0 jh init
  */
 
 // 테이블명 
-const tableName = 'questions';
+const tableName = 'submissions';
 
 // Constraint명 
-const constraintName = 'fk_questions_owner_id'; 
+const constraintName = 'fk-submissions-reservation_id'; 
 
 // Constraint 정의 
 const options = {
-  fields: ['owner_id'],                 // fk 부여할 컬럼
+  fields: ['reservation_id'],               // fk 부여할 컬럼
   type: 'foreign key',                  // constraint 종류
-  name: constraintName,                 // constraint명 지정 (constraint명_테이블명_컬럼명)
+  name: constraintName,                // constraint명 지정 (constraint명_테이블명_컬럼명)
   references: {                         // 참조 설정 
-    table: 'owners',                    // 참조할 테이블
+    table: 'reservations',                  // 참조할 테이블
     field: 'id',                        // 참조 컬럼 지정
   },
   onDelete: 'CASCADE',                  // 참조 레코드가 삭제 시, chatRooms의 레코드도 같이 삭제

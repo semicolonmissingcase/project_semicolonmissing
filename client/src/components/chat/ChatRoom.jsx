@@ -12,47 +12,62 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
   const [messageList, setMessageList] = useState([]);
   const [inputText, setInputText] = useState("");
   const [opponentName, setOpponentName] = useState("채팅방");
+  const [opponentId, setOpponentId] = useState(null);
   const scrollRef = useRef(null);
   const fileInputRef = useRef(null);
   
   const { user } = useSelector((state) => state.auth);
   const myId = user?.id ? Number(user.id) : null;
 
-  // [수정 포인트 1] user 객체 내 role이 없을 경우를 대비한 판별 로직
-  // 만약 DB 구조상 점주/기사의 ID가 모두 1이라면, 이 역할 판별이 매우 중요합니다.
   const userRole = user?.role || (user?.email?.includes('cleaner') ? 'CLEANER' : 'OWNER');
   const isCleanerUser = String(userRole).toUpperCase().includes('CLEANER');
 
   const roomId = rawRoomId ? String(rawRoomId).replace(/[^0-9]/g, '') : null;
 
-  // [수정 포인트 2] 유연한 스크롤 함수
   const scrollToBottom = useCallback((behavior = 'smooth') => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
         top: scrollRef.current.scrollHeight,
-        behavior: behavior // smooth: 부드럽게, auto: 즉시
+        behavior: behavior
       });
     }
   }, []);
 
+  // 1. 초기 데이터 로드 및 소켓 방 입장
   useEffect(() => {
     const fetchChatRoomData = async () => {
       if (!roomId) return;
+      
+      // [수정] 소켓 방 입장 요청
+      if (socket) {
+        socket.emit('join_room', roomId);
+      }
+
       try {
         const roomRes = await getChatRoomDetail(roomId);
         const roomData = roomRes.data.data;
-        // 내 역할에 따라 상대방 정보를 다르게 가져옴
-        const opponent = isCleanerUser ? roomData.owner : roomData.cleaner;
-        setOpponentName(opponent?.name || "상대방");
+
+        // --- [디버깅 로그 추가] ---
+        console.log('--- 기사 계정 디버깅 ---');
+        console.log('현재 사용자 역할:', userRole, '| 기사 여부:', isCleanerUser);
+        console.log('API 응답 (roomData):', roomData);
+        // --- [디버깅 로그 끝] ---
+
+        // [수정] 한 단계 더 깊은 data 객체에 접근
+        const roomDetails = roomData.data || {}; 
+        const opponentName = isCleanerUser ? roomDetails.ownerName : roomDetails.cleanerName;
+        const opponentId = isCleanerUser ? roomDetails.ownerId : roomDetails.cleanerId;
+
+        setOpponentName(opponentName || "상대방");
+        setOpponentId(opponentId || null);
       } catch (err) {
-        console.error("방 정보 조회 실패:", err);
+        console.warn("방 정보 조회 실패 (404 무시):", err);
       }
 
       try {
         const msgRes = await getChatMessages(roomId);
         if (msgRes.data && msgRes.data.data) {
-          setMessageList(msgRes.data.data.reverse());
-          // 초기 로딩 시에는 스크롤을 즉시(auto) 하단으로
+          setMessageList(msgRes.data.data);
           setTimeout(() => scrollToBottom('auto'), 100);
         }
       } catch (err) {
@@ -65,13 +80,22 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     fetchChatRoomData();
   }, [roomId, isCleanerUser, scrollToBottom]);
 
-  // 실시간 메시지 수신
+  // 2. [핵심] 실시간 메시지 수신 및 중복 방지 로직
   useEffect(() => {
     if (!socket || !roomId) return;
 
     const handleReceiveMessage = (newMsg) => {
-      if (String(newMsg.chatRoomId) === String(roomId)) {
-        setMessageList((prev) => [...prev, newMsg]);
+      // 서버 데이터의 필드명(room_id, chatRoomId 등) 유연하게 대응
+      const incomingRoomId = String(newMsg.room_id || newMsg.chatRoomId || newMsg.roomId);
+      
+      if (incomingRoomId === String(roomId)) {
+        setMessageList((prev) => {
+          // 중복 방지: 이미 목록에 있는 ID라면 무시
+          if (prev.find(m => m.id === newMsg.id)) return prev;
+          return [...prev, newMsg];
+        });
+        
+        // 메시지 수신 시 읽음 처리 전송
         markMessageAsRead(roomId).catch(() => {});
       }
     };
@@ -80,7 +104,7 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     return () => socket.off("receive_message", handleReceiveMessage);
   }, [socket, roomId]);
 
-  // 메시지 리스트 변경 시 부드럽게 스크롤
+  // 3. 메시지 추가 시 자동 스크롤
   useEffect(() => {
     if (messageList.length > 0) {
       scrollToBottom('smooth');
@@ -88,13 +112,15 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
   }, [messageList, scrollToBottom]);
 
   const handleSendMessage = async () => {
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !socket) return;
     try {
-      const msgData = { content: inputText, type: 'TEXT' };
-      const res = await sendChatMessage(roomId, msgData);
-      
-      socket.emit("send_message", res.data.data);
-      setMessageList((prev) => [...prev, res.data.data]);
+      // [수정] 소켓으로만 메시지 전송
+      socket.emit("send_message", { 
+        roomId, 
+        content: inputText, 
+        type: 'TEXT',
+        receiverId: opponentId // 상대방 알림용 ID
+      });
       setInputText("");
     } catch (error) {
       console.error("메시지 전송 실패:", error);
@@ -103,21 +129,28 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (!file || !socket) return;
 
+    // 이미지 전송은 기존 HTTP 방식을 유지하되, 소켓 알림은 단순화
     const formData = new FormData();
     formData.append('image', file);
 
     try {
       const uploadRes = await uploadChatImage(roomId, formData);
-      const imageUrl = uploadRes.data.url;
-      const msgData = { content: imageUrl, type: 'IMAGE' };
-      const res = await sendChatMessage(roomId, msgData);
+      const imageUrl = uploadRes.data.data.url; // 응답 구조에 따라 정확한 url 경로 확인
 
-      socket.emit("send_message", res.data.data);
-      setMessageList((prev) => [...prev, res.data.data]);
+      // [수정] 이미지 URL을 소켓으로 전송
+      socket.emit("send_message", { 
+        roomId, 
+        content: imageUrl, 
+        type: 'IMAGE',
+        receiverId: opponentId
+      });
     } catch (error) {
       console.error("이미지 전송 실패:", error);
+    } finally {
+      // 파일 입력 초기화
+      if(fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -135,31 +168,32 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
       </div>
 
       <div className='chatroom-message-list' ref={scrollRef}>
-        {messageList.map((msg) => {
-          // [수정 포인트 3] ID + Role(Type) 교차 검증
-          // 1. ID 일치 여부
-          // 2. 현재 로그인 유저가 기사이고 메시지 타입이 CLEANER이거나, 
-          //    현재 로그인 유저가 점주이고 메시지 타입이 OWNER일 때만 mine
-          const isMe = Number(msg.senderId) === myId && (
-            (isCleanerUser && msg.senderType === 'CLEANER') ||
-            (!isCleanerUser && msg.senderType === 'OWNER')
+        {messageList.map((msg, index) => {
+          // [수정] 데이터 필드명 유연성 확보 (snake_case & camelCase 모두 대응)
+          const sId = Number(msg.sender_id || msg.senderId);
+          const sRole = (msg.sender_role || msg.senderType || '').toUpperCase();
+          const mType = msg.type || msg.messageType;
+
+          const isMe = sId === myId && (
+            (isCleanerUser && sRole.includes('CLEANER')) ||
+            (!isCleanerUser && sRole.includes('OWNER'))
           );
 
           return (
             <div 
-              key={msg.id} 
+              key={msg.id || index} 
               className={`chatroom-message-item ${isMe ? 'mine' : 'other'}`}
             >
               <div className='chatroom-bubble-container'>
                 <div className='chatroom-bubble'>
-                  {msg.messageType === 'IMAGE' ? (
+                  {mType === 'IMAGE' ? (
                     <img src={msg.content} alt="chat" className="chat-image-content" />
                   ) : (
                     msg.content
                   )}
                 </div>
                 <span className='chatroom-time'>
-                  {dayjs(msg.createdAt).format('A h:mm')}
+                  {dayjs(msg.createdAt || msg.created_at).format('A h:mm')}
                 </span>
               </div>
             </div>

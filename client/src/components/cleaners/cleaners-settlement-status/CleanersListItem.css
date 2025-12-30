@@ -1,0 +1,51 @@
+
+/* 일별/주별 작업 목록 */
+.cleaners-list-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cleaners-list-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+.cleaners-list-item-title {
+  font-weight: 600;
+}
+.cleaners-list-item-toggle {
+  width: 20px;
+  height: 20px;
+  border: none;
+  transition: transform 0.2s;
+}
+
+.cleaners-list-item-body {
+  padding: 16px;
+  background-color: #f8fafc;
+  font-size: 14px;
+}
+.cleaners-list-item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+.cleaners-list-item-label {
+  color: #475569;
+}
+.cleaners-list-item-value {
+  font-weight: 600;
+}
+
+.cleaners-list-item-toggle-up {
+    display: flex;
+    align-items: center;
+}
+
+.cleaners-list-item-toggle-down {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}

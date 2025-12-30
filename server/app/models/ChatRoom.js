@@ -29,7 +29,7 @@ const attributes = {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true, 
+    unique: false, 
     comment: '기사 PK',
   },
   estimateId: {
