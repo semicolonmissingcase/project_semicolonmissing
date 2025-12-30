@@ -27,6 +27,7 @@ import Review from './Review.js';
 import Like from './Like.js';
 import Payment from './Payment.js';
 import Adjustment from './Adjustment.js';
+import QuestionOption from './QuestionOption.js';
 
 const db = {}; // 생성할 db 인스턴스 저장용 
 // Sequelize 인스턴스 생성
@@ -68,6 +69,7 @@ db.DriverRegion = DriverRegion.init(sequelize);
 db.Template = Template.init(sequelize);
 db.PushSubscription = PushSubscription.init(sequelize);
 db.Question = Question.init(sequelize);
+db.QuestionOption = QuestionOption.init(sequelize);
 db.Submission = Submission.init(sequelize);
 db.Reservation = Reservation.init(sequelize);
 db.Inquiry = Inquiry.init(sequelize);
@@ -91,6 +93,7 @@ DriverRegion.associate(db);
 Template.associate(db);
 PushSubscription.associate(db);
 Question.associate(db);
+QuestionOption.associate(db);
 Submission.associate(db);
 Reservation.associate(db);
 Inquiry.associate(db);
