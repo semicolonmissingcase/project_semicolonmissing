@@ -15,7 +15,7 @@ function CleanersUserQuoteListDetails () {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  const { reservation, submissions } = useSelector(state => state.cleaners);
+  const { cleanerLike, reservation, submissions } = useSelector(state => state.cleaners);
 
   const [toggleDetails, setToggleDetails] = useState(false);
 
@@ -51,7 +51,7 @@ function CleanersUserQuoteListDetails () {
 
         {/* 기본 정보 */}
         <div className="cleaners-user-quote-list-details-items-box cleaners-user-quote-list-details-base-info">
-          <span className="cleaners-user-quote-list-details-like-status">지정</span>
+          <span className="cleaners-user-quote-list-details-like-status">{cleanerLike ? '지정' : '비지정'}</span>
           <div className="cleaners-user-quote-list-details-icon-set">
             <MdHomeWork size={20} />
             <div className="cleaners-user-quote-list-details-place">{reservation?.store.name}</div>

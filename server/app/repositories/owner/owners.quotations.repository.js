@@ -6,7 +6,7 @@
 
 import modelsConstants from '../../constants/models.constants.js';
 import db from '../../models/index.js';
-const { sequelize, Reservation, Submission, Question, QuestionOption, Store, Owner } = db;
+const { sequelize, Reservation, Submission, Question, QuestionOption, Store, Owner, Like } = db;
 
 async function reservationFindByIdAndStatusIsRequest(t = null, id) {
   return await Reservation.findOne(
@@ -66,7 +66,23 @@ async function submissionFindByReservationId(t = null, id) {
   );
 }
 
+async function likeFindByOwnerIdAndCleanerId(t = null, {ownerId, cleanerId}) {
+  return await Like.findOne(
+    {
+      attributes: ['id', 'ownerId', 'cleanerId'],
+      where: {
+        ownerId: ownerId,
+        cleanerId: cleanerId,
+      }
+    },
+    {
+      transaction: t
+    }
+  );
+}
+
 export default {
   reservationFindByIdAndStatusIsRequest,
   submissionFindByReservationId,
+  likeFindByOwnerIdAndCleanerId,
 }

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import cleanersThunk from "../thunks/cleanersThunk.js";
 
 const initialState = {
+  cleanerLike: null,
   reservation: null,
   submissions: null,
 }
@@ -11,6 +12,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     clearCleaners(state) {
+      state.cleanerLike = null;
       state.reservation = null;
       state.submissions = null;
     },
@@ -18,7 +20,8 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(cleanersThunk.showThunk.fulfilled, (state, action) => {
-        const { reservation, submissions } = action.payload.data;
+        const { cleanerLike, reservation, submissions } = action.payload.data;
+        state.cleanerLike = cleanerLike;
         state.reservation = reservation;
         state.submissions = submissions;
       });
