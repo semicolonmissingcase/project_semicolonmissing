@@ -1,8 +1,10 @@
 import { useState } from "react";
 import "./SocialLoginInfo.css";
 import useKakaoPostcode from "../hooks/useKakaoPostcode.js";
+import { useNavigate } from "react-router-dom";
 
 export default function SocialLoginInfo() {
+  const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState(null); // 'OWNER' 또는 'CLEANER'
   const { openPostcode } = useKakaoPostcode();
   const [formData, setFormData] = useState({
@@ -17,6 +19,34 @@ export default function SocialLoginInfo() {
     address: "",
     addressDetail: ""
   });
+
+  const handleSubmit = async () => {
+    // 1. 데이터 가공 (전화번호 합치기 등)
+    const finalData = {
+      ...formData,
+      role: selectedRole,
+      phone: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
+      storePhone: selectedRole === 'OWNER' 
+        ? `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}` 
+        : null,
+      // 중요: 백엔드에서 필요한 이메일이나 카카오 고유 ID 등도 포함되어야 함
+      email: "kakao@kakao" // 실제로는 이전 단계에서 받아온 값을 넣어줘야 함
+    };
+
+    try {
+      // 2. 백엔드 API 호출
+      const response = await axios.post('/api/auth/signup/complete', finalData);
+
+      if (response.status === 200) {
+        alert("회원가입이 완료되었습니다!");
+        // 3. 홈화면으로 리다이렉트
+        navigate('/'); 
+      }
+    } catch (error) {
+      console.error("등록 실패:", error);
+      alert("등록 중 오류가 발생했습니다.");
+    }
+  };
 
   // 입력 핸들러
   const handleChange = (e) => {
@@ -163,7 +193,7 @@ export default function SocialLoginInfo() {
       )}
 
       {selectedRole && (
-        <button className="sociallogininfo-submit-btn">등록하기</button>
+        <button className="sociallogininfo-submit-btn" onClick={handleSubmit}>등록하기</button>
       )}
     </div>
   );
