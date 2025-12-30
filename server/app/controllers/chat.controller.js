@@ -1,7 +1,6 @@
 /**
  * @file app/controllers/chat.controller.js
- * @description Chat controller
- * 251223 v1.0.0 seon init
+ * @description
  */
 import chatService from '../services/chat.service.js'
 
@@ -20,6 +19,41 @@ const createRoom = async (req, res, next) => {
     });
 
     res.status(200).json({ success: true, data: result.room, isNew: result.isNew });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * 사이드바 기본 정보 조회 (점주용 프로필 또는 기사용 의뢰서 요약)
+ * GET /api/chat/room/:roomId/sidebar
+ */
+const getSidebarInfo = async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+    const { role } = req.user;
+
+    const result = await chatService.getChatRoomWithSidebar(roomId, role);
+    res.status(200).json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * 사이드바 리뷰 목록 조회 (페이징 및 정렬 필터)
+ * GET /api/chat/room/:roomId/reviews?page=1&sort=latest
+ */
+const getSidebarReviews = async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+    const { page, sort } = req.query;
+
+    const result = await chatService.getSidebarReviews(roomId, { 
+      page: parseInt(page) || 1, 
+      sort: sort || 'latest' 
+    });
+    res.status(200).json({ success: true, data: result });
   } catch (error) {
     next(error);
   }
@@ -100,10 +134,7 @@ const chatUploadImage = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ success: false, message: "파일이 업로드 되지 않았습니다." });
     }
-    
-    // 접근 가능한 정적 경로 생성
     const fileUrl = `/uploads/chat/${req.file.filename}`;
-
     res.status(200).json({ success: true, url: fileUrl });
   } catch (error) {
     next(error);
@@ -126,7 +157,7 @@ const leaveRoom = async (req, res, next) => {
 };
 
 /**
- * 채팅방 닫기 (의뢰서 기간 마감이나 견적 마감 종료 시 닫는 로직)
+ * 채팅방 닫기
  */
 const closeRoom = async (req, res, next) => {
   try {
@@ -140,6 +171,8 @@ const closeRoom = async (req, res, next) => {
 
 export default {
   createRoom,
+  getSidebarInfo,
+  getSidebarReviews,
   getRooms,
   getMessages,
   chatSendMessage,

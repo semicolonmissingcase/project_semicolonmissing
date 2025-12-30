@@ -4,7 +4,7 @@ const CHAT_API_URL = '/api/chat';
 const cleanId = (id) => String(id).replace(/[^0-9]/g, '');
 
 export const getChatRoomDetail = (roomId) => 
-  axiosInstance.get(`${CHAT_API_URL}/rooms/${cleanId(roomId)}`);
+  axiosInstance.get(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/sidebar`);
 
 export const getChatMessages = (roomId, page = 1) => 
   axiosInstance.get(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/messages?page=${page}`);

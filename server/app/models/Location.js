@@ -90,6 +90,7 @@ const Location = {
   },
   associate: (db) => {
     db.Location.hasMany(db.DriverRegion, { sourceKey: 'id', foreignKey: 'locationId', as: 'locations' });
+    db.Location.belongsToMany(db.Cleaner, { through: db.DriverRegion, foreignKey: 'locationId', otherKey: 'cleanerId',as: 'cleaners' });
   }
 }
 
