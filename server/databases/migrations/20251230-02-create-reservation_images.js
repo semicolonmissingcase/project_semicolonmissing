@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-15-create-payments.js
- * @description payments migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251230-02-reservation_images.js
+ * @description reservationImages migration file
+ * 251230 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'payments';
+const tableName = 'reservation_images';
 
 // 컬럼 정의
 const attributes = {
@@ -17,61 +17,26 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '결제 PK',
-  },
-  estimateId: {
-    field: 'estimate_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '견적서 PK',
+    comment: '전송이미지 PK',
   },
   reservationId: {
     field: 'reservation_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '예약 PK',
+    comment: '예약정보 PK',
   },
-  totalAmount: {
-    field: 'total_amount',
-    type: DataTypes.INTEGER,
+  imagePath: {
+    field: 'image_path',
+    type: DataTypes.STRING(500),
     allowNull: false,
-    comment: '실제 결제 금액',
+    comment: '이미지 경로'
   },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
-    allowNull: true,
-    comment: '상태(성공, 취소)'
-  },
-  paymentKey: {
-    field: 'payment_key',
-    type: DataTypes.STRING(255),
+  sortOrder: {
+    field: 'sort_order',
+    type: DataTypes.TINYINT.UNSIGNED,
+    defaultValue: 1,
     allowNull: false,
-    comment: '결제고유키'
-  },
-  orderId: {
-    field: 'order_id',
-    type: DataTypes.STRING(64),
-    allowNull: false,
-    comment: '주문 번호',
-  },
-  method: {
-    field: 'method',
-    type: DataTypes.STRING(30),
-    allowNull: false,
-    comment: '결제 수단',
-  },
-  approvedAt: {
-    field: 'approved_at',
-    type: DataTypes.DATE,
-    allowNull: false,
-    comment: '결제 승인 일시',
-  },
-  reciptUrl: {
-    field: 'recipt_url',
-    type: DataTypes.TEXT,
-    allowNull: false,
-    comment: '영수증 주소',
+    comment: '순서'
   },
   createdAt: {
     field: 'created_at',
