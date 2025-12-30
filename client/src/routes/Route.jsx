@@ -3,6 +3,7 @@ import App from "../App";
 import Main from "../components/main/Main.jsx";
 import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
+import QnaPostShow from "../components/posts/QnaPostShow.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import Result from "../components/result/Result.jsx";
@@ -138,6 +139,11 @@ const router = createBrowserRouter([
             // 글작성 페이지
             path: 'create',
             element: <PostCreate />
+          },
+          {
+            // 게시글 확인 페이지
+            path: 'show/:id',
+            element: <QnaPostShow />
           }
         ]
       },      
