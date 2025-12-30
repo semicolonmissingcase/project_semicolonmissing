@@ -28,7 +28,7 @@ const attributes = {
   gender: {
     field: 'gender',
     type: DataTypes.CHAR(1),
-    allowNull: false,
+    allowNull: true,
     comment: '점주 성별',
   },
   email: {
@@ -41,7 +41,7 @@ const attributes = {
   password: {
     field: 'password',
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
     comment: '비밀번호',
   },
   provider: {
@@ -59,7 +59,7 @@ const attributes = {
   },
   profile: {
     field: 'profile',
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(500),
     allowNull: true, 
     comment: '점주 프로필',
   },

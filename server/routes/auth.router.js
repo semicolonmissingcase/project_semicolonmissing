@@ -11,6 +11,7 @@ import adminLoginValidator from '../app/middlewares/validations/validatiors/auth
 import { userController } from '../app/controllers/auth/user.controller.js';
 import { adminController } from '../app/controllers/auth/admin.controller.js';
 import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
+import socialValidator from '../app/middlewares/validations/validatiors/auth/social.validator.js';
  
 const authRouter = express.Router();
 
@@ -19,5 +20,9 @@ authRouter.post('/logout', authUserMiddleware, validationHandler, userController
 authRouter.post('/login/admin', adminLoginValidator, validationHandler, adminController.adminLogin);
 authRouter.post('/reissue', userController.reissue);
 authRouter.post('/reissue/admin', adminController.reissue);
+authRouter.get('/social/:provider', socialValidator, validationHandler, userController.social);
+authRouter.get('/callback/:provider', userController.socialCallback);
+authRouter.post('/signup/complete', userController.completeSignup);
+authRouter.get('/me', authUserMiddleware, userController.getMe);
 
 export default authRouter;
