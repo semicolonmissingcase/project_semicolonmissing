@@ -124,7 +124,9 @@ const Reservation = {
     db.Reservation.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
     db.Reservation.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
     db.Reservation.belongsTo(db.Store, { targetKey: 'id', foreignKey: 'storeId', as: 'store' });
-    db.Reservation.hasMany(db.Submission, { sourcKey: 'id', foreignKey: 'reservationId', as: 'submission' });
+    db.Reservation.hasMany(db.Submission, { sourceKey: 'id', foreignKey: 'reservationId', as: 'submission' });
+    db.Reservation.hasMany(db.ReservationImage, { sourceKey: 'id', foreignKey: 'reservationId', as: 'ReservationImage' });
+    db.Reservation.hasMany(db.VirtualAccount, { sourceKey: 'id', foreignKey: 'reservationId', as: 'virtualAccount' });
   }
 }
 
