@@ -55,3 +55,28 @@
       transform: translateX(0);
     }
   }
+
+/* Common styles for sidebar close buttons */
+.sidebar-close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-gray);
+  padding: 0;
+  line-height: 1;
+  /* Hidden by default on desktop, unless .chatmain-right is .open */
+  display: none; 
+}
+
+/* Show X button when sidebar is open on desktop */
+.chatmain-right.open .sidebar-close-button {
+    display: block;
+}
+
+/* Always show X button on mobile (if sidebar is open) */
+@media (max-width: 820px) {
+  .sidebar-close-button {
+    display: block;
+  }
+}
