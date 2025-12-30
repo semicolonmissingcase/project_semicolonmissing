@@ -49,7 +49,7 @@ export default function OwnerStoreInfo({ onClose, onSubmit }) {
     }
 
     // 1. 전화번호 조합
-    const phoneNumber = `${phonePrefix}-${phoneMiddle}-${phoneLast}`;
+    const phoneNumber = `${phonePrefix}${phoneMiddle}${phoneLast}`;
 
     // 2. 주소 가공 (시/도, 군/구/읍/면/동, 상세주소로 분리)
     let addr1 = ''; // 시/도
@@ -74,6 +74,8 @@ export default function OwnerStoreInfo({ onClose, onSubmit }) {
       addr2: addr2,
       addr3: addr3,
     };
+
+    console.log("클라이언트가 보내는 데이터:", formattedStoreData);
 
     onSubmit(formattedStoreData); // OwnerInfo.jsx의 handleAddStore로 전달
   };

@@ -7,7 +7,7 @@ export const storeGetThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get('/api/stores');
-      return response.data.result;
+      return response.data.data;
     } catch (error) {
       if(error.response) {
         return rejectWithValue(error.response.data);

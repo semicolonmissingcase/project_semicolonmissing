@@ -18,7 +18,7 @@ const id = param('storeId')
 ;
 
 const storeName = body('store.name')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('매장 이름을 입력해주세요.')
@@ -28,7 +28,7 @@ const storeName = body('store.name')
 ;
 
 const storeAddr1 = body('store.addr1')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('시/도 주소를 입력해주세요.')
@@ -38,7 +38,7 @@ const storeAddr1 = body('store.addr1')
 ;
 
 const storeAddr2 = body('store.addr2')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('상세 주소(군/구/읍/면/동)를 입력해주세요.')
@@ -48,7 +48,7 @@ const storeAddr2 = body('store.addr2')
 ;
 
 const storeAddr3 = body('store.addr3')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('상세 주소를 입력해주세요.')

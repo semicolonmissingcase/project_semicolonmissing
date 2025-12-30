@@ -4,7 +4,7 @@
  * 251222 v1.0.0 jae init
  */
 
-import { REISSUE_ERROR, SUCCESS } from "../../../configs/responseCode.config.js";
+import { FORBIDDEN_ERROR, REISSUE_ERROR, SUCCESS, UNAUTHORIZED_ERROR } from "../../../configs/responseCode.config.js";
 import myError from "../../errors/customs/my.error.js";
 import PROVIDER from "../../middlewares/auth/configs/provider.enum.js";
 import userService from "../../services/auth/user.service.js";
@@ -189,6 +189,27 @@ async function getMe(req, res, next) {
   }
 }
 
+/**
+ * 점주 정보 수정용
+ */
+async function updateOwner(req, res, next) {
+  try {
+    const { id, role } = req.user;
+    const updateData = req.body;
+
+    if(!id || !role) {
+      return next(new Error('인증 정보가 없습니다.', UNAUTHORIZED_ERROR));
+    }
+
+    // 서비스 호출 정보 업뎃
+    const updatedUser = await userService.updateOwner(id, role, updateData);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { user: updatedUser }));
+  } catch (error) {
+    
+    next(error);
+  }
+}
 
 // ------------
 // export 
@@ -201,4 +222,5 @@ export const userController = {
   socialCallback,
   completeSignup,
   getMe,
+  updateOwner,
 };

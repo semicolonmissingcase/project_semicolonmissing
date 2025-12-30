@@ -8,7 +8,7 @@ export const storeCreateThunk = createAsyncThunk(
     try {
       const url = '/api/stores';
       const response = await axiosInstance.post(url, { store: storeData });
-      return response.data.result;
+      return response.data.data;
     } catch (error) {
       if(error.response) {
         return rejectWithValue(error.response.data);

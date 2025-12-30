@@ -20,7 +20,7 @@ async function createStore(ownerId, { name, addr1, addr2, addr3, phoneNumber }, 
     throw myError('필수 매장 정보가 누락되었습니다.', CONFLICT_ERROR);
   }
 
-  const newStore = await ownerStoreRepository.createStore(t, {
+  const newStoreInstance = await ownerStoreRepository.createStore(t, {
     ownerId,
     name, 
     addr1,
@@ -28,7 +28,8 @@ async function createStore(ownerId, { name, addr1, addr2, addr3, phoneNumber }, 
     addr3,
     phoneNumber : phoneNumber || null,
   });
-  return newStore;
+  
+  return newStoreInstance.get({ plain: true });
 }
 
 /**
@@ -44,7 +45,10 @@ async function getStoresByOwnerId(ownerId, t = null) {
   const stores = await ownerStoreRepository.findAllStores(t, {
     where: { ownerId },
   });
-  return stores;
+
+  const plainStores = stores.map(instance => instance.get({ plain: true }));
+
+  return plainStores;
 }
 
 /**

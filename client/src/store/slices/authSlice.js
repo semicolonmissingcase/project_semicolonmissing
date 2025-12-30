@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginThunk, reissueThunk, getMeThunk, logoutThunk } from "../thunks/authThunk.js";
+import { loginThunk, reissueThunk, getMeThunk, logoutThunk, updateOwnerInfoThunk } from "../thunks/authThunk.js";
 
 const initialState = {
  user: null,
@@ -34,17 +34,23 @@ const slice = createSlice({
         state.isLoading = false;
       })
       .addCase(getMeThunk.fulfilled, (state, action) => {
-      const { user } = action.payload.data; // 서버 응답 구조에 맞게 조정 (data.user 등)
-      state.user = user;
-      state.isLoggedIn = true;
-      state.isLoading = false;
+        const { user } = action.payload.data; // 서버 응답 구조에 맞게 조정 (data.user 등)
+        state.user = user;
+        state.isLoggedIn = true;
+        state.isLoading = false;
       })
       // getMeThunk 실패 시 (토큰이 없거나 만료된 경우)
       .addCase(getMeThunk.rejected, (state) => {
-      state.user = null;
-      state.isLoggedIn = false;
-      state.isLoading = false;
+        state.user = null;
+        state.isLoggedIn = false;
+        state.isLoading = false;
        })
+      // 점주 정보 수정용
+      .addCase(updateOwnerInfoThunk.fulfilled, (state, action) => {
+        const { user } = action.payload.data;
+        state.user = user;
+        state.isLoading = false;
+      })
       // 토큰 재발급 성공 시
       .addCase(reissueThunk.fulfilled, (state, action) => {
         const { user } = action.payload.data;

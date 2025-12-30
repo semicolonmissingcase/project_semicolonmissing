@@ -10,15 +10,19 @@ const { ADMIN, OWNER, CLEANER } = ROLE;
 // 인증 및 인가가 필요한 요청만 정의
 const ROLE_PERMISSIONS = {
   GET: [
-    {path: /^\/api\/auth\/me$/, roles: [OWNER, CLEANER],}
+    {path: /^\/api\/auth\/me$/, roles: [OWNER, CLEANER],},
+    {path: /^\/api\/stores$/, roles: [OWNER],} // 매장 정보
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },
-    { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER]} // 둘 다 허용
+    { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER]}, // 둘 다 허용
+    { path: /^\/api\/stores$/, roles: [OWNER] }, // 매장 추가
   ],
   PUT: [
+    { path: /^\/api\/auth\/me$/, roles: [OWNER] } // 점장 정보수정용
   ],
   DELETE: [
+    { path: /^\/api\/stores\/\d+$/, roles: [OWNER] }, // 매장 삭제
   ]
 }
 Object.freeze(ROLE_PERMISSIONS);

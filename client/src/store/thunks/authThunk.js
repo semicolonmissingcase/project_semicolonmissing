@@ -61,3 +61,16 @@ export const getMeThunk = createAsyncThunk(
     }
   }
 );
+
+// 점주 정보 수정하기
+export const updateOwnerInfoThunk = createAsyncThunk(
+  'auth/updateOwnerInfoThunk',
+  async(updateData, {rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.put('/api/auth/me', updateData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);

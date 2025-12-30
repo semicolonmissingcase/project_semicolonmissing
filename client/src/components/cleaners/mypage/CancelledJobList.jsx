@@ -13,10 +13,10 @@ export default function CancelledJobList() {
     // 모바일에서 앱 열기 시도
     window.location.href = kakaoMapUrl;
     
-    // 앱이 설치되어 있지 않으면 웹으로 이동 (2초 후)
+    // 앱이 설치되어 있지 않으면 웹으로 이동
     setTimeout(() => {
       window.open(webMapUrl, '_blank');
-    }, 2000);
+    }, 500);
   }
 
   return (
@@ -28,7 +28,7 @@ export default function CancelledJobList() {
           <div className="cancelledjoblist-card-row">
               <div className="completedjoblist-card-place">
                 <FaMapMarkerAlt style={{ fontSize: '1rem', color: '#7C7F88', cursor: "pointer" }}
-                onClick={openKakaoMap}/>
+                onClick={() => openKakaoMap("대구 광역시")}/>
                 <span className="completedjoblist-card-value">스벅동성로</span>
               </div>
           </div>
