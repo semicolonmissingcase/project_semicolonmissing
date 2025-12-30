@@ -68,10 +68,22 @@ export default function OwnerInfo() {
     
     try {
       await dispatch(updateOwnerInfoThunk({ phone: newPhoneNumber })).unwrap();
-      dispatch(getMeThunk());
+      dispatch(getMeThunk()); // 내 정보 다시 불러오기
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // ---------수정 오나료 모달 띄우기------------
+      setModalConfig({
+        message: "회원 정보가 수정되었습니다.",
+        confirmText: "확인",
+        onConfirm: () => setIsConfirmModalOpen(false) // '확인' 누르면 모달 닫기
+      });
+      setIsConfirmModalOpen(true);
     } catch(err) {
       const errorMessage = err.data && err.data[0] ? err.data[0] : (err.msg || "정보 수정 중 오류가 발생했습니다.")
       alert(errorMessage)
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
