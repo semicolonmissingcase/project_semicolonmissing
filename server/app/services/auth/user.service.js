@@ -235,7 +235,6 @@ async function socialKakao(code) {
   
   return result;
 } catch (error) {
-    // 🔥 이 부분이 핵심입니다! 터미널에 찍히는 내용을 확인하세요.
     if (error.response) {
       console.error("===== 카카오 API 에러 상세 =====");
       console.error("상태 코드:", error.response.status); // 401
@@ -249,6 +248,7 @@ async function socialKakao(code) {
 }
 
 async function completeSocialSignup(signupData) {
+  console.log(signupData);
   // 프론트에서 넘어온 데이터 구조 분해
   const { 
     role, email, name, profile, provider,
