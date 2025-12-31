@@ -16,29 +16,21 @@ import usersService from "../../services/cleaner/cleaners.user.service.js";
  * @param {import("express").NextFunction} next - NextFunction 객체 
  * @returns
  */
-async function registerCleaner(req, res, next) {
-  try {
 
+  async function registerCleaner(req, res, next) {
+  try {
     const data = {
-      
-      phone: req.body.phone,
-      gender: req.body.gender,
-      email: req.body.email,
-      password: req.body.password,
-      provider: req.body.provider,
-      passwordChk: req.body.passwordChk,
-      name: req.body.name,
-      profile: req.body.profile,
-      locationId: req.body.locationId, 
+      ...req.body,
+      provider: req.params.provider,
     };
 
-    await usersService.store(data);
-
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS));
-  } catch(error) {
-    return next(error);
+    const result = await usersService.store(data);
+    return res.json(result);
+  } catch (err) {
+    next(err);
   }
 }
+
 
 export default {
   registerCleaner

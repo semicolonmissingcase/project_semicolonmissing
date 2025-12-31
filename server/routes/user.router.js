@@ -18,7 +18,6 @@ const usersRouter = express.Router();
 usersRouter.post('/owner', ownerUserValidators, validationHandler, ownerUserController.registerOwner);
 
 // 여기에 기사님도 하면 될듯
-
-usersRouter.post('/cleaner', cleanerUserValidators, validationHandler, cleanerUserController.registerCleaner);
+usersRouter.post('/cleaner/:provider', cleanerUserValidators, validationHandler, cleanerUserController.registerCleaner);
 
 export default usersRouter;

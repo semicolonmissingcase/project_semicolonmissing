@@ -32,14 +32,14 @@ async function store(data) {
 
     // 가입 처리
     const createData = {
-      phoneNumber: data.phone,
+      phoneNumber: phone,
       gender,
       email,
       password: bcrypt.hashSync(password, 10),
       name,
       profile,
       locationId,
-      provider: PROVIDER[(provider ?? "NONE").toUpperCase()] ?? PROVIDER.NONE,
+      provider,
     }
 
     return await userRepository.create(t, createData);
