@@ -22,14 +22,14 @@ const attributes = {
  ownerId: {
   field: 'owner_id',
   type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: false,
-  comment: '점주 PK(nullable 설정해야함)',
+  allowNull: true,
+  comment: '점주 PK',
  },
  cleanerId: {
   field: 'cleaner_id',
   type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: false,
-  comment: '기사 PK(nullable 설정해야함)',
+  allowNull: true,
+  comment: '기사 PK',
  },
   title: {
     field: 'title',
@@ -47,7 +47,7 @@ const attributes = {
     field: 'guest_name',
     type: DataTypes.STRING(50),
     allowNull: true,
-    comment: '비회원 이름(nullable 설정해야함)'
+    comment: '비회원 이름'
   },
   guestPassword: {
     field: 'guest_password',
@@ -59,8 +59,7 @@ const attributes = {
     field: 'status',
     type: DataTypes.STRING(20),
     allowNull: false,
-    defaultValue: 'PENDING',
-    comment: '상태(PENDING, COMPLETED)',
+    comment: '상태(대기중, 답변완료)',
   },
   createdAt: {
     field: 'created_at',
