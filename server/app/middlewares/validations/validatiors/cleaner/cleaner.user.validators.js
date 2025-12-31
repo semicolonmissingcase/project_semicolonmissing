@@ -1,7 +1,8 @@
+import cleanerField from "../../fields/cleaner.field.js";
 
-import {name, gender, provider, email, password,
-      passwordChk, cleaner_number, location_id, profile,} from "../../fields/cleaner/field.js";
+const {name, gender, provider, email, password,
+         passwordChk, phone, locationId, profile} = cleanerField;
 
       export default [
         name, gender, provider, email, password,
-         passwordChk, cleaner_number, location_id, profile];
+         passwordChk, phone, locationId, profile];
