@@ -17,6 +17,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },
     { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER]}, // 둘 다 허용
     { path: /^\/api\/stores$/, roles: [OWNER] }, // 매장 추가
+    { path: /^\/api\/owners\/profile$/, roles: [OWNER] }, // 점주 프로필 이미지 업로드
   ],
   PUT: [
     { path: /^\/api\/auth\/me$/, roles: [OWNER] } // 점장 정보수정용

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginThunk, reissueThunk, getMeThunk, logoutThunk, updateOwnerInfoThunk } from "../thunks/authThunk.js";
+import { loginThunk, reissueThunk, getMeThunk, logoutThunk, updateOwnerInfoThunk, uploadProfileImageThunk } from "../thunks/authThunk.js";
 
 const initialState = {
  user: null,
@@ -50,6 +50,23 @@ const slice = createSlice({
         const { user } = action.payload.data;
         state.user = user;
         state.isLoading = false;
+      })
+      // 점주 프로필 이미지 업로드
+      .addCase(uploadProfileImageThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(uploadProfileImageThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const newImageUrl = action.payload.data.profileImageUrl;
+        // user 상태 존재, 새로운 이미지 경로 유효
+        if(state.user && newImageUrl) {
+          state.user.profile = newImageUrl;
+        }
+      })
+      .addCase(uploadProfileImageThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       })
       // 토큰 재발급 성공 시
       .addCase(reissueThunk.fulfilled, (state, action) => {

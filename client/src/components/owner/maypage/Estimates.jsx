@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import './Estimates.css';
+import { useNavigate } from 'react-router-dom';
 
+// 받은 견적
 export default function Estimates() {
+  const navigate = useNavigate();
   // 선택된 매장 정보를 저장하는 상태 (초기값은 null)
   const [selectedStore, setSelectedStore] = useState(null);
 
@@ -21,6 +24,10 @@ export default function Estimates() {
     setSelectedStore(store);
     // 클릭 시 하단으로 자동 스크롤하고 싶다면 여기에 로직 추가 가능
   };
+
+  function chatroom() {
+    navigate('/chatroom/:id');
+  }
 
   return (
     <div className="estimates-page">
@@ -82,7 +89,7 @@ export default function Estimates() {
 
                   <div className="estimates-card-action-row">
                     <button className="estimates-btn-light">견적서 보기</button>
-                    <button className="estimates-btn-primary">채팅하기</button>
+                    <button className="estimates-btn-primary" onClick={chatroom}>채팅하기</button>
                   </div>
                 </div>
               ))}

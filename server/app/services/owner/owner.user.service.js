@@ -80,6 +80,26 @@ async function store(data) {
   return result.toJSON();
 }
 
+/**
+ * 점주 프로필 이미지 업데이트
+ * @param {number} ownerId 
+ * @param {string} profileImgaUrl 
+ * @returns 
+ */
+async function updateProfile(ownerId, profileImgaUrl) {
+  console.log('--- 3. 서비스 함수 실행 ---');
+  console.log('ownerId:', ownerId);
+  console.log('profileImageUrl:', profileImageUrl);
+  await db.sequelize.transaction(async(t) => {
+    await ownerUserRepository.update(t, ownerId, {
+      profile: profileImgaUrl,
+    });
+  });
+
+  return;
+}
+
 export default {
   store,
+  updateProfile,
 }

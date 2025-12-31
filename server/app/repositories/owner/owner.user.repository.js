@@ -19,6 +19,20 @@ async function create(t = null, data) {
   });
 }
 
+async function updateProfile(t = null, ownerId, updateData) {
+  console.log('--- 4. 리포지토리 함수 실행 ---');
+  console.log('ownerId:', ownerId);
+  console.log('updateData:', updateData);
+  return await Owner.update(updateData, 
+  {
+    where: {
+      id: ownerId
+    },
+    transaction: t,
+  });
+}
+
 export default {
   create,
+  updateProfile
 };

@@ -54,9 +54,9 @@ export default function Reservations() {
               <button className="reservations-btn-secondary">견적보기</button>
               
               {item.status === 'upcoming' ? (
-                <button className="reservations-btn-danger">취소하기</button>
+                <button className="reservations-btn-danger">예약취소</button>
               ) : (
-                <button className="reservations-btn-secondary">리뷰쓰기</button>
+                <button className="bg-blue">리뷰쓰기</button>
               )}
             </div>
           </div>
