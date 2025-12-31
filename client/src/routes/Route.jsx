@@ -29,7 +29,10 @@ import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.j
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
-
+// 결제 관련 
+import PaymentRequest from "../components/payment/paymentCheckout.jsx";
+import PaymentSuccess from "../components/payment/paymentSuccess.jsx";
+import PaymentFail from "../components/payment/paymentFail.jsx";
 
 
 
@@ -167,6 +170,23 @@ const router = createBrowserRouter([
         // 결과 페이지(ex. 문의가 등록되었습니다!)
         path: '/result',
         element: <Result />
+      },
+      // 결제 관련 라우트 
+      {
+        path: '/payment',
+        element: <Outlet />,
+        children: [
+          {
+            // 결제 성공
+            path: '/payment/success',
+            element: <PaymentSuccess />
+          }, 
+          {
+            // 결제 실패
+            path: '/payment/fail',
+            element: <PaymentFail />
+          }
+        ]
       },
       {
         // 관리자페이지
