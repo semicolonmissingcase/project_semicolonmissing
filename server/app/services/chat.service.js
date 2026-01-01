@@ -215,7 +215,7 @@ async function getChatRoomWithSidebar(roomId, userRole) {
 }
 
 /**
- * 사이드바 리뷰 목록 조회
+ * 사이드바 리뷰 목록 조회 (작성자 이름 포함 최종본)
  */
 async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
   const limit = 5;
@@ -233,25 +233,45 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
   const targetCleanerId = room.cleanerId;
 
   const { count, rows } = await db.Review.findAndCountAll({
-    include: [{
-      model: db.Reservation,
-      as: 'reservationData',
-      where: { cleanerId: targetCleanerId },
-      attributes: [] 
-    }],
+    include: [
+      {
+        model: db.Reservation,
+        as: 'reservationData',
+        where: { cleanerId: targetCleanerId },
+        include: [
+          {
+            model: db.Owner,
+            as: 'owner', // DB 관계 설정(as)에 따라 수정 필요할 수 있음
+            attributes: ['name'] 
+          }
+        ]
+      }
+    ],
     order: orderMap[sort] || orderMap.latest,
     limit,
     offset
+  });
+
+  // 데이터 가공: 프론트엔드에서 authorName으로 바로 접근 가능하도록 flatten
+  const formattedReviews = rows.map(review => {
+    const plainReview = review.get({ plain: true });
+    return {
+      id: plainReview.id,
+      star: plainReview.star,
+      content: plainReview.content,
+      createdAt: plainReview.createdAt,
+      // 작성자 이름 추출 (없을 경우 익명 처리)
+      authorName: plainReview.reservationData?.owner?.name || '익명'
+    };
   });
 
   return {
     totalCount: count,
     totalPages: Math.ceil(count / limit),
     currentPage: Number(page),
-    reviews: rows
+    reviews: formattedReviews
   };
 }
-
 /**
  * 채팅방 나가기
  */

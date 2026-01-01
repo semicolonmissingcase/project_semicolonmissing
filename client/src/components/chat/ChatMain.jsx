@@ -14,7 +14,7 @@ const ChatMain = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [socket, setSocket] = useState(null); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [ sidebarInfo, setSidebarInfo ] = useState({
+  const [sidebarInfo, setSidebarInfo] = useState({
     sideType: null,
     data: null,
     reviews: [],
@@ -23,7 +23,6 @@ const ChatMain = () => {
   const [sidebarError, setSidebarError] = useState(null);
 
   useEffect(() => {
-    // 서버가 연결 즉시 브라우저의 쿠키를 읽어 인증
     const newSocket = io('http://localhost:3000', {
       withCredentials: true,
       transports: ['websocket'],
@@ -31,23 +30,11 @@ const ChatMain = () => {
     });
 
     newSocket.on("authenticated", (data) => {
-      console.log("✅ 서버 쿠키 인증 완료:", data.userKey);
       setIsAuthenticated(true);
-      
-      // 인증 완료 직후 방 입장
-      if (safeid) {
-        console.log(`📤 방 입장 요청 (roomId: ${safeid})`);
-        newSocket.emit("join_room", safeid);
-      }
-    });
-
-    // 인증 실패 또는 토큰 만료 시
-    newSocket.on("error", (err) => {
-      console.error("❌ 소켓 인증/연결 에러:", err.message);
+      if (safeid) newSocket.emit("join_room", safeid);
     });
 
     setSocket(newSocket);
-
     return () => {
       if (newSocket) {
         if (safeid) newSocket.emit("leave_room", { roomId: safeid });
@@ -67,45 +54,47 @@ const ChatMain = () => {
       setSidebarError(null);
       try {
         const sidebarRes = await getChatRoomDetail(safeid);
-        const { sideType, data } = sidebarRes.data.data;
+        let { sideType, data } = sidebarRes.data.data;
 
-        let reviewsData = [];
+        let reviewsArray = []; 
         if(sideType === 'OWNER') {
           const reviewsRes = await getCleanerReviewsForRoom(safeid);
-          reviewsData = reviewsRes.data.data;
+          reviewsArray = reviewsRes.data.data.reviews || [];
+
+          // [프론트엔드 계산] 리뷰 기반 평균 별점 산출
+          if (reviewsArray.length > 0) {
+            const totalStar = reviewsArray.reduce((acc, cur) => acc + (Number(cur.star) || 0), 0);
+            const averageStar = totalStar / reviewsArray.length;
+            // data 객체에 계산된 평균 별점 주입
+            data = { ...data, star: averageStar };
+          } else {
+            data = { ...data, star: 0 };
+          }
         }
 
-        setSidebarInfo({ sideType, data, reviews: reviewsData });
+        setSidebarInfo({ sideType, data, reviews: reviewsArray });
       } catch (err) {
         setSidebarError('정보를 불러오는 데 실패했습니다.');
-        console.error("사이드바 데이터 로딩 에러", err);
+        console.error(err);
       } finally {
-        setIsSidebarLoading(false); // <--- CORRECTED LINE
+        setIsSidebarLoading(false); 
       }
     };
     fetchData();
   }, [safeid]);
 
-  const toggleSidebar = (status) => {
-    setIsSidebarOpen(status);
-  };
+  const toggleSidebar = (status) => setIsSidebarOpen(status);
 
   const renderSidebar = () => {
-    if(isSidebarLoading) return <p>정보 로딩 중...</p>;
-    if(sidebarError) return <p>{sidebarError}</p>;
+    if(isSidebarLoading) return <p className="loading-text">정보 로딩 중...</p>;
+    if(sidebarError) return <p className="error-text">{sidebarError}</p>;
+    const commonProps = { onClose: () => toggleSidebar(false) };
 
-    const commonProps = {
-      onClose: () => toggleSidebar(false),
-    };
     if (sidebarInfo.sideType === 'OWNER') {
-      return (
-        <ChatSidebarProfile {...commonProps} data={sidebarInfo.data} reviews={sidebarInfo.reviews} />
-      );
+      return <ChatSidebarProfile {...commonProps} data={sidebarInfo.data} reviews={sidebarInfo.reviews} />;
     }
     if (sidebarInfo.sideType === 'CLEANER') {
-      return (
-        <ChatSidebarRequest {...commonProps} data={sidebarInfo.data} />
-      );
+      return <ChatSidebarRequest {...commonProps} data={sidebarInfo.data} />;
     }
     return null;
   }
@@ -114,27 +103,13 @@ const ChatMain = () => {
     <div className='chatmain-container'>
       <div className='chatmain-center'>
         {socket && isAuthenticated ? (
-          <ChatRoom 
-            roomId={safeid} 
-            socket={socket} 
-            onOpenSidebar={toggleSidebar} 
-            isSidebarOpen={isSidebarOpen}
-          />
+          <ChatRoom roomId={safeid} socket={socket} onOpenSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         ) : (
-          <div className="chat-loading">
-            <div className="spinner"></div>
-            <p>채팅 서버 인증 중...</p>
-          </div>
+          <div className="chat-loading"><div className="spinner"></div><p>채팅 서버 인증 중...</p></div>
         )}
       </div>
-
-      <div className={`chatmain-right ${isSidebarOpen ? 'open' : ''}`}>
-        {renderSidebar()}
-      </div>
-
-      {isSidebarOpen && (
-        <div className="chatmain-overlay" onClick={() => setIsSidebarOpen(false)}></div>
-      )}
+      <div className={`chatmain-right ${isSidebarOpen ? 'open' : ''}`}>{renderSidebar()}</div>
+      {isSidebarOpen && <div className="chatmain-overlay" onClick={() => setIsSidebarOpen(false)}></div>}
     </div>
   );
 };
