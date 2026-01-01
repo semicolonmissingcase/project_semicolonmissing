@@ -3,11 +3,11 @@ import './CleanersMyPage.css';
 import { useNavigate } from 'react-router-dom';
 
 // 출력 카드 컨포넌트
-import PendingSettlementList from './PendingSettlementList.jsx';
 import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
 import CancelledJobList from './CancelledJobList.jsx';
 import CompletedJobList from './CompletedJobList.jsx';
+import CleanersSettlementStatus from "../CleanersSettlementStatus.jsx";
 
 function CleanersMyPage () {
   const [activeTab, setActiveTab] = useState('정산 대기 건수');
@@ -15,11 +15,11 @@ function CleanersMyPage () {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case '정산 대기': return <PendingSettlementList />
+      case '정산': return <CleanersSettlementStatus />;
       case '예약 완료': return <ReservationCompletedList />;
       case '오늘 작업': return <TodayJobList />;
-      case '취소·미방문': return <CancelledJobList />;
-      case '완료 작업': return <CompletedJobList />
+      case '문의 내역': return <CancelledJobList />;
+      case '리뷰': return <CompletedJobList />
       default: return <div className="tab-placeholder">내용을 불러오는 중...</div>;
     }
   };
@@ -75,7 +75,7 @@ function CleanersMyPage () {
 
       {/* 2. 기사님 전용 탭 메뉴 */}
       <nav className="cleanermypage-tabs">
-        {['예약 완료', '오늘 작업', '정산 대기', '취소·미방문', '완료 작업'].map(tab => (
+        {['예약 완료', '오늘 작업', '정산', '문의 내역', '리뷰'].map(tab => (
           <button 
             key={tab}
             className={`cleanermypage-tab-item ${activeTab === tab ? 'cleanermypage-active' : ''}`}

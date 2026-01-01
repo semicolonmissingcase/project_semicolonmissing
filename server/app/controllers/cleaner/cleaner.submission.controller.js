@@ -3,32 +3,31 @@
  * @description cleaner submission 관련 컨트롤러
  * 251231 v1.0.0 yh init
  */
-import { SUCCESS } from "../../../configs/responseCode.config.js";
-import cleanerAccountService from "../../services/cleaner/cleaner.account.service.js";
-import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
 
-async function createAccountInfo(req, res, next) {
+export const getSubmissionByReservation = async (req, res) => {
   try {
-    const data = {
-      id: req.body.id,
-      cleanerId: req.body.cleaner_id,
-      bank: req.body.bank,
-      depositor: req.body.depositor,
-      accountNumber: req.body.account_number,
-      isPrimary: req.body.is_primary,
-    };
+    const { reservationId } = req.params;
 
-    await cleanerAccountService.accountinfo(data);
+    const data = await Submission.findAll({
+      where: { reservationId },
+      include: [
+        {
+          model: Question,
+          as: 'question',
+          attributes: ['content', 'code']
+        },
+        {
+          model: QuestionOption,
+          as: 'questionOption',
+          attributes: ['correct']
+        }
+      ],
+      order: [['questionId', 'ASC']]
+    });
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS));
-
+    res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "정보 불러오기 실패", error: error.message });
   }
-  catch(error) {
-    return next(error)
-  }
-
-}
-
-export default {
-  createAccountInfo,
-}
+};
