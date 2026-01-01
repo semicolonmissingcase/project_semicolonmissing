@@ -1,5 +1,5 @@
 import { SUCCESS } from "../../../configs/responseCode.config.js";
-import adjustmentService from "../../services/cleaner/adjustment.service.js";
+import adjustmentService from "../../services/cleaner/cleaner.adjustment.service.js";
 
 /**
  * 정산 신청하기
@@ -7,7 +7,8 @@ import adjustmentService from "../../services/cleaner/adjustment.service.js";
 async function requestAdjustment(req, res, next) {
   try {
     const data = {
-      cleanerId: req.user.id, // 인증 미들웨어에서 넘어온 ID
+      // cleanerId: req.user.id, // 인증 미들웨어에서 넘어온 ID
+      cleanerId: req.user ? req.user.id : 2,
       ...req.body
     };
     const result = await adjustmentService.createRequest(data);

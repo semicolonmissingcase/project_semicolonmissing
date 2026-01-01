@@ -11,6 +11,7 @@ import cleanersThunk from "../../store/thunks/cleanersThunk.js";
 import { clearCleaners } from "../../store/slices/cleanersSlice.js";
 import CleanersQuotationsPreparationSave from "./CleanersQuotationsPreparationSave";
 import "./CleanersUserQuotations.css";
+import styles from "./CleanersUserQuotations.module.css";
 
 function CleanersUserQuoteListDetails () {
   const dispatch = useDispatch();
@@ -137,8 +138,21 @@ function CleanersUserQuoteListDetails () {
                                 submission.question.questionOptions.map(questionOption => {
                                   return (
                                     <div className="cleaners-user-quotations-items-box-question-answer" key={`${submission.question.code}-${questionOption.id}`}>
-                                      <input type="radio" name={submission.question.code} id={`${submission.question.code}-${questionOption.id}`} checked={submission.questionOptionId === questionOption.id} value={questionOption.id} readOnly />
-                                      <label htmlFor={`${submission.question.code}-${questionOption.id}`}>{questionOption.correct}</label>
+                                      <input 
+                                        type="radio" 
+                                        name={submission.question.code} 
+                                        id={`${submission.question.code}-${questionOption.id}`} 
+                                        checked={submission.questionOptionId === questionOption.id} 
+                                        value={questionOption.id} 
+                                        readOnly 
+                                        className={styles.radioInput} // 클래스 추가
+                                      />
+                                      <label 
+                                        htmlFor={`${submission.question.code}-${questionOption.id}`}
+                                        className={styles.radioLabel} // 클래스 추가
+                                      >
+                                        {questionOption.correct}
+                                      </label>
                                     </div>
                                   )
                                 })

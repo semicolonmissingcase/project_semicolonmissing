@@ -66,7 +66,7 @@ function CleanersProfileEdit() {
   const onConfirm = () => {
   if (confirmType === "cancel") {
     // TODO: 취소 확정 동작 (예: 뒤로가기, 페이지 이동, 상태 초기화 등)
-    // navigate(-1) 여기서 처리
+    navigate(-1)
     closeConfirmModal();
     return;
   }
@@ -164,7 +164,7 @@ function CleanersProfileEdit() {
 
                 <span className="cleaners-profile-edit-buttons">
                   <button type="button" className="cleaners-profile-edit-button-small-custom2" onClick={openCancelModal} >취소</button>
-                  <button type="submit" className="cleaners-profile-edit-button-small-custom2" onClick={openSaveModal} >완료</button>
+                  <button type="button" className="cleaners-profile-edit-button-small-custom2" onClick={openSaveModal} >완료</button>
                 </span>
               </div>
               </div>     

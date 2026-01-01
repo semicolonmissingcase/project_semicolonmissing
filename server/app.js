@@ -20,6 +20,7 @@ import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
 import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 // import cleanersRouter from './routes/cleaners.router.js'; // TODO: 추후 코멘트 해제
 import ownersRouter from './routes/owners.routes.js';
+import cleanersRouter from './routes/cleaners.router.js';
 
 const app = express();
 app.use(cors({
@@ -38,7 +39,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/users', usersRouter); // 회원가입 관련
 app.use('/api/owners', ownersRouter);
-// app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
+app.use('/api/cleaners', cleanersRouter);
 
 // 에러 핸들러 등록
 app.use(errorHandler);

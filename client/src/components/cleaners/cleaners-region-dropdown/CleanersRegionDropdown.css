@@ -1,0 +1,9 @@
+.cleaners-profile-edit-last-modal-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cleaners-profile-edit-modal-button-row {
+    margin-top: 1rem;
+}

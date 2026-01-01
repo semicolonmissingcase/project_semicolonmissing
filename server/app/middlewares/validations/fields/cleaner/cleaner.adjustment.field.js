@@ -1,4 +1,4 @@
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 
 export const reservationId = body('reservationId')
   .notEmpty()
@@ -24,7 +24,7 @@ export const accountNumber = body('accountNumber')
 
 export default {
   reservationId,
-  amount,
-  bankName,
+  settlementAmount,
+  bank,
   accountNumber
 };

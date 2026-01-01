@@ -5,16 +5,16 @@
  */
 
 import express from 'express';
-import cleanersAccountController from '../app/controllers/cleaner/cleaner.account.controller.js';
-
+import cleanerAdjustmentController from '../app/controllers/cleaner/cleaner.adjustment.controller.js';
+import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
+import cleanersAdjustmentValidator from '../app/middlewares/validations/validatiors/cleaner/cleaner.adjustment.validators.js';
 
 const cleanersRouter = express.Router();
 
-cleanersRouter.get('/userquotelistdetails/:id', (req, res, next) => {
-  res.send('ttt');
-});
+// cleanersRouter.get('/quotations/:id', (req, res, next) => {
+//   res.send('ttt');
+//  });
 
-cleanersRouter.get('/accountinfo', cleanersAccountController.createAccountInfo);
-cleanersRouter.post('/accountinfo', cleanersAccountController.createAccountInfo);
+cleanersRouter.post('/accountinfo', authUserMiddleware, cleanersAdjustmentValidator.requestAdjustmentValidator, cleanerAdjustmentController.requestAdjustment);
 
 export default cleanersRouter;

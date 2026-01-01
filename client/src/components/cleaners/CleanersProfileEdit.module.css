@@ -1,37 +1,33 @@
-.profileImageWrap {
-  display: flex;
-  justify-content: end;
-  gap: 1rem;
+/* 부모 컨테이너 */
+.cleaners-profile-edit-profile-title {
+  position: relative; /* 자식들의 기준점 */
+  width: 150px;       /* 프로필 이미지 크기에 맞춤 */
+  height: 150px;
+  margin: 1rem auto;  /* 가운데 정렬 등 필요시 추가 */
 }
 
+/* 이미지 컨테이너 (이미지와 편집 아이콘을 감싸는 div) */
 .profileImageContainer {
+  position: relative;
   width: 180px;
   height: 270px;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  border-radius: 5px;
 }
 
+/* 프로필 이미지 */
 .profileImage {
   width: 100%;
   height: 100%;
-  background: #bbdcdd;
   object-fit: cover;
   border-radius: 5px;
 }
 
-.imageSelected {                                                                                                
-  background: none;                                                                                             
-}   
-
+/* 편집 아이콘 (이미지 위에 겹치기) */
 .editIcon {
-  bottom: 5px;
+  position: absolute;
+  bottom: 5px;   /* 우측 하단 배치 */
   right: 5px;
-  width: 30px;
-  height: 30px;
-  background: #fff;
-  border-radius: 50%;
-  padding: 5px;
-  border: 1px solid var(--color-light-gray);
+  width: 24px;   /* 아이콘 크기 */
+  height: 24px;
+  z-index: 2;    /* 이미지보다 위에 오도록 함 */
 }

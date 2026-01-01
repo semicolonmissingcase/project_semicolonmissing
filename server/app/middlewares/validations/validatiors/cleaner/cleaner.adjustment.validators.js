@@ -1,7 +1,7 @@
-import { reservationId, settlementAmount, bank, accountNumber } from "../../fields/adjustment.field.js";
+import { reservationId, settlementAmount, bank, accountNumber } from '../../fields/cleaner/cleaner.adjustment.field.js';
 
 export const requestAdjustmentValidator = [
-  reservationId, 
+  reservationId,
   settlementAmount, 
   bank, 
   accountNumber
