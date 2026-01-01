@@ -9,8 +9,8 @@ import cleanerAdjustmentController from '../app/controllers/cleaner/cleaner.adju
 import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
 import cleanersAdjustmentValidator from '../app/middlewares/validations/validatiors/cleaner/cleaner.adjustment.validators.js';
 import profileController from "../app/controllers/cleaner/cleaner.profile.controller.js";
-import { name, locations } from "../fields/cleaner/cleaner.profile.field.js";
-import upload from "../middlewares/cleaener/cleaner.multer.middleware.js";
+import { name, locations } from '../app/middlewares/validations/fields/cleaner/cleaner.profile.field.js';
+import upload from "../app/middlewares/cleaner/cleaner.multer.middleware.js";
 
 const cleanersRouter = express.Router();
 
