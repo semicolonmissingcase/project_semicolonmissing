@@ -168,70 +168,56 @@ export default function QnaPost () {
   return (
     <div className="qnapost-main-container">
       <div className="all-container qnapost-container">
-        <h2>주요 문의 사항</h2>
 
-        {/* 사용자 유형 선택 */}
+        {/* 상단부분 */}
+        <h2>주요 문의 사항</h2>
         <div className="qnapost-btn-container">
           <button 
             className={`btn-medium ${userType === 'owner' ? 'bg-darkblue' : 'bg-blue'}`}
-            onClick={() => {
-              setUserType('owner');
-              setOpenIndex(null); // 타입 변경 시 모두 닫기
-            }}
+            onClick={() => { setUserType('owner'); setOpenIndex(null); }}
           >
             점주님용
           </button>
           <button 
             className={`btn-medium ${userType === 'cleaner' ? 'bg-darkblue' : 'bg-blue'}`}
-            onClick={() => {
-              setUserType('cleaner');
-              setOpenIndex(null);
-            }}
+            onClick={() => { setUserType('cleaner'); setOpenIndex(null); }}
           >
             기사님용
           </button>
         </div>
 
-        {/* FAQ 아코디언 */}
         <div className="qnapost-qna-box">
           {faqData[userType].map((faq, index) => (
             <div key={index} className="qnapost-item-wrapper">
-              <div 
-                className="qnapost-item"
-                onClick={() => toggleFaq(index)}
-              >
+              <div className="qnapost-item" onClick={() => toggleFaq(index)}>
                 <span>Q. {faq.q}</span>
-                <span className="qnapost-arrow">
-                  {openIndex === index ? '▲' : '▼'}
-                </span>
+                <span className="qnapost-arrow">{openIndex === index ? '▲' : '▼'}</span>
               </div>
               {openIndex === index && (
-                <div className="qnapost-answer">
-                  A. {faq.a}
-                </div>
+                <div className="qnapost-answer">A. {faq.a}</div>
               )}
             </div>
           ))}
         </div>
 
-        {/* 문의하기 버튼 */}
         <button className="bg-blue btn-big" onClick={qnaPostCreate}>
           1 : 1 문의하러 가기
         </button>
 
-        {/* 게시글 목록 테이블 */}
+        {/* 게시글 목록 테이블 섹션 */}
         <div className="qnapost-table-section">
-          <h3>문의 게시판</h3>
           {loading ? (
             <div className="qnapost-loading">로딩 중...</div>
           ) : (
-            <TableUi 
-              data={posts} 
-              columns={columns}
-              showSearch={true}
-              showPagination={true}
-              pageSize={10}
-            />
+            <div className="table-wrapper-custom">
+              <TableUi 
+                data={posts} 
+                columns={columns}
+                showSearch={true}
+                showPagination={true}
+                pageSize={10}
+              />
+            </div>
           )}
         </div>
       </div>
