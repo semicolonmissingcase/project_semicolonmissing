@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-07-create-inquiries.js
- * @description inquiries migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251230-01-create-virtual_accounts.js
+ * @description virtualAccounts migration file
+ * 251230 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'inquiries';
+const tableName = 'virtual_accounts';
 
 // 컬럼 정의
 const attributes = {
@@ -17,49 +17,55 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '문의 PK',
+    comment: '가상계좌대기 PK',
   },
- ownerId: {
-  field: 'owner_id',
-  type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: true,
-  comment: '점주 PK',
- },
- cleanerId: {
-  field: 'cleaner_id',
-  type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: true,
-  comment: '기사 PK',
- },
-  title: {
-    field: 'title',
-    type: DataTypes.STRING(50),
+  reservationId: {
+    field: 'reservation_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '제목',
+    comment: '예약 PK',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.TEXT,
-    allowNull: true,
-    comment: '문의내용',
+  orderId: {
+    field: 'order_id',
+    type: DataTypes.STRING(64),
+    allowNull: false,
+    comment: '주문번호'
   },
-  guestName: {
-    field: 'guest_name',
-    type: DataTypes.STRING(50),
-    allowNull: true,
-    comment: '비회원 이름'
+  bankCode: {
+    field: 'bank_code',
+    type: DataTypes.STRING(10),
+    allownull: false,
+    comment: '은행코드',
   },
-  guestPassword: {
-    field: 'guest_password',
-    type: DataTypes.STRING(100),
-    allowNull: true,
-    comment: '비회원 비밀번호(nullable)'
+  accountNumber: {
+    field: 'account_number',
+    type: DataTypes.STRING(30),
+    allowNull: false,
+    comment: '가상계좌번호',
   },
-  status: {
-    field: 'status',
+  accountType: {
+    field: 'account_type',
+    type: DataTypes.STRING(10),
+    allowNull: false,
+    comment: '계좌 타입',
+  },
+  customerName: {
+    field: 'customer_name',
     type: DataTypes.STRING(20),
     allowNull: false,
-    comment: '상태(대기중, 답변완료)',
+    comment: '입금자명',
+  },
+  dueDate: {
+    field: 'due_date',
+    type: DataTypes.DATE,
+    allowNull: false,
+    comment: '입금기한',
+  },
+  isSettlement: {
+    field: 'is_settlement',
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    comment: '입금완료여부',
   },
   createdAt: {
     field: 'created_at',

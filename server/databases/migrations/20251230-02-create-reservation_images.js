@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-07-create-inquiries.js
- * @description inquiries migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20251230-02-reservation_images.js
+ * @description reservationImages migration file
+ * 251230 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'inquiries';
+const tableName = 'reservation_images';
 
 // 컬럼 정의
 const attributes = {
@@ -17,49 +17,26 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '문의 PK',
+    comment: '전송이미지 PK',
   },
- ownerId: {
-  field: 'owner_id',
-  type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: true,
-  comment: '점주 PK',
- },
- cleanerId: {
-  field: 'cleaner_id',
-  type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: true,
-  comment: '기사 PK',
- },
-  title: {
-    field: 'title',
-    type: DataTypes.STRING(50),
+  reservationId: {
+    field: 'reservation_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '제목',
+    comment: '예약정보 PK',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.TEXT,
-    allowNull: true,
-    comment: '문의내용',
-  },
-  guestName: {
-    field: 'guest_name',
-    type: DataTypes.STRING(50),
-    allowNull: true,
-    comment: '비회원 이름'
-  },
-  guestPassword: {
-    field: 'guest_password',
-    type: DataTypes.STRING(100),
-    allowNull: true,
-    comment: '비회원 비밀번호(nullable)'
-  },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
+  imagePath: {
+    field: 'image_path',
+    type: DataTypes.STRING(500),
     allowNull: false,
-    comment: '상태(대기중, 답변완료)',
+    comment: '이미지 경로'
+  },
+  sortOrder: {
+    field: 'sort_order',
+    type: DataTypes.TINYINT.UNSIGNED,
+    defaultValue: 1,
+    allowNull: false,
+    comment: '순서'
   },
   createdAt: {
     field: 'created_at',

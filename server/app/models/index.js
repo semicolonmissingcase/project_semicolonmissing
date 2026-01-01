@@ -28,6 +28,8 @@ import Like from './Like.js';
 import Payment from './Payment.js';
 import Adjustment from './Adjustment.js';
 import QuestionOption from './QuestionOption.js';
+import ReservationImage from './ReservationImage.js';
+import VirtualAccount from './VirtualAccount.js';
 
 const db = {}; // 생성할 db 인스턴스 저장용 
 // Sequelize 인스턴스 생성
@@ -78,6 +80,8 @@ db.Review = Review.init(sequelize);
 db.Like = Like.init(sequelize);
 db.Payment = Payment.init(sequelize);
 db.Adjustment = Adjustment.init(sequelize);
+db.ReservationImage = ReservationImage.init(sequelize);
+db.VirtualAccount = VirtualAccount.init(sequelize);
 
 // 모델 관계 설정
 Owner.associate(db);
@@ -102,5 +106,7 @@ Review.associate(db);
 Like.associate(db);
 Payment.associate(db);
 Adjustment.associate(db);
+ReservationImage.associate(db);
+VirtualAccount.associate(db);
 
 export default db;
