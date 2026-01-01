@@ -29,3 +29,11 @@
     font-size: 1.1rem;
     text-align: center;
 }
+
+.cleaners-top-summary-account-edit-btn {
+  margin: 0 auto;
+  background-color: var(--color-light-gray);
+  padding: 10px;
+  border-radius: 1rem;
+  width: 140px;
+}

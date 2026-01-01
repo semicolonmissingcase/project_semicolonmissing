@@ -18,7 +18,7 @@ import bcrypt from "bcrypt";
  * @returns 
  */
 async function store(data) {
-  const { phone, gender, email, password, provider, name, profile, locationId } = data;
+  const { phoneNumber, gender, email, password, provider, name, profile, locationId } = data;
 
 
   return await db.sequelize.transaction(async t => {
@@ -32,7 +32,7 @@ async function store(data) {
 
     // 가입 처리
     const createData = {
-      phoneNumber: phone,
+      phoneNumber: phoneNumber,
       gender,
       email,
       password: bcrypt.hashSync(password, 10),

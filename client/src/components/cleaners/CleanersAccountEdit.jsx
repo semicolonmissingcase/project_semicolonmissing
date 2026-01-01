@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import './CleanersAccountEdit.css';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { RiArrowDropDownFill } from "react-icons/ri";
@@ -10,6 +11,50 @@ import { RiArrowDropUpFill } from "react-icons/ri";
 
 
 function CleanerAccountEdit () {
+
+  // 계좌 정보를 저장할 상태
+  const [accountData, setAccountData] = useState({
+    bank: "",
+    accountNumber: "",
+    depositor: ""
+  });
+
+  // 데이터 불러오기
+  useEffect(() => {
+    const fetchAccount = async () => {
+      try {
+        const response = await axios.get("/api/adjustments/primary"); // 설정한 라우트
+        if (response.data) {
+          setAccountData({
+            bank: response.data.bank,
+            accountNumber: response.data.accountNumber,
+            depositor: response.data.depositor
+          });
+          setSelectAddAccount(true); // 데이터가 있으면 폼을 보여줌
+        }
+      } catch (err) {
+        console.error("데이터 로드 실패:", err);
+      }
+    };
+    fetchAccount();
+  }, []);
+
+  // 입력값 변경 핸들러
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAccountData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // 저장 로직 (Modal의 onConfirm 내부에서 호출)
+  const handleSave = async () => {
+    try {
+      await axios.post("/api/adjustments/update", accountData);
+      alert("저장되었습니다.");
+      closeConfirmModal();
+    } catch (err) {
+      alert("저장 실패");
+    }
+  };
 
   const [toggleNew, setToggleNew] = useState(false);
   const [toggleInfo, setToggleInfo] = useState(false);
@@ -152,7 +197,12 @@ function CleanerAccountEdit () {
       
       <span className="cleaners-account-edit-layout-inputs">
       <label htmlFor="banks">은행</label>
-      <select className="cleaners-account-edit-input-layout" id="banks" name="banks">
+      <select 
+      className="cleaners-account-edit-input-layout" 
+      name="bank" // name을 모델과 맞춤
+      value={accountData.bank}
+      onChange={handleInputChange}
+      >
         <option value="Woori Bank">우리은행</option>
         <option value="iM Bank">iM뱅크</option>
         <option value="Kookmin Bank">국민은행</option>
@@ -167,12 +217,20 @@ function CleanerAccountEdit () {
       </select>
 
       <label htmlFor="accounts">계좌번호</label>
-      <input className="cleaners-account-edit-input-layout" id="accounts" name="accounts" 
-      value="1002-123-456789" readOnly/>
+      <input 
+      className="cleaners-account-edit-input-layout" 
+      name="accountNumber"
+      value={accountData.accountNumber}
+      onChange={handleInputChange} 
+      />
 
       <label htmlFor="account-holder">예금주</label>
-      <input className="cleaners-account-edit-input-layout" id="account-holder" name="account-holder" 
-      value="김기사" readOnly/>
+      <input 
+      className="cleaners-account-edit-input-layout" 
+      name="depositor"
+      value={accountData.depositor}
+      onChange={handleInputChange}
+      />
       </span>
       
       <div className="cleaners-account-edit-button">

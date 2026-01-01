@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 // 출력 카드 컨포넌트
 import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
-import CancelledJobList from './CancelledJobList.jsx';
-import CompletedJobList from './CompletedJobList.jsx';
+import CleanersInquiries from './CleanersInquiries.jsx';
+import CleanersReview from './CleanersReview.jsx';
 import CleanersSettlementStatus from "../CleanersSettlementStatus.jsx";
 
 function CleanersMyPage () {
@@ -18,8 +18,8 @@ function CleanersMyPage () {
       case '정산': return <CleanersSettlementStatus />;
       case '예약 완료': return <ReservationCompletedList />;
       case '오늘 작업': return <TodayJobList />;
-      case '문의 내역': return <CancelledJobList />;
-      case '리뷰': return <CompletedJobList />
+      case '문의 내역': return <CleanersInquiries />;
+      case '리뷰': return <CleanersReview />
       default: return <div className="tab-placeholder">내용을 불러오는 중...</div>;
     }
   };
