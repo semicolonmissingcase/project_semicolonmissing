@@ -1,25 +1,25 @@
-.cleaners-user-quote-list-details-container {
+.cleaners-user-quotations-container {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.cleaners-user-quote-list-details-container > form {
+.cleaners-user-quotations-container > form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.cleaners-user-quote-list-details-container > form > button {
+.cleaners-user-quotations-container > form > button {
   align-self: center;
 }
 
-.cleaners-user-quote-list-details-title {
+.cleaners-user-quotations-title {
   font-size: 1.5rem;
 }
 
-.cleaners-user-quote-list-details-items-box {
+.cleaners-user-quotations-items-box {
   border: 1px solid var(--color-gray);
   border-radius: 15px;
   padding: 1rem;
@@ -27,7 +27,7 @@
   gap: 1rem;
 }
 
-.cleaners-user-quote-list-details-items-box-column {
+.cleaners-user-quotations-items-box-column {
   border: 1px solid var(--color-gray);
   border-radius: 15px;
   padding: 1rem;
@@ -36,85 +36,85 @@
   gap: 1rem;
 }
 
-.cleaners-user-quote-list-details-items-box-title-box {
+.cleaners-user-quotations-items-box-title-box {
   display: flex;
   justify-content: space-between;
 }
 
-.cleaners-user-quote-list-details-btn {
+.cleaners-user-quotations-btn {
   padding: 5px;
   background-color: var(--color-gray);
   border-radius: 10px;
   color: var(--color-white);
 }
 
-.cleaners-user-quote-list-details-grid {
+.cleaners-user-quotations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 0.5rem;
 }
 
-.cleaners-user-quote-list-details-base-info {
+.cleaners-user-quotations-base-info {
   display: flex;
   gap: 0.5rem;
   justify-content: space-around;
 }
 
-.cleaners-user-quote-list-details-like-status {
+.cleaners-user-quotations-like-status {
   color: var(--color-blue);
   font-weight: bold;
   font-size: 1.2rem;
 }
 
-.cleaners-user-quote-list-details-icon-set {
+.cleaners-user-quotations-icon-set {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.cleaners-user-quote-list-details-items-box-title {
+.cleaners-user-quotations-items-box-title {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
 
-.cleaners-user-quote-list-details-items-box-sub-title {
+.cleaners-user-quotations-items-box-sub-title {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
 
-.cleaners-user-quote-list-details-items-box-images {
+.cleaners-user-quotations-items-box-images {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 1rem;
 }
 
-.cleaners-user-quote-list-details-items-box-image {
+.cleaners-user-quotations-items-box-image {
   padding-top: 70%;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.cleaners-user-quote-list-details-input-box {
+.cleaners-user-quotations-input-box {
   display: flex;
   gap: 0.8rem;
   align-items: center;
 }
 
-.cleaners-user-quote-list-details-input-box > label {
+.cleaners-user-quotations-input-box > label {
   width: 70px;
 }
 
-.cleaners-user-quote-list-details-input-box > input {
+.cleaners-user-quotations-input-box > input {
   width: 100%;
 }
 
-.cleaners-user-quote-list-details-textarea-box {
+.cleaners-user-quotations-textarea-box {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.cleaners-user-quote-list-details-textarea {
+.cleaners-user-quotations-textarea {
   height: 100px;
   outline: none;
   padding: 5px;
@@ -123,17 +123,24 @@
   -ms-overflow-style: none;
 }
 
-.cleaners-user-quote-list-details-textarea::-webkit-scrollbar{
+.cleaners-user-quotations-textarea::-webkit-scrollbar{
   display:none;
 }
 
-.cleaners-user-quote-list-details-grid-1 {
+.cleaners-user-quotations-grid-1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.cleaners-user-quote-list-details-input-layout {
+.cleaners-user-quotations-input-box {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  justify-items: start;
+}
+
+.cleaners-user-quotations-input-layout {
   padding: 10px;
   background-color: var(--color-light-gray);
   border: none;
@@ -142,7 +149,7 @@
   flex: 1;
 }
 
-.cleaners-user-quote-list-details-input-layout-full-width {
+.cleaners-user-quotations-input-layout-full-width {
   padding: 10px;
   background-color: var(--color-light-gray);
   border: none;
@@ -151,33 +158,33 @@
   flex: 1;
 }
 
-.cleaners-user-quote-list-details-input-layout:focus {
+.cleaners-user-quotations-input-layout:focus {
   outline: none;
 }
 
-.cleaners-user-quote-list-details-toggle-question {
+.cleaners-user-quotations-toggle-question {
   cursor: pointer;
   user-select: none;
 }
-.cleaners-user-quote-list-details-toggle-question::after {
+.cleaners-user-quotations-toggle-question::after {
   content: '(필수 사항이 아닌 선택 사항입니다. 하지만 입력해주시면 기사님들이 빠른 진단을 해주실 수 있어요!)';
   font-size: 0.9rem;
   color: var(--color-gray);
 }
 
 /* 추가 질문 관련 */
-.cleaners-user-quote-list-details-items-box-question {
+.cleaners-user-quotations-items-box-question {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.cleaners-user-quote-list-details-items-box-question-answers {
+.cleaners-user-quotations-items-box-question-answers {
   display: flex;
   gap: 1rem;
 }
 
-.cleaners-user-quote-list-details-items-box-question-answer {
+.cleaners-user-quotations-items-box-question-answer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -185,7 +192,7 @@
 
 
 /* 라디오 관련 */
-.cleaners-user-quote-list-details-radio-ui {
+.cleaners-user-quotations-radio-ui {
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -193,35 +200,75 @@
   background-color: var(--color-light-gray);
 }
 
-.cleaners-user-quote-list-details-radio-ui:checked {
+.cleaners-user-quotations-radio-ui:checked {
   background-color: var(--color-gray);
   border-color: var(--color-gray);
 }
 
+/* 배경 레이어: 화면 전체를 어둡게 덮음 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* 반투명 검정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 다른 요소보다 위에 배치 */
+}
 
+/* 실제 모달 박스 */
+.modal-content {
+  background-color: white;
+  width: 90%;
+  max-width: 1000px; /* 원하는 너비로 조절 */
+  max-height: 80vh; /* 화면 높이의 80%까지만 */
+  overflow-y: auto; /* 내용이 많으면 내부 스크롤 */
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 우측 상단 닫기 버튼 */
+.modal-close-x {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
 
 /* 이하 확인 필요 */
 @media (max-width: 820px) {
-  .cleaners-user-quote-list-details-base-info {
+  .cleaners-user-quotations-base-info {
     display: grid;
     grid-template-columns: 0.5fr 1.5fr;
     justify-items: center;
   }
 
-  .cleaners-user-quote-list-details-grid-1 {
+  .cleaners-user-quotations-grid-1 {
     grid-template-columns: 1fr;
   }
+
+  .cleaners-user-quotations-grid-1-custom {
+  grid-template-columns: 1fr;
+}
   
-  .cleaners-user-quote-list-details-items-box-images {
+  .cleaners-user-quotations-items-box-images {
     grid-template-columns: 1fr 1fr;
   }
   
-  .cleaners-user-quote-list-details-items-box-question {
+  .cleaners-user-quotations-items-box-question {
     grid-template-columns: 1fr;
     gap: 0.2rem;
   }
 
-  .cleaners-user-quote-list-details-items-box-question-answers {
+  .cleaners-user-quotations-items-box-question-answers {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
@@ -230,24 +277,24 @@
 
 
 @media ( max-width: 720px ) {
-  .cleaners-user-quote-list-details-contents {
+  .cleaners-user-quotations-contents {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.5rem;
   }
 
-  .cleaners-user-quote-list-details-contents .cleaners-user-quote-list-details-requests {
+  .cleaners-user-quotations-contents .cleaners-user-quotations-requests {
     width: 100%;
   }
 
-  .cleaners-user-quote-list-details-answer-layout {
+  .cleaners-user-quotations-answer-layout {
     display: flex;
     flex-direction: column;
     align-items: start;
     gap: 1rem;
   }
 
-  .cleaners-user-quote-list-details-input-layout-full-width {
+  .cleaners-user-quotations-input-layout-full-width {
     width: 100%;
   }
 }

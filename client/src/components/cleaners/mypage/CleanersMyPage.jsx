@@ -63,12 +63,6 @@ function CleanersMyPage () {
                 <p>오늘의 예약 건수: <strong>1건</strong></p>
               </div>
             </div>
-            
-            {/* 이게 뭐가 출력되는 부분인지 몰라서 버튼만 만들었습니다. */}
-            <div className="cleanermypage-action-btn-container">
-              <button className="cleanermypage-action-btn">현재 정산 상태</button>
-              <button className="cleanermypage-action-btn">오늘 예정 일정</button>
-            </div>
           </div>
         </div>
       </header>

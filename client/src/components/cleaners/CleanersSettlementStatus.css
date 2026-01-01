@@ -114,7 +114,8 @@ tr.rdp-weekdays {
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 1.3rem;
+  gap: 2.2rem;
+  padding-right: 2.2rem;
 }
 tbody.rdp-weeks {
   display: inline-block;
@@ -153,7 +154,7 @@ tbody.rdp-weeks {
   border: 2px solid transparent;
   color: #000; 
   background-color: var(--color-light-gray);
-  margin: 0.5rem 0;
+  margin: 0.5rem 0.2rem;
   z-index: 10;
 }
 .rdp-day:not([disabled]) {
@@ -393,6 +394,36 @@ tr.rdp-week {
 .ws-lv2 { background: var(--color-blue); color: #fff; }
 .ws-lv3 { background: var(--color-dark-blue); color: #fff; }
 
+/* 선택된 주 강조 스타일 */
+.cleaners-settlement-status-week-selected {
+  background-color: rgba(74, 163, 255, 0.1) !important;
+  box-shadow: inset 0 0 0 2px var(--color-blue);
+  border-radius: 12px;
+}
+
+/* 배지가 들어갈 td: 배지가 없어도 공간을 차지하게 하여 달력 흔들림 방지 */
+.rdp-week-badge-cell {
+  width: 32px; /* 배지 크기에 맞춘 고정 너비 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px; /* rdp-day 높이와 맞춤 */
+}
+
+/* 배지 디자인 */
+.cleaners-settlement-status-week-total-badge {
+  background-color: #111;
+  color: #fff;
+  font-size: 11px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
 /* --- Responsive --- */
 @media (max-width: 920px) {
   .cleaners-settlement-status-grid {
@@ -400,7 +431,7 @@ tr.rdp-week {
   }
 }
 
-@media (min-width: 390px) and (max-width: 490px) {
+@media (min-width: 520px) and (max-width: 570px) {
 thead{
  width: 283px;
  display: flex;
@@ -409,32 +440,61 @@ thead{
 tr.rdp-weekdays {
   width: 100%;
   display: flex;
-  gap: 1.9rem;
+  gap: 1.7rem;
+  padding-right: 1.7rem;
 }
+
 .rdp-day {
   width: 33px;
   height: 33px;
 }
-.cleaners-settlement-status-right-top{
-  width: 283px;
+.cleaners-settlement-status-right{
+  width: 330px;
 }
 }
 
-@media (max-width: 390px) {
+@media (min-width: 440px) and (max-width: 519px) {
 thead{
-  width: 260px;
+  width: 240px;
 }
 tr.rdp-weekdays {
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 1.3rem;
+  gap: 1.4rem;
+  padding-right: 0.4rem;
 }
 tbody.rdp-weeks {
   margin: 0 auto;
 }
 .rdp-day {
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
+}
+.cleaners-settlement-status-right{
+  width: 290px;
+}
+}
+
+@media (min-width: 359px) and (max-width: 439px) {
+  thead{
+  width: 220px;
+}
+tr.rdp-weekdays {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  padding-right: 0.2rem;
+}
+tbody.rdp-weeks {
+  margin: 0 auto;
+}
+.rdp-day {
+  width: 18px;
+  height: 18px;
+}
+.cleaners-settlement-status-right{
+  width: 220px;
 }
 }

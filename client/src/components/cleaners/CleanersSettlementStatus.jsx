@@ -245,25 +245,28 @@ export default function CleanersSettlementStatus() {
                     0
                   );
 
+                  // 현재 이 주가 선택된 상태인지 확인
                   const isWeekSelected = selectedWeek && weekStart && isSameDay(weekStart, selectedWeek);
+
                   return (
                     <tr
-                      className={`rdp-week ${isWeekSelected ? "cs-week-selected" : ""}`}
-                      style={{
-                        position: "relative",
-                        cursor: "pointer",
-                        ["--cs-week-total"]: totalCount > 0 ? `"${totalCount}"` : `""`,
-                      }}
-                      onClickCapture={(e) => {
-                        // 날짜 버튼 누른 거면 주 클릭 무시
+                      className={`rdp-week ${isWeekSelected ? "cleaners-settlement-status-week-selected" : ""}`}
+                      onClick={(e) => {
                         if (e.target.closest("button.rdp-day_button")) return;
                         if (weekStart) handleWeekClick(weekStart);
                       }}
                     >
+                      {/* 날짜들 (일~토) */}
                       {props.children}
-                      {isWeekSelected && totalCount > 0 && (
-                        <td className="cleaners-settlement-status-week-total-badge">{totalCount}</td>
-                      )}
+
+                      {/* 배지 칸: 선택되었을 때만 내부의 span(배지)을 보여줌 */}
+                      <td className="rdp-week-badge-cell">
+                        {isWeekSelected && totalCount > 0 && (
+                          <span className="cleaners-settlement-status-week-total-badge">
+                            {totalCount}
+                          </span>
+                        )}
+                      </td>
                     </tr>
                   );
                 }

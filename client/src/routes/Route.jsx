@@ -14,9 +14,9 @@ import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx"
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
-import CleanersQuoteListPreparationSave from "../components/cleaners/CleanersQuoteListPreparationSave.jsx";
-import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuoteListTitle.jsx";
-import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
+import CleanersQuotationsPreparationSave from "../components/cleaners/CleanersQuotationsPreparationSave.jsx";
+import CleanersUserQuotationsTitle from "../components/cleaners/CleanersUserQuotationsTitle.jsx";
+import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/maypage/OwnerMyPage.jsx";
@@ -101,18 +101,18 @@ const router = createBrowserRouter([
           },
           {
             // 기사 견적 작성 임시저장 페이지
-            path: 'quotelistpreparationsave',
-            element: <CleanersQuoteListPreparationSave />,
+            path: 'quotationspreparationsave',
+            element: <CleanersQuotationsPreparationSave />,
           },
           {
             // 유저 견적 작성 페이지
             path: 'quotations',
-            element: <CleanersUserQuoteListTitle />,
+            element: <CleanersUserQuotationsTitle />,
           },
           {
             // 유저 견적 작성 페이지 상세
             path: 'quotations/:id',
-            element: <CleanersUserQuoteListDetails />,
+            element: <CleanersUserQuotations />,
           },
         ]
       },
