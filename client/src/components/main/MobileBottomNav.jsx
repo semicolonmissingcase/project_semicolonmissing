@@ -30,11 +30,11 @@ export default function MobileBottomNav() {
       {navItems.map((item, index) => (
         <button
           key={index}
-          className={`mobile-nav-item ${location.pathname === item.path ? 'active' : ''}`}
+          className={`mobile-bottom-item ${location.pathname === item.path ? 'active' : ''}`}
           onClick={item.action}
         >
-          <span className="mobile-nav-icon">{item.icon}</span>
-          <span className="mobile-nav-label">{item.label}</span>
+          <span className="mobile-bottom-icon">{item.icon}</span>
+          <span className="mobile-bottom-label">{item.label}</span>
         </button>
       ))}
     </nav>

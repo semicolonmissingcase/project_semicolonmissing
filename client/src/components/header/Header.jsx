@@ -57,14 +57,6 @@ export default function Header() {
     }
   })
   
-  // 로그 아웃 처리 함수 (저희는 이거 메뉴바 만듭니다.)
-  //function handleLogout() {
-  //  localStorage.removeItem('accessToken'); // 스토리지 삭제
-  //  localStorage.removeItem('user');
-  //  dispatch(clearAuth()); // 리덕스 상태 초기화
-  //  navigate('/');
-  //}
-
   // 버튼 네비게이터
   function mainPage() {
     navigate('/');
