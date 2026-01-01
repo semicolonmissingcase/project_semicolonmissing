@@ -1,4 +1,4 @@
-import { reservationId, answers, questionId, questionOptionId, answerText } from "../../fields/cleaner/cleaner.submissions.field";
+import { reservationId, answers, questionId, questionOptionId, answerText } from "../../fields/cleaner/cleaner.submissions.field.js";
 
 export const createSubmissionValidator = [
   reservationId,
