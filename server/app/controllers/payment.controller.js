@@ -4,7 +4,8 @@
  * 251231 v1.0.0 jae init
  */
 
-import { SUCCESS } from '../../configs/responseCode.config.js';
+import { SUCCESS, UNAUTHORIZED_ERROR } from '../../configs/responseCode.config.js';
+import myError from '../errors/customs/my.error.js';
 import paymentService from '../services/payment.service.js';
 import { createBaseResponse } from '../utils/createBaseResponse.util.js';
 
@@ -46,13 +47,15 @@ async function confirmPayment(req, res, next) {
   try {
     const { paymentKey, orderId, amount } = req.body;
 
-    const user = req.user;
+    if(!req.user) {
+      throw myError("인증 정보가 없습니다. 로그인을 다시 해주세요.", UNAUTHORIZED_ERROR);
+    }
 
     const result = await paymentService.confirmPayment({
       paymentKey,
       orderId,
       amount,
-      userId: user.id,
+      userId: req.user.id,
     });
 
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));

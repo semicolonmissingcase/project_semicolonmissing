@@ -1,14 +1,7 @@
-/**
- * @file app/services/payment.service.js
- * @description Payment Service
- * 251231 v1.0.0 jae init
- */
-
 import axios from 'axios';
 import db from '../models/index.js';
 import paymentRepository from '../repositories/payment.repository.js';
 import myError from '../errors/customs/my.error.js';
-// 상수 파일 import 방식 수정
 import modelsConstants from '../constants/models.constants.js';
 const { PaymentStatus, ReservationStatus } = modelsConstants;
 import { 
@@ -24,7 +17,7 @@ import {
 async function readyPayment({ reservationId, userId }) {
   return await db.sequelize.transaction(async (t) => {
     const reservation = await db.Reservation.findOne({
-      where: { id: reservationId, ownerId: userId }, // ownerId 컬럼명 확인 필요
+      where: { id: reservationId, ownerId: userId },
       transaction: t,
     });
 
@@ -32,7 +25,6 @@ async function readyPayment({ reservationId, userId }) {
       throw myError('결제할 예약 정보를 찾을 수 없습니다.', NOT_FOUND_ERROR);
     }
     
-    // 예약 상태 검증 (요청 상태일 때만 결제 가능)
     if (reservation.status !== ReservationStatus.REQUEST) {
       throw myError('이미 처리되었거나 진행중인 예약입니다.', ALREADY_PROCESSED_ERROR);
     }
@@ -51,20 +43,19 @@ async function readyPayment({ reservationId, userId }) {
     await paymentRepository.createPendingPayment(
       {
         orderId: orderId,
-        amount: reservation.amount,
+        amount: estimate.estimatedAmount,
         reservationId: reservation.id,
         estimateId: estimate.id,
       },
       t
     );
 
-    // 예약 상태를 '대기'로 변경 (결제창 진입 의미)
-    // models.constants에 정의된 상수를 사용하는 것이 좋습니다.
-    await reservation.update({ status: 'PENDING' }, { transaction: t });
+    // 예약 상태를 '대기'로 변경
+    await reservation.update({ status: ReservationStatus.PENDING }, { transaction: t });
 
     return {
       orderId: orderId,
-      amount: reservation.amount,
+      amount: estimate.estimatedAmount,
       reservationName: `제빙기 청소 예약 #${reservation.id}`,
     };
   });
@@ -74,20 +65,20 @@ async function readyPayment({ reservationId, userId }) {
  * 결제 승인
  */
 async function confirmPayment({ paymentKey, orderId, amount, userId }) {
-  return await db.sequelize.transaction(async (t) => {
-    // repository에서 include: [Reservations]를 했으므로 payment.reservation 접근 가능
+  // 1. 트랜잭션 시작
+  const t = await db.sequelize.transaction();
+  
+  try {
     const payment = await paymentRepository.findByOrderId(orderId, t);
     
     if (!payment) {
       throw myError("해당 주문 내역을 찾을 수 없습니다.", NOT_FOUND_ERROR);
     }
     
-    // DB 컬럼명이 total_amount(snake_case)인지 확인하세요.
-    if (Number(payment.total_amount) !== Number(amount)) {
+    if (Number(payment.totalAmount) !== Number(amount)) {
       throw myError("결제 금액이 일치하지 않습니다.", BAD_REQUEST_ERROR);
     }
 
-    // 작성하신 코드의 payment.Reservation.ownerId 부분 확인 필요 (as 설정에 따라 다름)
     if (payment.reservation.ownerId !== userId) {
       throw myError("본인의 결제 건에 대해서만 승인할 수 있습니다.", BAD_REQUEST_ERROR);
     }
@@ -96,41 +87,52 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
       throw myError('이미 처리된 결제입니다.', ALREADY_PROCESSED_ERROR);
     }
 
+    // 2. 토스 인증 헤더 생성
     const authorizations = Buffer.from(process.env.TOSS_SECRET_KEY + ":").toString("base64");
 
+    // 3. 토스 승인 API 호출
     const response = await axios.post(
       "https://api.tosspayments.com/v1/payments/confirm",
       { paymentKey, orderId, amount },
       { 
         headers: {
-          Authorization: `Basic ${authorizations}`, // 한 칸 띄우기 수정됨
+          Authorization: `Basic ${authorizations}`,
           "Content-Type": "application/json", 
         },
+        timeout: 5000 
       }
-    ).catch(error => {
-      if (error.response) {
-        throw myError(`토스 결제 승인 실패: ${error.response.data.message}`, BAD_REQUEST_ERROR, error.response.data);
-      }
-      throw myError('토스 페이먼츠 서버 통신 오류', SYSTEM_ERROR, error);
-    });
+    );
 
-    const tossResult = response.data;
+    const tossResult = response.data; // 여기서 tossResult 정의
 
-    // 승인 성공 시 상태 업데이트
+    // 4. 승인 성공 시 DB 상태 업데이트 
     await paymentRepository.updatePaymentAfterSuccess(
       {
         orderId: tossResult.orderId,
         paymentKey: tossResult.paymentKey,
         method: tossResult.method,
         approvedAt: tossResult.approvedAt,
-        receiptUrl: tossResult.receipt?.url, // 영수증 URL 옵셔널 체이닝 추천
+        receiptUrl: tossResult.receipt?.url, 
       }, 
-      payment.reservation_id, 
+      payment.reservationId, 
       t 
     );
 
+    // 5. 모든 작업 성공 시 커밋
+    await t.commit();
     return tossResult;
-  });
+
+  } catch (error) {
+    // 6. 실패 시 롤백 및 에러 핸들링
+    if (t) await t.rollback();
+
+    if (error.response) {
+      const { code, message } = error.response.data;
+      throw myError(`${code}: ${message}`, BAD_REQUEST_ERROR);
+    }
+    
+    throw error;
+  }
 }
 
 export default { 

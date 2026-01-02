@@ -15,13 +15,14 @@ const { Payment, Reservation } = db;
  * 대기 상태의 결제 정보 생성
  */
 async function createPendingPayment(paymentData, transaction = null) {
+  console.log(paymentData);
+
   const dataToCreate = {
-    // 주의: DB 컬럼명이 order_id라면 왼쪽 키값을 order_id로 맞춰야 합니다.
-    order_id: paymentData.orderId, 
-    total_amount: paymentData.amount,
-    reservation_id: paymentData.reservationId,
-    estimate_id: paymentData.estimateId,
-    status: PaymentStatus.READY,
+    orderId: paymentData.orderId, 
+    totalAmount: paymentData.amount,
+    reservationId: paymentData.reservationId,
+    estimateId: paymentData.estimateId,
+    status: '대기',
   };
   return await Payment.create(dataToCreate, { transaction });
 }
@@ -32,11 +33,12 @@ async function createPendingPayment(paymentData, transaction = null) {
 async function findByOrderId(orderId, transaction = null) {
   return await Payment.findOne({
     where: { order_id: orderId },
-    // include 사용 시 모델 설정에서 관계(HasOne/BelongsTo)가 정의되어 있어야 합니다.
-    include: [{
-      model: Reservation,
-      // as: 'reservation', // 모델 설정과 일치해야 함. 설정 안 했다면 제거 권장
-    }],
+    include: [
+      {
+        model: Reservation,
+        as: 'reservation'
+      }
+    ],
     transaction
   });
 }
@@ -49,16 +51,18 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
   const { orderId, ...updateFields } = paymentData;
 
   const dataToUpdate = {
-    ...updateFields,
+    paymentKey: paymentData.paymentKey,
+    method: paymentData.method,
+    approvedAt: paymentData.approvedAt,
+    receiptUrl: paymentData.receiptUrl,
     status: PaymentStatus.DONE, // 성공 시 상태 변경 명시
   };
 
-  const [updatedRows] = await Payments.update(dataToUpdate, {
+  const [updatedRows] = await Payment.update(dataToUpdate, {
     where: { order_id: orderId },
     transaction
   });
 
-  // 수정: 변수명 오타 수정 (updatedRows)
   if (updatedRows === 0) {
     throw new Error('결제 레코드를 찾을 수 없습니다.');
   }
