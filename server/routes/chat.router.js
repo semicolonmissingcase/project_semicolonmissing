@@ -1,6 +1,6 @@
 import express from 'express';
 import chatController from '../app/controllers/chat.controller.js';
-import chatUpload from '../app/middlewares/chatUpload.middleware.js';
+import chatUpload from '../app/middlewares/multer/uploaders/chat.upload.js';
 import chatAuth from '../app/middlewares/chat.auth.middleware.js';
 
 const chatRouter = express.Router();
@@ -27,6 +27,6 @@ chatRouter.get('/rooms/:roomId/sidebar', chatController.getSidebarInfo);
 chatRouter.get('/rooms/:roomId/reviews', chatController.getSidebarReviews);
 
 // 파일 업로드
-chatRouter.post('/rooms/:roomId/upload', chatUpload.single('image'), chatController.chatUploadImage);
+chatRouter.post('/rooms/:roomId/upload', chatUpload, chatController.chatUploadImage);
 
 export default chatRouter;

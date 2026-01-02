@@ -16,7 +16,7 @@ export const sendChatMessage = (roomId, msgData) =>
   axiosInstance.post(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/messages`, msgData);
 
 export const uploadChatImage = (roomId, formData) => 
-  axiosInstance.post(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/upload`, formData, {
+  axiosInstance.post(`/api/files/chat`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   });
 

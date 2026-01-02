@@ -75,22 +75,17 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
 
   useEffect(() => {
     if (!roomId) return;
-
     const init = async () => {
       try {
         const roomRes = await getChatRoomDetail(roomId);
         const responseData = roomRes.data?.data; 
-        
         if (responseData) {
           onOpenSidebar(responseData, false);
-
-          const sideType = responseData.sideType; // "OWNER" 또는 "CLEANER"
+          const sideType = responseData.sideType;
           const detail = responseData.data;
-
           const isMeOwner = sideType === 'OWNER';
           const targetName = isMeOwner ? detail.cleanerName : detail.ownerName;
           const targetId = isMeOwner ? detail.cleanerId : detail.ownerId;
-
           setOpponentName(targetName || "이름 없음");
           setOpponentId(targetId);
         }
@@ -98,13 +93,11 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
         console.warn("방 정보 조회 실패", err); 
         setOpponentName("채팅방");
       }
-
       setHasMore(true);
       setPage(1);
       await fetchMessages(1, true);
       markMessageAsRead(roomId).catch(() => {});
     };
-
     init();
   }, [roomId]);
 
@@ -116,7 +109,6 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
 
   useEffect(() => {
     if (!socket || !roomId) return;
-
     const handleReceive = (newMsg) => {
       const incomingId = String(newMsg.chatRoomId || newMsg.room_id || newMsg.roomId);
       if (incomingId === String(roomId)) {
@@ -127,7 +119,6 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
         setTimeout(() => scrollToBottom('smooth'), 100);
       }
     };
-
     socket.on("receive_message", handleReceive);
     return () => socket.off("receive_message", handleReceive);
   }, [socket, roomId, scrollToBottom]);
@@ -144,6 +135,32 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     setTimeout(() => scrollToBottom('smooth'), 100);
   };
 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await uploadChatImage(roomId, formData);
+      const imageUrl = res.data.data.path;
+
+      socket.emit("send_message", { 
+        roomId, 
+        content: imageUrl, 
+        type: 'IMAGE', 
+        receiverId: opponentId 
+      });
+
+      e.target.value = ''; 
+      setTimeout(() => scrollToBottom('smooth'), 100);
+    } catch(err) { 
+      console.error("이미지 업로드 실패", err);
+      alert("이미지 전송에 실패했습니다.");
+    }
+  };
+
   return (
     <div className='chatroom-container'>
       <div className='chatroom-header'>
@@ -152,7 +169,7 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
           <h3 className='chatroom-cleaner-name'>{opponentName}</h3>
         </div>
         <div className='chatroom-header-right'>
-          <button className='chatroom-detail-btn' onClick={() => onOpenSidebar(null, true)}>상세보기</button>
+          <button className='chatroom-detail-btn' onClick={() => onOpenSidebar(true)}>상세보기</button>
           {userRole === 'OWNER' && (<button className='chatroom-book-btn'>예약하기</button>)}
         </div>
       </div>
@@ -171,14 +188,24 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
             (isCleanerUser && sRole.includes('CLEANER')) ||
             (!isCleanerUser && sRole.includes('OWNER'))
           );
+          
+          const isImage = (msg.messageType || msg.type) === 'IMAGE';
 
           return (
             <div key={msg.id || index} className={`chatroom-message-item ${isMe ? 'mine' : 'other'}`}>
               <div className='chatroom-bubble-container'>
-                <div className='chatroom-bubble'>
-                  {(msg.messageType || msg.type) === 'IMAGE' ? (
-                    <img src={msg.content} alt="chat" className="chat-image-content" />
-                  ) : msg.content}
+                {/* 이미지일 때 배경을 없애주는 'has-image' 클래스만 추가했습니다 */}
+                <div className={`chatroom-bubble ${isImage ? 'has-image' : ''}`}>
+                  {isImage ? (
+                    <img 
+                      src={msg.content} 
+                      alt="chat" 
+                      className="chat-image-content" 
+                      onClick={() => window.open(msg.content, '_blank')}
+                    />
+                  ) : (
+                    msg.content
+                  )}
                 </div>
                 <span className='chatroom-time'>
                   {dayjs(msg.createdAt || msg.created_at).format('A h:mm')}
@@ -195,21 +222,7 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
           accept='image/*' 
           ref={fileInputRef} 
           style={{ display: 'none' }} 
-          onChange={async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const formData = new FormData();
-            formData.append('image', file);
-            try {
-              const res = await uploadChatImage(roomId, formData);
-              socket.emit("send_message", { 
-                roomId, 
-                content: res.data.data.url, 
-                type: 'IMAGE', 
-                receiverId: opponentId 
-              });
-            } catch(err) { console.error("이미지 업로드 실패", err); }
-          }} 
+          onChange={handleImageChange} 
         />
         <button className='chatroom-image-send' onClick={() => fileInputRef.current.click()}>
           <FaRegFileImage size={22} />

@@ -20,8 +20,13 @@ function getProfilesImagePath() {
   return process.env.APP_MODE !== 'dev' ? process.env.FILE_USER_PROFILE_PATH : path.resolve(process.env.FILE_USER_PROFILE_PATH);
 }
 
+function getChatImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_CHAT_IMAGE_PATH : path.resolve(process.env.FILE_CHAT_IMAGE_PATH);
+}
+
  export default {
   getViewDirPath,
   getPostsImagePath,
   getProfilesImagePath,
+  getChatImagePath
  }
