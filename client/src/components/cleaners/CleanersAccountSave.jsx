@@ -66,7 +66,7 @@ function CleanerAccountSave() {
         <div className="cleaners-account-edit-add-account-wrapper">
           <div className="cleaners-account-edit-account-management-title" onClick={toggleMenuNew}>
             <button type="button">
-              {toggleNew ? <RiArrowDropUpFill size={30} /> : <RiArrowDropDownFill size={30} />}
+              {!toggleNew ? <RiArrowDropUpFill size={30} /> : <RiArrowDropDownFill size={30} />}
             </button>
             <p className="cleaners-account-edit-new-account-message">정산 계좌 설정</p>
           </div>

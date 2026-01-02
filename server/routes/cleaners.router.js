@@ -18,9 +18,24 @@ const cleanersRouter = express.Router();
 //   res.send('ttt');
 //  });
 
-cleanersRouter.post('/accountinfo', authUserMiddleware, cleanersAdjustmentValidator.requestAdjustmentValidator, cleanerAdjustmentController.requestAdjustment);
+cleanersRouter.get('/adjustment/history', authUserMiddleware, cleanerAdjustmentController.getAdjustmentHistory);
+cleanersRouter.post('/adjustment/request', authUserMiddleware, cleanerAdjustmentController.requestAdjustment);
 
-cleanersRouter.patch('/edit', 
+//  계좌 정보 관련 라우터 추가
+cleanersRouter.get(
+    '/accountinfo', 
+    authUserMiddleware, 
+    cleanerAdjustmentController.getAccountInfo // ⬅️ 조회 함수 연결
+);
+cleanersRouter.post(
+ '/accountinfo', 
+ authUserMiddleware, 
+ //  saveAccountValidator가 배열을 반환한다고 가정하고 Spread Operator를 사용
+ ...cleanersAdjustmentValidator.saveAccountValidator, 
+ cleanerAdjustmentController.saveAccountInfo 
+);
+
+cleanersRouter.patch('/profileedit', 
   upload.single('profile'),
   [name, locations], 
   profileController.update

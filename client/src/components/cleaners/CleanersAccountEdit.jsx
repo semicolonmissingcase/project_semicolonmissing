@@ -12,32 +12,34 @@ import { RiArrowDropUpFill } from "react-icons/ri";
 
 function CleanerAccountEdit () {
 
-  // 계좌 정보를 저장할 상태
-  const [accountData, setAccountData] = useState({
-    bank: "",
-    accountNumber: "",
-    depositor: ""
-  });
+  // 1. 상태(State) 선언: 컴포넌트 최상단에 모아서 선언하는 것이 관례입니다.
+    const [selectAddAccount, setSelectAddAccount] = useState(false); // <--- Line 74였던 이 부분을 위로 올립니다.
+    const [accountData, setAccountData] = useState({
+        bank: '',
+        accountNumber: '',
+        depositor: ''
+    });
 
-  // 데이터 불러오기
-  useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        const response = await axios.get("/api/adjustments/primary"); // 설정한 라우트
-        if (response.data) {
-          setAccountData({
-            bank: response.data.bank,
-            accountNumber: response.data.accountNumber,
-            depositor: response.data.depositor
-          });
-          setSelectAddAccount(true); // 데이터가 있으면 폼을 보여줌
-        }
-      } catch (err) {
-        console.error("데이터 로드 실패:", err);
-      }
-    };
-    fetchAccount();
-  }, []);
+    // 2. 데이터 불러오기
+    useEffect(() => {
+        const fetchAccount = async () => {
+            try {
+                const response = await axios.get("/accountinfo"); 
+                if (response.data) {
+                    setAccountData({
+                        bank: response.data.bank,
+                        accountNumber: response.data.accountNumber,
+                        depositor: response.data.depositor
+                    });
+                    // setSelectAddAccount는 이제 먼저 선언되었으므로 오류가 사라집니다.
+                    setSelectAddAccount(true); 
+                }
+            } catch (err) {
+                console.error("데이터 로드 실패:", err);
+            }
+        };
+        fetchAccount();
+    }, []);
 
   // 입력값 변경 핸들러
   const handleInputChange = (e) => {
@@ -70,8 +72,6 @@ function CleanerAccountEdit () {
     setToggleInfo(!toggleInfo)
 
   };
-
-  const [selectAddAccount, setSelectAddAccount] = useState(false);
 
   const toggleAddAccount = (e) => {
   e.stopPropagation();           // 바깥 토글로 클릭 전파 방지
