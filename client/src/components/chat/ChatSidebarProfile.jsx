@@ -36,7 +36,7 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
   return (
     <div className="ChatSidebarProfile-container">
       <div className="ChatSidebarProfile-header">
-        <h3>기사님 정보</h3>
+        <h3>프로필</h3>
         <button onClick={onClose} className="ChatSidebarProfile-close-btn">✕</button>
       </div>
       

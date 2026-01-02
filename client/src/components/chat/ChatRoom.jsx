@@ -153,7 +153,7 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
         </div>
         <div className='chatroom-header-right'>
           <button className='chatroom-detail-btn' onClick={() => onOpenSidebar(null, true)}>상세보기</button>
-          <button className='chatroom-book-btn'>예약하기</button>
+          {userRole === 'OWNER' && (<button className='chatroom-book-btn'>예약하기</button>)}
         </div>
       </div>
 

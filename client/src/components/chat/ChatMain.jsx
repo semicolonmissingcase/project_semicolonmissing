@@ -61,11 +61,10 @@ const ChatMain = () => {
           const reviewsRes = await getCleanerReviewsForRoom(safeid);
           reviewsArray = reviewsRes.data.data.reviews || [];
 
-          // [프론트엔드 계산] 리뷰 기반 평균 별점 산출
+          // 평균 별점 계산
           if (reviewsArray.length > 0) {
             const totalStar = reviewsArray.reduce((acc, cur) => acc + (Number(cur.star) || 0), 0);
             const averageStar = totalStar / reviewsArray.length;
-            // data 객체에 계산된 평균 별점 주입
             data = { ...data, star: averageStar };
           } else {
             data = { ...data, star: 0 };
@@ -91,7 +90,7 @@ const ChatMain = () => {
     const commonProps = { onClose: () => toggleSidebar(false) };
 
     if (sidebarInfo.sideType === 'OWNER') {
-      return <ChatSidebarProfile {...commonProps} data={sidebarInfo.data} reviews={sidebarInfo.reviews} />;
+      return <ChatSidebarProfile {...commonProps} data={sidebarInfo.data} reviews={sidebarInfo.reviews} sideType={sidebarInfo.sideType} />;
     }
     if (sidebarInfo.sideType === 'CLEANER') {
       return <ChatSidebarRequest {...commonProps} data={sidebarInfo.data} />;
