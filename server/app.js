@@ -18,10 +18,11 @@ import storesRouter from './routes/store.router.js'; // 매장 관리 관련
 // 채팅 관련 import
 import { createServer } from 'http'; // HTTP 서버 생성
 import { Server } from 'socket.io';   // 소켓 모듈
-import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
+import chatRouter from './routes/chat.router.js'; // 채팅 라우트
 import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 // import cleanersRouter from './routes/cleaners.router.js'; // TODO: 추후 코멘트 해제
 import ownersRouter from './routes/owners.routes.js';
+import filesRouter from './routes/files.router.js';
 import estimateRouter from './routes/estimate.router.js';
 
 // ES 모듈에서 __filename, __dirname을 사용하기 위한 정의
@@ -37,7 +38,6 @@ app.use(cors({
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
 app.use('/uploads', express.static('uploads'));
-app.use('/files', express.static(path.join(__dirname, 'storage/images'))); // 이미지 업로드용
 
 // -----------------
 // 라우터 정의
@@ -46,6 +46,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/users', usersRouter); // 회원가입 관련
 app.use('/api/owners', ownersRouter);
+app.use('/api/files', filesRouter);
 // app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 app.use('/api/stores', storesRouter); // 매장관리 관련
 app.use('/api/reservations', estimateRouter); // 견적서 관련 
@@ -56,10 +57,7 @@ app.use(errorHandler);
 // -----------------
 // Socket.io 설정
 // -----------------
-// 1. Express 앱을 HTTP 서버로 감싸기
 const httpServer = createServer(app);
-
-// 2. Socket.io 서버 객체 생성
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:5173",
