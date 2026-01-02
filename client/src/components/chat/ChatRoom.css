@@ -24,7 +24,6 @@
   gap: 12px;
 }
 
-/* 기사 이름 강조 */
 .chatroom-cleaner-name {
   color: var(--color-dark-blue);
   font-weight: bold;
@@ -32,22 +31,11 @@
   font-size: 1.1rem;
 }
 
-/* 뒤로가기 버튼 */
 .chatroom-back-btn {
   cursor: pointer;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
-}
-
-/* 예약하기 버튼 */
-.chatroom-book-btn {
-  background-color: var(--color-light-blue);
-  color: var(--color-white);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 /* 채팅 메세지 리스트 */
@@ -89,19 +77,45 @@
 }
 
 .chatroom-message-item.other .chatroom-bubble {
-  background-color: #ffffff; /* 흰색 */
+  background-color: #ffffff;
   border-radius: 0px 15px 15px 15px;
   border: 1px solid #ddd;
 }
 
-/* 메세지 전송 시간 */
+/* --- 추가된 이미지 관련 스타일 (컬러 영향 없음) --- */
+.chatroom-bubble.has-image {
+  background-color: transparent !important; /* 이미지일 때만 배경 제거 */
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.chat-image-content {
+  width: 220px;
+  height: 220px;
+  display: block;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center;
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.chatroom-bubble-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mine .chatroom-bubble-container { align-items: flex-end; }
+.other .chatroom-bubble-container { align-items: flex-start; }
+/* ------------------------------------------- */
+
 .chatroom-time {
   font-size: 11px;
   color: var(--color-gray);
   margin: 0 5px;
 }
 
-/* 메세지 입력창 */
 .chatroom-input {
   padding: 15px;
   border-top: 1px solid var(--color-light-gray);
@@ -118,8 +132,7 @@
   outline: none;
 }
 
-/* 이미지 첨부 버튼 */
-.chatroom-image-send {
+.chatroom-image-send, .chatroom-send-btn {
   background-color: transparent;
   color: var(--color-gray);
   border: 1px solid var(--color-light-gray);
@@ -127,26 +140,9 @@
   height: 35px;
   border-radius: 50%;
   cursor: pointer;
-}
-
-/* 전송 버튼 */
-.chatroom-send-btn {
-  background-color: transparent;
-  color: var(--color-gray);
-  border: 1px solid var(--color-light-gray);
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-/* 헤더 레이아웃 수정 */
-.chatroom-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid #eee;
+  justify-content: center;
 }
 
 .chatroom-header-right {
@@ -155,7 +151,6 @@
   align-items: center;
 }
 
-/* 상세보기 버튼 스타일 */
 .chatroom-detail-btn {
   padding: 6px 12px;
   background-color: #f0f0f0;
@@ -168,7 +163,7 @@
 
 .chatroom-book-btn {
   padding: 6px 12px;
-  background-color: #5eb5f8;
+  background-color: var(--color-light-blue);
   color: white;
   border: none;
   border-radius: 4px;
@@ -176,13 +171,8 @@
   cursor: pointer;
 }
 
-/* 모바일 대응 */
 @media (max-width: 768px) {
-  .chatroom-detail-btn {
-    display: block; /* 모바일에서만 상세보기 버튼 노출 */
-  }
-  
-  .chatroom-cleaner-name {
-    font-size: 16px;
-  }
+  .chatroom-detail-btn { display: block; }
+  .chatroom-cleaner-name { font-size: 16px; }
+  .chat-image-content { width: 180px; height: 180px; }
 }
