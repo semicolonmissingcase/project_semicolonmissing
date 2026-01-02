@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaStar, FaRegStar, FaQuoteLeft } from 'react-icons/fa';
 import { MdOutlineRateReview, MdEventNote } from 'react-icons/md';
-
+import './CleanersReview.css';
 
   const reviewData = [
     {
@@ -36,42 +36,44 @@ function CleanersReview() {
   if (!data) return <p>리뷰가 없습니다.</p>;
 
   return (
-    <div className="cancelledjoblist-card card-shadow" style={{ marginBottom: '1rem' }}>
-      <div className="cancelledjoblist-card-row" style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px', marginBottom: '10px' }}>
-        <div className="completedjoblist-card-place">
-          <MdOutlineRateReview style={{ fontSize: '1.2rem', color: '#FF7A00', marginRight: '6px' }} />
-          <div style={{ display: 'flex', gap: '2px', fontSize: '1.1rem' }}>
-            {renderStars(data.star)} {/* data.star로 변경 */}
+    <div className="cleaners-review-container">
+      <div className="cleaners-review-card">
+        <div className="cleaners-review-card-row" style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px', marginBottom: '10px' }}>
+          <div className="completedjoblist-card-place">
+            <MdOutlineRateReview style={{ fontSize: '1.2rem', color: '#FF7A00' }} />
+            <div style={{ display: 'flex', gap: '2px', fontSize: '1.1rem' }}>
+              {renderStars(data.star)} {/* data.star로 변경 */}
+            </div>
+          <span style={{ fontSize: '0.85rem', color: '#888', fontWeight: '500' }}>
+            {data.star}.0 / 5.0
+          </span>
           </div>
         </div>
-        <span style={{ fontSize: '0.85rem', color: '#888', fontWeight: '500' }}>
-          {data.star}.0 / 5.0
-        </span>
-      </div>
 
-      <div className="cancelledjoblist-card-row" style={{ alignItems: 'flex-start', margin: '10px 0' }}>
-        <span className="cancelledjoblist-card-label" style={{ marginTop: '3px' }}>
-          <FaQuoteLeft style={{ fontSize: '0.8rem', color: '#CCC' }} />
-        </span>
-        <span className="cancelledjoblist-card-value" style={{ lineHeight: '1.6', color: '#333', whiteSpace: 'pre-wrap', fontSize: '0.95rem' }}>
-          {data.content} {/* data.content로 변경 */}
-        </span>
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #EEE' }}>
-        <div className="cancelledjoblist-card-row" style={{ margin: 0 }}>
-          <span className="cancelledjoblist-card-label" style={{ fontSize: '0.8rem' }}>
-            <MdEventNote style={{ marginRight: '4px' }} /> 작성일
+        <div className="cleaners-review-card-row">
+          <span className="cleaners-review-card-label">
+            <FaQuoteLeft style={{ fontSize: '1rem', color: '#CCC', marginRight: '1rem' }} />
           </span>
-          <span className="cancelledjoblist-card-value" style={{ fontSize: '0.8rem' }}>
-            {data.created_at?.split(' ')[0]}
+          <span className="cleaners-review-card-value" style={{ color: '#333', fontSize: '0.95rem' }}>
+            {data.content} {/* data.content로 변경 */}
           </span>
         </div>
-        <div className="cancelledjoblist-card-row" style={{ margin: 0 }}>
-          <span className="cancelledjoblist-card-label" style={{ fontSize: '0.8rem' }}>예약번호</span>
-          <span className="cancelledjoblist-card-value" style={{ fontSize: '0.8rem' }}>
-            #{data.reservation_id}
-          </span>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #EEE' }}>
+          <div className="cleaners-review-card-row" style={{ margin: 0 }}>
+            <span className="cleaners-review-card-label" style={{ fontSize: '0.8rem' }}>
+              <MdEventNote style={{ marginRight: '4px' }} /> 작성일
+            </span>
+            <span className="cleaners-review-card-value" style={{ fontSize: '0.8rem' }}>
+              {data.created_at?.split(' ')[0]}
+            </span>
+          </div>
+          <div className="cleaners-review-card-row" style={{ margin: 0 }}>
+            <span className="cleaners-review-card-label" style={{ fontSize: '0.8rem' }}>예약번호</span>
+            <span className="cleaners-review-card-value" style={{ fontSize: '0.8rem' }}>
+              #{data.reservation_id}
+            </span>
+          </div>
         </div>
       </div>
     </div>

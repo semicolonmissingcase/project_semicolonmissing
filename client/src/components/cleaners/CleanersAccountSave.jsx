@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal";
+import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal.jsx";
 import './CleanersAccountSave.css';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { RiArrowDropDownFill, RiArrowDropUpFill } from "react-icons/ri";
+import { FaRegTrashCan } from "react-icons/fa6";
 import axios from "axios"; // API 통신을 위해 추가
 
 function CleanerAccountSave() {
@@ -99,7 +100,9 @@ function CleanerAccountSave() {
                   <form className="cleaners-account-edit-form" onSubmit={openSaveModal}>
                     <span className="cleaners-account-edit-remove-layout">
                       <label className="cleaners-account-edit-account-title">정산 계좌 정보 입력</label>
-                      <img src="/icons/btn-delete.png" className="cleaners-account-edit-delete-img" onClick={openCancelModal} alt="삭제" />
+                      <FaRegTrashCan 
+                      onClick={openCancelModal}
+                      size={20}/>
                     </span>
 
                     <span className="cleaners-account-edit-layout-inputs">

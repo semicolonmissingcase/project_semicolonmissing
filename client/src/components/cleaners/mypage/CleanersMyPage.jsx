@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import './CleanersMyPage.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'; // 리덕스 연결
-
 // 출력 카드 컴포넌트
 import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
 import CleanersInquiries from './CleanersInquiries.jsx';
 import CleanersReview from './CleanersReview.jsx';
 import CleanersSettlementStatus from "../CleanersSettlementStatus.jsx";
+import './CleanersMyPage.css';
 
 function CleanersMyPage() {
   const [activeTab, setActiveTab] = useState('오늘 작업'); // 초기 탭 설정

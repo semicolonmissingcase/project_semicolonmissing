@@ -76,7 +76,7 @@ const router = createBrowserRouter([
         children: [
            {
             // 기사 계좌 수정 페이지
-            path: 'accountedit',
+            path: 'accountedit/:id',
             element: <CleanersAccountEdit />
           },
           {
@@ -91,7 +91,7 @@ const router = createBrowserRouter([
           },
           {
             // 기사 프로필 수정 페이지
-            path: 'profileedit',
+            path: 'profileedit/:id',
             element: <CleanersProfileEdit />,
           },
           { 

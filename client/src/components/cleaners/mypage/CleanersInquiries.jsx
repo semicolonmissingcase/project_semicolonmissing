@@ -71,15 +71,6 @@ export default function InquiryList() {
   const inquiryData = [
     {
       "id": 1,
-      "owner_id": 1,
-      "cleaner_id": null,
-      "title": "예약 확정 후 기사님이 연락이 두절되었습니다.",
-      "content": "O월 O일 예약된 건인데, 배정된 기사님과 연락이 닿지 않고 있습니다...",
-      "status": "대기중",
-      "created_at": "2026-01-01 13:24:57",
-    },
-    {
-      "id": 2,
       "owner_id": null,
       "cleaner_id": 1,
       "title": "지난주 작업 완료 건 수익금 입금 확인 요청",

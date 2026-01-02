@@ -6,7 +6,7 @@
 /* 카드 목록 영역 */
 .cancelledjoblist-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* PC: 3개씩 나란히 */
+  grid-template-columns: repeat(1, 1fr); 
   gap: 1rem; /* 카드 사이 간격 */
 }
 

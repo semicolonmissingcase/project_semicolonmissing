@@ -74,8 +74,17 @@ async function saveAccount(data) {
 
 async function getAccount(cleanerId) {
   // 💡 DB 처리: 해당 cleanerId의 계좌 정보를 DB에서 조회
-  // 예: return db.CleanerAccount.findOne({ where: { cleanerId } });
+  // 임시 테이블(Adjustment)에서 해당 cleanerId의 최신 계좌 정보를 가져온다고 가정합니다.
+  const accountData = await db.Adjustment.findOne({
+    where: { cleanerId },
+    order: [['createdAt', 'DESC']], // 가장 최근에 저장된 계좌 정보
+    attributes: ['bank', 'accountNumber', 'depositor'] // 필요한 필드만 선택
+  });
+
+  // 조회된 데이터가 없으면 빈 객체를 반환합니다.
+  return accountData || {};
 }
+
 
 export default {
   createRequest,
