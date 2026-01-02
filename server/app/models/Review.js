@@ -31,6 +31,12 @@ const attributes = {
     allowNull: false,
     comment: '예약 PK',
   },
+  cleanerId: {
+    field: 'cleaner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '기사 PK',
+  },
   content: {
     field: 'content',
     type: DataTypes.STRING(255),
@@ -104,6 +110,7 @@ const Review = {
   associate: (db) => {
     db.Review.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
     db.Review.belongsTo(db.Reservation, { targetKey: 'id', foreignKey: 'reservationId', as: 'reservationData' });
+    db.Review.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
   }
 }
 

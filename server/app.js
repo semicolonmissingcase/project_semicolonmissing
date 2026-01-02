@@ -10,6 +10,7 @@ import errorHandler from './app/errors/errorHandler.js';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import { fileURLToPath } from 'url';
 
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
 import storesRouter from './routes/store.router.js'; // 매장 관리 관련
@@ -21,6 +22,11 @@ import chatRouter from './routes/chatRoutes.js'; // 채팅 라우트
 import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 // import cleanersRouter from './routes/cleaners.router.js'; // TODO: 추후 코멘트 해제
 import ownersRouter from './routes/owners.routes.js';
+import estimateRouter from './routes/estimate.router.js';
+
+// ES 모듈에서 __filename, __dirname을 사용하기 위한 정의
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors({
@@ -31,6 +37,7 @@ app.use(cors({
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
 app.use('/uploads', express.static('uploads'));
+app.use('/files', express.static(path.join(__dirname, 'storage/images'))); // 이미지 업로드용
 
 // -----------------
 // 라우터 정의
@@ -41,6 +48,7 @@ app.use('/api/users', usersRouter); // 회원가입 관련
 app.use('/api/owners', ownersRouter);
 // app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 app.use('/api/stores', storesRouter); // 매장관리 관련
+app.use('/api/reservations', estimateRouter); // 견적서 관련 
 
 // 에러 핸들러 등록
 app.use(errorHandler);

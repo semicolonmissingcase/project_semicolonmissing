@@ -8,7 +8,7 @@ import { CONFLICT_ERROR } from "../../../configs/responseCode.config.js";
 import ownerStoreRepository from "../../repositories/owner/owner.store.repository.js";
 import ownerUserRepository from "../../repositories/owner/owner.user.repository.js";
 import ownerRepository from "../../repositories/auth/owner.repository.js";
-import cleanerRepository from "../../repositories/auth/cleaner.repository.js"
+import cleanerRepository from "../../repositories/auth/cleaner.repository.js";
 import db from "../../models/index.js";
 import myError from "../../errors/customs/my.error.js";
 import bcrypt from 'bcrypt';
@@ -86,20 +86,35 @@ async function store(data) {
  * @param {string} profileImgaUrl 
  * @returns 
  */
-async function updateProfile(ownerId, profileImgaUrl) {
-  console.log('--- 3. 서비스 함수 실행 ---');
-  console.log('ownerId:', ownerId);
-  console.log('profileImageUrl:', profileImageUrl);
+async function updateProfile(ownerId, profileImageUrl) {
   await db.sequelize.transaction(async(t) => {
     await ownerUserRepository.update(t, ownerId, {
-      profile: profileImgaUrl,
+      profile: profileImageUrl,
     });
   });
 
   return;
 }
 
+/**
+ * 점주 통계 조회
+ * @param {number} ownerId 
+ */
+async function getOwnerStats(ownerId) {
+  return await ownerUserRepository.getStatsByOwnerId(ownerId);
+}
+
+/**
+ * 점주 예약 목록 조회
+ * @param {number} ownerId 
+ */
+async function getOwnerReservations(ownerId) {
+  return await ownerUserRepository.getReservationsByOwnerId(ownerId);
+}
+
 export default {
   store,
   updateProfile,
+  getOwnerStats,
+  getOwnerReservations,
 }

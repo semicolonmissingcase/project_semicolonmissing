@@ -55,9 +55,6 @@ export default function(req, res, next) {
 
   // 예외처리
   upload(req, res, err => {
-    console.log('--- 1. Multer 미들웨어 실행 ---');
-    console.log('파일 정보:', req.file);
-    console.log('Multer 에러:', err);
     if(err) {
       if(err instanceof multer.MulterError) {
         return next(myError(err.message, BAD_FILE_ERROR));

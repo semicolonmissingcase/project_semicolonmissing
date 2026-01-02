@@ -31,6 +31,12 @@ const attributes = {
     allowNull: false,
     comment: '예약 PK',
   },
+  cleanerId: {
+    field: 'cleaner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: false,
+    comment: '기사 PK',
+  },
   content: {
     field: 'content',
     type: DataTypes.STRING(255),

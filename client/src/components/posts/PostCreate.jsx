@@ -153,7 +153,9 @@ export default function PostCreate() {
           </div>
 
           {/* SmartEditor2 컴포넌트 */}
-          <WritePost />
+          <div className="postcreate-editor-container">
+            <WritePost />
+          </div>
         </div>
 
         {/* 버튼 영역 */}

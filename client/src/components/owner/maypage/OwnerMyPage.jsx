@@ -8,16 +8,18 @@ import InquiryHistory from './InquiryHistory.jsx' // 문의내역
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadProfileImageThunk } from '../../../store/thunks/authThunk.js';
+import { getOwnerStats } from '../../../api/axiosOwner.js';
 
 export default function OwnerMyPage() {
-  const [activeTab, setActiveTab] = useState('받은 견적');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const APP_SERVER_URL = import.meta.env.APP_SERVER_URL
   const { user, loading } = useSelector((state) => state.auth);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const APP_SERVER_URL = import.meta.env.APP_SERVER_URL
+  const [activeTab, setActiveTab] = useState('받은 견적');
   const [isModalOpen, setIsModalOpen] = useState(false); // 프로필 모달
+  const [stats, setStats] = useState(null); // 상단 통계용
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -29,6 +31,20 @@ export default function OwnerMyPage() {
       default: return <div style={{padding: '20px'}}>준비 중인 페이지입니다.</div>;
     }
   };
+
+  // 상단 통계용
+  useEffect(() => {
+    const fetchStats = async() => {
+      try {
+        const statsData = await getOwnerStats();
+        setStats(statsData);
+      } catch (error) {
+        console.error('마이페이지 통계 로딩 실패:', error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   // 미리보기 업뎃
   useEffect(() => {
@@ -144,10 +160,22 @@ export default function OwnerMyPage() {
               )}
 
               <div className="owner-mypage-stats-container">
-                <div className="owner-mypage-stat-item"><p>이용 횟수</p><p>10</p></div>
-                <div className="owner-mypage-stat-item"><p>리뷰 갯수</p><p>5</p></div>
-                <div className="owner-mypage-stat-item"><p>견적 요청</p><p>1</p></div>
-                <div className="owner-mypage-stat-item"><p>받은 견적</p><p>5</p></div>
+                <div className="owner-mypage-stat-item">
+                  <p>이용 횟수</p>
+                  <p>{stats ? stats.completedReservations : '-'}</p>
+                </div>
+                <div className="owner-mypage-stat-item">
+                  <p>리뷰 갯수</p>
+                  <p>{stats ? stats.reviewCount : '-'}</p>
+                </div>
+                <div className="owner-mypage-stat-item">
+                  <p>견적 요청</p>
+                  <p>{stats ? stats.totalReservations : '-'}</p>
+                </div>
+                <div className="owner-mypage-stat-item">
+                  <p>받은 견적</p>
+                  <p>{stats ? stats.estimateCount : '-'}</p>
+                </div>
               </div>
             </div>
         </div>

@@ -53,9 +53,6 @@ async function registerOwner(req, res, next) {
  * @returns 
  */
 async function uploadProfileImage(req, res, next) {
-  console.log('--- 2. 컨트롤러 함수 실행 ---');
-  console.log('사용자 ID (req.user.id):', req.user?.id);
-  console.log('파일 경로 (req.file.path):', req.file?.path);
   try {
     const ownerId = req.user.id;
     const { filename } = req.file;
@@ -70,7 +67,42 @@ async function uploadProfileImage(req, res, next) {
       message: '프로필 이미지가 성공적으로 업데이트되었습니다.'
     }));
   } catch (error) {
-    console.error('--- 🚨 컨트롤러에서 에러 발생! ---', error);
+    next(error);
+  }
+}
+
+/**
+ * 점주 마이페이지 통계 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function getOwnerStats(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+    const stats = await ownerUserService.getOwnerStats(ownerId);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, stats));
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * 점주 예약 목록 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function getOwnerReservations(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+    const stats = await ownerUserService.getOwnerReservations(ownerId);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, stats));
+  } catch (error) {
     next(error);
   }
 }
@@ -78,4 +110,6 @@ async function uploadProfileImage(req, res, next) {
 export default {
   registerOwner,
   uploadProfileImage,
+  getOwnerStats,
+  getOwnerReservations,
 }
