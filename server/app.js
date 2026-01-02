@@ -10,10 +10,10 @@ import errorHandler from './app/errors/errorHandler.js';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { fileURLToPath } from 'url';
 
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
 import storesRouter from './routes/store.router.js'; // 매장 관리 관련
+import postsRouter from './routes/post.router.js'; // 글쓰기 관려(문의, 리뷰)
 
 // 채팅 관련 import
 import { createServer } from 'http'; // HTTP 서버 생성
@@ -25,10 +25,6 @@ import ownersRouter from './routes/owners.routes.js';
 import filesRouter from './routes/files.router.js';
 import estimateRouter from './routes/estimate.router.js';
 
-// ES 모듈에서 __filename, __dirname을 사용하기 위한 정의
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
 app.use(cors({
   origin: "http://localhost:5173", // 프론트 주소
@@ -37,7 +33,9 @@ app.use(cors({
 }));
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
-app.use('/uploads', express.static('uploads'));
+app.use('/storage/images/posts', express.static('storage/images/posts'));
+app.use('/storage/images/profile', express.static('storage/images/profiles'));
+app.use('/storage/images/chat', express.static('storage/images/chat'));
 
 // -----------------
 // 라우터 정의
@@ -50,6 +48,7 @@ app.use('/api/files', filesRouter);
 // app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 app.use('/api/stores', storesRouter); // 매장관리 관련
 app.use('/api/reservations', estimateRouter); // 견적서 관련 
+app.use('/api/posts', postsRouter); // 글쓰기 관련
 
 // 에러 핸들러 등록
 app.use(errorHandler);
@@ -73,5 +72,4 @@ socketHandler(io);
 // -----------------------
 const PORT = parseInt(process.env.APP_PORT) || 3000;
 httpServer.listen(PORT, () => {
-  console.log(`💬 실시간 채팅 기능 활성화됨`);
 });

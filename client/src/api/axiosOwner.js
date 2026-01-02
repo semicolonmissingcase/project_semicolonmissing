@@ -25,3 +25,14 @@ export const toggleCleanerFavorite = async (cleanerId) => {
   const response = await axiosInstance.post(`${OWNER_API_URL}/cleaners/${cleanerId}/like`);
   return response.data.data;
 };
+
+// 좋아요
+export const getLikedCleaners = async () => {
+  try {
+    const response = await axiosInstance.get('/owners/likes');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching liked cleaners:', error);
+     throw error;
+  }
+};

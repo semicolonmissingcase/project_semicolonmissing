@@ -1,0 +1,39 @@
+import axiosInstance from "./axiosInstance.js";
+
+const POST_API_URL = '/api/posts';
+
+// 문의사항 작성(회원)
+export const createInquiry = async (inquiryData) => {
+  const response = await axiosInstance.post(`${POST_API_URL}/inquiries`, inquiryData);
+  return response.data.data;
+};
+
+// 문의사항 생성(비회원)
+export const createGuestInquiry = async (guestInquiryData) => {
+  const response = await axiosInstance.post(`${POST_API_URL}/inquiries`, guestInquiryData);
+  return response.data.data;
+};
+
+// 특정 사용자의 문의 목록 조회(회원 본인)
+export const getMyInquiry = async () => {
+  const response = await axiosInstance.get(`${POST_API_URL}/owner/inquiries`);
+  return response.data.data;
+};
+
+// 특정 문의 상세 조회(본인, 관리자)
+export const getInquiryDetails = async (inquiryId) => {
+  const response = await axiosInstance.get(`${POST_API_URL}/owner/inquiries/${inquiryId}`);
+  return response.data.data;
+};
+
+// 문의에 대한 답변 생성(관리자전용)
+export const createAnswer = async (inquiryId, answerData) => {
+  const response = await axiosInstance.post(`${POST_API_URL}/inquiries/${inquiryId}/answers`, answerData);
+  return response.data.data;
+};
+
+// 마이페이지 통계 정보 가져오기
+export const getMypageStats = async () => {
+  const response = await axiosInstance.get(`${POST_API_URL}/mypage/stats`);
+  return response.data.data;
+};

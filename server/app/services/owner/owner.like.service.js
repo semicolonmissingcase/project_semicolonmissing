@@ -25,6 +25,17 @@ async function toggleFavorite(ownerId, cleanerId) {
   }
 }
 
+/**
+ * 찜한 기사님 목록 조회
+ * @param {number} ownerId 
+ */
+async function getFavoriteCleaners(ownerId) {
+  const favoriteCleaners = await ownerLikeRepository.findFavoriteCleanersByOwnerId(ownerId);
+  
+  return favoriteCleaners;
+}
+
 export default {
   toggleFavorite,
+  getFavoriteCleaners,
 }

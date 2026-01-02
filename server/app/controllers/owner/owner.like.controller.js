@@ -31,6 +31,29 @@ async function toggleFavorite(req, res, next) {
   }
 }
 
+/**
+ * 찜한 기사님 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function getFavoriteCleaners(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+
+    const favoriteCleaner = await ownerLikeService.getFavoriteCleaners(ownerId);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {
+      isFavorited: favoriteCleaner,
+      message: newFavoriteStatus ? '기사님을 찜했습니다.' : '기사님 찜을 취소했습니다.'
+    }));
+  } catch (error) {
+    next(error);
+  }
+}
+
 export default {
   toggleFavorite,
+  getFavoriteCleaners,
 }

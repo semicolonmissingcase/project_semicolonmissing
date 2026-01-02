@@ -1,70 +1,104 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getMyInquiry } from '../../../api/axiosPost.js';
 import './InquiryHistory.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function InquiryHistory() {
-  // 어떤 문의가 펼쳐져 있는지 관리하는 상태 (null이면 모두 닫힘)
+  const navigate = useNavigate();
+  const [inquiryData, setInquiryData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const inquiryData = [
-    {
-      id: 1,
-      title: "여기는 문의 제목이 들어갑니다.",
-      question: "문의 상세 내용이 여기에 들어갑니다.",
-      answer: "여기는 답변 내용이 들어가는 자리입니다."
-    },
-    {
-      id: 2,
-      title: "기사님이 연락이 안됩니다ㅠㅠㅠ",
-      question: "기사님이 연락이 안됩니다ㅠㅠㅠ 어쩌죠 연락할 방법이 없나요? 연락처 주실 수 있나요?",
-      answer: "A. 기사님의 연락처는 개인정보라 알려드릴 수 없습니다. 죄송하지만 예약 취소 후 다른 기사님과 협의 후 예약하시는 것을 추천드립니다."
-    },
-    {
-      id: 3,
-      title: "여기는 문의 제목이 들어갑니다.",
-      question: "결제 관련 문의드립니다.",
-      answer: "결제 취소는 마이페이지 예약 내역에서 가능합니다."
-    }
-  ];
+  useEffect(() => {
+    const fetchInquiries = async () => {
+      try {
+        setLoading(true);
+        const responseData = await getMyInquiry();
+
+        const transformedData = responseData.map(item => ({
+          id: item.id,
+          title: item.title,
+          question: item.content,
+          answer: item.answers && item.answers.length > 0
+                  ? item.answers[0].content
+                  : '아직 답변이 등록되지 않았습니다.',
+          status: item.status,
+          createdAt: item.createdAt,
+        }));
+
+        setInquiryData(transformedData);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInquiries();
+  }, []);
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
+  function qnaPostCreate() {
+    navigate('/qnaposts/create');
+  }
+
+  if(loading) {
+    return <div className="text-center">문의 내역을 불러오는 중입니다...</div>;
+  }
+
+  if(error) {
+    return <div className="text-center py-4 text-red-500">문의 내역을 불러오는데 실패했습니다: {error.message}</div>
+  }
+
+  if(inquiryData.length === 0) {
+    return <div className="text-center">작성하신 문의 내역이 없습니다.</div>;
+  }
+  
   return (
     <div className="inquiryhistory-tab-container">
-      <div className="inquiryhistory-list">
-        {inquiryData.map((item, index) => (
-          <div 
-            key={item.id} 
-            className={`inquiryhistory-item ${activeIndex === index ? 'active' : ''}`}
-          >
-            {/* 질문 헤더 (클릭 시 토글) */}
-            <div 
-              className="inquiryhistory-header" 
-              onClick={() => toggleAccordion(index)}
-            >
-              <span className="inquiryhistory-q-prefix">Q.</span>
-              <span className="inquiryhistory-title-text">{item.title}</span>
-              <span className="inquiryhistory-arrow-icon">
-                {activeIndex === index ? '▲' : '▼'}
-              </span>
-            </div>
-
-            {/* 답변 영역 (활성화 시 노출) */}
-            {activeIndex === index && (
-              <div className="inquiryhistory-body">
-                <div className="inquiryhistory-question-content">
-                  {item.question}
-                </div>
-                <div className="inquiryhistory-divider"></div>
-                <div className="inquiryhistory-answer-content">
-                  {item.answer}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="inquiryhistory-top-action">
+        <button className="inquiryhistory-write-btn" onClick={qnaPostCreate}>
+          문의 작성하기 <span className="inquiryhistory-btn-icon">▶</span>
+        </button>
       </div>
+
+      {inquiryData.length === 0 ? (
+        <div className="text-center">작성하신 문의 내역이 없습니다.</div>
+      ) : (
+        <div className="inquiryhistory-list">
+          {inquiryData.map((item, index) => (
+            <div 
+              key={item.id} 
+              className={`inquiryhistory-item ${activeIndex === index ? 'active' : ''}`}
+            >
+              <div className="inquiryhistory-header" onClick={() => toggleAccordion(index)}>
+                <span className="inquiryhistory-q-prefix">Q.</span>
+                <span className="inquiryhistory-title-text">{item.title}</span>
+                <span className={`inquiryhistory-status ${item.status === 'PENDING' ? 'status-pending' : 'status-completed'}`}>
+                  {item.status === 'PENDING' ? '답변 대기중' : '답변 완료'}
+                </span>
+                <span className="inquiryhistory-arrow-icon">
+                  {activeIndex === index ? '▲' : '▼'}
+                </span>
+              </div>
+
+              {activeIndex === index && (
+                <div className="inquiryhistory-body">
+                  <div className="inquiryhistory-question-content">{item.question}</div>
+                  <div className="inquiryhistory-divider"></div>
+                  <div className="inquiryhistory-answer-content">
+                    <span className="inquiryhistory-a-prefix">A.</span>
+                    {item.answer}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

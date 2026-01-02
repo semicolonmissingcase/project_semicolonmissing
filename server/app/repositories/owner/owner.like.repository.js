@@ -5,7 +5,7 @@
  */
 
 import db from '../../models/index.js';
-const { Like } = db;
+const { Like, Cleaner } = db;
 
 /**
  * 기사님 좋아요 조회
@@ -41,8 +41,28 @@ async function deleteLike(ownerId, cleanerId) {
   });
 }
 
+/**
+ * 좋아요 조회
+ * @param {number} ownerId 
+ * @param {number} cleanerId
+ * @returns 
+ */
+async function findFavoriteCleanersByOwnerId(ownerId, cleanerId) {
+  return await Like.findAll({
+    where: { ownerId },
+    include: [{
+      model: Cleaner,
+      attributes: ['id', 'name', 'profileImage', 'star'],
+      required: true
+    }],
+    raw: true,
+    nest: true,
+  }).then(likes => likes.map(like => like.Cleaner));
+}
+
 export default {
   findByOwnerIdAndCleanerId,
   createLike,
   deleteLike,
+  findFavoriteCleanersByOwnerId,
 }

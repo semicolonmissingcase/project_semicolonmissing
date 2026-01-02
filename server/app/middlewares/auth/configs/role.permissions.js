@@ -15,6 +15,9 @@ const ROLE_PERMISSIONS = {
     {path: /^\/api\/owners\/mypage\/stats$/, roles: [OWNER],}, // 점주 마이페이지 통계
     {path: /^\/api\/owners\/reservations$/, roles: [OWNER],}, // 점주 예약 목록 조회
     {path: /^\/api\/reservations\/\d+\/estimates$/, roles: [OWNER],}, // 특정 예약에 대한 견적서 목록 조회
+    {path: /^\/api\/owners\/mypage\/favorite-cleaners$/, roles: [OWNER],}, // 찜한 기사님 목록 조회
+    { path: /^\/api\/posts\/owner\/inquiries$/, roles: [OWNER, CLEANER],}, // 내 문의 목록 조회
+    { path: /^\/api\/posts\/owner\/inquiries\/\d+$/, roles: [OWNER, CLEANER] }, // 내 문의 상세 조회
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },
@@ -22,6 +25,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/stores$/, roles: [OWNER] }, // 매장 추가
     { path: /^\/api\/owners\/profile$/, roles: [OWNER] }, // 점주 프로필 이미지 업로드
     { path: /^\/api\/owners\/cleaners\/\d+\/like$/, roles: [OWNER] }, // 기사님 좋아요
+    { path: /^\/api\/posts\/inquiries$/, roles: [OWNER, CLEANER] }, // 문의 생성
   ],
   PUT: [
     { path: /^\/api\/auth\/me$/, roles: [OWNER] }, // 점장 정보수정용

@@ -44,7 +44,7 @@ export default function MainQna() {
   }
 
   return (
-    <div className="mainqna-container">
+    <div className="all-container mainqna-container">
       {/* 헤더 */}
       <div className="mainqna-header">
         <h2 className="mainqna-title">주요 문의 사항</h2>
