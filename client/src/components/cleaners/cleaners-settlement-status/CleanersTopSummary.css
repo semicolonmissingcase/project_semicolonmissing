@@ -1,7 +1,7 @@
 .cleaners-top-summary-wrapper {
   border: 1px solid var(--color-gray);
   border-radius: 15px;
-  padding: 1rem;
+  padding: 0.7rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -10,12 +10,12 @@
 
 .cleaners-top-summary-title {
   display: inline-block;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   margin: 0 auto;
 }
 
 .cleaners-top-summary-date {
-    font-size: 1.2em;
+    font-size: 1rem;
     margin: 0 auto;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .cleaners-top-summary-amount-item {
-    font-size: 1.1rem;
+    font-size: 1rem;
     text-align: center;
 }
 
@@ -35,5 +35,5 @@
   background-color: var(--color-light-gray);
   padding: 10px;
   border-radius: 1rem;
-  width: 140px;
+  width: 100px;
 }

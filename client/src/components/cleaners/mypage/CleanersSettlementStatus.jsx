@@ -1,8 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import "./CleanersTopSummary.css";
+  import { useMemo, useState } from "react";
+  import { DayPicker } from "react-day-picker";
+  import "react-day-picker/style.css";
+  import { addMonths, endOfWeek, format, isValid, isSameDay, isWithinInterval, startOfWeek, subMonths } from "date-fns";
+  import { ko } from "date-fns/locale";
+  import { IoChevronBack } from "react-icons/io5";
+  import { IoChevronForward } from "react-icons/io5";
+  import  CleanersTopSummary  from "../cleaners-settlement-status/CleanersTopSummary.jsx";
+  import  CleanersListItem  from "../cleaners-settlement-status/CleanersListItem.jsx";
+  import "./CleanersSettlementStatus.css";
 
+  // --- Mock Data ---
  const DUMMY_JOBS = [
     { id: "1", date: "2025-12-01", time: "10:00", title: "상인동 유명한 카페1", amount: 50000, jobStatus: "완료", settlementStatus: "정산완료", canceled: false, address: "대구광역시 달서구 상인동 123", owner: "김상인" },
     { id: "2", date: "2025-12-02", time: "11:00", title: "상인동 유명한 카페2", amount: 60000, jobStatus: "완료", settlementStatus: "정산완료", canceled: false, address: "대구광역시 달서구 상인동 456", owner: "박상인" },
@@ -59,78 +66,234 @@ import "./CleanersTopSummary.css";
 ];
 
 
-/**
- * 더미 데이터를 이용해 입금 예정 및 정산 완료 금액을 계산합니다.
- * @param {Array<Object>} jobs - 작업 목록 데이터
- * @returns {Object} { expectedDeposit: number, settledComplete: number }
- */
-function calculateSettlement(jobs) {
-    const settlementSummary = {
-        expectedDeposit: 0, // 입금 예정 (정산대기)
-        settledComplete: 0, // 정산 완료
+  // --- Utils ---4
+  const ymd = (d) => (isValid(d) ? format(d, "yyyy-MM-dd") : "");
+
+  const countToLevel = (count) => {
+    if (count >= 9) return "cleaners-settlement-status-lv3";
+    if (count >= 5) return "cleaners-settlement-status-lv2";
+    if (count >= 1) return "cleaners-settlement-status-lv1";
+    return "lv0";
+  };
+
+  const pickDate = (p) => {
+    const d = p?.date ?? p?.day?.date ?? p?.day ?? null;
+    return d instanceof Date && isValid(d) ? d : null;
+  };
+
+  const parseYmd = (s) => {
+    const [y, m, d] = s.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
+
+  const getWeekRange = (date) => ({
+    start: startOfWeek(date, { weekStartsOn: 0 }),
+    end: endOfWeek(date, { weekStartsOn: 0 }),
+  });
+  const inRange = (day, range) => day && range && isWithinInterval(day, { start: range.start, end: range.end });
+
+  export default function CleanersSettlementStatus() {
+
+    const [monthCursor, setMonthCursor] = useState(new Date());
+    const [excludeCanceled, setExcludeCanceled] = useState(true);
+    const [selectedDay, setSelectedDay] = useState(new Date());
+    const [selectedWeek, setSelectedWeek] = useState(null);
+
+    const getDateFromProps = (props) =>
+
+      props?.date ?? props?.day ?? props?.day?.date ?? props?.dayObj?.date;
+
+
+    // 주간 클릭 핸들러 (상태 업데이트용)
+    const handleWeekClick = (date) => {
+      setSelectedDay(null); // 일자 선택 해제
+      setSelectedWeek(date); // 주간 선택 설정
     };
 
-    jobs.forEach(job => {
-        // 취소된 작업은 정산 금액 계산에서 제외
-        if (job.canceled) {
-            return;
-        }
+    const handleDayClick = (day) => {
+      if (!day) return;
+      setSelectedDay(day);
+      setSelectedWeek(null); // 일 선택 시 주 선택 해제
+    };
 
-        if (job.settlementStatus === "정산완료") {
-            // 정산 완료 금액 합산
-            settlementSummary.settledComplete += job.amount;
-        } else if (job.settlementStatus === "정산대기") {
-            // 입금 예정 금액 합산 (향후 정산 예정인 모든 대기 건)
-            settlementSummary.expectedDeposit += job.amount;
-            
-            /*
-            // 만약 '입금 예정'을 '현재 날짜(2026-01-02) 이전의 미정산 건'으로 한정하고 싶다면 아래 로직 사용
-            const currentDate = new Date('2026-01-02');
-            const jobDate = new Date(job.date);
-            if (jobDate <= currentDate) {
-                settlementSummary.expectedDeposit += job.amount;
-            }
-            */
-        }
-    });
 
-    return settlementSummary;
-}
+    const countsByYmd = useMemo(() => {
+      return DUMMY_JOBS.reduce((map, job) => {
+        if (excludeCanceled && job.canceled) return map;
 
-const result = calculateSettlement(DUMMY_JOBS);
+        const key = ymd(new Date(job.date));
+        map.set(key, (map.get(key) ?? 0) + 1);
 
-export default function CleanersTopSummary({ summary }) {
-    // summary.summaryDate가 유효한 Date 객체인지 확인합니다.
-    const dateSource = summary?.summaryDate ?? new Date();
+        return map;
+      }, new Map());
+    }, [excludeCanceled]);
 
-    const formattedDate = format(
-      new Date(dateSource),
-      "yyyy년 M월 d일 eeee",
-      { locale: ko }
-    );
+    const rightItems = useMemo(() => {
+      const base = DUMMY_JOBS.filter((j) => !(excludeCanceled && j.canceled));
+      
+      if (selectedDay) {
+        return base.filter((j) => j.date === ymd(selectedDay));
+      }
+      
+      if (selectedWeek) {
+        const weekRange = getWeekRange(selectedWeek);
+        return base.filter((j) => {
+          const jobDate = parseYmd(j.date);
+          return isWithinInterval(jobDate, { start: weekRange.start, end: weekRange.end });
+        });
+      }
+      
+      return [];
+    }, [excludeCanceled, selectedDay, selectedWeek]);
 
-    const navigate = useNavigate();
+    const rightTitle = useMemo(() => {
+      if (selectedDay) return format(selectedDay, "yyyy년 M월 d일 eeee", { locale: ko });
+      if (selectedWeek) {
+        const range = getWeekRange(selectedWeek);
+        return `${format(range.start, "M월 d일")} ~ ${format(range.end, "M월 d일")} (주간)`;
+      }
+      return "날짜를 선택하세요";
+    }, [selectedDay, selectedWeek]);
 
-  
+    const modifiers = {
+      selected: selectedDay,
+      lv1: (date) => (countsByYmd.get(ymd(date)) ?? 0) >= 1 && (countsByYmd.get(ymd(date)) ?? 0) < 5,
+      lv2: (date) => (countsByYmd.get(ymd(date)) ?? 0) >= 5 && (countsByYmd.get(ymd(date)) ?? 0) < 9,
+      lv3: (date) => (countsByYmd.get(ymd(date)) ?? 0) >= 9,
+    };
 
-  return (
-    <div className="cleaners-top-summary-wrapper">
-            <div className="cleaners-top-summary-title">현재 정산 상태</div>
-            
-            {/* 1. <p> 태그를 올바르게 닫고 중복된 코드를 제거합니다. */}
-            <p className="cleaners-top-summary-date">{formattedDate}</p>
+    const modifiersClassNames = {
+      selected: "rdp-day_selected", // Use default selected class
+      lv1: "cleaners-settlement-status-lv1",
+      lv2: "cleaners-settlement-status-lv2",
+      lv3: "cleaners-settlement-status-lv3",
+    };
+    
+    return (
+      <div className="all-container cleaners-settlement-status-container">
+        <CleanersTopSummary />
 
-            <div className="cleaners-top-summary-amounts">
-                <dl className="cleaners-top-summary-amount-item">
-                    <dt>입금 예정:</dt>
-                    <dd>{result.expectedDeposit.toLocaleString()} 원</dd>
-                </dl>
-        <dl className="cleaners-top-summary-amount-item">
-          <dt>정산 완료:</dt>
-          <dd>{result.settledComplete.toLocaleString()} 원</dd>
-        </dl>
+        <div className="cleaners-settlement-status-box cleaners-settlement-status-monthly-summary">
+          <div className="cleaners-settlement-status-box-title">월별 요약 그래프</div>
+          <div className="cleaners-settlement-status-grid">
+            <section className="cleaners-settlement-status-left"
+              onClick={(e) => {
+                // 1. 클릭된 요소에서 가장 가까운 'tr'(행)을 찾습니다.
+                const row = e.target.closest('tr.rdp-week');
+                if (!row) return;
+
+                // 2. 해당 행 안에 있는 첫 번째 날짜 버튼을 찾아 날짜 정보를 가져옵니다.
+                // DayPicker v9은 보통 버튼에 aria-label이나 데이터 속성이 있습니다.
+                const firstDayBtn = row.querySelector('button.rdp-day');
+                if (firstDayBtn) {
+                  // v9의 경우 버튼 구조를 확인해야 하지만, 
+                  // 가장 단순한 방법은 해당 행의 순서를 이용하거나 
+                  // 우리가 보냈던 days 데이터를 찾는 것입니다.
+                }
+              }}
+            >
+              <div className="cleaners-settlement-status-caption">
+                <button type="button" className="cleaners-settlement-status-nav-btn" onClick={() => setMonthCursor(m => subMonths(m, 1))}> <IoChevronBack size={30} /> </button>
+                <div className="cleaners-settlement-status-caption-center">
+                  <div className="cleaners-settlement-status-caption-year">{format(monthCursor, "yyyy년")}</div>
+                  <div className="cleaners-settlement-status-caption-month">{format(monthCursor, "M월")}</div>
+                </div>
+                <button type="button" className="cleaners-settlement-status-nav-btn" onClick={() => setMonthCursor(m => addMonths(m, 1))}> <IoChevronForward size={30} /> </button>
+              </div>
+              <DayPicker
+                mode="single"
+                selected={selectedDay}
+                hideNavigation
+                onSelect={(day) => {
+                  if (!day) return;
+                  setSelectedDay(day);
+                  setSelectedWeek(null);
+                }}
+                locale={ko}
+                month={monthCursor}
+                onMonthChange={setMonthCursor}
+                showOutsideDays
+                modifiers={modifiers}          
+                modifiersClassNames={modifiersClassNames}
+                components={{
+                  MonthCaption: () => null,
+                  DayButton: (props) => {
+                    const date = pickDate(props);
+                    if (!date) return <button {...props} />;
+
+                    const key = ymd(date);
+                    const count = countsByYmd.get(key) ?? 0;
+                    const levelClass = countToLevel(count); // cleaners-settlement-status-lvX 반환
+
+                    return (
+                      <button {...props} className={`${props.className ?? ""} ${levelClass}`}>
+                        {props.children}
+                      </button>
+                    );
+                  },
+                  Week: (props) => {
+                    const days = props.week.days || [];
+                    const weekStart = days[0]?.date;
+
+                    const totalCount = days.reduce(
+                      (acc, day) => acc + (countsByYmd.get(ymd(day.date)) || 0),
+                      0
+                    );
+
+                    // 현재 이 주가 선택된 상태인지 확인
+                    const isWeekSelected = selectedWeek && weekStart && isSameDay(weekStart, selectedWeek);
+
+                    return (
+                      <tr
+                        className={`rdp-week ${isWeekSelected ? "cleaners-settlement-status-week-selected" : ""}`}
+                        onClick={(e) => {
+                          if (e.target.closest("button.rdp-day_button")) return;
+                          if (weekStart) handleWeekClick(weekStart);
+                        }}
+                      >
+                        {/* 날짜들 (일~토) */}
+                        {props.children}
+
+                        {/* 배지 칸: 선택되었을 때만 내부의 span(배지)을 보여줌 */}
+                        <td className="rdp-week-badge-cell">
+                          {isWeekSelected && totalCount > 0 && (
+                            <span className="cleaners-settlement-status-week-total-badge">
+                              {totalCount}
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                }}
+                />
+              <div className="cleaners-settlement-status-legend">
+                  <div className="cleaners-settlement-status-legend-item"> <span className="cleaners-settlement-status-legend-dot cleaners-settlement-status-lv1-legend"></span> 1 ~ 5건 </div>
+                  <div className="cleaners-settlement-status-legend-item"> <span className="cleaners-settlement-status-legend-dot cleaners-settlement-status-lv2-legend"></span> 5 ~ 8건 </div>
+                  <div className="cleaners-settlement-status-legend-item"> <span className="cleaners-settlement-status-legend-dot cleaners-settlement-status-lv3-legend"></span> 9 ~ 11건 </div>
+              </div>
+            </section>
+
+            <section className="cleaners-settlement-status-right">
+              <div className="cleaners-settlement-status-right-top">
+                <div className="cleaners-settlement-status-right-title">{rightTitle}</div>
+                <label className="cleaners-settlement-status-filter">
+                  <select onChange={(e) => setExcludeCanceled(e.target.value !== 'all')} defaultValue="canceled">
+                    <option value="all">취소 포함</option>
+                    <option value="canceled">취소 제외</option>
+                  </select>
+                </label>
+              </div>
+              <div className="cleaners-settlement-status-list">
+                {rightItems.length === 0 ? (
+                  <div className="cleaners-settlement-status-empty">표시할 항목이 없습니다.</div>
+                ) : (
+                  rightItems.map((job) => <CleanersListItem key={job.id} job={job} defaultOpen={true} />)
+                )}
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
-      <button className="cleaners-top-summary-account-edit-btn" onClick={() => navigate('/cleaners/accountsave')}>계좌 수정</button>
-    </div>
-  );
-}
+    );
+  }

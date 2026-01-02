@@ -16,8 +16,7 @@
 }
 
 .cleaners-settlement-status-box-title {
-  font-size: 1.3rem;
-  font-weight: 500;
+  font-size: 1.1rem;
   margin: 0 0 20px 0;
   text-align: center;
 }
@@ -76,8 +75,8 @@
 }
 
 .cleaners-settlement-status-caption-center { text-align: center; }
-.cleaners-settlement-status-caption-year { font-size: 18px; font-weight: 500; }
-.cleaners-settlement-status-caption-month { font-size: 24px; font-weight: 500; }
+.cleaners-settlement-status-caption-year { font-size: 1rem;  }
+.cleaners-settlement-status-caption-month { font-size: 1.1rem; }
 
 /* --- DayPicker 기본 구조 정리 --- */
 .rdp {
@@ -210,7 +209,7 @@ tr.rdp-week {
 .rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv1 { 
   color: #000;
   background-color: var(--color-light-gray);
-  border: solid 1px var(--color-blue);
+  border: solid 1px var(--color-light-blue);
  }
 
 .rdp-day[aria-selected="true"] .rdp-day_button.cleaners-settlement-status-lv2,
@@ -320,14 +319,12 @@ tr.rdp-week {
   margin-bottom: 16px;
 }
 .cleaners-settlement-status-right-title {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 0.9rem;
 }
 .cleaners-settlement-status-filter select {
   border: 1px solid #d1d5db;
   border-radius: 8px;
   padding: 6px 10px;
-  font-weight: 500;
 }
 .cleaners-settlement-status-list { display: flex; flex-direction: column; gap: 12px; }
 .cleaners-settlement-status-empty {
@@ -336,7 +333,6 @@ tr.rdp-week {
   background-color: #f8fafc;
   border-radius: 12px;
   color: #64748b;
-  font-weight: 500;
 }
 
 /* Job Item */
@@ -351,9 +347,6 @@ tr.rdp-week {
   align-items: center;
   padding: 12px 16px;
   cursor: pointer;
-}
-.cleaners-settlement-status-item-title {
-  font-weight: 500;
 }
 .cleaners-settlement-status-item-toggle {
   width: 20px;

@@ -52,12 +52,8 @@
 
 /* 태블릿 크기 (820px ~ 501px) */
 @media (max-width: 820px) {
-  .cleaners-review-cards {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿: 2개씩 */
-  }
 
   .cleaners-review-card {
-    height: 7rem; /* 112px */
     padding: 0.75rem;
   }
 
@@ -81,10 +77,6 @@
     margin-bottom: 0.75rem;
   }
 
-  .cleaners-review-card {
-    height: 6.5rem; /* 104px */
-    padding: 0.75rem;
-  }
 
   .cleaners-review-card-row {
     font-size: 0.8125rem; /* 13px */

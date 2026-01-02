@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import "./CleanersQuotationsPreparationSave.css";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoIosClose } from "react-icons/io";
+import "./CleanersQuotationsPreparationSave.css";
 
 const SORT_OPTIONS = [
   { value: "latest", label: "최신순" },
@@ -108,7 +108,7 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
           </label>
         </div>
 
-        <section className="qt-list-section">
+        <section className="cleaners-quotations-preparation-save-list-section">
           {sortedTemplates.map((t) => {
             const isEditing = editingId === t.id;
             return (
@@ -123,8 +123,8 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
                     <div className="cleaners-quotations-preparation-save-label">견적 설명</div>
                   </div>
 
-                  <div className="qt-value-col">
-                    <div className="qt-price">
+                  <div className="cleaners-quotations-preparation-save-value-col">
+                    <div className="cleaners-quotations-preparation-save-price">
                       {isEditing ? (
                         <input
                           type="number"
@@ -135,11 +135,11 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
                           onClick={(e) => e.stopPropagation()}
                         />
                       ) : (
-                        <>{money(t.price)} <span className="qt-won">원</span></>
+                        <>{money(t.price)} <span className="cleaners-quotations-preparation-save-won">원</span></>
                       )}
                     </div>
 
-                    <div className={`qt-desc ${t.collapsed ? "is-collapsed" : ""}`}>
+                    <div className={`cleaners-quotations-preparation-save-desc ${t.collapsed ? "is-collapsed" : ""}`}>
                       {isEditing ? (
                         <textarea
                           className="edit-textarea-desc"
@@ -161,17 +161,17 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
                       </button>
                     )}
 
-                    {!isEditing && t.saved && <div className="qt-saved-badge">임시저장됨</div>}
+                    {!isEditing && t.saved && <div className="cleaners-quotations-preparation-save-saved-badge">임시저장됨</div>}
                   </div>
 
-                  <div className="qt-action-col" onClick={(e) => e.stopPropagation()}>
-                    <button type="button" className="qt-link-btn" onClick={() => onTempSave(t.id)}>
+                  <div className="cleaners-quotations-preparation-save-action-col" onClick={(e) => e.stopPropagation()}>
+                    <button type="button" className="cleaners-quotations-preparation-save-link-btn" onClick={() => onTempSave(t.id)}>
                       저장
                     </button>
-                    <button type="button" className="qt-apply-btn" onClick={() => onApplyNow(t)}>
+                    <button type="button" className="cleaners-quotations-preparation-save-apply-btn" onClick={() => onApplyNow(t)}>
                       바로 적용
                     </button>
-                    <button type="button" className="qt-del-btn" onClick={() => onDelete(t.id)}>
+                    <button type="button" className="cleaners-quotations-preparation-save-del-btn" onClick={() => onDelete(t.id)}>
                       <IoIosClose size={30} />
                     </button>
                   </div>
@@ -180,17 +180,17 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
             );
           })}
 
-          <button type="button" className="qt-add-card" onClick={onAddTemplate}>
+          <button type="button" className="cleaners-quotations-preparation-save-add-card" onClick={onAddTemplate}>
             <IoMdAddCircleOutline size={30} />
-            <div className="qt-add-text">
-              <div className="qt-add-title">반복되는 견적 입력은 이제 그만!</div>
-              <div className="qt-add-sub">상황별 양식을 저장해 업무 시간을 단축해 보세요.</div>
+            <div className="cleaners-quotations-preparation-save-add-text">
+              <div className="cleaners-quotations-preparation-save-add-title">반복되는 견적 입력은 이제 그만!</div>
+              <div className="cleaners-quotations-preparation-save-add-sub">상황별 양식을 저장해 업무 시간을 단축해 보세요.</div>
             </div>
           </button>
         </section>
       </div>
 
-      <button className="qt-fab" type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+      <button className="cleaners-quotations-preparation-save-fab" type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
         ^
       </button>
     </div>
