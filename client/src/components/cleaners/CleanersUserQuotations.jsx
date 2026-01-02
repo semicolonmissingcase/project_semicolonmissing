@@ -31,20 +31,16 @@ function CleanersUserQuoteListDetails () {
   };
 
   useEffect(() => {
-    async function init() {
-      const result = await dispatch(cleanersThunk.showThunk(params.id));
-      console.log(result);
-      if(result.type.endsWith('/rejected')) {
-        alert('정보 획득 실패');
-        navigate(-1);
-      }
+  (async () => {
+    const result = await dispatch(cleanersThunk.showThunk(params.id));
+    if (result.type.endsWith("/rejected")) {
+      alert("정보 획득 실패");
+      navigate(-1);
     }
-    init();
+  })();
 
-    return () => {
-      dispatch(clearCleaners);
-    }
-  }, []);
+  return () => dispatch(clearCleaners());
+}, [dispatch, navigate, params.id]);
 
   // --- 1. 견적서 입력을 위한 상태 관리 ---
   const [quoteData, setQuoteData] = useState({
