@@ -6,7 +6,7 @@ export default (io) => {
   const connectedUsers = new Map();
 
   io.on('connection', async (socket) => {
-    // 1. 쿠키 기반 자동 인증
+    // 1. 쿠키 기반 자동 인증 (기존 로직 유지)
     try {
       const rawCookies = socket.handshake.headers.cookie || '';
       const parsedCookies = cookie.parse(rawCookies);
@@ -20,12 +20,9 @@ export default (io) => {
         const userKey = `${socket.userRole}_${socket.userId}`;
         connectedUsers.set(userKey, socket.id);
         
-        // 개인 알림용 채널 입장
+        // 개인 알림용 채널 입장 (방 밖에 있을 때 알림을 받기 위함)
         socket.join(`user_${userKey}`);
         
-        console.log(`✅ [Socket] 인증 및 개인채널 입장: ${userKey}`);
-
-        // 프론트엔드에 인증 완료 신호 전송
         socket.emit('authenticated', { success: true, userKey });
       }
     } catch (err) {
@@ -33,31 +30,33 @@ export default (io) => {
       socket.emit('error', { message: '인증 실패' });
     }
 
-    // 2. 채팅방 입장 (실시간의 핵심)
+    // 2. 채팅방 입장 (기존 로직 유지)
     socket.on('join_room', async (roomId) => {
       try {
         if (!socket.userId) return;
-        
-        // [중요] 모든 roomId는 문자열로 통일하여 관리
         const roomName = String(roomId);
-        
-        // 기존에 혹시 들어가있던 방이 있다면 정리 (선택사항)
-        // socket.rooms.forEach(room => { if(room !== socket.id) socket.leave(room); });
-
         socket.join(roomName);
-        console.log(`🚪 [Join] 유저 ${socket.userId}(${socket.userRole}) -> 방 ${roomName}`);
 
-        // 입장 시 읽음 처리
         await chatService.markAsRead(roomId, socket.userId);
-        
-        // 상대방에게 내가 읽었음을 알림
         socket.to(roomName).emit('messages_read', { roomId, userId: socket.userId });
       } catch (error) {
         console.error('입장 에러:', error.message);
       }
     });
 
-    // 3. 메시지 전송 및 실시간 브로드캐스트
+    // 4. 실시간 읽음 신호 수신 (기존 로직 유지)
+    socket.on('mark_as_read', async (data) => {
+      try {
+        const { roomId } = data;
+        const roomName = String(roomId);
+        await chatService.markAsRead(roomId, socket.userId);
+        socket.to(roomName).emit('messages_read', { roomId, userId: socket.userId });
+      } catch (error) {
+        console.error('읽음 처리 에러:', error.message);
+      }
+    });
+
+    // 3. 메시지 전송 및 실시간 브로드캐스트 (중복 수정 완료)
     socket.on('send_message', async (data) => {
       try {
         const { roomId, content, type = 'TEXT' } = data;
@@ -75,11 +74,10 @@ export default (io) => {
         });
 
         // (2) 해당 방에 있는 모든 유저에게 전송 (본인 포함)
-        // io.to를 써야 내 화면과 상대방 화면에 동시에 뜹니다.
+        // 채팅방 내부의 메시지 목록을 업데이트하는 용도입니다.
         io.to(roomName).emit('receive_message', newMessage);
-        console.log(`✉️ [Msg] 방 ${roomName} 전송: ${content.substring(0, 10)}...`);
 
-        // (3) 상대방이 방 밖에 있을 경우를 위한 개인 알림 전송
+        // (3) 상대방이 방 밖에 있을 경우를 위한 개인 알림 전송 (수정 포인트)
         const roomInfo = await chatService.getChatRoomWithSidebar(roomId, socket.userRole);
         const roomData = roomInfo.data; 
         const isOwner = socket.userRole === 'OWNER';
@@ -88,8 +86,13 @@ export default (io) => {
 
         if (opponentId) {
           const opponentKey = `user_${opponentRole}_${opponentId}`;
-          // 상대방 개인 채널로 한 번 더 쏴줌 (방에 없더라도 알림을 받게 함)
-          socket.to(opponentKey).emit('receive_message', newMessage);
+          
+          // [핵심] 이벤트 이름을 'receive_message'에서 'new_notification'으로 변경
+          // 이렇게 해야 채팅창 안에서 중복으로 메시지가 쌓이지 않습니다.
+          socket.to(`user_${opponentKey}`).emit('new_notification', {
+            ...newMessage,
+            roomName: roomData.cleanerName || roomData.ownerName // 알림창에 띄울 이름 추가
+          });
         }
 
       } catch (error) {
