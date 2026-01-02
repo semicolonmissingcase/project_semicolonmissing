@@ -41,12 +41,12 @@ const attributes = {
     field: 'status',
     type: DataTypes.STRING(20),
     allowNull: true,
-    comment: '상태(성공, 취소)'
+    comment: '상태(대기, 성공, 취소)'
   },
   paymentKey: {
     field: 'payment_key',
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
     comment: '결제고유키'
   },
   orderId: {
@@ -58,19 +58,19 @@ const attributes = {
   method: {
     field: 'method',
     type: DataTypes.STRING(30),
-    allowNull: false,
+    allowNull: true,
     comment: '결제 수단',
   },
   approvedAt: {
     field: 'approved_at',
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
     comment: '결제 승인 일시',
   },
-  reciptUrl: {
+  receiptUrl: {
     field: 'recipt_url',
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
     comment: '영수증 주소',
   },
   createdAt: {
