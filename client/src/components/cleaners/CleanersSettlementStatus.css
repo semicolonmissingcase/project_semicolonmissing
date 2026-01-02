@@ -83,6 +83,10 @@
 .rdp {
   width: 100%;
 }
+.rdp-root {
+  display: flex;
+  justify-content: center;
+}
 tr.rdp-weekdays {
   width: 100%;
   display: flex;
@@ -149,7 +153,7 @@ tr.rdp-week {
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 20px !important;
   transition: background-color 0.2s;
 }
 
@@ -561,7 +565,6 @@ tbody.rdp-weeks {
 .cleaners-settlement-status-grid {
     grid-template-columns: 1fr; /* 그리드를 한 줄로 변경 */
   }
-
   thead{
   width: 220px;
 }

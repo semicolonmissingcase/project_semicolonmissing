@@ -25,14 +25,12 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 700;
 }
 .cleaners-quotations-preparation-save-sort select {
   border: none;
   background: transparent;
-  font-weight: 700;
   padding: 10px;
-  font-size: 18px;
+  font-size: 1rem;
   outline: none;
   cursor: pointer;
 }
@@ -48,6 +46,7 @@
   gap: 1rem;
   width: 100%;
   margin: 1rem 0;
+  cursor: pointer;
 }
 
 .cleaners-quotations-preparation-save-card-grid {
@@ -64,23 +63,20 @@
   padding-top: 10px;
 }
 .cleaners-quotations-preparation-save-label {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 1.2rem;
 }
 
 /* values */
 .qt-value-col { padding-top: 4px; }
 .qt-price {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 1.2rem;
   letter-spacing: -0.5px;
   margin: 4px 0 10px;
 }
-.qt-won { font-size: 22px; font-weight: 800; margin-left: 6px; }
+.qt-won { font-size: 1.2rem; font-weight: 500; margin-left: 6px; }
 
 .qt-desc {
-  font-size: 22px;
-  font-weight: 950;
+  font-size: 1.2rem;
   word-break: keep-all;
 }
 .qt-desc.is-collapsed{
@@ -96,7 +92,7 @@
   padding: 6px 10px;
   border-radius: 999px;
   background: #eef2ff;
-  color: #1e3a8a;
+  color: var(--color-blue);
 }
 
 /* actions */
@@ -111,8 +107,7 @@
   border: none;
   background: transparent;
   color: #7b7b7b;
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
 }
 .qt-link-btn:hover{ text-decoration: underline; }
@@ -121,8 +116,7 @@
   border: none;
   background: var(--color-light-gray);
   color: #000;
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 1rem;
   border-radius: 10px;
   padding: 10px 16px;
   cursor: pointer;
@@ -130,13 +124,12 @@
 .qt-apply-btn:hover{ filter: brightness(0.98); }
 
 .qt-icon-btn{
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   border: 3px solid #8a8a8a;
   background: transparent;
   font-size: 26px;
-  font-weight: 1000;
   color: #6a6a6a;
   cursor: pointer;
   display: grid;
@@ -159,6 +152,7 @@
   gap: 1rem;
   width: 100%;
   margin-top: 1rem;
+  cursor: pointer;
 }
 .qt-add-card:hover{ background: var(--color-light-gray); }
 
@@ -190,7 +184,7 @@
 
 /* 수정 모드일 때 카드 테두리 강조 */
 .cleaners-quotations-preparation-save-card.is-editing {
-  border: 2px solid #3b82f6;
+  border: 1px solid var(--color-blue);
   cursor: default;
 }
 
@@ -211,8 +205,8 @@
 
 .edit-done-btn {
   margin-top: 8px;
-  padding: 4px 12px;
-  background-color: #3b82f6;
+  padding: 10px 14px;
+  background-color: var(--color-blue);
   color: white;
   border: none;
   border-radius: 4px;

@@ -30,7 +30,7 @@
     { id: "j17", date: "2025-12-28", time: "15:00", title: "남일동 유명한 카페1", amount: 80000, status: "대기", canceled: false },
     { id: "j18", date: "2025-12-28", time: "17:00", title: "남일동 아주 유명한 카페2", amount: 95000, status: "대기", canceled: false },
     { id: "j19", date: "2025-12-29", time: "10:00", title: "시내 스타벅스", amount: 105000, status: "대기", canceled: false },
-    { id: "j20", date: "2025-12-29", time: "11:00", time: "11:00", title: "시내 이디야", amount: 45000, status: "대기", canceled: false },
+    { id: "j20", date: "2025-12-29", time: "11:00", title: "시내 이디야", amount: 45000, status: "대기", canceled: false },
     { id: "j21", date: "2025-12-30", time: "11:00", title: "대학로 유명 까페", amount: 88000, status: "대기", canceled: false },
     { id: "j22", date: "2025-12-31", time: "10:00", title: "서점 근처 찻집", amount: 60000, status: "대기", canceled: false },
     { id: "j23", date: "2025-12-31", time: "11:00", title: "서점 근처 커피숍", amount: 50000, status: "대기", canceled: false },
@@ -219,7 +219,7 @@
                 month={monthCursor}
                 onMonthChange={setMonthCursor}
                 showOutsideDays
-                modifiers={modifiers}          // ✅ selected 제거
+                modifiers={modifiers}          
                 modifiersClassNames={modifiersClassNames}
                 components={{
                   MonthCaption: () => null,

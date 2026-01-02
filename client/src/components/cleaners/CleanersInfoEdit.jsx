@@ -62,7 +62,7 @@ const CleanersInfoEdit = () => {
 
 
   return (
-    <div className="all-container">
+    <div className="all-container cleanerinfoedit-container">
       {/* 폼 전체에 onSubmit을 적용하고, 제출 버튼의 type을 "submit"으로 설정하여 handleSubmit을 호출하도록 변경했습니다. */}
       <form className="cleanerinfoedit-wrapper" onSubmit={handleSubmit}> 
         <h1 className="cleanerinfoedit-title">정보 수정</h1>
@@ -113,6 +113,7 @@ const CleanersInfoEdit = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="새 비밀번호 입력"
+                className="cleanerinfoedit-input"
               />
               <button type="button" className="cleanerinfoedit-inline-btn">수정</button> {/* 수정 로직은 별도 구현 필요 */}
             </div>
@@ -126,6 +127,7 @@ const CleanersInfoEdit = () => {
               value={formData.passwordChk}
               onChange={handleChange}
               placeholder="새 비밀번호 확인"
+              className="cleanerinfoedit-input"
             />
           </div>
 
@@ -139,15 +141,16 @@ const CleanersInfoEdit = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="이름을 입력하세요" 
+              className="cleanerinfoedit-input"
             />
           </div>
 
 
           {/* 생년월일 (기존 setBirth 상태 사용) */}
           {/* 생년월일은 formData에 없으므로 기존 로직 유지 */}
-          <label htmlFor="birth">생년월일:</label>
+          <label className="cleanerinfoedit-group" htmlFor="birth">생년월일:</label>
           <input 
-            className="cleaners-info-edit-input-border-radius" 
+            className="cleanerinfoedit-group cleaners-info-edit-input-border-radius cleanerinfoedit-input" 
             id="birth" 
             name="birth" 
             type="text" 
@@ -206,7 +209,7 @@ const CleanersInfoEdit = () => {
           </div>
           
           {/* 알림 (기존 notification 상태 사용) */}
-          <label htmlFor="notification">알림:</label>
+          <label className="cleanerinfoedit-group" htmlFor="notification">알림:</label>
           <span className="cleaners-info-edit-notification">
             <label 
               htmlFor="notification-on" 
@@ -243,13 +246,13 @@ const CleanersInfoEdit = () => {
 
             <div className="cleanerinfoedit-confirm-msg" onClick={checkStatus}>
               <div className="cleanerinfoedit-check-icon"  onClick={changeCheckStatus}>{check ? '✓' : ''}</div> 
-              <p>수정하신 내용을 한 번 더 확인하시고<br />왼쪽 버튼을 눌러주세요.</p>
+              <p className="cleanerinfoedit-check-message">수정하신 내용을 한 번 더 확인하시고 왼쪽 버튼을 눌러주세요.</p>
             </div>
 
             <div className="cleanerinfoedit-action-btns">
               {/* 버튼들은 <form> 밖에 있었던 버튼과 중복되어 제거했습니다. */}
-              <button type="button" className="btn-medium bg-light-gray">수정 취소</button>
-              <button type="submit" className="btn-medium bg-blue">수정 완료</button> {/* type="submit"으로 변경 */}
+              <button type="button" className="btn-custom-bg-light-gray">수정 취소</button>
+              <button type="submit" className="btn-custom-bg-blue ">수정 완료</button> {/* type="submit"으로 변경 */}
             </div>
           </div>
         </section>
