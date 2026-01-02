@@ -5,11 +5,15 @@
  */
 
 import express from 'express';
+import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
+import paymentController from '../app/controllers/payment.controller.js';
 
 const paymentsRouter = express.Router();
 
-// 결제
-paymentsRouter.post('/payments', );
+// 결제 준비
+paymentsRouter.post('/ready', authUserMiddleware, paymentController.readyPayment);
 
+// 결제 승인
+paymentsRouter.post('/confirm',authUserMiddleware, paymentController.confirmPayment);
 
 export default paymentsRouter;

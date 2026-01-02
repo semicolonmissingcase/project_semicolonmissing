@@ -11,8 +11,20 @@ const ReservationStatus = {
   ACCEPTED: '동의',
   CANCELED: '취소',
 }
+
+// 결제 관련 상태값 추가
+const PaymentStatus = {
+  READY: '대기',
+  DONE: '완료',
+  FAILED: '실패',
+  EXPIRED: '만료',
+  CANCELED: '취소',
+}
+
 Object.freeze(ReservationStatus);
+Object.freeze(PaymentStatus);
 
 export default {
   ReservationStatus,
+  PaymentStatus,
 }
