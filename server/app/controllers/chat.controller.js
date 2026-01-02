@@ -117,9 +117,9 @@ const chatSendMessage = async (req, res, next) => {
 const markAsRead = async (req, res, next) => {
   try {
     const { roomId } = req.params;
-    const { id } = req.user; 
+    const { id, role } = req.user; // 토큰에 담긴 정보 활용
 
-    await chatService.markAsRead(roomId, id);
+    await chatService.markAsRead(roomId, id, role);
     res.status(200).json({ success: true });
   } catch (error) {
     next(error);

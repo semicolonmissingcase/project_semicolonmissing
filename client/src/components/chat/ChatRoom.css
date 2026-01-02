@@ -52,8 +52,23 @@
   margin-bottom: 15px;
 }
 
+/* [수정] 버블과 숫자를 가로로 배치하기 위한 컨테이너 */
+.chatroom-bubble-row {
+  display: flex;
+  align-items: flex-end; /* 숫자와 버블이 바닥 정렬 */
+  gap: 6px;
+}
+
 .chatroom-message-item.mine {
   justify-content: flex-end;
+}
+
+.mine .chatroom-bubble-row {
+  flex-direction: row; /* 숫자가 왼쪽, 버블이 오른쪽 */
+}
+
+.other .chatroom-bubble-row {
+  flex-direction: row-reverse; /* 버블이 왼쪽, 숫자가 오른쪽 (상대방은 보통 숫자 없음) */
 }
 
 .chatroom-message-item.mine .chatroom-bubble {
@@ -82,9 +97,17 @@
   border: 1px solid #ddd;
 }
 
-/* --- 추가된 이미지 관련 스타일 (컬러 영향 없음) --- */
+/* [추가] 읽음 숫자 스타일 */
+.unread-count {
+  font-size: 11px;
+  color: var(--color-dark-blue);
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+/* 이미지 관련 스타일 */
 .chatroom-bubble.has-image {
-  background-color: transparent !important; /* 이미지일 때만 배경 제거 */
+  background-color: transparent !important;
   border: none !important;
   padding: 0 !important;
   box-shadow: none !important;
@@ -108,14 +131,14 @@
 
 .mine .chatroom-bubble-container { align-items: flex-end; }
 .other .chatroom-bubble-container { align-items: flex-start; }
-/* ------------------------------------------- */
 
 .chatroom-time {
   font-size: 11px;
   color: var(--color-gray);
-  margin: 0 5px;
+  margin-top: 4px;
 }
 
+/* 입력창 및 기타 버튼 */
 .chatroom-input {
   padding: 15px;
   border-top: 1px solid var(--color-light-gray);

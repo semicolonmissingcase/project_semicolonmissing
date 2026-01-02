@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import { getChatRoomDetail, getCleanerReviewsForRoom } from '../../api/axiosChat';
+import { 
+  getChatRoomDetail, 
+  getCleanerReviewsForRoom,
+  getQuotationDetail 
+} from '../../api/axiosChat.js'; 
 import './ChatMain.css';
 import ChatRoom from './ChatRoom.jsx';
 import ChatSidebarProfile from './ChatSidebarProfile.jsx';
@@ -17,7 +21,7 @@ const ChatMain = () => {
   const [sidebarInfo, setSidebarInfo] = useState({
     sideType: null,
     data: null,
-    reviews: [],
+    reviews: [], // 프론트에서 별점 계산을 위해 사용됨
   });
   const [isSidebarLoading, setIsSidebarLoading] = useState(true);
   const [sidebarError, setSidebarError] = useState(null);
@@ -49,36 +53,63 @@ const ChatMain = () => {
       return;
     }
 
-    const fetchData = async () => {
-      setIsSidebarLoading(true);
-      setSidebarError(null);
+const fetchData = async () => {
+  setIsSidebarLoading(true);
+  try {
+    const sidebarRes = await getChatRoomDetail(safeid);
+    const { sideType, data: baseData } = sidebarRes.data.data;
+
+    let finalData = baseData;
+    let reviewsArray = [];
+
+    if (sideType === 'OWNER') {
+      const reviewsRes = await getCleanerReviewsForRoom(safeid);
+      reviewsArray = reviewsRes.data.data.reviews || [];
+      // ... 별점 계산 로직 동일 ...
+    } 
+    else if (sideType === 'CLEANER') {
+      // 1. baseData에 reservationId가 없으면 id를 사용 (404 방지)
+      const qId = baseData.reservationId || baseData.id || 1; 
+
       try {
-        const sidebarRes = await getChatRoomDetail(safeid);
-        let { sideType, data } = sidebarRes.data.data;
+        const quoteRes = await getQuotationDetail(qId);
+        const detail = quoteRes.data.data;
 
-        let reviewsArray = []; 
-        if(sideType === 'OWNER') {
-          const reviewsRes = await getCleanerReviewsForRoom(safeid);
-          reviewsArray = reviewsRes.data.data.reviews || [];
+        // 2. 화면에 필요한 구조로 데이터 재조합
+        finalData = {
+          ownerName: detail.reservation.owner.name,
+          storeName: detail.reservation.store.name,
+          wishDate: detail.reservation.date,
+          wishTime: detail.reservation.time,
+          // 주소 합치기 (addr1, addr2, addr3)
+          storeAddress: `${detail.reservation.store.addr1} ${detail.reservation.store.addr2} ${detail.reservation.store.addr3}`,
+          
+          // 3. submissions 배열을 순회하며 ID를 실제 텍스트 답변으로 치환
+          qaList: detail.submissions.map((sub) => {
+            if (sub.answerText) return { question: sub.question?.content || "기타", answer: sub.answerText };
 
-          // 평균 별점 계산
-          if (reviewsArray.length > 0) {
-            const totalStar = reviewsArray.reduce((acc, cur) => acc + (Number(cur.star) || 0), 0);
-            const averageStar = totalStar / reviewsArray.length;
-            data = { ...data, star: averageStar };
-          } else {
-            data = { ...data, star: 0 };
-          }
-        }
-
-        setSidebarInfo({ sideType, data, reviews: reviewsArray });
+            // questionOptions에서 사용자가 선택한 id와 일치하는 'correct' 텍스트 찾기
+            const selectedOption = sub.question?.questionOptions?.find(opt => opt.id === sub.questionOptionId);
+            return {
+              question: sub.question?.content || "질문 정보 없음",
+              answer: selectedOption ? selectedOption.correct : "답변 정보 없음"
+            };
+          })
+        };
       } catch (err) {
-        setSidebarError('정보를 불러오는 데 실패했습니다.');
-        console.error(err);
-      } finally {
-        setIsSidebarLoading(false); 
+        console.error("상세 정보 로드 실패:", err);
+        // 실패 시 region이라도 주소에 넣어줌
+        finalData = { ...baseData, storeAddress: baseData.region };
       }
-    };
+    }
+
+    setSidebarInfo({ sideType, data: finalData, reviews: reviewsArray });
+  } catch (err) {
+    setSidebarError('정보를 불러오지 못했습니다.');
+  } finally {
+    setIsSidebarLoading(false);
+  }
+};
     fetchData();
   }, [safeid]);
 
@@ -87,14 +118,29 @@ const ChatMain = () => {
   const renderSidebar = () => {
     if(isSidebarLoading) return <p className="loading-text">정보 로딩 중...</p>;
     if(sidebarError) return <p className="error-text">{sidebarError}</p>;
+    
     const commonProps = { onClose: () => toggleSidebar(false) };
 
     if (sidebarInfo.sideType === 'OWNER') {
-      return <ChatSidebarProfile {...commonProps} data={sidebarInfo.data} reviews={sidebarInfo.reviews} sideType={sidebarInfo.sideType} />;
+      return (
+        <ChatSidebarProfile 
+          {...commonProps} 
+          data={sidebarInfo.data} 
+          reviews={sidebarInfo.reviews} // 여기서 넘겨준 reviews로 프론트에서 별점 계산
+          sideType={sidebarInfo.sideType} 
+        />
+      );
     }
+    
     if (sidebarInfo.sideType === 'CLEANER') {
-      return <ChatSidebarRequest {...commonProps} data={sidebarInfo.data} />;
+      return (
+        <ChatSidebarRequest 
+          {...commonProps} 
+          data={sidebarInfo.data} 
+        />
+      );
     }
+    
     return null;
   }
 
@@ -102,13 +148,25 @@ const ChatMain = () => {
     <div className='chatmain-container'>
       <div className='chatmain-center'>
         {socket && isAuthenticated ? (
-          <ChatRoom roomId={safeid} socket={socket} onOpenSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+          <ChatRoom 
+            roomId={safeid} 
+            socket={socket} 
+            onOpenSidebar={toggleSidebar} 
+            isSidebarOpen={isSidebarOpen} 
+          />
         ) : (
-          <div className="chat-loading"><div className="spinner"></div><p>채팅 서버 인증 중...</p></div>
+          <div className="chat-loading">
+            <div className="spinner"></div>
+            <p>채팅 서버 연결 중...</p>
+          </div>
         )}
       </div>
-      <div className={`chatmain-right ${isSidebarOpen ? 'open' : ''}`}>{renderSidebar()}</div>
-      {isSidebarOpen && <div className="chatmain-overlay" onClick={() => setIsSidebarOpen(false)}></div>}
+      <div className={`chatmain-right ${isSidebarOpen ? 'open' : ''}`}>
+        {renderSidebar()}
+      </div>
+      {isSidebarOpen && (
+        <div className="chatmain-overlay" onClick={() => setIsSidebarOpen(false)}></div>
+      )}
     </div>
   );
 };
