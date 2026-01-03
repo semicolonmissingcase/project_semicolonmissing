@@ -14,7 +14,7 @@ import cleanersAdjustmentValidator from '../app/middlewares/validations/validati
 
 const cleanersRouter = express.Router();
 
-// cleanersRouter.get('/quotations/:id', (req, res, next) => {
+// cleanersRouter.get('/quotations', (req, res, next) => {
 //   res.send('ttt');
 //  });
 
@@ -40,5 +40,7 @@ cleanersRouter.post(
 //   [name, locations],
 //   profileController.update
 // );
+
+
 
 export default cleanersRouter;

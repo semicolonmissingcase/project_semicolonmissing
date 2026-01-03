@@ -6,8 +6,7 @@
 }
 
 .cleaners-user-quotations-title-text {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.5rem;
   padding: 20px 0;
 }
 
@@ -23,8 +22,7 @@
 .cleaners-user-quotations-title-small-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  width: 90%;
+  gap: 1rem;
 }
 
 .cleaners-user-quotations-title-wrapper-selected {

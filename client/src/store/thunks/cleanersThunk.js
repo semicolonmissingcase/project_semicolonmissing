@@ -2,23 +2,31 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
 
 const titleThunk = createAsyncThunk(
-  'cleaners/titleThunk', // 액션 타입 이름 중복 방지
-  async (_, { rejectWithValue }) => { // 목록 조회라면 id가 필요 없을 수 있음
+  'cleaners/titleThunk',
+  async (_, { rejectWithValue }) => { // ⬅️ 리스트 조회이므로 id 파라미터를 제거해보세요
     try {
-      // 기사님에게 들어온 '요청 의뢰서 목록'을 가져오는 주소로 변경 필요
-      // 예: /api/cleaners/quotations 또는 /api/cleaners/requests
-      const url = `/api/cleaners/quotations`; 
-
+      // ⚠️ 만약 백엔드에서 '목록 조회' API 주소가 따로 있다면 그 주소를 써야 합니다.
+      const url = `/api/owners/quotations`; 
       const response = await axiosInstance.get(url);
       
-      console.log("API Response Data:", response.data); // 데이터 구조 확인용 로그
-      return response.data; // 보통 배열 형태여야 함 [{}, {}, {}]
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+export const submitQuotation = createAsyncThunk(
+  "cleaners/submitQuotation",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await api.post("/api/cleaners/quotations", formData);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 const showThunk = createAsyncThunk(
   'cleaners/showThunk',
@@ -59,6 +67,7 @@ const accountInfoThunk = createAsyncThunk(
 
 export default {
   titleThunk,
+  submitQuotation,
   showThunk,         
   accountInfoThunk, 
 };

@@ -9,11 +9,25 @@ import myError from "../../errors/customs/my.error.js";
 import ownersQuotationsRepository from "../../repositories/owner/owners.quotations.repository.js"
 
 /**
- * 견적 요청서 상세
- * @param {number} id Reservation PK
- * @returns {import("../../models/index.js").Reservation}
+ * 견적 요청서 전체 목록 (CleanersUserQuotationsTitle용)
  */
+async function index() {
+  // ID를 넘기지 않아야 Repository에서 전체 조회가 일어납니다.
+  const submissions = await ownersQuotationsRepository.submissionFindByReservationId(null, null);
+  
+  // 데이터가 없을 경우를 대비해 빈 배열 보장
+  return { submissions: submissions || [] };
+}
+
 async function show(id) {
+
+  if (!id || id === 'undefined') {
+    // Repository에 목록을 가져오는 함수가 있다고 가정 (예: findAll)
+    // 만약 없다면 repository에도 findAll 관련 함수를 만들어야 합니다.
+    const submissions = await ownersQuotationsRepository.submissionFindAll(null); 
+    return { submissions }; 
+  }
+
   // 예약 정보 획득
   const reservation = await ownersQuotationsRepository.reservationFindByIdAndStatusIsRequest(null, id);
 
@@ -33,5 +47,6 @@ async function show(id) {
 }
 
 export default {
+  index,
   show,
 }
