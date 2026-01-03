@@ -224,4 +224,44 @@
     display: block;
   }
 }
+/* 페이지네이션 컨테이너 */
+.ChatSidebarProfile-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
 
+/* 화살표 및 숫자 공통 스타일 */
+.ChatSidebarProfile-page-arrow,
+.ChatSidebarProfile-page-number {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ChatSidebarProfile-page-arrow:hover:not(:disabled),
+.ChatSidebarProfile-page-number:hover {
+  background-color: #f8f9fa;
+}
+
+/* 활성화된 페이지 번호 (파란색 계열) */
+.ChatSidebarProfile-page-number.active {
+  background-color: #5eb5f8;
+  color: #fff;
+  border-color: #5eb5f8;
+  font-weight: bold;
+}
+
+/* 비활성화된 화살표 */
+.ChatSidebarProfile-page-arrow:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  border-color: #eee;
+}

@@ -22,3 +22,6 @@ export const uploadChatImage = (roomId, formData) =>
 
 export const markMessageAsRead = (roomId) => 
   axiosInstance.patch(`${CHAT_API_URL}/rooms/${cleanId(roomId)}/read`);
+
+export const getQuotationDetail = (quotationId) => 
+  axiosInstance.get(`/api/owners/quotations/${cleanId(quotationId)}`);

@@ -96,19 +96,19 @@ const chatRepository = {
   /**
    * 특정 방의 메시지 목록 조회
    */
-  findMessagesByRoomId: async (transaction, room_id, limit = 50, offset = 0) => {
-    // 1. 먼저 최신 메시지를 기준으로 50개를 가져옵니다. (DESC)
-    const messages = await db.ChatMessage.findAll({
-      where: { chatRoomId: room_id },
-      limit: parseInt(limit),
-      offset: parseInt(offset),
-      order: [['createdAt', 'DESC']], 
-      transaction
-    });
+findMessagesByRoomId: async (transaction, room_id, limit = 50, offset = 0) => {
+  const messages = await db.ChatMessage.findAll({
+    where: { chatRoomId: room_id },
+    // attributes를 명시해서 isRead(is_read)가 확실히 포함되게 합니다.
+    attributes: ['id', 'chatRoomId', 'content', 'senderId', 'senderType', 'messageType', 'isRead', 'createdAt'],
+    limit: parseInt(limit),
+    offset: parseInt(offset),
+    order: [['createdAt', 'DESC']], 
+    transaction
+  });
 
-    // 2. 가져온 50개의 메시지를 다시 과거 -> 현재 순으로 뒤집어서 반환합니다.
-    return messages.reverse(); 
-  },
+  return messages.reverse(); 
+},
 
   /**
    * 방 나가기 (나간 시점 기록)
@@ -140,19 +140,26 @@ const chatRepository = {
   /**
    * 읽음 처리 업데이트
    */
-  markAsRead: async (transaction, room_id, user_id) => {
-    return await db.ChatMessage.update(
-      { isRead: 1 },
-      {
-        where: {
-          chatRoomId: room_id,
-          senderId: { [Op.ne]: user_id },
-          isRead: 0
-        },
-        transaction
-      }
-    );
-  }
-};
+markAsRead: async (transaction, room_id, user_id, user_role) => {
+  // 1. role이 없을 경우를 대비한 안전 장치 (서비스/컨트롤러에서 누락 시)
+  const roleStr = String(user_role || '').toUpperCase();
+  
+  // 2. 타겟팅: 내가 OWNER면 상대방인 CLEANER의 글을 읽음 처리
+  const opponentRole = roleStr.includes('OWNER') ? 'CLEANER' : 'OWNER';
+  const result = await db.ChatMessage.update(
+    { isRead: 1 },
+    {
+      where: {
+        chatRoomId: room_id,
+        senderType: opponentRole, // DB에 저장된 'CLEANER' 또는 'OWNER' 문자열과 매칭
+        isRead: 0
+      },
+      transaction
+    }
+  );
+
+  return result;
+}
+}
 
 export default chatRepository;

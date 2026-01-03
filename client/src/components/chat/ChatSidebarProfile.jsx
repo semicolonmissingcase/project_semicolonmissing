@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ChatSidebarProfile.css';
 
 const ChatSidebarProfile = ({ data, reviews, onClose }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 3;
+
   if (!data) {
     return (
       <div className="ChatSidebarProfile-container">
@@ -10,17 +13,19 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
     );
   }
 
-  const averageRating = data.star || 0.0;
+  // --- [수정 구간] 프론트엔드에서 리뷰 배열로 평균 별점 직접 계산 ---
   const reviewCount = reviews?.length || 0;
+  const averageRating = reviewCount > 0 
+    ? reviews.reduce((acc, cur) => acc + (Number(cur.star) || 0), 0) / reviewCount 
+    : 0;
+  // -----------------------------------------------------------
 
-  // 이름 마스킹 함수 (구조 유지)
   const maskName = (name) => {
     if (!name || name === '익명') return '고객';
     const firstChar = name.charAt(0);
     return name.length > 1 ? `${firstChar}${'*'.repeat(name.length - 1)}` : name;
   };
 
-  // 별점 렌더링 함수 (하단 리뷰용)
   const renderStars = (star) => {
     const rating = Math.round(star);
     const fullStars = '★'.repeat(rating);
@@ -32,6 +37,16 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
       </span>
     );
   };
+
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = (reviews || []).slice(indexOfFirstReview, indexOfLastReview);
+  const totalPages = Math.ceil((reviews || []).length / reviewsPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className="ChatSidebarProfile-container">
@@ -68,7 +83,6 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
         </div>
       )}
 
-      {/* 통계 박스: 상단은 요청하신 대로 깔끔하게 숫자만 표시 */}
       <div className="ChatSidebarProfile-stats">
         <div className="ChatSidebarProfile-stat-item">
           <span className="ChatSidebarProfile-stat-label">고용</span>
@@ -77,6 +91,7 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
         <div className="ChatSidebarProfile-stat-item">
           <span className="ChatSidebarProfile-stat-label">리뷰</span>
           <span className="ChatSidebarProfile-stat-value">
+            {/* toFixed(1)로 소수점 한자리 표시 */}
             ⭐ {averageRating.toFixed(1)} ({reviewCount})
           </span>
         </div>
@@ -91,28 +106,58 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
 
       <div className="ChatSidebarProfile-review-preview" style={{ marginTop: '30px' }}>
         <h4>리뷰 ({reviewCount})</h4>
-        {reviews && reviews.length > 0 ? (
-          reviews.map((review) => (
-            <div key={review.id} className="ChatSidebarProfile-review-item">
-              <div className="ChatSidebarProfile-review-header">
-                <div className="ChatSidebarProfile-review-user-row">
-                  <span className="ChatSidebarProfile-review-user">
-                    {maskName(review.authorName)}님
-                  </span>
+        {currentReviews && currentReviews.length > 0 ? (
+          <>
+            {currentReviews.map((review) => (
+              <div key={review.id} className="ChatSidebarProfile-review-item">
+                <div className="ChatSidebarProfile-review-header">
+                  <div className="ChatSidebarProfile-review-user-row">
+                    <span className="ChatSidebarProfile-review-user">
+                      {maskName(review.authorName)}님
+                    </span>
+                  </div>
+                  <div className="ChatSidebarProfile-review-info-row">
+                    <span className="ChatSidebarProfile-star-group">
+                      {renderStars(review.star)}
+                      <span className="star-number">({review.star})</span>
+                    </span>
+                    <span className="ChatSidebarProfile-review-date">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
-                <div className="ChatSidebarProfile-review-info-row">
-                  <span className="ChatSidebarProfile-star-group">
-                    {renderStars(review.star)}
-                    <span className="star-number">({review.star})</span>
-                  </span>
-                  <span className="ChatSidebarProfile-review-date">
-                    {new Date(review.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
+                <p className="ChatSidebarProfile-review-content">{review.content}</p>
               </div>
-              <p className="ChatSidebarProfile-review-content">{review.content}</p>
-            </div>
-          ))
+            ))}
+
+            {totalPages > 1 && (
+              <div className="ChatSidebarProfile-pagination">
+                <button 
+                  className="ChatSidebarProfile-page-arrow"
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  &lt;
+                </button>
+                {pageNumbers.map(number => (
+                  <button
+                    key={number}
+                    onClick={() => setCurrentPage(number)}
+                    className={`ChatSidebarProfile-page-number ${currentPage === number ? 'active' : ''}`}
+                  >
+                    {number}
+                  </button>
+                ))}
+                <button 
+                  className="ChatSidebarProfile-page-arrow"
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                >
+                  &gt;
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <p className="no-review-text">작성된 리뷰가 없습니다.</p>
         )}

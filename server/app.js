@@ -68,5 +68,4 @@ socketHandler(io);
 // -----------------------
 const PORT = parseInt(process.env.APP_PORT) || 3000;
 httpServer.listen(PORT, () => {
-  console.log(`💬 실시간 채팅 기능 활성화됨`);
 });
