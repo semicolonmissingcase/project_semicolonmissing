@@ -37,6 +37,12 @@ const attributes = {
     allowNull: false,
     comment: '제목',
   },
+  category: {
+    field: 'category',
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    comment: '카테고리(견적문의, 서비스 문의, 기술지원, 불만/개선사항, 기타)',
+  },
   content: {
     field: 'content',
     type: DataTypes.TEXT,
@@ -60,6 +66,18 @@ const attributes = {
     type: DataTypes.STRING(20),
     allowNull: false,
     comment: '상태(대기중, 답변완료)',
+  },
+  inquiryPicture1: {
+    field: 'inquiry_picture_1',
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: '문의사진1',
+  },
+  inquiryPicture2: {
+    field: 'inquiry_picture_2',
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: '문의사진2',
   },
   createdAt: {
     field: 'created_at',

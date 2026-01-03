@@ -41,7 +41,7 @@ const attributes = {
     field: 'status',
     type: DataTypes.STRING(20),
     allowNull: true,
-    comment: '상태(대기, 성공, 취소)'
+    comment: '상태(대기, 성공, 취소, 만료, 실패)'
   },
   paymentKey: {
     field: 'payment_key',
