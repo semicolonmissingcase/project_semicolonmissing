@@ -1,7 +1,25 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
 
-// 1. 기존 Quotation 관련 Thunk (그대로 유지)
+const titleThunk = createAsyncThunk(
+  'cleaners/titleThunk', // 액션 타입 이름 중복 방지
+  async (_, { rejectWithValue }) => { // 목록 조회라면 id가 필요 없을 수 있음
+    try {
+      // 기사님에게 들어온 '요청 의뢰서 목록'을 가져오는 주소로 변경 필요
+      // 예: /api/cleaners/quotations 또는 /api/cleaners/requests
+      const url = `/api/cleaners/quotations`; 
+
+      const response = await axiosInstance.get(url);
+      
+      console.log("API Response Data:", response.data); // 데이터 구조 확인용 로그
+      return response.data; // 보통 배열 형태여야 함 [{}, {}, {}]
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+
 const showThunk = createAsyncThunk(
   'cleaners/showThunk',
   async (id, { rejectWithValue }) => {
@@ -19,7 +37,7 @@ const showThunk = createAsyncThunk(
   }
 );
 
-// 2. 새로운 AccountInfo 관련 Thunk (추가)
+
 const accountInfoThunk = createAsyncThunk(
   // Thunk 액션 타입: accounts 슬라이스에서 계정 정보 조회
   'accounts/fetchAccountInfo',
@@ -40,6 +58,7 @@ const accountInfoThunk = createAsyncThunk(
 
 
 export default {
-  showThunk,         // 기존 Thunk
-  accountInfoThunk,  // 새로 추가된 Thunk
+  titleThunk,
+  showThunk,         
+  accountInfoThunk, 
 };
