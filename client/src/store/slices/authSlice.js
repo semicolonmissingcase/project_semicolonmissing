@@ -4,6 +4,7 @@ import { loginThunk, reissueThunk, getMeThunk, logoutThunk, updateOwnerInfoThunk
 const initialState = {
  user: null,
  isLoggedIn: false,
+ accessToken: false,
  isLoading: true,
 }
 
@@ -14,6 +15,7 @@ const slice = createSlice({
     clearAuth(state) {
       state.user = null;
       state.isLoggedIn = false;
+      state.accessToken = false;
       state.isLoading = false;
     },
 

@@ -21,7 +21,9 @@ const ROLE_PERMISSIONS = {
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },
-    { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER]}, // 둘 다 허용
+    { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER]},, // 둘 다 허용
+    { path: /^\/api\/payments\/ready$/,  roles: [OWNER, CLEANER]},
+    { path: /^\/api\/payments\/confirm$/, roles: [OWNER] },
     { path: /^\/api\/stores$/, roles: [OWNER] }, // 매장 추가
     { path: /^\/api\/owners\/profile$/, roles: [OWNER] }, // 점주 프로필 이미지 업로드
     { path: /^\/api\/owners\/cleaners\/\d+\/like$/, roles: [OWNER] }, // 기사님 좋아요

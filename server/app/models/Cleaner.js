@@ -142,8 +142,7 @@ const Cleaner = {
     db.Cleaner.belongsToMany(db.Location, { through: db.DriverRegion, foreignKey: 'cleanerId', otherKey: 'locationId', as: 'locations'});
     db.Cleaner.hasMany(db.Certification, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'certification' });
     db.Cleaner.hasMany(db.Inquiry, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'inquiries' });
-    db.Cleaner.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'reviews' });
-    db.Cleaner.hasMany(db.Like, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'likes' });
+    db.Cleaner.hasMany(db.CleanerAccount, { sourceKey:'id', foreignKey: 'cleanerId', as:'cleanerAccounts'});
   }
 }
 

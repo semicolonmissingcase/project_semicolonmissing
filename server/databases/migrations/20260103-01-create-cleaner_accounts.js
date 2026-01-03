@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-07-create-inquiries.js
- * @description inquiries migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20260103-01-create-cleaner_accounts.js
+ * @description cleanerAccounts migration file
+ * 260103 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'inquiries';
+const tableName = 'cleaner_accounts';
 
 // 컬럼 정의
 const attributes = {
@@ -17,67 +17,38 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '문의 PK',
+    comment: '기사계좌PK',
   },
- ownerId: {
-  field: 'owner_id',
-  type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: true,
-  comment: '점주 PK',
- },
- cleanerId: {
-  field: 'cleaner_id',
-  type: DataTypes.BIGINT.UNSIGNED,
-  allowNull: true,
-  comment: '기사 PK',
- },
-  title: {
-    field: 'title',
-    type: DataTypes.STRING(50),
+  cleanerId: {
+    field: 'cleaner_id',
+    type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '제목',
+    comment: '기사 PK',
   },
-  category: {
-    field: 'category',
+ 
+  bankCode: {
+    field: 'bank_code',
     type: DataTypes.STRING(20),
-    allowNull: false,
-    comment: '카테고리(견적문의, 서비스 문의, 기술지원, 불만/개선사항, 기타)',
+    allownull: true,
+    comment: '은행코드',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.TEXT,
-    allowNull: true,
-    comment: '문의내용',
-  },
-  guestName: {
-    field: 'guest_name',
+  depositor: {
+    field: 'depositor',
     type: DataTypes.STRING(50),
     allowNull: true,
-    comment: '비회원 이름'
+    comment: '예금주',
   },
-  guestPassword: {
-    field: 'guest_password',
-    type: DataTypes.STRING(100),
-    allowNull: true,
-    comment: '비회원 비밀번호(nullable)'
-  },
-  status: {
-    field: 'status',
+  accountNumber: {
+    field: 'accountNumber',
     type: DataTypes.STRING(20),
-    allowNull: false,
-    comment: '상태(대기중, 답변완료)',
-  },
-  inquiryPicture1: {
-    field: 'inquiry_picture_1',
-    type: DataTypes.TEXT,
     allowNull: true,
-    comment: '문의사진1',
+    comment: '계좌번호',
   },
-  inquiryPicture2: {
-    field: 'inquiry_picture_2',
-    type: DataTypes.TEXT,
+  isDefault: {
+    field: 'is_default',
+    type: DataTypes.BOOLEAN,
     allowNull: true,
-    comment: '문의사진2',
+    comment: '주계좌'
   },
   createdAt: {
     field: 'created_at',

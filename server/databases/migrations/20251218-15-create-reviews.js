@@ -25,7 +25,7 @@ const attributes = {
     allowNull: false,
     comment: '점주 PK',
   },
-  reservation: {
+  reservationId: {
     field: 'reservation_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
@@ -48,6 +48,18 @@ const attributes = {
     type: DataTypes.INTEGER(5),
     allowNull: false,
     comment: '별점',
+  },
+  reviewePicture1: {
+    field: 'review_picture_1',
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: '리뷰사진1',
+  },
+  reviewePicture2: {
+    field: 'review_picture_2',
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: '리뷰사진2',
   },
   createdAt: {
     field: 'created_at',

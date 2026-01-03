@@ -25,6 +25,9 @@ import ownersRouter from './routes/owners.routes.js';
 import filesRouter from './routes/files.router.js';
 import estimateRouter from './routes/estimate.router.js';
 
+// 결제 관련 import
+import paymentsRouter from './routes/payments.router.js';
+
 const app = express();
 app.use(cors({
   origin: "http://localhost:5173", // 프론트 주소
@@ -45,6 +48,7 @@ app.use('/api/chat', chatRouter);
 app.use('/api/users', usersRouter); // 회원가입 관련
 app.use('/api/owners', ownersRouter);
 app.use('/api/files', filesRouter);
+app.use('/api/payments', paymentsRouter); 
 // app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 app.use('/api/stores', storesRouter); // 매장관리 관련
 app.use('/api/reservations', estimateRouter); // 견적서 관련 
