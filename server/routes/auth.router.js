@@ -24,5 +24,6 @@ authRouter.get('/social/:provider', socialValidator, validationHandler, userCont
 authRouter.get('/callback/:provider', userController.socialCallback);
 authRouter.post('/signup/complete', userController.completeSignup);
 authRouter.get('/me', authUserMiddleware, userController.getMe);
+authRouter.post('/login', adminLoginValidator, validationHandler, adminController.adminLogin);
 
 export default authRouter;

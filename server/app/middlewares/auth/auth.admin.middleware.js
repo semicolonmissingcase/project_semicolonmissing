@@ -45,7 +45,7 @@ function adminAuthorize(req) {
     adminAuthenticate(req);
 
     // 권한 체크
-    const adminRole = req.owner?.role;
+    const adminRole = req.admin?.role;
     if(!adminRole || !matchRole.roles.includes(adminRole)) {
       throw myError('권한 부족', FORBIDDEN_ERROR);
     }
