@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
+import axios from "axios";
 
 const titleThunk = createAsyncThunk(
   'cleaners/titleThunk',
@@ -62,10 +63,46 @@ const accountInfoThunk = createAsyncThunk(
   }
 );
 
+// 예시: thunk 내부 구조 확인
+// cleanersThunk.js (또는 해당 thunk가 정의된 곳)
+export const fetchTemplatesThunk = createAsyncThunk(
+  'cleaners/fetchTemplates',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get('/api/cleaners/templates'); 
+      
+      // 여기서 response가 undefined이거나 response.data가 없을 때 에러가 납니다.
+      if (!response || !response.data) {
+        throw new Error("서버 응답이 올바르지 않습니다.");
+      }
+
+      return response.data; 
+    } catch (error) {
+      // 에러를 catch해서 rejected 상태로 보냅니다.
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+// 견적서 제출 (POST) Thunk
+ const submitQuotationThunk = createAsyncThunk(
+  "cleaners/submitQuotation",
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios.post("/api/cleaners/quotations", payload);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data);
+    }
+  }
+);
+
 
 export default {
   titleThunk,
   submitQuotation,
   showThunk,        
-  accountInfoThunk, 
+  accountInfoThunk,
+  fetchTemplatesThunk,
+  submitQuotationThunk
 };

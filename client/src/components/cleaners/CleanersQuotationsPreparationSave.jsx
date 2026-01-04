@@ -1,4 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSelector, useDispatch } from "react-redux"; // 1. 추가
+import cleanersThunk from "../../store/thunks/cleanersThunk.js"; // Thunk 경로 확인
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoIosClose } from "react-icons/io";
 import "./CleanersQuotationsPreparationSave.css";
@@ -15,17 +17,40 @@ function money(n) {
 
 // 부모로부터 onSelect prop을 전달받음
 export default function CleanersQuotationsPreparationSave({ onSelect }) {
+  const dispatch = useDispatch();
   const [sort, setSort] = useState("latest");
-  const [templates, setTemplates] = useState([
-    {
-      id: 1,
-      createdAt: new Date().toISOString(),
-      price: 150000,
-      desc: "기본 제빙기 청소 패키지입니다.",
-      saved: true,
-      collapsed: false,
+  
+  
+  // 1. Redux 데이터 구독
+  const reduxTemplates = useSelector((state) => state.cleaners.templates);
+
+  // 2. Redux 데이터가 변경될 때마다 로컬 state 업데이트
+  useEffect(() => {
+    if (reduxTemplates && reduxTemplates.length > 0) {
+      // 서버 필드명(estimatedAmount, description) 그대로 사용
+      setTemplates(reduxTemplates);
     }
-  ]);
+  }, [reduxTemplates]); // reduxTemplates가 바뀌면 실행
+
+  
+  // 편집 중인 상태를 관리하기 위한 로컬 state (이건 유지해도 좋습니다)
+  const [templates, setTemplates] = useState([]);
+
+  // 3. Redux 데이터가 변경될 때 로컬 state 동기화 (편집을 위해)
+  useEffect(() => {
+    if (reduxTemplates) {
+      setTemplates(reduxTemplates);
+    }
+  }, [reduxTemplates]);
+
+  // 4. 저장 버튼 클릭 시 Redux Thunk 호출 (서버 저장)
+  function onTempSave(tpl) {
+    // 예: 서버에 저장하는 thunk가 있다고 가정
+    dispatch(cleanersThunk.saveTemplateThunk(tpl))
+      .unwrap()
+      .then(() => alert("서버에 저장되었습니다."))
+      .catch(() => alert("저장 실패"));
+  }
 
   const [editingId, setEditingId] = useState(null);
 
@@ -77,14 +102,20 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
   }
 
   // 핵심 수정 부분: 부모에게 데이터를 전달하는 함수
-  function onApplyNow(tpl) {
-    if (onSelect) {
-      // 부모 컴포넌트의 estimates 테이블 필드명(estimated_amount)에 맞춰 데이터 가공
-      onSelect({
-        estimated_amount: tpl.price,
-        description: tpl.desc
-      });
+ function onApplyNow(tpl) {
+  if (onSelect) {
+    onSelect({
+      estimatedAmount: tpl.estimatedAmount, // 필드명 수정
+      description: tpl.description           // 필드명 수정
+    });
     }
+  } 
+
+  // [참고] 데이터 변경 시 Number 처리 확인
+  function onChangeTemplate(id, field, value) {
+    setTemplates((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
+    );
   }
 
   function onDelete(id) {
@@ -109,48 +140,48 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
         </div>
 
         <section className="cleaners-quotations-preparation-save-list-section">
-          {sortedTemplates.map((t) => {
-            const isEditing = editingId === t.id;
-            return (
-              <div 
-                className={`cleaners-quotations-preparation-save-card ${isEditing ? 'is-editing' : ''}`} 
-                key={t.id}
-                onClick={() => handleCardClick(t.id)}
-              >
-                <div className="cleaners-quotations-preparation-save-card-grid">
-                  <div className="cleaners-quotations-preparation-save-label-col">
-                    <div className="cleaners-quotations-preparation-save-label">견적 금액</div>
-                    <div className="cleaners-quotations-preparation-save-label">견적 설명</div>
+        {sortedTemplates.map((t) => {
+          const isEditing = editingId === t.id;
+          return (
+            <div 
+              className={`cleaners-quotations-preparation-save-card ${isEditing ? 'is-editing' : ''}`} 
+              key={t.id} // Key가 제대로 들어가 있는지 확인
+              onClick={() => handleCardClick(t.id)}
+            >
+              <div className="cleaners-quotations-preparation-save-card-grid">
+                <div className="cleaners-quotations-preparation-save-label-col">
+                  <div className="cleaners-quotations-preparation-save-label">견적 금액</div>
+                  <div className="cleaners-quotations-preparation-save-label">견적 설명</div>
+                </div>
+
+                <div className="cleaners-quotations-preparation-save-value-col">
+                  <div className="cleaners-quotations-preparation-save-price">
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        className="edit-input-price"
+                        value={t.estimatedAmount ?? ""} // nullish coalescing 사용
+                        onChange={(e) => onChangeTemplate(t.id, "estimatedAmount", Number(e.target.value))}
+                        autoFocus
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <>{money(t.estimatedAmount || 0)} <span className="cleaners-quotations-preparation-save-won">원</span></>
+                    )}
                   </div>
 
-                  <div className="cleaners-quotations-preparation-save-value-col">
-                    <div className="cleaners-quotations-preparation-save-price">
-                      {isEditing ? (
-                        <input
-                          type="number"
-                          className="edit-input-price"
-                          value={t.price}
-                          onChange={(e) => onChangeTemplate(t.id, "price", Number(e.target.value))}
-                          autoFocus
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      ) : (
-                        <>{money(t.price)} <span className="cleaners-quotations-preparation-save-won">원</span></>
-                      )}
-                    </div>
-
-                    <div className={`cleaners-quotations-preparation-save-desc ${t.collapsed ? "is-collapsed" : ""}`}>
-                      {isEditing ? (
-                        <textarea
-                          className="edit-textarea-desc"
-                          value={t.desc}
-                          onChange={(e) => onChangeTemplate(t.id, "desc", e.target.value)}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      ) : (
-                        t.desc
-                      )}
-                    </div>
+                  <div className={`cleaners-quotations-preparation-save-desc ${t.collapsed ? "is-collapsed" : ""}`}>
+                    {isEditing ? (
+                      <textarea
+                        className="edit-textarea-description"
+                        value={t.description || ""} // 빈 값 처리
+                        onChange={(e) => onChangeTemplate(t.id, "desccription", e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      t.description
+                    )}
+                  </div>
                     
                     {isEditing && (
                       <button className="edit-done-btn" onClick={(e) => {
@@ -165,20 +196,16 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
                   </div>
 
                   <div className="cleaners-quotations-preparation-save-action-col" onClick={(e) => e.stopPropagation()}>
-                    <button type="button" className="cleaners-quotations-preparation-save-link-btn" onClick={() => onTempSave(t.id)}>
-                      저장
-                    </button>
-                    <button type="button" className="cleaners-quotations-preparation-save-apply-btn" onClick={() => onApplyNow(t)}>
-                      바로 적용
-                    </button>
-                    <button type="button" className="cleaners-quotations-preparation-save-del-btn" onClick={() => onDelete(t.id)}>
-                      <IoIosClose size={30} />
-                    </button>
-                  </div>
+                  <button type="button" className="cleaners-quotations-preparation-save-link-btn" onClick={() => onTempSave(t.id)}>저장</button>
+                  <button type="button" className="cleaners-quotations-preparation-save-apply-btn" onClick={() => onApplyNow(t)}>바로 적용</button>
+                  <button type="button" className="cleaners-quotations-preparation-save-del-btn" onClick={() => onDelete(t.id)}>
+                    <IoIosClose size={30} />
+                  </button>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
 
           <button type="button" className="cleaners-quotations-preparation-save-add-card" onClick={onAddTemplate}>
             <IoMdAddCircleOutline size={30} />

@@ -6,6 +6,7 @@ const initialState = {
   reservation: null,
   cleanerLike: null,
   accountInfo: null,
+  templates: [],
   loading: false,
 };
 
@@ -20,6 +21,10 @@ const slice = createSlice({
       state.accountInfo = null; //  clear 시 계좌 정보도 초기화
       state.loading = false;
       state.error = null;
+    },
+    clearCleaners: (state) => {
+      // 초기화 로직
+      state.templates = [];
     },
   },
   extraReducers: (builder) => {
@@ -63,7 +68,6 @@ const slice = createSlice({
 
     // 2. 요청 성공
     .addCase(cleanersThunk.titleThunk.fulfilled, (state, action) => {
-      console.log("Slice에 도착한 실제 페이로드:", action.payload);
 
       // 데이터 구조가 action.payload.data.result 또는 action.payload.result 일 수 있습니다.
       // 안전하게 데이터를 추출하기 위해 아래와 같이 작성합니다.
@@ -80,8 +84,34 @@ const slice = createSlice({
       state.error = null;
     })
 
+    //templates 슬라이스
+    .addCase(cleanersThunk.fetchTemplatesThunk.pending, (state) => {
+      console.log("로딩 시작...");
+    })
+    // cleanersSlice.js
+    .addCase(cleanersThunk.fetchTemplatesThunk.fulfilled, (state, action) => {
+      console.log("Slice에 도착한 실제 페이로드:", action.payload);
+
+      // 1. 만약 action.payload 자체가 배열이라면 (현재 로그 상황)
+      if (Array.isArray(action.payload)) {
+        state.templates = action.payload;
+      } 
+      // 2. 만약 기존처럼 data.templates 안에 들어있을 경우를 대비
+      else if (action.payload?.data?.templates) {
+        state.templates = action.payload.data.templates;
+      }
+      // 3. 그 외 예외 처리
+      else {
+        console.warn("데이터를 찾을 수 없습니다.");
+      }
+    })
+    .addCase(cleanersThunk.fetchTemplatesThunk.rejected, (state, action) => {
+      console.log("실패 상세 사유(payload):", action.payload);
+      console.log("실패 에러 객체(error):", action.error);
+      console.error("실패 사유:", action.error.message);
+    });
   },  
-  
+
 });
 
 export const {
