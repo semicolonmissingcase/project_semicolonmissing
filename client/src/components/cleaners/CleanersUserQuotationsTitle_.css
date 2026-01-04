@@ -12,18 +12,8 @@
 
 .cleaners-user-quotations-title-small-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
-}
-
-.cleaners-user-quotations-title-button-wrapper {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  padding: 2rem 0; /* 위아래 여백 추가 */
 }
 
 .cleaners-user-quotations-title-status-selected {
@@ -36,7 +26,7 @@
 }
 
 .cleaners-user-quotations-title-wrapper-selected {
-  background-color: #FFFDF9 !important;
+  background-color: #FFFDF9 !important; /* 요청하신 연한 노란색/아이보리 톤 */
   border: 1px solid var(--color-gray);
   border-radius: 15px;
   padding: 1rem;
@@ -77,13 +67,14 @@
 }
 
 .cleaners-user-quotations-title-wrapper-rejected {
-  background-color: #FFFDF9 !important;
+  background-color: #F9F9FB;
   border: 1px solid var(--color-gray);
   border-radius: 15px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
 }
 
 .cleaners-user-quotations-title-status-rejected {
@@ -108,7 +99,7 @@
   gap: 0.3rem;
 }
 
-.cleaners-user-quotations-title-rejected-place {
+.cleaners-user-quotations-title-reejected-place {
   display: flex;
   align-items: center;
   gap: 0.3rem;

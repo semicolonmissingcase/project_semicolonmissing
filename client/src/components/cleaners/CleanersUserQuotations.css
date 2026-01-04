@@ -160,6 +160,14 @@
   outline: none;
 }
 
+.cleaners-user-quotations-input-layout-custom {
+  padding: 10px;
+  border: solid 1px var(--color-gray);
+  font-size: 18px;
+  border-radius: 5px;
+  flex: 1;
+}
+
 .cleaners-user-quotations-toggle-question {
   cursor: pointer;
   user-select: none;

@@ -3,12 +3,11 @@ import axiosInstance from "../../api/axiosInstance.js";
 
 const titleThunk = createAsyncThunk(
   'cleaners/titleThunk',
-  async (_, { rejectWithValue }) => { // ⬅️ 리스트 조회이므로 id 파라미터를 제거해보세요
+  async (cleanerId, { rejectWithValue }) => { // 컴포넌트에서 cleanerId를 보낸다고 가정
     try {
-      // ⚠️ 만약 백엔드에서 '목록 조회' API 주소가 따로 있다면 그 주소를 써야 합니다.
+
       const url = `/api/owners/quotations`; 
       const response = await axiosInstance.get(url);
-      
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -45,7 +44,6 @@ const showThunk = createAsyncThunk(
   }
 );
 
-
 const accountInfoThunk = createAsyncThunk(
   // Thunk 액션 타입: accounts 슬라이스에서 계정 정보 조회
   'accounts/fetchAccountInfo',
@@ -68,6 +66,6 @@ const accountInfoThunk = createAsyncThunk(
 export default {
   titleThunk,
   submitQuotation,
-  showThunk,         
+  showThunk,        
   accountInfoThunk, 
 };

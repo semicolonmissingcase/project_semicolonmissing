@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import cleanersThunk from "../../store/thunks/cleanersThunk.js";
 import { clearCleaners } from "../../store/slices/cleanersSlice.js";
-import CleanersQuotationsPreparationSave from "./CleanersQuotationsPreparationSave";
+import CleanersQuotationsPreparationSave from "./CleanersQuotationsPreparationSave.jsx";
 import "./CleanersUserQuotations.css";
 import styles from "./CleanersUserQuotations.module.css";
 
@@ -197,7 +197,7 @@ function CleanersUserQuoteListDetails () {
             <label htmlFor="estimated_amount">견적 금액</label>
             <input 
               type="number" 
-              className="cleaners-user-quotations-input-layout input-remove-arrows" 
+              className="cleaners-user-quotations-input-layout-custom input-remove-arrows" 
               id="estimated_amount"
               value={quoteData.estimated_amount}
               onChange={(e) => setQuoteData({ ...quoteData, estimated_amount: e.target.value })}

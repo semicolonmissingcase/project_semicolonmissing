@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-select'; 
+import { IoMdAddCircleOutline } from "react-icons/io"; 
 import cleanersThunk from "../../store/thunks/cleanersThunk.js";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { clearCleaners } from "../../store/slices/cleanersSlice.js";
@@ -9,126 +11,176 @@ import { MdHomeWork } from "react-icons/md";
 import { LuCalendarClock } from "react-icons/lu";
 import './CleanersUserQuotationsTitle.css';
 
+// 일단 더 살펴보기.. 동의/승인 무슨 차이이고.. 취소/반려 무슨 차이인지.. ??
+const ReservationStatus = {
+  REQUEST: '요청',
+  APPROVED: '승인',
+  // ACCEPTED: '동의',
+  IN_PROGRESS: '진행중',
+  COMPLETED: '완료',
+  CANCELED: '취소',
+  REJECTED: '반려'
+};
+
+const filterOptions = [
+  { value: 'ALL', label: '전체 보기' },
+  { value: '요청', label: '요청' }, // DB 값에 맞춰 한글로 변경
+  { value: 'SELECTED', label: '지정' },
+  { value: '승인', label: '승인' },
+  // { value: '동의', label: '동의' },
+  { value: '진행중', label: '진행 중' },
+  { value: '완료', label: '완료' },
+  { value: '취소', label: '취소/반려' },
+];
+
 function CleanersUserQuotationsTitle() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { submissions, loading, user } = useSelector((state) => state.cleaners);
+  
+  const [filter, setFilter] = useState(filterOptions[0]); 
+  const [visibleCount, setVisibleCount] = useState(4); 
 
   useEffect(() => {
     dispatch(cleanersThunk.titleThunk());
     return () => dispatch(clearCleaners());
   }, [dispatch]);
 
-  if (loading) return <div className="loading">로딩 중...</div>;
+  const processedData = useMemo(() => {
+    const dataArray = Array.isArray(submissions) ? submissions : (submissions?.submissions || []);
+    if (dataArray.length === 0) return [];
 
-// CleanersUserQuotationsTitle.jsx 내부
+    const now = new Date();
+    const limitDate = new Date();
+    limitDate.setDate(now.getDate() - 3);
 
-// 1. 더 안전하고 유연한 중복 제거 로직
-const uniqueSubmissions = submissions ? Array.from(
-  submissions.reduce((map, current) => {
-    // 백엔드에서 reservation_id 또는 reservationId 중 어떤 이름으로 오는지 확인
-    const rId = current.reservation_id || current.reservationId;
-
-    if (rId) {
-      if (!map.has(rId)) {
-        map.set(rId, current);
+    const uniqueMap = new Map();
+    dataArray.forEach((item, index) => {
+      const rId = item.reservationId || item.reservation?.id || `temp-${index}`;
+      if (!uniqueMap.has(rId)) {
+        const resDateStr = item.reservation?.date ? `${item.reservation.date} ${item.reservation.time || '00:00:00'}` : null;
+        if (resDateStr) {
+          const resDate = new Date(resDateStr);
+          if (resDate >= limitDate) uniqueMap.set(rId, item);
+        } else {
+          uniqueMap.set(rId, item);
+        }
       }
-    }
-    return map;
-  }, new Map()).values()
-  ) : [];
+    });
 
-  // 2. 디버깅: 어떤 키로 데이터가 오는지 확인하기 위해 첫 번째 데이터 출력
-  if (submissions && submissions.length > 0) {
-    console.log("데이터 샘플 (키 이름 확인용):", submissions[0]);
-  }
-  console.log("중복 제거 후 개수:", uniqueSubmissions.length);
+    return Array.from(uniqueMap.values()).sort((a, b) => {
+      return new Date(`${b.reservation?.date} ${b.reservation?.time}`) - 
+             new Date(`${a.reservation?.date} ${a.reservation?.time}`);
+    });
+  }, [submissions]);
 
-  // 2. 상태(Status)에 따른 CSS 클래스 매핑 함수
-  const getStatusClass = (status) => {
-    switch (status) {
-      case "요청": return "pending"; // 대기중
-      case "승인": return "selected"; // 지정됨
-      case "거절": return "rejected"; // 거절됨
-      default: return "pending";
+  // 🟢 데이터 구조에 맞게 수정한 상태 판별 로직
+  const getStatusInfo = (item) => {
+    const res = item.reservation;
+    const currentStatus = res?.status; // 예: "요청"
+    const likes = res?.owner?.likes;
+    const isLiked = Array.isArray(likes) && likes.length > 0;
+
+    // "지정": 찜이 있고 상태가 '요청' 혹은 '승인'일 때
+    if (isLiked && (currentStatus === ReservationStatus.REQUEST || currentStatus === ReservationStatus.APPROVED)) {
+      return { type: "selected", label: "지정" };
     }
+    // "취소/반려"
+    if (currentStatus === ReservationStatus.CANCELED || currentStatus === ReservationStatus.REJECTED) {
+      return { type: "rejected", label: currentStatus };
+    }
+    // "요청" (찜 없음)
+    if (currentStatus === ReservationStatus.REQUEST) {
+      return { type: "pending", label: ReservationStatus.REQUEST };
+    }
+    // 기타 (진행중, 완료 등)
+    return { type: "pending", label: currentStatus || "대기" };
   };
 
-const handleCardClick = (id) => {
-  navigate(`/cleaners/quotations/${id}`);
-};
+  const filteredSubmissions = useMemo(() => {
+    if (filter.value === 'ALL') return processedData;
+    return processedData.filter(item => {
+      const info = getStatusInfo(item);
+      const status = item.reservation?.status;
+      if (filter.value === 'SELECTED') return info.type === 'selected';
+      if (filter.value === '취소') return status === '취소' || status === '반려';
+      return status === filter.value;
+    });
+  }, [processedData, filter]);
 
- return (
-    <div className="all-container cleaners-user-quotations-title-container">
-      <span className="cleaners-user-quotations-title-text">
-        안녕하세요, {user?.name || "기사"} 님! 요청 의뢰서입니다.
-      </span>
+  if (loading) return <div className="loading">로딩 중...</div>;
+
+  return (
+    <div className="all-container cleaners-user-quotations-title-container"> 
+      
+        <span className="cleaners-user-quotations-title-text">
+          안녕하세요, {user?.name || "기사"} 님! 요청 의뢰서입니다.
+        </span>
+        <div style={{ width: '140px' }}>
+          <Select
+            options={filterOptions} 
+            value={filter}
+            onChange={(sel) => { setFilter(sel); setVisibleCount(4); }}
+            isSearchable={false}
+          />
+        </div>
 
       <div className="cleaners-user-quotations-title-small-container">
-        {uniqueSubmissions.length > 0 ? (
-          uniqueSubmissions.slice(0, 4).map((item) => {
-            const res = item.reservation;
-            const store = res?.store;
-            const owner = res?.owner;
-            const statusType = getStatusClass(res?.status); // 'selected', 'rejected', 'pending' 중 하나
+          {filteredSubmissions.length > 0 ? (
+            <>
+              {filteredSubmissions.slice(0, visibleCount).map((item) => {
+                const { type, label } = getStatusInfo(item);
+                const res = item.reservation;
 
-            return (
-              <div 
-                key={item.reservation_id} 
-                className={`cleaners-user-quotations-title-wrapper-${statusType}`}
-                onClick={() => handleCardClick(res.id)}
-                style={{ cursor: 'pointer' }}
-              >
-                {/* 상단 상태 (지정/거절/대기) */}
-                <div className={`cleaners-user-quotations-title-status-${statusType}`}>
-                  {res?.status || "대기"}
-                </div>
-
-                {/* 카드 내부 수직 레이아웃 */}
-                <div className={`cleaners-user-quotations-title-vertical-line-${statusType}-layout`}>
-                  
-                  {/* 주소 정보 */}
-                  <div className={`cleaners-user-quotations-title-location-${statusType}-location`}>
-                    <FaMapMarkerAlt size={25} /> {store ? `${store.addr1} ${store.addr2}` : "주소 정보 없음"}
+                return (
+                  <div 
+                    key={res?.id || Math.random()} 
+                    className={`cleaners-user-quotations-title-wrapper-${type}`}
+                    onClick={() => navigate(`/cleaners/quotations/${res?.id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className={`cleaners-user-quotations-title-status-${type}`}>
+                      {label}
+                    </div>
+                    <div className={`cleaners-user-quotations-title-vertical-line-${type}-layout`}>
+                      <div className={`cleaners-user-quotations-title-${type}-location`}>
+                        <FaMapMarkerAlt size={25} /> {res?.store?.addr1 || "정보 없음"}
+                      </div>
+                      <div className={`cleaners-user-quotations-title-${type}-place`}>
+                        <MdHomeWork size={25} /> {res?.store?.name || "상점명 없음"}
+                      </div>
+                      <div className={`cleaners-user-quotations-title-${type}-user`}>
+                        <CiUser size={25} /> {res?.owner?.name || "점주"}
+                      </div>
+                      <div className={`cleaners-user-quotations-title-${type}-date`}>
+                        <LuCalendarClock size={25} /> {res?.date} {res?.time?.substring(0, 5)}
+                      </div>
+                      <div className="cleaners-user-quotations-title-img-frame">
+                        {res?.owner?.profile ? (
+                          <img src={res.owner.profile} alt="profile" className="cleaners-user-quotations-title-img" />
+                        ) : (
+                          <div className="cleaners-user-quotations-title-profile-placeholder" />
+                        )}
+                      </div>
+                    </div>
                   </div>
-
-                  {/* 업체명 */}
-                  <div className={`cleaners-user-quotations-title-place-${statusType}-place`}>
-                    <MdHomeWork size={25} /> {store?.name || "상점명 없음"}
-                  </div>
-
-                  {/* 점주명 */}
-                  <div className={`cleaners-user-quotations-title-user-${statusType}-user`}>
-                    <CiUser size={25} /> {owner?.name || "점주명 없음"}
-                  </div>
-
-                  {/* 예약 일시 */}
-                  <div className={`cleaners-user-quotations-title-date-${statusType}-date`}>
-                    <LuCalendarClock size={25} /> {res?.date} {res?.time?.substring(0, 5)}
-                  </div>
+                );
+              })} 
+              {visibleCount < filteredSubmissions.length && (
+                <div className="cleaners-user-quotations-title-button-wrapper" onClick={() => setVisibleCount(c => c + 4)}>
+                  <IoMdAddCircleOutline size={45} color="var(--color-blue)" />
+                  <p style={{ marginTop: '5px', color: 'var(--color-blue)' }}>더 보기</p>
                 </div>
-
-                {/* 이미지 프레임 (점주 프로필) */}
-                <div className="cleaners-user-quotations-title-img-frame">
-                  {owner?.profile ? (
-                    <img src={owner.profile} alt="프로필" className="cleaners-user-quotations-title-img-selected" />
-                  ) : (
-                    <span>점주님 프로필 사진</span>
-                  )}
-                </div>
-
-                {/* 하단 특이사항 (CSS에 없어서 텍스트로 추가) */}
-                <div style={{ textAlign: 'center', fontSize: '0.9rem', color: '#666' }}>
-                  {item.answer_text || "특이사항 없음"}
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <p>의뢰서 내역이 없습니다.</p>
-        )}
+              )}
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '100px 0', color: '#999', width: '100%' }}>
+              표시할 요청 내역이 없습니다.
+            </div>
+          )}
       </div>
     </div>
   );
 }
+
 export default CleanersUserQuotationsTitle;

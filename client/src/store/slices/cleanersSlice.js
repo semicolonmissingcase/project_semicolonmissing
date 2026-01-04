@@ -76,10 +76,12 @@ const slice = createSlice({
       state.reservation = result.reservation || null;
       state.cleanerLike = result.cleanerLike || null;
       
-      state.loading = false; // 로딩을 여기서 확실히 꺼줘야 합니다.
+      state.loading = false;
       state.error = null;
     })
+
   },  
+  
 });
 
 export const {

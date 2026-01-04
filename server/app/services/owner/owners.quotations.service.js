@@ -10,12 +10,11 @@ import ownersQuotationsRepository from "../../repositories/owner/owners.quotatio
 
 /**
  * 견적 요청서 전체 목록 (CleanersUserQuotationsTitle용)
- */
-async function index() {
-  // ID를 넘기지 않아야 Repository에서 전체 조회가 일어납니다.
-  const submissions = await ownersQuotationsRepository.submissionFindByReservationId(null, null);
+ */// cleanerId를 인자로 받도록 수정
+async function index(cleanerId) {
+  // 세 번째 인자로 cleanerId 전달
+  const submissions = await ownersQuotationsRepository.submissionFindByReservationId(null, null, cleanerId);
   
-  // 데이터가 없을 경우를 대비해 빈 배열 보장
   return { submissions: submissions || [] };
 }
 

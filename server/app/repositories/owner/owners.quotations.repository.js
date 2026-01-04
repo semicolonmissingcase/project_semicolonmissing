@@ -35,18 +35,29 @@ async function reservationFindByIdAndStatusIsRequest(t = null, id) {
   );
 }
 
-async function submissionFindByReservationId(t = null, id) {
+// cleanerId 파라미터 추가
+async function submissionFindByReservationId(t = null, id, cleanerId = null) {
   return await Submission.findAll(
     {
-      // id가 있으면 특정 예약만, 없으면 전체를 조회하도록 처리 (index용)
       where: id ? { reservation_id: id } : {}, 
       include: [
         {
           model: Reservation,
-          as: 'reservation', // 모델 관계 설정에 따른 alias 확인 필요
+          as: 'reservation',
           include: [
             { model: Store, as: 'store' },
-            { model: Owner, as: 'owner' }
+            { 
+              model: Owner, 
+              as: 'owner',
+              include: [
+                {
+                  model: Like,
+                  as: 'likes', // 모델 정의 시 설정한 alias 확인 필요
+                  required: false, // 찜이 없어도 데이터는 나와야 하므로 false
+                  where: cleanerId ? { cleaner_id: cleanerId } : {}
+                }
+              ]
+            }
           ]
         },
         {
