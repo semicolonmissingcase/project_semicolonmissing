@@ -204,7 +204,8 @@ async function getChatRoomWithSidebar(roomId, userRole) {
         wishDate: reservationDetail?.date,
         wishTime: reservationDetail?.time,
         estimateContent: roomPlain.estimate?.description,
-        
+        reservationId: reservationId,
+
         // 정렬된 QA 리스트
         qaList: submissions?.map(s => ({
           question: s.question?.content,
