@@ -3,14 +3,13 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default function Editor({ onContentChange }) {
   
-  // 기존의 useEffect(스크립트 로드 및 iframe 스타일 주입) 로직은 
-  // 라이브러리 자체에서 처리하므로 모두 삭제되었습니다.
-
   return (
     <div className="smart-editor-wrapper" style={{ width: '100%' }}>
       <BaseCKEditor
         editor={ClassicEditor}
         config={{
+          // 라이센스 키
+          licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Njg3ODA3OTksImp0aSI6IjBhYWQxMDFkLTg1MjItNGM5YS1iYjI4LWRlNmJiZDQwYThhOCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjU0N2FkNzRjIn0.Vp-pzM9HmSXfCs8ug_GCqdWM4YRPB-ZvFkF7e-vWmne4JPDta0nlW2xxWf6BN8ioq9SBflxRXgjJzT3ITUzB3Q',
           placeholder: "이미지를 드래그하거나 버튼을 눌러 추가해보세요.",
           toolbar: [
             'heading', '|', 

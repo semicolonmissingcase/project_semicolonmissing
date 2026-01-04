@@ -63,13 +63,13 @@ export default function HeaderMenu({ isOpen, onClose }) {
             // --- 점주(Owner) 메뉴 ---
             <>
               <p className="header-menu-mobile-menu-item" onClick={() => goTo('/chatlist')}>채팅</p>
-              <p className="header-menu-mobile-menu-item" onClick={() => goTo('/request-quote')}>견적요청</p>
+              <p className="header-menu-mobile-menu-item" onClick={() => goTo('owners/reservation')}>견적요청</p>
             </>
           ) : user?.role === 'CLEANER' ? (
             // --- 기사님(Cleaner) 메뉴 ---
             <>
               <p className="header-menu-mobile-menu-item" onClick={() => goTo('/chatlist')}>채팅</p>
-              <p className="header-menu-mobile-menu-item" onClick={() => goTo('/new-requests')}>신규요청</p>
+              <p className="header-menu-mobile-menu-item" onClick={() => goTo('cleaner/quotations')}>신규요청</p>
             </>
           ) : null}
         </div>

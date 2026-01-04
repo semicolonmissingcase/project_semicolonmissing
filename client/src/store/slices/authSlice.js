@@ -59,12 +59,9 @@ const slice = createSlice({
         state.error = null;
       })
       .addCase(uploadProfileImageThunk.fulfilled, (state, action) => {
+        const { user } = action.payload.data;
         state.isLoading = false;
-        const newImageUrl = action.payload.data.profileImageUrl;
-        // user 상태 존재, 새로운 이미지 경로 유효
-        if(state.user && newImageUrl) {
-          state.user.profile = newImageUrl;
-        }
+        state.user = user;
       })
       .addCase(uploadProfileImageThunk.rejected, (state, action) => {
         state.isLoading = false;

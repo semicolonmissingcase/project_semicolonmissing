@@ -13,7 +13,7 @@ import { getOwnerStats } from '../../../api/axiosOwner.js';
 export default function OwnerMyPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const APP_SERVER_URL = import.meta.env.APP_SERVER_URL
+  const APP_SERVER_URL = import.meta.env.VATE_APP_SERVER_URL
   const { user, loading } = useSelector((state) => state.auth);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -48,9 +48,10 @@ export default function OwnerMyPage() {
 
   // 미리보기 업뎃
   useEffect(() => {
-    if(user && user.profile) {
-      
-      setPreviewUrl(APP_SERVER_URL + user.profile);
+    setIsModalOpen(false);
+    setSelectedFile(null);
+    if(user && user.profile) {      
+      setPreviewUrl(user.profile);
     } else {
       setPreviewUrl('/icons/default-profile.png');
     }
@@ -92,8 +93,6 @@ export default function OwnerMyPage() {
       alert('새로운 프로필 이미지를 선택해주세요.');
       return
     }
-    const formData = new FormData();
-    formData.append('profile', selectedFile);
 
     dispatch(uploadProfileImageThunk(selectedFile))
       .unwrap()

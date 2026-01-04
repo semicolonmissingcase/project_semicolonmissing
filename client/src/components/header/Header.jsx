@@ -80,12 +80,12 @@ export default function Header() {
 
   // 점주(owner)
   function ownerQuteList() {
-    navigate('cleaners/userquotelistdetails'); // TODO: 라우트 다시 확인하기
+    navigate('owners/reservation'); 
   }
 
   // 기사님(cleaners)
   function cleanerQuotelist() {
-    navigate('cleaners/userquotelist');
+    navigate('cleaners/quotations');
   }
 
   // 모바일 네비게이션 관련
@@ -127,9 +127,9 @@ export default function Header() {
                     <div className='header-profile-icon'
                       onClick={() => setIsDropDown((prev) => !prev)}>
                       {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
-                      {user?.profileImage ? (
+                      {user?.profile ? (
                         <img 
-                          src={user.profileImage} 
+                          src={user.profile} 
                           alt="프로필" 
                           className='header-profile-img'
                         />
@@ -162,9 +162,9 @@ export default function Header() {
                     <div className='header-profile-icon'
                       onClick={() => setIsDropDown((prev) => !prev)}>
                       {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
-                      {user?.profileImage ? (
+                      {user?.profile ? (
                         <img 
-                          src={user.profileImage} 
+                          src={user.profile} 
                           alt="프로필" 
                           className='header-profile-img'
                         />

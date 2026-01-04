@@ -46,32 +46,6 @@ async function registerOwner(req, res, next) {
 }
 
 /**
- * 점주 프로필 이미지 업데이트 요청 처리
- * @param {import("express").Request} req 
- * @param {import("express").Response} res 
- * @param {import("express").NextFunction} next 
- * @returns 
- */
-async function uploadProfileImage(req, res, next) {
-  try {
-    const ownerId = req.user.id;
-    const { filename } = req.file;
-    const basePath = process.env.ACCESS_FILE_USER_PROFILE_PATH;
-
-    const relativeFilePath = path.posix.join(basePath, filename);
-
-    await ownerUserService.updateProfile(ownerId, relativeFilePath);
-
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {
-      profileImageUrl: relativeFilePath,
-      message: '프로필 이미지가 성공적으로 업데이트되었습니다.'
-    }));
-  } catch (error) {
-    next(error);
-  }
-}
-
-/**
  * 점주 마이페이지 통계 조회
  * @param {import("express").Request} req 
  * @param {import("express").Response} res 
@@ -96,7 +70,7 @@ async function getOwnerStats(req, res, next) {
  * @param {import("express").NextFunction} next 
  * @returns 
  */
-async function getOwnerReservations(req, res, next) {
+async function getEstimateByOwnerId(req, res, next) {
   try {
     const ownerId = req.user.id;
     const stats = await ownerUserService.getOwnerReservations(ownerId);
@@ -109,7 +83,6 @@ async function getOwnerReservations(req, res, next) {
 
 export default {
   registerOwner,
-  uploadProfileImage,
   getOwnerStats,
-  getOwnerReservations,
+  getEstimateByOwnerId,
 }

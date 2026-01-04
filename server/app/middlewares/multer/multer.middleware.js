@@ -7,9 +7,13 @@
 import postUploader from "./uploaders/post.uploader.js";
 import profileUploader from "./uploaders/profile.uploader.js";
 import chatUpload from "./uploaders/chat.upload.js";
+import editorImageUploader from "./uploaders/editorImage.uploader.js";
+import inquiryImageUploader from "./uploaders/inquiryImage.uploader.js"
 
 export default {
   postUploader,
   profileUploader,
-  chatUpload
+  chatUpload,
+  editorImageUploader,
+  inquiryImageUploader,
 }

@@ -1,35 +1,49 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import "./Result.css";
 
-export default function Result () {
+export default function Result() {
   const navigate = useNavigate();
+  const location = useLocation();
   
-  function mainPage() {
-    navigate('/');
-  }
+  // location.state에서 데이터 가져오기
+  const {
+    title = '작업이 완료되었습니다.',
+    message = '성공적으로 처리되었습니다.',
+    imgSrc = '/icons/success.png',
+    button1Text = '홈으로 가기',
+    button1Path = '/',
+    button2Text = '로그인으로 가기',
+    button2Path = '/login',
+    showButton2 = true,
+  } = location.state || {};
 
-  function loginPage() {
-    navigate('/login');
-  }
+  // location.state가 없을 경우 리다이렉트 (잘못된 접근 방지)
+  useEffect(() => {
+    if (!location.state) {
+      navigate('/', { replace: true });
+    }
+  }, [location.state, navigate]);
 
   return (
     <div className="all-container result-container">
       <div className="result-box">
-        <div style={{ backgroundImage: `url('/icons/success.png')` }} className="result-img"></div>
+        <div style={{ backgroundImage: `url(${imgSrc})` }} className="result-img"></div>
         <div className="result-text">
-          <h3>회원가입이 완료되었습니다.</h3>
-          <p>안녕하세요 점주님!<br />
-            다양한 기사님을 만나보세요.</p>
+          <h3>{title}</h3>
+          <p dangerouslySetInnerHTML={{ __html: message }}></p>
         </div>
       </div>
       <div className="result-btn-containver">
-        <button type="button" className="bg-light btn-medium" onClick={mainPage}>
-          홈으로 가기
+        <button type="button" className="bg-light btn-medium" onClick={() => navigate(button1Path)}>
+          {button1Text}
         </button>
-        <button type="button" className="bg-blue btn-medium" onClick={loginPage}>
-          로그인 가기
-        </button>
+        {showButton2 && (
+          <button type="button" className="bg-blue btn-medium" onClick={() => navigate(button2Path)}>
+            {button2Text}
+          </button>
+        )}
       </div>
     </div>
   );
-};
+}

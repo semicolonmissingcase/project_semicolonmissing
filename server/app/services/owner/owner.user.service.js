@@ -81,22 +81,6 @@ async function store(data) {
 }
 
 /**
- * 점주 프로필 이미지 업데이트
- * @param {number} ownerId 
- * @param {string} profileImgaUrl 
- * @returns 
- */
-async function updateProfile(ownerId, profileImageUrl) {
-  await db.sequelize.transaction(async(t) => {
-    await ownerUserRepository.update(t, ownerId, {
-      profile: profileImageUrl,
-    });
-  });
-
-  return;
-}
-
-/**
  * 점주 통계 조회
  * @param {number} ownerId 
  */
@@ -114,7 +98,6 @@ async function getOwnerReservations(ownerId) {
 
 export default {
   store,
-  updateProfile,
   getOwnerStats,
   getOwnerReservations,
 }

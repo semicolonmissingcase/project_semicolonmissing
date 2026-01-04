@@ -21,8 +21,9 @@ import CleanersUserQuoteListTitle from "../components/cleaners/CleanersUserQuote
 import CleanersUserQuoteListDetails from "../components/cleaners/CleanersUserQuoteListDetails.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
-import OwnerMyPage from "../components/owner/maypage/OwnerMyPage.jsx";
+import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
 import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
+import OwnerReservation from "../components/owner/OwnerReservation.jsx";
 // 관리자 관련
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
@@ -139,7 +140,12 @@ const router = createBrowserRouter([
             // 점주 정보 수정페이지
             path: 'info',
             element: <OwnerInfo />
-          }
+          },
+          {
+            // 점주 견적 요청서 작성 페이지
+            path: 'reservation',
+            element: <OwnerReservation />,
+          },
         ]
       },
       {

@@ -5,31 +5,20 @@
  */
 
 import ownerInquiryRepository from "../../repositories/owner/owner.inquiry.repository.js";
-import {  } from "../../../configs/responseCode.config.js";
 
 /**
- * 점주 새로운 문의 생성
+ * 문의 생성
  * @param {number} ownerId 
  * @param {string} title 
  * @param {string} content 
  * @returns 
  */
-async function createInquiry(ownerId, title, content) {
-  const inquiryData = { ownerId, title, content };
-  const newInquiry = await ownerInquiryRepository.createInquiry(inquiryData);
-  
-  if(!newInquiry) {
-    throw myErrorError('문의 생성에 실패했습니다.')
-  }
+async function createInquiry(inquiryData) {
+  const finalInquiryData = { ...inquiryData, status: '대기중' };
 
-  return {
-    id: newInquiry.id,
-    ownerId: newInquiry.ownerId,
-    title: newInquiry.title,
-    content: newInquiry.content,
-    status: newInquiry.status,
-    createAt: newInquiry.createdAt,
-  }    
+  console.log("--- [DEBUG] 서비스에서 레포지토리로 전달될 finalInquiryData:", finalInquiryData);
+  const newInquiry = await ownerInquiryRepository.createInquiry(finalInquiryData);
+  return newInquiry;
 }
 
 /**
@@ -82,8 +71,30 @@ async function  getInquiryDetailsForOwner(inquiryId, ownerId) {
   };
 }
 
+/**
+ * 모든 문의 목록 조회
+ */
+async function getAllInquiries(page = 1, pageSize = 10) {
+  const limit = parseInt(pageSize);
+  const offset = (parseInt(page) - 1) * limit;
+
+  const { count, rows } = await ownerInquiryRepository.findAllInquiries(limit, offset);
+  
+  return { count, rows };
+}
+
+/**
+ * 점주 내 리뷰 목록 조회
+ */
+async function getOwnerReviews(ownerId) {
+  const reviews = await ownerInquiryRepository.findReviewsByOwnerId(ownerId);
+  return reviews;
+}
+
 export default {
   createInquiry,
   getInquiriesByOwner,
   getInquiryDetailsForOwner,
+  getAllInquiries,
+  getOwnerReviews,
 }

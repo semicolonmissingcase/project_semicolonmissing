@@ -37,7 +37,7 @@ app.use(cors({
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
 app.use('/storage/images/posts', express.static('storage/images/posts'));
-app.use('/storage/images/profile', express.static('storage/images/profiles'));
+app.use('/storage/images/profiles', express.static('storage/images/profiles'));
 app.use('/storage/images/chat', express.static('storage/images/chat'));
 
 // -----------------

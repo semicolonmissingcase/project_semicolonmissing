@@ -7,14 +7,19 @@ export default function FavoriteButton({ cleanerId, initialIsFavorited, onToggle
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
   const [loading, setLoading] = useState(false); // API 호출 로딩 상태
 
-  const handleToggleFavorite = async () => {
+  const handleToggleFavorite = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    setLoading(true);
+
     try {
       const response = await toggleCleanerFavorite(cleanerId);
+
       setIsFavorited(response.isFavorited);
 
-      setIsFavorited(prev => !prev); // UI 상태 먼저 변경
       if (onToggle) {
-        onToggle(response.isFavorited);
+        onToggle(cleanerId, response.isFavorited);
       }
     } catch (error) {
       console.error('좋아요 상태 토글 실패:', error);
@@ -26,9 +31,10 @@ export default function FavoriteButton({ cleanerId, initialIsFavorited, onToggle
   return (
     <button
       onClick={handleToggleFavorite}
+      disabled={loading}
       className={`favoritebtn-button ${isFavorited ? 'favoritebtn-favorited' : ''}`}
     >
-      {isFavorited ? <IoMdHeartEmpty className="favoritebtn-heart-icon favoritebtn-favorited" /> : <IoIosHeart className="heart-icon" />}
+      {isFavorited ? <IoIosHeart className="favoritebtn-heart-icon favoritebtn-favorited" /> : <IoMdHeartEmpty className="favoritebtn-heart-icon" />}
       {loading && <span className="favoritebtn-loading-spinner"></span>}
     </button>
   )

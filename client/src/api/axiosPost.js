@@ -3,14 +3,14 @@ import axiosInstance from "./axiosInstance.js";
 const POST_API_URL = '/api/posts';
 
 // 문의사항 작성(회원)
-export const createInquiry = async (inquiryData) => {
-  const response = await axiosInstance.post(`${POST_API_URL}/inquiries`, inquiryData);
+export const createInquiry = async (formData) => {
+  const response = await axiosInstance.post(`${POST_API_URL}/inquiries`, formData);
   return response.data.data;
 };
 
 // 문의사항 생성(비회원)
-export const createGuestInquiry = async (guestInquiryData) => {
-  const response = await axiosInstance.post(`${POST_API_URL}/inquiries`, guestInquiryData);
+export const createGuestInquiry = async (formData) => {
+  const response = await axiosInstance.post(`${POST_API_URL}/inquiries/guest`, formData);
   return response.data.data;
 };
 
@@ -33,7 +33,24 @@ export const createAnswer = async (inquiryId, answerData) => {
 };
 
 // 마이페이지 통계 정보 가져오기
-export const getMypageStats = async () => {
-  const response = await axiosInstance.get(`${POST_API_URL}/mypage/stats`);
-  return response.data.data;
+export const getAllInquiries = async (page = 1, pageSize = 10) => {
+  try {
+    const response = await axiosInstance.get(`${POST_API_URL}/inquiries`, {params: { page, pageSize }});
+    
+    return response.data;
+  } catch (error) {
+    console.error("모든 문의 목록 조회 실패:", error);
+    throw error;
+  }
+};
+
+// 리뷰 조회
+export const getOwnerReviews = async () => {
+  try {
+    const response = await axiosInstance.get(`${POST_API_URL}/owner/reviews`);
+    return response.data.data;
+  } catch (error) {
+    console.error(`점주 리뷰 목록 조회 실패:`, error);
+    throw error;
+  }
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./OwnerInfo.css";
 import { useNavigate } from "react-router-dom";
 import OwnerStoreInfo from "./OwnerStoreInfo";
-import ConfirmModal from "../../result/ConfirmModal.jsx" // 모달
+import ConfirmModal from "../../result/ConfirmModal.jsx" // 완료 모달
 import { useDispatch, useSelector } from "react-redux";
 import { storeGetThunk } from "../../../store/thunks/storeGetThunk.js";
 import { storeCreateThunk } from "../../../store/thunks/storeCreateThunk.js";
@@ -123,6 +123,8 @@ export default function OwnerInfo() {
     setIsConfirmModalOpen(true);
   };
 
+  const profileImageUrl = user?.profile || '/icons/default-profile.png';
+
   function ownerMyPage() {
     navigate('/owners/mypage');
   }
@@ -133,7 +135,7 @@ export default function OwnerInfo() {
         <div className="ownerinfo-profile-container">
           <div 
             className="ownerinfo-profile-img" 
-            style={{ backgroundImage: `url('/icons/default-profile.png')` }}
+            style={{ backgroundImage: `url('${profileImageUrl}')` }}
           ></div>
           <h2>{user ? `${user.name} 점주님` : '점주님'}</h2>
           <p>{user ? user.email : 'admin@admin.com'}</p>

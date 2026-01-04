@@ -39,15 +39,12 @@ async function toggleFavorite(req, res, next) {
  * @returns 
  */
 async function getFavoriteCleaners(req, res, next) {
-  try {
+  try {    
     const ownerId = req.user.id;
 
-    const favoriteCleaner = await ownerLikeService.getFavoriteCleaners(ownerId);
+    const favoriteCleaners = await ownerLikeService.getFavoriteCleaners(ownerId);
 
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {
-      isFavorited: favoriteCleaner,
-      message: newFavoriteStatus ? '기사님을 찜했습니다.' : '기사님 찜을 취소했습니다.'
-    }));
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, favoriteCleaners));
   } catch (error) {
     next(error);
   }

@@ -5,6 +5,7 @@
  */
 
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 function getViewDirPath() {
   const __dirname = process.env.APP_MODE !== 'dev' ? process.env.APP_DIST_PATH : path.resolve(process.env.APP_DIST_PATH);
@@ -24,9 +25,19 @@ function getChatImagePath() {
   return process.env.APP_MODE !== 'dev' ? process.env.FILE_CHAT_IMAGE_PATH : path.resolve(process.env.FILE_CHAT_IMAGE_PATH);
 }
 
+function getEditorImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_EDITOR_IMAGE_PATH : path.resolve(process.env.FILE_EDITOR_IMAGE_PATH);
+}
+
+function getInquiryImagePat() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_INQUIRY_IMAGE_PATH : path.resolve(process.env.FILE_INQUIRY_IMAGE_PATH);
+}
+
  export default {
   getViewDirPath,
   getPostsImagePath,
   getProfilesImagePath,
-  getChatImagePath
+  getChatImagePath,
+  getEditorImagePath,
+  getInquiryImagePat,
  }

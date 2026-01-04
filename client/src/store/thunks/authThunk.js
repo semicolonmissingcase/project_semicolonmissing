@@ -75,39 +75,26 @@ export const updateOwnerInfoThunk = createAsyncThunk(
   }
 );
 
-// 점주 프로필 이미지 업로드 
-// export const uploadProfileImageThunk = createAsyncThunk(
-//   'auth/uploadProfileImageThunk',
-//   async(formData, { rejectWithValue }) => {
-//     try {
-//       const response = await axiosInstance.post('/api/owners/profile', formData, {
-//         headers: {
-//           'Content-Type': 'multipart/form-data',
-//         }
-//       });
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response?.data || error.message);
-//     }
-//   }
-// )
-
 export const uploadProfileImageThunk = createAsyncThunk(
   'auth/uploadProfileImageThunk',
   async(file, { rejectWithValue }) => {
     try {
-      const url = '/api/owners/profile';
-      const headers = {
-        'Content-Type': 'multipart/form-data'
-      };
-
       const formData = new FormData();
       formData.append('profile', file);
 
-      const response = await axiosInstance.post(url, formData, {headers});
+      const uploadResponse = await axiosInstance.post('/api/files/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
 
-      return response.data;
+      const imageUrl = uploadResponse.data.data.path;
+
+      const updateResponse = await axiosInstance.put(`/api/owners/mypage/profile`, { profile: imageUrl });
+
+      return updateResponse.data;
     } catch (error) {
+      console.error("프로필 이미지 업로드 및 업데이트 실패:", error.response?.data || error.message);
       return rejectWithValue(error.response?.data || error.message);
     }
   }

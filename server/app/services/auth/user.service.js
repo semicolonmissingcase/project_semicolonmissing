@@ -336,23 +336,35 @@ async function updateOwner(userId, role, updateData) {
     throw myError('점주만 정보를 볼 수 있습니다.', FORBIDDEN_ERROR);
   }
   // 허용된 필드만 업뎃
-  const { phone } = updateData;
-  const allowedUpdateData = { phoneNumber: phone };
-
-  // 리포지토리를 통해 db업뎃
-  await ownerRepository.updateById(null, userId, allowedUpdateData);
-
-  // 업데이트된 정보 다시 조회 반환
-  const updatedUserInstance = await ownerRepository.findByPk(null, userId);
-
-  if (!updatedUserInstance) {
-    throw myError('정보 수정 후 유저 정보를 찾을 수 없습니다.', NOT_FOUND_ERROR);
+  // 업데이트할 데이터 객체 생성(전화번호, 이미지)
+  const fieldsToUpdate = {};
+  if(updateData.name !== undefined) {
+    fieldsToUpdate.name = updateData.name;
+  } 
+  if(updateData.phone !== undefined) {
+    fieldsToUpdate.phone = updateData.phone;
+  }
+  if(updateData.profile !== undefined) {
+    fieldsToUpdate.profile = updateData.profile;
   }
 
-  const userResponse = updatedUserInstance.get({ plain: true });
-  userResponse.role = role;
+  // 트랜잭션 시작
+  return await db.sequelize.transaction(async t => {
+    // 리포지토리를 통해 db업뎃
+    await ownerRepository.updateById(t, userId, fieldsToUpdate);
+    
+    // 업데이트된 정보 다시 조회 반환
+    const updatedUserInstance = await ownerRepository.findByPk(t, userId);
+  
+    if (!updatedUserInstance) {
+      throw myError('정보 수정 후 유저 정보를 찾을 수 없습니다.', NOT_FOUND_ERROR);
+    }
 
-  return userResponse;
+    const userResponse = updatedUserInstance.get({ plain: true });
+    userResponse.role = role;
+  
+    return userResponse;
+  });
 }
 
 export default {

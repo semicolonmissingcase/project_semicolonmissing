@@ -151,7 +151,18 @@ export default function OwnerRegistration() {
       }
 
       await dispatch(ownerStoreThunk(submitData)).unwrap();
-      navigate('/result');
+      navigate('/result', {
+        state: {
+          title: '회원가입이 완료되었습니다!',
+          message: '안녕하세요 점주님!\n다양한 기사님을 만나보세요.',
+          imgSrc: '/icons/success.png',
+          button1Text: '홈으로 가기',
+          button1Path: '/',
+          button2Text: '로그인으로 가기',
+          button2Path: '/login',
+          showButton2: true,
+        },
+      });
 
     } catch (error) {
       console.error('회원가입 오류:', error);

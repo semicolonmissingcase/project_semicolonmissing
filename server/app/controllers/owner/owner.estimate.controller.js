@@ -27,6 +27,26 @@ async function getEstimatesByReservationId(req, res, next) {
   }
 }
 
+/**
+ * 특정 예약 ID에 대한 '수락' 상태의 견적 목록 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function getAcceptedEstimatesByOwnerId(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+
+    const estimates = await ownerEstimateService.getAcceptedEstimatesByOwnerId(ownerId);
+    
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, estimates));
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export default {
   getEstimatesByReservationId,
+  getAcceptedEstimatesByOwnerId,
 }

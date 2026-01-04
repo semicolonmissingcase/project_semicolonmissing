@@ -1,30 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './FavoriteCleaner.css';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
 import { getLikedCleaners } from '../../../api/axiosOwner.js';
+import CleanerProfileModal from '../../commons/CleanerProfileModal.jsx';
 
-export default function FavoriteCleaner({ cleaners, onRemoveFavorite }) {
-  const displayCleaners = cleaners || [];
+export default function FavoriteCleaner() {
   const [likedCleaners, setLikedCleaners] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCleaner, setSelectedCleaner] = useState(null);
 
-  useEffect(() => {
-    const fetchFavoriteCleaners = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getLikedCleaners();
-        setLikedCleaners(response.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setIsLoading(false);
+  const fetchFavoriteCleaners = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getLikedCleaners();
+
+      if (Array.isArray(data)) {
+        setLikedCleaners(data);
+      } else {
+        setError(new Error("서버 응답 형식이 올바르지 않습니다."));
       }
-    };
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchFavoriteCleaners();
   }, []);
+
+  const handleToggle = (cleanerId, isFavorited) => {
+    if(!isFavorited) {
+      setLikedCleaners(prevCleaners => {
+        const updatedList = prevCleaners.filter(cleaner => cleaner.id !== cleanerId);
+        return updatedList;
+      });
+    }
+  };
 
   // 프로필 모달
   const openProfile = (cleaner) => {
@@ -45,7 +60,9 @@ export default function FavoriteCleaner({ cleaners, onRemoveFavorite }) {
     return <div className="favoritecleaner-text">오류가 발생했습니다. : {error.message}</div>;
   }
 
-  if(displayCleaners.length === 0) {
+  const cleanersToRender = Array.isArray(likedCleaners) ? likedCleaners : [];
+
+  if (cleanersToRender.length === 0) {
     return (
       <div className="favoritecleaner-tab-container">
         <p className="favoritecleaner-no-items">찜한 기사님이 없습니다.</p>
@@ -56,7 +73,7 @@ export default function FavoriteCleaner({ cleaners, onRemoveFavorite }) {
   return (
     <div className="favoritecleaner-tab-container">
       <div className="favoritecleaner-driver-grid">
-        {displayCleaners.map((cleaner) => (
+        {cleanersToRender.map((cleaner) => (
           <div key={cleaner.id} className="favoritecleaner-fav-card">
             {/* 기사님 원형 프로필 이미지 */}
             <div className="favoritecleaner-fav-avatar-circle">
@@ -70,27 +87,31 @@ export default function FavoriteCleaner({ cleaners, onRemoveFavorite }) {
             <div className="favoritecleaner-fav-info">
               <h4>
                 {cleaner.name} 기사님 <span className="favoritecleaner-heart-red">
-                <FavoriteButton cleanerId={cleaner.id} isFavorited={true} onToggleFavorite={onRemoveFavorite}/></span>
+                <FavoriteButton cleanerId={cleaner.id} 
+                  initialIsFavorited={true} onToggle={handleToggle} /></span>
               </h4>
               <p className="favoritecleaner-rating-star">
                 <span className="favoritecleaner-star-icon">★</span>
-                {cleaner.star ? cleaner.star.toFixed(1) : '평점 없음'} 
+                {cleaner.star ? Number(cleaner.star).toFixed(1) : '평점 없음'} 
               </p>
             </div>
 
             <div className="favoritecleaner-fav-btn-group">
-              <button className="favoritecleaner-btn-cancel"
-                onClick={() => onRemoveFavorite && onRemoveFavorite(cleaner.id)}>
-                  찜 취소</button>
               <button className="favoritecleaner-btn-profile"
-                isOpen={openProfile}
-                onClose={closeModal}
-                data={selectedCleaner}
+                onClick={() => openProfile(cleaner)}
               >프로필</button>
             </div>
           </div>
         ))}
       </div>
+            {/* 기사님 프로필 모달 */}
+            {isModalOpen && selectedCleaner && (
+              <CleanerProfileModal 
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                cleanerData={selectedCleaner}
+              />
+            )}
     </div>
   );
 }
