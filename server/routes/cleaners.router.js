@@ -9,11 +9,11 @@ const cleanersRouter = express.Router();
 // 1. 템플릿 조회 (미들웨어 추가)
 cleanersRouter.get('/templates', authCleanerMiddleware, async (req, res) => {
   try {
+    console.log("req.user:", req.user);
     const cleanerId = req.user.id; 
     const templates = await db.Template.findAll({
       where: { 
         cleanerId: cleanerId,
-        deletedAt: null 
       }
     });
     res.json(templates);
@@ -33,10 +33,15 @@ cleanersRouter.post('/quotations', authCleanerMiddleware, async (req, res) => {
       cleanerId,
       estimatedAmount,
       description
+
     });
 
+    const RESERVATION_STATUS = {
+      REQUEST: '요청',
+    };
+
     await db.Reservation.update(
-      { status: 'QUOTED' }, 
+      { status: RESERVATION_STATUS.IN_PROGRESS },
       { where: { id: reservationId } }
     );
 
@@ -102,5 +107,27 @@ cleanersRouter.get('/adjustment/history', authCleanerMiddleware, cleanerAdjustme
 cleanersRouter.post('/adjustment/request', authCleanerMiddleware, cleanerAdjustmentController.requestAdjustment);
 cleanersRouter.get('/accountedit/:id', authCleanerMiddleware, cleanerAdjustmentController.getAccountInfo);
 cleanersRouter.post('/accountinfo', authCleanerMiddleware, ...cleanersAdjustmentValidator.saveAccountValidator, cleanerAdjustmentController.saveAccountInfo);
+
+// 지역 라우터
+cleanersRouter.get('/locations', async (req, res) => {
+  try {
+    const rawLocations = await db.Location.findAll({
+      attributes: ['city', 'district'],
+      where: { deletedAt: null }
+    });
+
+    // { "서울": ["종로구", "중구"...], "경기": [...] } 형태로 변환
+    const formattedLocations = rawLocations.reduce((acc, curr) => {
+      const { city, district } = curr;
+      if (!acc[city]) acc[city] = [];
+      acc[city].push(district);
+      return acc;
+    }, {});
+
+    res.json(formattedLocations);
+  } catch (error) {
+    res.status(500).json({ message: "지역 정보를 불러오지 못했습니다." });
+  }
+});
 
 export default cleanersRouter;

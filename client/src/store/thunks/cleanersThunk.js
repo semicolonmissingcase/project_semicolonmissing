@@ -2,7 +2,38 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
 import axios from "axios";
 
-const titleThunk = createAsyncThunk(
+// 신규: 클리너 회원가입 Thunk
+export const registerCleaner = createAsyncThunk(
+  "cleaners/registerCleaner",
+  async (payload, { rejectWithValue }) => {
+    try {
+      console.log("보내는 데이터(Payload):", payload); // 1. 내가 보내는 값 확인
+      
+      const response = await axiosInstance.post("/api/users/cleaner", payload); 
+      
+      console.log("서버 응답 성공:", response.data); // 2. 성공 시 응답 확인
+      return response.data;
+    } catch (error) {
+
+  return rejectWithValue(err.response?.data ?? { message: "unknown" });
+    }
+  }
+);
+
+
+export const fetchLocations = createAsyncThunk(
+  "cleaners/fetchLocations",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/api/cleaners/locations`);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const titleThunk = createAsyncThunk(
   'cleaners/titleThunk',
   async (cleanerId, { rejectWithValue }) => { // 컴포넌트에서 cleanerId를 보낸다고 가정
     try {
@@ -16,7 +47,7 @@ const titleThunk = createAsyncThunk(
   }
 );
 
-const showThunk = createAsyncThunk(
+export const showThunk = createAsyncThunk(
   'cleaners/showThunk',
   async (id, { rejectWithValue }) => {
     try {
@@ -33,7 +64,7 @@ const showThunk = createAsyncThunk(
   }
 );
 
-const accountInfoThunk = createAsyncThunk(
+export const accountInfoThunk = createAsyncThunk(
   // Thunk 액션 타입: accounts 슬라이스에서 계정 정보 조회
   'accounts/fetchAccountInfo',
   // id는 accountinfo/:id 경로에서 사용될 ID (예: cleaner_id)
@@ -73,13 +104,11 @@ export const fetchTemplateThunk = createAsyncThunk(
 );
 
 // 템플릿 신규 저장 (DB에 INSERT)
-  const createTemplateThunk = createAsyncThunk(
+export const createTemplateThunk = createAsyncThunk(
   "cleaners/createTemplate",
   async (templateData, { rejectWithValue }) => {
     try {
       const response = await axios.post("/api/cleaners/templates", {
-        // 백엔드 DB 컬럼명이 estimated_amount라면 백엔드에서 변환해주거나 
-        // 여기서 백엔드가 받는 이름으로 보내야 합니다.
         estimatedAmount: templateData.estimatedAmount, 
         description: templateData.description,
       });
@@ -92,7 +121,7 @@ export const fetchTemplateThunk = createAsyncThunk(
 
 // 템플릿 수정 저장 (DB에 UPDATE)
 // 템플릿 수정 (객체를 통째로 받음)
- const updateTemplateThunk = createAsyncThunk(
+export const updateTemplateThunk = createAsyncThunk(
   "cleaners/updateTemplate",
   async (templateData, { rejectWithValue }) => {
     try {
@@ -108,7 +137,7 @@ export const fetchTemplateThunk = createAsyncThunk(
 );
 
 // 템플릿 삭제 (ID만 받음)
-  const deleteTemplateThunk = createAsyncThunk(
+export const deleteTemplateThunk = createAsyncThunk(
   "cleaners/deleteTemplate",
   async (templateId, { rejectWithValue }) => {
     try {
@@ -122,7 +151,7 @@ export const fetchTemplateThunk = createAsyncThunk(
   );
 
 // 견적서 제출 (POST) Thunk
- const submitQuotationThunk = createAsyncThunk(
+export const submitQuotationThunk = createAsyncThunk(
   "cleaners/submitQuotation",
   async (payload, thunkAPI) => {
     try {
@@ -136,6 +165,8 @@ export const fetchTemplateThunk = createAsyncThunk(
 
 
 export default {
+  registerCleaner,
+  fetchLocations,
   titleThunk,
   showThunk,        
   accountInfoThunk,

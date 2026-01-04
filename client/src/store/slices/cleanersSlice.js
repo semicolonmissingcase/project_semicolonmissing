@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import cleanersThunk from "../thunks/cleanersThunk.js";
+import { fetchLocations, registerCleaner } from "../thunks/cleanersThunk";
 
 const initialState = {
-  submissions: [], // null 대신 빈 배열로 초기화하면 map 에러를 방지합니다.
+  registrationSuccess: false, // 가입 성공 여부 플래그
+  locationData: {},
+  submissions: [],
   reservation: null,
   cleanerLike: null,
   accountInfo: null,
@@ -14,6 +17,10 @@ const slice = createSlice({
   name: 'cleaners',
   initialState,
   reducers: {
+    clearRegistrationStatus: (state) => {
+      state.registrationSuccess = false;
+      state.error = null;
+    },  
     clearCleaners(state) {
       state.cleanerLike = null;
       state.reservation = null;
@@ -29,15 +36,37 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // 기존 showThunk 처리
-      .addCase(cleanersThunk.showThunk.fulfilled, (state, action) => {
-        const { cleanerLike, reservation, submissions } = action.payload.data;
-        state.cleanerLike = cleanerLike;
-        state.reservation = reservation;
-        state.submissions = submissions;
-        state.loading = false;
+      // --- 클리너 회원가입 ---
+      .addCase(registerCleaner.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
+      .addCase(registerCleaner.fulfilled, (state) => {
+        state.loading = false;
+        state.registrationSuccess = true;
+      })
+      .addCase(registerCleaner.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(fetchLocations.fulfilled, (state, action) => {
+        const rawData = action.payload;
+        console.log("받은 데이터:", rawData);
+
+        // [수정] 서버 데이터가 이미 객체 형식이므로 분기 처리
+        if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
+          state.locationData = rawData;
+        } else if (Array.isArray(rawData)) {
+          state.locationData = rawData.reduce((acc, curr) => {
+            const city = curr.city || curr.si;
+            const district = curr.district || curr.gu;
+            if (!acc[city]) acc[city] = [];
+            acc[city].push(district);
+            return acc;
+          }, {});
+        }
+      }) // <--- 이 닫는 괄호와 점(.) 연결 확인
       
       // =======================================================
       //  accountInfoThunk 처리 로직 추가
@@ -129,8 +158,9 @@ const slice = createSlice({
 
 });
 
+
 export const {
-  clearCleaners,
+  clearCleaners, clearRegistrationStatus
 } = slice.actions;
 
 export default slice.reducer;
