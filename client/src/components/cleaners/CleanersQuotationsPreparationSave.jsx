@@ -44,12 +44,28 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
   }, [reduxTemplates]);
 
   // 4. 저장 버튼 클릭 시 Redux Thunk 호출 (서버 저장)
-  function onTempSave(tpl) {
-    // 예: 서버에 저장하는 thunk가 있다고 가정
-    dispatch(cleanersThunk.saveTemplateThunk(tpl))
+  function onTempSave(id) {
+  // 1. 현재 편집 중인 템플릿 데이터 찾기
+  const target = templates.find((t) => t.id === id);
+  console.log("저장/수정 대상 데이터:", target);
+
+  if (!target) return;
+
+  // 2. ID 타입에 따라 신규(문자열) 또는 수정(숫자) 결정
+  // 백엔드에서 받은 데이터는 id가 숫자(number)입니다.
+  if (typeof id === "number") {
+    console.log("수정(Update) Thunk 실행");
+    dispatch(cleanersThunk.updateTemplateThunk(target))
       .unwrap()
-      .then(() => alert("서버에 저장되었습니다."))
-      .catch(() => alert("저장 실패"));
+      .then(() => alert("수정 완료!"))
+      .catch((err) => console.error("수정 실패:", err));
+  } else {
+    console.log("신규 저장(Create) Thunk 실행");
+    dispatch(cleanersThunk.createTemplateThunk(target))
+      .unwrap()
+      .then(() => alert("저장 완료!"))
+      .catch((err) => console.error("저장 실패:", err));
+  }
   }
 
   const [editingId, setEditingId] = useState(null);
@@ -118,8 +134,26 @@ export default function CleanersQuotationsPreparationSave({ onSelect }) {
     );
   }
 
+  // CleanersQuotationsPreparationSave.jsx 수정
   function onDelete(id) {
-    if(window.confirm("템플릿을 삭제하시겠습니까?")) {
+    console.log("삭제 시도 ID:", id);
+
+    if (!window.confirm("이 양식을 삭제하시겠습니까?")) return;
+
+    // 1. ID가 숫자형(DB 데이터)인 경우만 서버 통신
+    if (typeof id === "number") {
+      dispatch(cleanersThunk.deleteTemplateThunk(id))
+        .unwrap()
+        .then(() => {
+          alert("DB에서 삭제되었습니다.");
+          // 서버 삭제 성공 후 로컬 상태 업데이트
+          setTemplates((prev) => prev.filter((t) => t.id !== id));
+        })
+        .catch((err) => alert("삭제 실패: " + err));
+    } 
+    // 2. ID가 문자열(임시 데이터)인 경우 로컬에서만 삭제
+    else {
+      console.log("임시 데이터이므로 로컬에서만 삭제합니다.");
       setTemplates((prev) => prev.filter((t) => t.id !== id));
     }
   }

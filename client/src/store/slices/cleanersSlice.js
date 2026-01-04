@@ -85,11 +85,11 @@ const slice = createSlice({
     })
 
     //templates 슬라이스
-    .addCase(cleanersThunk.fetchTemplatesThunk.pending, (state) => {
+    .addCase(cleanersThunk.fetchTemplateThunk.pending, (state) => {
       console.log("로딩 시작...");
     })
     // cleanersSlice.js
-    .addCase(cleanersThunk.fetchTemplatesThunk.fulfilled, (state, action) => {
+    .addCase(cleanersThunk.fetchTemplateThunk.fulfilled, (state, action) => {
       console.log("Slice에 도착한 실제 페이로드:", action.payload);
 
       // 1. 만약 action.payload 자체가 배열이라면 (현재 로그 상황)
@@ -105,11 +105,26 @@ const slice = createSlice({
         console.warn("데이터를 찾을 수 없습니다.");
       }
     })
-    .addCase(cleanersThunk.fetchTemplatesThunk.rejected, (state, action) => {
-      console.log("실패 상세 사유(payload):", action.payload);
-      console.log("실패 에러 객체(error):", action.error);
-      console.error("실패 사유:", action.error.message);
-    });
+  .addCase(cleanersThunk.fetchTemplateThunk.rejected, (state, action) => {
+;
+    console.error("실패 사유:", action.error.message);
+  })
+  .addCase(cleanersThunk.createTemplateThunk.fulfilled, (state, action) => {
+    console.log("실패 상세 사유(payload):", action.payload);
+    console.log("실패 에러 객체(error):", action.error)
+    state.templates.unshift(action.payload); 
+  })
+  .addCase(cleanersThunk.updateTemplateThunk.fulfilled, (state, action) => {
+    // 수정된 데이터로 기존 목록 업데이트
+    const index = state.templates.findIndex(t => t.id === action.payload.id);
+    if (index !== -1) {
+      state.templates[index] = action.payload;
+    }
+  })
+  .addCase(cleanersThunk.deleteTemplateThunk.fulfilled, (state, action) => {
+  state.templates = state.templates.filter(t => t.id !== action.payload);
+  });
+
   },  
 
 });

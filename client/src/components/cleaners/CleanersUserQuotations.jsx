@@ -12,7 +12,7 @@ import CleanersQuotationsPreparationSave from "./CleanersQuotationsPreparationSa
 import "./CleanersUserQuotations.css";
 import styles from "./CleanersUserQuotations.module.css";
 
-function CleanersUserQuoteListDetails() {
+function CleanersUserQuotations() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -57,7 +57,10 @@ function CleanersUserQuoteListDetails() {
 
  useEffect(() => {
     // 모달이 열릴 때만 명확하게 템플릿 호출
-    dispatch(cleanersThunk.fetchTemplatesThunk());
+    dispatch(cleanersThunk.fetchTemplateThunk());
+    dispatch(cleanersThunk.createTemplateThunk());
+    dispatch(cleanersThunk.updateTemplateThunk());
+    dispatch(cleanersThunk.deleteTemplateThunk());
   }, [dispatch]);
 
   const handleSubmit = async (e) => {
@@ -276,4 +279,4 @@ function CleanersUserQuoteListDetails() {
   );
 }
 
-export default CleanersUserQuoteListDetails;
+export default CleanersUserQuotations;

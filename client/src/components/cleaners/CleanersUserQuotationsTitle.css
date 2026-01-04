@@ -36,7 +36,7 @@
 }
 
 .cleaners-user-quotations-title-wrapper-selected {
-  background-color: #FFFDF9 !important;
+  background-color: #FFFDF9;
   border: 1px solid var(--color-gray);
   border-radius: 15px;
   padding: 1rem;
@@ -77,7 +77,7 @@
 }
 
 .cleaners-user-quotations-title-wrapper-rejected {
-  background-color: #FFFDF9 !important;
+  background-color: #F9F9FB;
   border: 1px solid var(--color-gray);
   border-radius: 15px;
   padding: 1rem;

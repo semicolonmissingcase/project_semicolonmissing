@@ -16,18 +16,6 @@ const titleThunk = createAsyncThunk(
   }
 );
 
-export const submitQuotation = createAsyncThunk(
-  "cleaners/submitQuotation",
-  async (formData, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/api/cleaners/quotations", formData);
-      return response.data;
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-
 const showThunk = createAsyncThunk(
   'cleaners/showThunk',
   async (id, { rejectWithValue }) => {
@@ -65,7 +53,7 @@ const accountInfoThunk = createAsyncThunk(
 
 // 예시: thunk 내부 구조 확인
 // cleanersThunk.js (또는 해당 thunk가 정의된 곳)
-export const fetchTemplatesThunk = createAsyncThunk(
+export const fetchTemplateThunk = createAsyncThunk(
   'cleaners/fetchTemplates',
   async (_, thunkAPI) => {
     try {
@@ -84,6 +72,55 @@ export const fetchTemplatesThunk = createAsyncThunk(
   }
 );
 
+// 템플릿 신규 저장 (DB에 INSERT)
+  const createTemplateThunk = createAsyncThunk(
+  "cleaners/createTemplate",
+  async (templateData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/cleaners/templates", {
+        // 백엔드 DB 컬럼명이 estimated_amount라면 백엔드에서 변환해주거나 
+        // 여기서 백엔드가 받는 이름으로 보내야 합니다.
+        estimatedAmount: templateData.estimatedAmount, 
+        description: templateData.description,
+      });
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || "저장 실패");
+    }
+  }
+);
+
+// 템플릿 수정 저장 (DB에 UPDATE)
+// 템플릿 수정 (객체를 통째로 받음)
+ const updateTemplateThunk = createAsyncThunk(
+  "cleaners/updateTemplate",
+  async (templateData, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`/api/cleaners/templates/${templateData.id}`, {
+        estimatedAmount: templateData.estimatedAmount,
+        description: templateData.description,
+      });
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || "수정 에러");
+    }
+  }
+);
+
+// 템플릿 삭제 (ID만 받음)
+  const deleteTemplateThunk = createAsyncThunk(
+  "cleaners/deleteTemplate",
+  async (templateId, { rejectWithValue }) => {
+    try {
+      // 주소 끝에 templateId가 확실히 붙는지 확인
+      await axios.delete(`/api/cleaners/templates/${templateId}`);
+      return templateId;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || "삭제 실패");
+    }
+  }
+  );
+
 // 견적서 제출 (POST) Thunk
  const submitQuotationThunk = createAsyncThunk(
   "cleaners/submitQuotation",
@@ -100,9 +137,11 @@ export const fetchTemplatesThunk = createAsyncThunk(
 
 export default {
   titleThunk,
-  submitQuotation,
   showThunk,        
   accountInfoThunk,
-  fetchTemplatesThunk,
+  fetchTemplateThunk,
+  createTemplateThunk,
+  updateTemplateThunk,
+  deleteTemplateThunk,
   submitQuotationThunk
 };

@@ -1,80 +1,40 @@
-/**
- * @file routes/cleaners.router.js
- * @description cleaners 관련 라우터
- * 251229 v1.0.0 jh init
- */
-
 import express from 'express';
 import cleanerAdjustmentController from '../app/controllers/cleaner/cleaner.adjustment.controller.js';
-import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
+import authCleanerMiddleware from '../app/middlewares/auth/auth.cleaner.middleware.js';
 import cleanersAdjustmentValidator from '../app/middlewares/validations/validatiors/cleaner/cleaner.adjustment.validators.js';
 import db from '../app/models/index.js';
-// import profileController from "../app/controllers/cleaner/cleaner.profile.controller.js";
-// import { name, locations } from '../app/middlewares/validations/fields/cleaner/cleaner.profile.field.js';
-// import multerMiddleware from '../app/middlewares/multer/multer.middleware.js';
 
 const cleanersRouter = express.Router();
 
-// cleanersRouter.get('/quotations', (req, res, next) => {
-//   res.send('ttt');
-//  });
-
-cleanersRouter.get('/adjustment/history', authUserMiddleware, cleanerAdjustmentController.getAdjustmentHistory);
-cleanersRouter.post('/adjustment/request', authUserMiddleware, cleanerAdjustmentController.requestAdjustment);
-
-//  계좌 정보 관련 라우터 추가
-cleanersRouter.get(
-    '/accountedit/:id',
-    authUserMiddleware,
-    cleanerAdjustmentController.getAccountInfo // 조회 함수 연결
-);
-cleanersRouter.post(
- '/accountinfo',
- authUserMiddleware,
- //  saveAccountValidator가 배열을 반환한다고 가정하고 Spread Operator를 사용
- ...cleanersAdjustmentValidator.saveAccountValidator, 
- cleanerAdjustmentController.saveAccountInfo 
-);
-
-// cleanersRouter.patch('/profileedit', 
-//    multerMiddleware.profileUploader.single('profile_image'), // 필드 이름 명시
-//   [name, locations],
-//   profileController.update
-// );
-
-cleanersRouter.get('/templates', async (req, res) => {
+// 1. 템플릿 조회 (미들웨어 추가)
+cleanersRouter.get('/templates', authCleanerMiddleware, async (req, res) => {
   try {
-    console.log("템플릿 조회 API 시작"); // 서버 콘솔로그 확인용
-    
-    const cleanerId = 2; // DB에 실제로 존재하는 기사 ID
-    
+    const cleanerId = req.user.id; 
     const templates = await db.Template.findAll({
       where: { 
-        cleanerId: cleanerId, // 모델에 정의된 camelCase 필드명
+        cleanerId: cleanerId,
         deletedAt: null 
       }
     });
-
     res.json(templates);
   } catch (error) {
     res.status(500).json({ message: "템플릿 조회 실패", error: error.message });
   }
 });
 
-cleanersRouter.post('/quotations', async (req, res) => {
+// 2. 견적 제출 (기존 /quotations 유지, 미들웨어 추가)
+cleanersRouter.post('/quotations', authCleanerMiddleware, async (req, res) => {
   try {
-    const { reservationId, estimated_amount, description } = req.body;
+    const { reservationId, estimatedAmount, description } = req.body;
     const cleanerId = req.user.id; 
 
-    // Quotation 테이블에 데이터 저장
     const result = await db.Quotation.create({
-      reservationId: reservationId,
-      cleanerId: cleanerId,
-      estimatedAmount: estimated_amount,
-      description: description
+      reservationId,
+      cleanerId,
+      estimatedAmount,
+      description
     });
 
-    // 예약 상태 업데이트 (필요한 경우)
     await db.Reservation.update(
       { status: 'QUOTED' }, 
       { where: { id: reservationId } }
@@ -85,5 +45,62 @@ cleanersRouter.post('/quotations', async (req, res) => {
     res.status(500).json({ message: "견적 제출 실패", error: error.message });
   }
 });
+
+// 3. 템플릿 신규 생성 (경로 수정: /cleaners 제거)
+cleanersRouter.post('/templates', authCleanerMiddleware, async (req, res) => {
+  try {
+    const { estimatedAmount, description } = req.body;
+    const cleanerId = req.user.id;
+
+    const newTemplate = await db.Template.create({
+      cleanerId,
+      estimatedAmount,
+      description
+    });
+
+    res.status(201).json({ success: true, data: newTemplate });
+  } catch (error) {
+    res.status(500).json({ message: "서버 내부 에러", error: error.message });
+  }
+});
+
+// 4. 템플릿 수정 (경로 수정: /cleaners 제거)
+cleanersRouter.put('/templates/:id', authCleanerMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estimatedAmount, description } = req.body;
+
+    await db.Template.update(
+      { estimatedAmount, description },
+      { where: { id, cleanerId: req.user.id } }
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).send("Update Error");
+  }
+});
+
+// 5. 템플릿 삭제 (경로 수정: /cleaners 제거)
+cleanersRouter.delete('/templates/:id', authCleanerMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // DB에서 실제 삭제 또는 deletedAt 업데이트
+    await db.Template.destroy({
+      where: { id, cleanerId: req.user.id }
+    });
+
+    res.json({ success: true, id });
+  } catch (error) {
+    res.status(500).send("Delete Error");
+  }
+});
+
+// 기타 정산 관련 라우터
+cleanersRouter.get('/adjustment/history', authCleanerMiddleware, cleanerAdjustmentController.getAdjustmentHistory);
+cleanersRouter.post('/adjustment/request', authCleanerMiddleware, cleanerAdjustmentController.requestAdjustment);
+cleanersRouter.get('/accountedit/:id', authCleanerMiddleware, cleanerAdjustmentController.getAccountInfo);
+cleanersRouter.post('/accountinfo', authCleanerMiddleware, ...cleanersAdjustmentValidator.saveAccountValidator, cleanerAdjustmentController.saveAccountInfo);
 
 export default cleanersRouter;
