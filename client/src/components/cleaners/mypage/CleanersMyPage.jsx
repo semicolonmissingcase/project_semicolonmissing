@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import PendingSettlementList from './PendingSettlementList.jsx';
 import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
-import CancelledJobList from './CancelledJobList.jsx';
-import CompletedJobList from './CompletedJobList.jsx';
+import CancelledJobList from './MyQnaList.jsx';
+import CompletedJobList from './ReviewList.jsx';
 
 function CleanersMyPage () {
   const [activeTab, setActiveTab] = useState('정산 대기 건수');
@@ -64,18 +64,18 @@ function CleanersMyPage () {
               </div>
             </div>
             
-            {/* 이게 뭐가 출력되는 부분인지 몰라서 버튼만 만들었습니다. */}
+            {/* 이게 뭐가 출력되는 부분인지 몰라서 버튼만 만들었습니다.
             <div className="cleanermypage-action-btn-container">
               <button className="cleanermypage-action-btn">현재 정산 상태</button>
               <button className="cleanermypage-action-btn">오늘 예정 일정</button>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>
 
       {/* 2. 기사님 전용 탭 메뉴 */}
       <nav className="cleanermypage-tabs">
-        {['예약 완료', '오늘 작업', '정산 대기', '취소·미방문', '완료 작업'].map(tab => (
+        {['대기 작업', '오늘 일정', '정산 대기', '문의내역', '리뷰내역'].map(tab => (
           <button 
             key={tab}
             className={`cleanermypage-tab-item ${activeTab === tab ? 'cleanermypage-active' : ''}`}
