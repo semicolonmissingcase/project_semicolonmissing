@@ -5,15 +5,21 @@ import 'dayjs/locale/ko';
 import './ChatRoom.css';
 import { FaRegFileImage } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
+import PaymentModal from '../payment/paymentModal.jsx';
 
 import { 
   getChatRoomDetail, 
   getChatMessages, 
   markMessageAsRead, 
-  uploadChatImage 
+  uploadChatImage, 
 } from '../../api/axiosChat.js';
 
 const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) => {
+  // 상태 추가
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  // 예약 정보 저장을 위한 상태
+  const [reservationId, setReservationId] = useState(null);
+
   const [messageList, setMessageList] = useState([]);
   const [inputText, setInputText] = useState("");
   const [opponentName, setOpponentName] = useState("채팅방");
@@ -73,43 +79,42 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     }
   };
 
-  // 초기화 및 읽음 처리 순서 최적화
   useEffect(() => {
     if (!roomId) return;
     
-    const init = async () => {
-      try {
-        // 1. 방 정보 먼저 세팅 (UI 제목 등)
-        const roomRes = await getChatRoomDetail(roomId);
-        const responseData = roomRes.data?.data; 
-        if (responseData) {
-          onOpenSidebar(responseData, false);
-          const detail = responseData.data;
-          const isMeOwner = responseData.sideType === 'OWNER';
-          setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
-          setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
-        }
+  const init = async () => {
+  try {
+    const roomRes = await getChatRoomDetail(roomId);
+    const responseData = roomRes?.data?.data;
 
-        // 2. [핵심] 읽음 처리 API를 먼저 호출하고 '기다림'
-        await markMessageAsRead(roomId);
+    if (responseData) {
+      onOpenSidebar(responseData, false);
+      
+      const detail = responseData.data; 
+      const isMeOwner = responseData.sideType === 'OWNER';
+
+      if (detail) {
+        setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
+        setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
+
+        const rId = detail.reservationId;
         
-        // 3. 소켓으로 읽음 신호 전송
-        if (socket) {
-          socket.emit("mark_as_read", { roomId, userRole });
-        }
-
-        // 4. DB가 업데이트된 '후'에 메시지 목록을 가져옴
-        setHasMore(true);
-        setPage(1);
-        await fetchMessages(1, true);
-
-      } catch (err) { 
-        console.warn("초기화 중 오류 발생", err); 
-        setOpponentName("채팅방");
-        // 에러가 나더라도 메시지는 시도
-        fetchMessages(1, true);
+        setReservationId(rId);
+        console.log("세팅된 최종 예약 ID:", rId); 
       }
-    };
+    }
+
+    await markMessageAsRead(roomId);
+    if (socket) socket.emit("mark_as_read", { roomId, userRole });
+    setHasMore(true);
+    setPage(1);
+    await fetchMessages(1, true);
+
+  } catch (err) { 
+    console.warn("초기화 중 오류 발생:", err); 
+    fetchMessages(1, true);
+  }
+};
 
     init();
   }, [roomId, socket]);
@@ -204,7 +209,7 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
         </div>
         <div className='chatroom-header-right'>
           <button className='chatroom-detail-btn' onClick={() => onOpenSidebar(true)}>상세보기</button>
-          {userRole === 'OWNER' && (<button className='chatroom-book-btn'>예약하기</button>)}
+          {userRole === 'OWNER' && (<button className='chatroom-book-btn' onClick={() => setIsPaymentModalOpen(true)}>예약하기</button>)}
         </div>
       </div>
 
@@ -254,6 +259,8 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
           );
         })}
       </div>
+
+      {isPaymentModalOpen && reservationId && (<PaymentModal reservationId={reservationId} onClose={() => setIsPaymentModalOpen(false)}/>)}
 
       <div className='chatroom-input'>
         <input 
