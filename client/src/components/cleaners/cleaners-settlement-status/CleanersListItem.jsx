@@ -21,7 +21,7 @@ export default function CleanersListItem({ job, defaultOpen = false }) {
       >
         <div className="cleaners-list-item-title">{job.title}</div>
         <span className="cleaners-list-item-toggle">
-          {isOpen ? <RiArrowDropUpFill size={30} className="cleaners-list-item-toggle-up" /> : <RiArrowDropDownFill size={30} className="cleaners-list-item-toggle-down" />}
+          {isOpen ? <RiArrowDropUpFill size={20} style={{ verticalAlign: 'middle' }} className="cleaners-list-item-toggle-up" /> : <RiArrowDropDownFill size={20} style={{ verticalAlign: 'middle' }} className="cleaners-list-item-toggle-down" />}
         </span>
       </button>
       {!isOpen && (

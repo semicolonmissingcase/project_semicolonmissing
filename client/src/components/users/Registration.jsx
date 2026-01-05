@@ -8,6 +8,10 @@ export default function Registration () {
     navigate('owners');
   };
   
+  function cleanersRegistration() {
+    navigate('cleaners');
+  };
+
   return (
     <div className="all-container">
       <div className="registration-container">
@@ -33,7 +37,7 @@ export default function Registration () {
               </p>
             </div>
             <div className="registration-owner-img" style={{ backgroundImage: `url('/icons/cleaner.png')` }}></div>
-            <button type="button" className="btn-medium bg-blue">기사님 회원가입</button>
+            <button type="button" className="btn-medium bg-blue" onClick={cleanersRegistration}>기사님 회원가입</button>
           </div>
         </div>
       </div>

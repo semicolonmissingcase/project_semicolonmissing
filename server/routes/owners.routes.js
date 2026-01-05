@@ -12,6 +12,7 @@ import ownerQuotationsShow from '../app/middlewares/validations/validatiors/owne
 const ownersRouter = express.Router();
 
 // TODO: 추후 authMiddleware 추가 필요 (Permission도 같이)
+ownersRouter.get('/quotations', validationHandler, ownersController.index);
 ownersRouter.get('/quotations/:id', ownerQuotationsShow, validationHandler , ownersController.show);
 
 export default ownersRouter;

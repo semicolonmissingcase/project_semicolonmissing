@@ -1,15 +1,110 @@
-import { useState } from "react";
-import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal";
+import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal.jsx";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import cleanersThunk from "../../store/thunks/cleanersThunk.js";
+import { clearCleaners } from "../../store/slices/cleanersSlice.js";
 import './CleanersAccountEdit.css';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { RiArrowDropDownFill } from "react-icons/ri";
 import { RiArrowDropUpFill } from "react-icons/ri";
-
-
-
-
+import { FaRegTrashCan } from "react-icons/fa6";
 
 function CleanerAccountEdit () {
+
+    const [selectAddAccount, setSelectAddAccount] = useState(false); // <--- Line 74였던 이 부분을 위로 올립니다.
+    const [accountData, setAccountData] = useState({
+        bank: '',
+        accountNumber: '',
+        depositor: ''
+    });
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  useEffect(() => {
+  async function init() {
+    const result = await dispatch(
+      cleanersThunk.accountInfoThunk(params.id)
+    );
+
+    if (result.type.endsWith("/rejected")) {
+      alert("정보 획득 실패");
+      return;
+    }
+
+    const data = result.payload.data;
+
+    setAccountData({
+      bank: data.bank ?? "",
+      accountNumber: data.accountNumber ?? "",
+      depositor: data.depositor ?? "",
+    });
+  }
+
+  init();
+
+  return () => {
+    dispatch(clearCleaners());
+  };
+  }, [dispatch, params.id, navigate]);
+
+
+  // 입력값 변경 핸들러
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAccountData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // 저장 로직 (Modal의 onConfirm 내부에서 호출)
+  const handleSave = async () => {
+    try {
+      await axios.post("/api/adjustments/update", accountData);
+      alert("저장되었습니다.");
+      closeConfirmModal();
+    } catch (err) {
+      alert("저장 실패");
+    }
+  };
+
+  // ✅ Redux Store에서 데이터 및 상태 가져오기
+    const { accountInfo, loading, error } = useSelector(state => state.cleaners);
+
+    // useEffect 로직 수정
+    useEffect(() => {
+        dispatch(cleanersThunk.accountInfoThunk(params.id));
+
+        // 클린업 함수는 그대로 유지
+        return () => {
+            dispatch(clearCleaners());
+        };
+    }, [dispatch, params.id]); // navigate 의존성은 필요 없을 수 있습니다.
+
+    // ✅ accountInfo가 로드되거나 변경될 때만 accountData 업데이트
+    useEffect(() => {
+        if (accountInfo) {
+            setAccountData({
+                bank: accountInfo.bank ?? "",
+                accountNumber: accountInfo.accountNumber ?? "",
+                depositor: accountInfo.depositor ?? "",
+            });
+        }
+    }, [accountInfo]); // accountInfo가 변경될 때만 실행
+
+    // 로딩 및 에러 처리 (인증 오류가 Redux에 rejected로 잡힐 경우)
+    if (loading) {
+        return <div className="loading">계좌 정보를 불러오는 중입니다...</div>;
+    }
+
+    if (error) {
+        // 서버에서 인증 오류를 반환했을 때 (401), Redux Thunk가 rejectWithValue로 잡았을 경우
+        // alert(`정보 획득 실패: ${error}`); 
+        // navigate(-1); 
+        return <div className="error-message">계좌 정보를 불러오는 데 실패했습니다.</div>;
+    }
 
   const [toggleNew, setToggleNew] = useState(false);
   const [toggleInfo, setToggleInfo] = useState(false);
@@ -25,8 +120,6 @@ function CleanerAccountEdit () {
     setToggleInfo(!toggleInfo)
 
   };
-
-  const [selectAddAccount, setSelectAddAccount] = useState(false);
 
   const toggleAddAccount = (e) => {
   e.stopPropagation();           // 바깥 토글로 클릭 전파 방지
@@ -142,17 +235,19 @@ function CleanerAccountEdit () {
         <label className="cleaners-account-edit-account-title">
           정산 계좌
         </label>
-        <img
-          src="/icons/btn-delete.png"
-          className="cleaners-account-edit-delete-img"
-          onClick={openCancelModal}
-          alt="계좌 삭제"
-        />
+        <FaRegTrashCan 
+        onClick={openCancelModal}
+        size={20}/>
       </span>
       
       <span className="cleaners-account-edit-layout-inputs">
       <label htmlFor="banks">은행</label>
-      <select className="cleaners-account-edit-input-layout" id="banks" name="banks">
+      <select 
+      className="cleaners-account-edit-input-layout" 
+      name="bank" // name을 모델과 맞춤
+      value={accountData.bank}
+      onChange={handleInputChange}
+      >
         <option value="Woori Bank">우리은행</option>
         <option value="iM Bank">iM뱅크</option>
         <option value="Kookmin Bank">국민은행</option>
@@ -167,12 +262,20 @@ function CleanerAccountEdit () {
       </select>
 
       <label htmlFor="accounts">계좌번호</label>
-      <input className="cleaners-account-edit-input-layout" id="accounts" name="accounts" 
-      value="1002-123-456789" readOnly/>
+      <input 
+      className="cleaners-account-edit-input-layout" 
+      name="accountNumber"
+      value={accountData.accountNumber}
+      onChange={handleInputChange} 
+      />
 
       <label htmlFor="account-holder">예금주</label>
-      <input className="cleaners-account-edit-input-layout" id="account-holder" name="account-holder" 
-      value="김기사" readOnly/>
+      <input 
+      className="cleaners-account-edit-input-layout" 
+      name="depositor"
+      value={accountData.depositor}
+      onChange={handleInputChange}
+      />
       </span>
       
       <div className="cleaners-account-edit-button">

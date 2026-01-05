@@ -23,7 +23,14 @@ async function show(req, res, next) {
   return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
 }
 
+async function index(req, res, next) {
+  const id = req.params.id;
+  // 서비스에 모든 견적서를 가져오는 index 함수가 있다고 가정
+  const result = await ownersQuotationsService.index(); 
+  return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+}
 
 export default {
   show,
+  index
 };

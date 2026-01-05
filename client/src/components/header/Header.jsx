@@ -92,8 +92,8 @@ export default function Header() {
   }
 
   // 기사님(cleaners)
-  function cleanerQuotelist() {
-    navigate('cleaners/userquotelist');
+  function cleanerQuotation() {
+    navigate('cleaners/quotations');
   }
 
   // 모바일 네비게이션 관련
@@ -163,7 +163,7 @@ export default function Header() {
                   <button type='button' className='btn-small header-right-btn' onClick={chatListPage}>
                     채팅
                   </button>
-                  <button type='button' className='btn-small header-right-btn' onClick={cleanerQuotelist}>
+                  <button type='button' className='btn-small header-right-btn' onClick={cleanerQuotation}>
                     신규요청
                   </button>
                   <div className="header-profile-container" ref={dropdownRef}>
