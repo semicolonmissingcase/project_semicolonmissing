@@ -23,10 +23,10 @@ function CleanersMyPage() {
   const renderTabContent = () => {
     switch (activeTab) {
       case '정산': return <CleanersSettlementStatus />;
-      case '예약 완료': return <ReservationCompletedList />;
+      case '대기 작업': return <ReservationCompletedList />;
       case '오늘 작업': return <TodayJobList />;
       case '문의 내역': return <CleanersInquiries />;
-      case '리뷰': return <CleanersReview />
+      case '리뷰 내역': return <CleanersReview />
       default: return <div className="tab-placeholder">내용을 불러오는 중...</div>;
     }
   };

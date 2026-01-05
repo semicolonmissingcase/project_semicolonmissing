@@ -19,6 +19,8 @@ const ROLE_PERMISSIONS = {
     {path: /^\/api\/owners\/mypage\/favorite-cleaners$/, roles: [OWNER],}, // 찜한 기사님 목록 조회
     {path: /^\/api\/posts\/owner\/inquiries$/, roles: [OWNER, CLEANER],}, // 내 문의 목록 조회
     {path: /^\/api\/posts\/owner\/inquiries\/\d+$/, roles: [OWNER, CLEANER] }, // 내 문의 상세 조회
+    {path: /^\/api\/cleaners\/mypage\/pending$/, roles: [CLEANER],}, // 대기 작업 조회
+    {path: /^\/api\/cleaners\/mypage\/today$/, roles: [CLEANER],},   // 오늘 일정 조회
     {path: /^\/api\/posts\/owner\/reviews$/, roles: [OWNER],}, // 리뷰 조회
   ],
   POST: [

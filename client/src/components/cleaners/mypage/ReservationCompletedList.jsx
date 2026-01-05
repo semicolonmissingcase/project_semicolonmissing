@@ -1,34 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './ReservationCompletedList.css';
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { getPendingJobs } from '../../../api/axiosCleaner.js';
 
 export default function ReservationCompletedList() {
-  const [jobs, setJobs] = useState([]); // 작업 목록 저장
+  const [jobs, setJobs] = useState([]); 
   const [loading, setLoading] = useState(true);
 
-  // 1. 컴포넌트 마운트 시 데이터 불러오기
-useEffect(() => {
-  const fetchJobs = async () => {
-    try {
-      setLoading(true);
-      const response = await getPendingJobs(); // 정의한 함수 사용
-      if (response.data.success) {
-        setJobs(response.data.data);
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+        const response = await getPendingJobs(); 
+        if (response.data.success) {
+          // 백엔드에서 data: pendingJobs 형태로 보냄
+          setJobs(response.data.data);
+        }
+      } catch (error) {
+        console.error("데이터 로드 실패:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("데이터 로드 실패:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchJobs();
-}, []);
+    };
+    fetchJobs();
+  }, []);
 
-  // 카카오맵 열기 함수 (매장 이름과 주소를 함께 검색하면 더 정확합니다)
+  // 카카오맵 열기 함수
   function openKakaoMap(storeName, address) {
-    const searchQuery = `${storeName} ${address}`;
+    if (!address) {
+      alert("주소 정보가 없습니다.");
+      return;
+    }
+    const searchQuery = `${storeName || ''} ${address}`;
     const kakaoMapUrl = `kakaomap://search?q=${encodeURIComponent(searchQuery)}`;
     const webMapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(searchQuery)}`;
     
@@ -53,7 +56,7 @@ useEffect(() => {
                 <div className="completedjoblist-card-place">
                   <FaMapMarkerAlt 
                     style={{ fontSize: '1rem', color: '#7C7F88', cursor: "pointer" }}
-                    onClick={() => openKakaoMap(job.store?.name, job.store?.addr1)}
+                    onClick={() => openKakaoMap(job.store?.name, job.store?.address)} 
                   />
                   <span className="completedjoblist-card-value">
                     {job.store?.name || '정보 없음'}
@@ -61,19 +64,25 @@ useEffect(() => {
                 </div>
               </div>
 
-              {/* 시간 - 날짜와 시간을 함께 표시 */}
+              {/* 일시 - 백엔드에서 준 createdAt 활용 */}
               <div className="reservation-completedlist-card-row">
                 <span className="reservation-completedlist-card-label">일시</span>
                 <span className="reservation-completedlist-card-value">
-                  {job.reservationDate} {job.reservationTime}
+                  {job.createdAt ? new Date(job.createdAt).toLocaleString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  }) : '시간 정보 없음'}
                 </span>
               </div>
 
-              {/* 위치 */}
+              {/* 금액 - DB 컬럼명 estimated_amount 반영 */}
               <div className="reservation-completedlist-card-row">
-                <span className="reservation-completedlist-card-label">위치</span>
-                <span className="reservation-completedlist-card-value">
-                  {job.store?.addr1 || '주소 정보 없음'}
+                <span className="reservation-completedlist-card-label">금액</span>
+                <span className="reservation-completedlist-card-value" style={{ color: '#007bff', fontWeight: 'bold' }}>
+                  {job.estimate?.estimated_amount ? `${job.estimate.estimated_amount.toLocaleString()}원` : '견적 확인 중'}
                 </span>
               </div>
 
@@ -85,7 +94,14 @@ useEffect(() => {
                 </span>
               </div>
               
-              {/* 작업 시작/상세 버튼 (필요 시 추가) */}
+              {/* 상세 내용 (설명) - description 활용 */}
+              <div className="reservation-completedlist-card-row">
+                <span className="reservation-completedlist-card-label">내용</span>
+                <span className="reservation-completedlist-card-value text-truncate">
+                  {job.estimate?.description || '상세 내용 없음'}
+                </span>
+              </div>
+              
               <button className="job-detail-btn">상세 보기</button>
             </div>
           ))
