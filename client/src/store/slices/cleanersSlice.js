@@ -20,30 +20,26 @@ const slice = createSlice({
   name: 'cleaners',
   initialState,
   reducers: {
-    clearRegistrationStatus: (state) => {
-      state.registrationSuccess = false;
-      state.error = null;
-    },  
-    clearCleaners(state) {
-      state.cleanerLike = null;
-      state.reservation = null;
-      state.cleaner = null;
-      state.submissions = null;
-      state.accountInfo = null; //  clear 시 계좌 정보도 초기화
-      state.loading = false;
-      state.error = null;
-    },
-    clearCleaners: (state) => {
-      // 초기화 로직
-      state.templates = [];
-    },
-    // 로그아웃 액션: 상태 초기화 및 토큰 삭제
-    logout: (state) => {
-      state.cleaner = null;
-      state.isLoggedIn = false;
-      localStorage.removeItem('token');
-    }
+  clearRegistrationStatus: (state) => {
+    state.registrationSuccess = false;
+    state.error = null;
   },
+  clearCleaners: (state) => {
+    state.cleaner = null;
+    state.cleanerLike = null;
+    state.reservation = null;
+    state.submissions = null;
+    state.accountInfo = null;
+    state.templates = []; // 템플릿 초기화 포함
+    state.loading = false;
+    state.error = null;
+  },
+  logout: (state) => {
+    state.cleaner = null;
+    state.isLoggedIn = false;
+    localStorage.removeItem('token');
+  }
+},
   extraReducers: (builder) => {
     builder
       // --- 클리너 회원가입 ---
@@ -170,8 +166,15 @@ const slice = createSlice({
   .addCase(getMe.fulfilled, (state, action) => {
   state.isLoading = false;
   state.isLoggedIn = true;
-  state.cleaner = action.payload.cleaner ?? action.payload.user ?? action.payload;
-  })
+  
+  console.log("getMe 성공 페이로드:", action.payload); 
+
+  const payloadData = action.payload.data || action.payload;
+
+  // cleaner 정보와 submissions 정보를 함께 저장합니다.
+  state.cleaner = payloadData.user || payloadData;
+  state.submissions = payloadData.submissions || [];
+})
 .addCase(getMe.rejected, (state, action) => {
   state.isLoading = false;
   state.cleaner = null;

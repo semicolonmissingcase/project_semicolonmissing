@@ -55,20 +55,22 @@ export const getMe = createAsyncThunk(
   "cleaners/getMe",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("cleanerToken"); // <- 키 분리 추천
-      if (!token) return rejectWithValue({ status: 401, message: "토큰이 없습니다." });
+      // loginCleaner에서 "token"으로 저장했다면 여기서도 "token"이어야 합니다.
+      const token = localStorage.getItem("token"); 
+      
+      if (!token) {
+        console.warn("로컬스토리지에 토큰이 없습니다!"); // 확인용 로그
+        return rejectWithValue({ status: 401, message: "토큰이 없습니다." });
+      }
 
-      const response = await axios.get("/api/cleaners/me", {
+      // axiosInstance를 사용하여 baseURL과 기본 설정을 따르는 것이 안전합니다.
+      const response = await axiosInstance.get("/api/users/cleaner/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       return response.data; 
     } catch (error) {
-      return rejectWithValue({
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.response?.data?.message || error.message,
-      });
+      return rejectWithValue(error.response?.data);
     }
   }
 );

@@ -123,14 +123,52 @@ usersRouter.get('/cleaner/me', async (req, res) => {
     if (!authHeader) return res.status(401).json({ message: "토큰이 없습니다." });
 
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, 'your_jwt_secret_key'); // 로그인 때 쓴 시크릿 키와 동일해야 함
+    const decoded = jwt.verify(token, 'your_jwt_secret_key');
 
-    const cleaner = await db.Cleaner.findByPk(decoded.id);
+    const cleaner = await db.Cleaner.findByPk(decoded.id, {
+        attributes: { exclude: ['password'] }
+    });
+
     if (!cleaner) return res.status(404).json({ message: "유저를 찾을 수 없습니다." });
 
-    return res.status(200).json({ success: true, user: cleaner });
+    // 해당 클리너가 제출한 견적 목록(submissions)을 조회합니다.
+    const submissions = await db.Estimate.findAll({ // 올바른 모델 'Estimate' 사용
+      where: { cleanerId: cleaner.id },
+      include: [
+        {
+          model: db.Reservation,
+          as: 'reservation', // Estimate.js에서 확인한 별칭
+          include: [
+            {
+              model: db.Owner,
+              as: 'owner', // Reservation.js에서 확인한 별칭
+              attributes: ['id', 'name', 'profile'],
+              include: [{
+                model: db.Like,
+                as: 'likes', // Owner.js에서 확인한 별칭
+                required: false,
+              }]
+            },
+            {
+              model: db.Store,
+              as: 'store', // Reservation.js에서 확인한 별칭
+              attributes: ['id', 'name', 'addr1'],
+            }
+          ]
+        }
+      ],
+      order: [['createdAt', 'DESC']]
+    });
+
+    return res.status(200).json({
+      success: true,
+      user: cleaner,
+      submissions: submissions,
+    });
+
   } catch (error) {
-    return res.status(401).json({ message: "유효하지 않은 토큰입니다." });
+    console.error("cleaner/me 에러:", error);
+    return res.status(500).json({ message: "서버 오류가 발생했습니다.", error: error.message });
   }
 });
 
