@@ -35,31 +35,10 @@ async function reservationFindByIdAndStatusIsRequest(t = null, id) {
   );
 }
 
-// cleanerId 파라미터 추가
-async function submissionFindByReservationId(t = null, id, cleanerId = null) {
+async function submissionFindByReservationId(t = null, id) {
   return await Submission.findAll(
     {
-      where: id ? { reservation_id: id } : {}, 
       include: [
-        {
-          model: Reservation,
-          as: 'reservation',
-          include: [
-            { model: Store, as: 'store' },
-            { 
-              model: Owner, 
-              as: 'owner',
-              include: [
-                {
-                  model: Like,
-                  as: 'likes', // 모델 정의 시 설정한 alias 확인 필요
-                  required: false, // 찜이 없어도 데이터는 나와야 하므로 false
-                  where: cleanerId ? { cleaner_id: cleanerId } : {}
-                }
-              ]
-            }
-          ]
-        },
         {
           attributes: ['id', 'code', 'content'],
           model: Question,
@@ -74,13 +53,16 @@ async function submissionFindByReservationId(t = null, id, cleanerId = null) {
             },
           ],
         },
+
       ],
       order: [
-        [sequelize.literal('`question`.`code` IS NULL'), 'ASC'],
+        [sequelize.literal('`Question`.`code` IS NULL'), 'ASC'],
         [{ model: Question, as: 'question' }, 'code', 'ASC']
       ]
     },
-    { transaction: t }
+    {
+      transaction: t
+    }
   );
 }
 
