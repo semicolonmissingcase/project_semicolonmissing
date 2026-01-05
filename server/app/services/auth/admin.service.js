@@ -26,18 +26,22 @@ async function adminLogin(body) {
   return await db.sequelize.transaction(async t => {
     const { email, password } = body;
 
-    // email로 점주 정보 획득
+    // email로 관리자 정보 획득
+    // email로 관리자 정보 획득
     const admin = await adminRepository.findByEmail(t, email);
 
-    // 점주 존재 여부 체크
+    // 관리자 존재 여부 체크
+    // 관리자 존재 여부 체크
     if(!admin) {
-      throw myError('점주 미존재', NOT_REGISTERED_ERROR);
+      throw myError('관리자 미존재', NOT_REGISTERED_ERROR);
     }
 
     // 비밀번호 체크 
     if(!bcrypt.compareSync(password, admin.password)) {
       throw myError('비밀번호 틀림', NOT_REGISTERED_ERROR);
     }
+
+    admin.role = 'ADMIN';
 
     // JWT 생성(accessToken, refreshToken)
     const accessToken = jwtUtil.generateAccessToken(admin);
@@ -56,6 +60,15 @@ async function adminLogin(body) {
 }
 
 /**
+ * 로그아웃 처리
+ * @param {number} id - 유저id
+ */
+async function logout(id) {
+  return await adminRepository.logout(null, id);
+}
+
+
+/**
  * 토큰 재발급 처리
  * @param {string} token 
  */
@@ -65,7 +78,8 @@ async function reissue(token) {
   const adminId = claims.sub;
 
   return await db.sequelize.transaction(async t => {
-    // 유저 정보 획득
+    // 관리자 정보 획득
+    // 관리자 정보 획득
     const admin = await adminRepository.findByPk(t, adminId);
 
     // 토큰 일치 검증
@@ -91,5 +105,6 @@ async function reissue(token) {
 
 export default {
   adminLogin,
+  logout,
   reissue,
 }

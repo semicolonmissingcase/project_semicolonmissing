@@ -7,7 +7,6 @@
 import db from "../models/index.js";
 import constants from "../constants/models.constants.js";
 
-// 수정: 구조분해 할당 문법 수정
 const { PaymentStatus, ReservationStatus } = constants;
 const { Payment, Reservation } = db;
 
@@ -47,7 +46,6 @@ async function findByOrderId(orderId, transaction = null) {
  * 결제 승인 성공 후 상태 업데이트
  */
 async function updatePaymentAfterSuccess(paymentData, reservationId, transaction) {
-  // 수정: 변수명 정리 (dataToUpdate로 명명)
   const { orderId, ...updateFields } = paymentData;
 
   const dataToUpdate = {
@@ -69,7 +67,7 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
 
   // 예약 상태 업데이트 
   await Reservation.update({
-    status: ReservationStatus.COMPLETED
+    status: ReservationStatus.APPROVED
   }, {
     where: { id: reservationId },
     transaction

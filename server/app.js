@@ -10,7 +10,7 @@ import errorHandler from './app/errors/errorHandler.js';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
+import adminRouter from './routes/admin.router.js';
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
 
 // 채팅 관련 import
@@ -47,7 +47,8 @@ app.use('/api/users', usersRouter); // 회원가입 관련
 app.use('/api/owners', ownersRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
-app.use('/api/payments', paymentsRouter); 
+app.use('/api/payments', paymentsRouter);
+app.use('/api/admin', adminRouter);
 
 // 에러 핸들러 등록
 app.use(errorHandler);
