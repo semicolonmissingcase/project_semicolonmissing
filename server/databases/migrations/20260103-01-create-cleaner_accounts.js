@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-04-create-reviews.js
- * @description reviews migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20260103-01-create-cleaner_accounts.js
+ * @description cleanerAccounts migration file
+ * 260103 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'reviews';
+const tableName = 'cleaner_accounts';
 
 // 컬럼 정의
 const attributes = {
@@ -17,43 +17,38 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '리뷰 PK',
+    comment: '기사계좌PK',
   },
-  ownerId: {
-    field: 'owner_id',
+  cleanerId: {
+    field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 PK',
+    comment: '기사 PK',
   },
-  reservationId: {
-    field: 'reservation_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '예약 PK',
+ 
+  bankCode: {
+    field: 'bank_code',
+    type: DataTypes.STRING(20),
+    allownull: true,
+    comment: '은행코드',
   },
-  content: {
-    field: 'content',
-    type: DataTypes.STRING(255),
+  depositor: {
+    field: 'depositor',
+    type: DataTypes.STRING(50),
     allowNull: true,
-    comment: '내용',
+    comment: '예금주',
   },
-  star: {
-    field: 'star',
-    type: DataTypes.INTEGER(5),
-    allowNull: false,
-    comment: '별점',
-  },
-  reviewePicture1: {
-    field: 'review_picture_1',
-    type: DataTypes.TEXT,
+  accountNumber: {
+    field: 'accountNumber',
+    type: DataTypes.STRING(20),
     allowNull: true,
-    comment: '리뷰사진1',
+    comment: '계좌번호',
   },
-  reviewePicture2: {
-    field: 'review_picture_2',
-    type: DataTypes.TEXT,
+  isDefault: {
+    field: 'is_default',
+    type: DataTypes.BOOLEAN,
     allowNull: true,
-    comment: '리뷰사진2',
+    comment: '주계좌'
   },
   createdAt: {
     field: 'created_at',

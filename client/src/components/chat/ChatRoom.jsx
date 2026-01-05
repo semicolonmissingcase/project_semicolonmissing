@@ -73,55 +73,89 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     }
   };
 
+  // 초기화 및 읽음 처리 순서 최적화
   useEffect(() => {
     if (!roomId) return;
+    
     const init = async () => {
       try {
+        // 1. 방 정보 먼저 세팅 (UI 제목 등)
         const roomRes = await getChatRoomDetail(roomId);
         const responseData = roomRes.data?.data; 
         if (responseData) {
           onOpenSidebar(responseData, false);
-          const sideType = responseData.sideType;
           const detail = responseData.data;
-          const isMeOwner = sideType === 'OWNER';
-          const targetName = isMeOwner ? detail.cleanerName : detail.ownerName;
-          const targetId = isMeOwner ? detail.cleanerId : detail.ownerId;
-          setOpponentName(targetName || "이름 없음");
-          setOpponentId(targetId);
+          const isMeOwner = responseData.sideType === 'OWNER';
+          setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
+          setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
         }
-      } catch (err) { 
-        console.warn("방 정보 조회 실패", err); 
-        setOpponentName("채팅방");
-      }
-      setHasMore(true);
-      setPage(1);
-      await fetchMessages(1, true);
-      markMessageAsRead(roomId).catch(() => {});
-    };
-    init();
-  }, [roomId]);
 
+        // 2. [핵심] 읽음 처리 API를 먼저 호출하고 '기다림'
+        await markMessageAsRead(roomId);
+        
+        // 3. 소켓으로 읽음 신호 전송
+        if (socket) {
+          socket.emit("mark_as_read", { roomId, userRole });
+        }
+
+        // 4. DB가 업데이트된 '후'에 메시지 목록을 가져옴
+        setHasMore(true);
+        setPage(1);
+        await fetchMessages(1, true);
+
+      } catch (err) { 
+        console.warn("초기화 중 오류 발생", err); 
+        setOpponentName("채팅방");
+        // 에러가 나더라도 메시지는 시도
+        fetchMessages(1, true);
+      }
+    };
+
+    init();
+  }, [roomId, socket]);
+
+  // 스크롤 핸들러
   const handleScroll = () => {
     if (scrollRef.current && scrollRef.current.scrollTop === 0 && hasMore && !isLoading) {
       fetchMessages(page);
     }
   };
 
+  // 소켓 리스너
   useEffect(() => {
     if (!socket || !roomId) return;
+
+    socket.emit('join_room', roomId);
+
+    const handleMessagesRead = (data) => {
+      if (String(data.roomId) === String(roomId)) {
+        setMessageList(prev => prev.map(m => ({ ...m, isRead: 1 })));
+      }
+    };
+
     const handleReceive = (newMsg) => {
-      const incomingId = String(newMsg.chatRoomId || newMsg.room_id || newMsg.roomId);
-      if (incomingId === String(roomId)) {
+      if (String(newMsg.chatRoomId || newMsg.room_id) === String(roomId)) {
         setMessageList(prev => {
-          if (prev.some(m => (m.id && m.id === newMsg.id))) return prev;
-          return [...prev, newMsg];
+          // 중복 메시지 방지 로직 추가
+          const isDup = prev.some(m => m.id && newMsg.id && m.id === newMsg.id);
+          return isDup ? prev : [...prev, newMsg];
         });
+        
+        socket.emit('mark_as_read', { roomId }); 
+        markMessageAsRead(roomId).catch(() => {});
+        
         setTimeout(() => scrollToBottom('smooth'), 100);
       }
     };
+
+    socket.on("messages_read", handleMessagesRead);
     socket.on("receive_message", handleReceive);
-    return () => socket.off("receive_message", handleReceive);
-  }, [socket, roomId, scrollToBottom]);
+
+    return () => {
+      socket.off("messages_read", handleMessagesRead);
+      socket.off("receive_message", handleReceive);
+    };
+  }, [socket, roomId]);
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || !socket) return;
@@ -190,22 +224,27 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
           );
           
           const isImage = (msg.messageType || msg.type) === 'IMAGE';
+          const isReadVal = msg.isRead !== undefined ? msg.isRead : msg.is_read;
+          const showUnread = isMe && Number(isReadVal) === 0;
 
           return (
             <div key={msg.id || index} className={`chatroom-message-item ${isMe ? 'mine' : 'other'}`}>
               <div className='chatroom-bubble-container'>
-                {/* 이미지일 때 배경을 없애주는 'has-image' 클래스만 추가했습니다 */}
-                <div className={`chatroom-bubble ${isImage ? 'has-image' : ''}`}>
-                  {isImage ? (
-                    <img 
-                      src={msg.content} 
-                      alt="chat" 
-                      className="chat-image-content" 
-                      onClick={() => window.open(msg.content, '_blank')}
-                    />
-                  ) : (
-                    msg.content
-                  )}
+                <div className='chatroom-bubble-row'>
+                  {showUnread && <span className='unread-count'>1</span>}
+                  
+                  <div className={`chatroom-bubble ${isImage ? 'has-image' : ''}`}>
+                    {isImage ? (
+                      <img 
+                        src={msg.content} 
+                        alt="chat" 
+                        className="chat-image-content" 
+                        onClick={() => window.open(msg.content, '_blank')}
+                      />
+                    ) : (
+                      msg.content
+                    )}
+                  </div>
                 </div>
                 <span className='chatroom-time'>
                   {dayjs(msg.createdAt || msg.created_at).format('A h:mm')}

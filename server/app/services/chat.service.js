@@ -119,9 +119,10 @@ async function saveMessage(data) {
 /**
  * 메시지 읽음 처리
  */
-async function markAsRead(room_id, user_id) {
+async function markAsRead(room_id, user_id, user_role) {
   return await db.sequelize.transaction(async t => {
-    await chatRepository.markAsRead(t, room_id, user_id);
+    // 3개의 인자를 모두 정확히 전달
+    return await chatRepository.markAsRead(t, room_id, user_id, user_role);
   });
 }
 

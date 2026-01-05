@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import dayjs from 'dayjs';
-import { reissueThunk } from '../store/thunks/authThunk.js';
 
 // store 저장용 변수
 let store = null;
@@ -23,7 +20,10 @@ const axiosInstance = axios.create({
 });
 // 서버에 요청 보내기 전 만료 확인 
 axiosInstance.interceptors.request.use(async (config) => { // confing에 리퀘스트 객체의 옵션을 가져옴.
-
+  const accessToken = store.getState().auth.accessToken;
+   if(accessToken) {
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
+   }  
     return config;
   },
   (error)  => {

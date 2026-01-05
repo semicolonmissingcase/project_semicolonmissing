@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState } from "react";
 import "./SocialLoginInfo.css";
 import useKakaoPostcode from "../hooks/useKakaoPostcode.js";
@@ -11,10 +10,13 @@ export default function SocialLoginInfo() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const email = searchParams.get('email');
+  const nick = searchParams.get('nick');
+  const profile = searchParams.get('profile');
   const [selectedRole, setSelectedRole] = useState(null); // 'OWNER' 또는 'CLEANER'
   const { openPostcode } = useKakaoPostcode();
   const [formData, setFormData] = useState({ 
-    name: "",
+    name: nick || "", // URL에서 받은 닉네임으로 초기화
     phonePrefix: "010",
     phoneMiddle: "",
     phoneLast: "",
@@ -28,39 +30,65 @@ export default function SocialLoginInfo() {
 
 
 const handleSubmit = async () => {
+  // 1. 데이터 조립
+  const finalData = {
+    // URL에서 가져온 정보
+    email,
+    nick: formData.name, // 사용자가 수정했을 수 있으니 formData에서 가져옴
+    profile,
+    provider: 'KAKAO',
+
+    // 역할
+    role: selectedRole,
+
+    // 폼에서 입력받은 정보
+    name: formData.name,
+    phoneNumber: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
+    
+    // 점주/기사 분기 데이터
+    ...(selectedRole === 'OWNER' && {
+      storeName: formData.storeName,
+      storePhone: `${formData.storePhonePrefix}-${formData.storePhoneMiddle}-${formData.storePhoneLast}`,
+      storeAddress: `${formData.address} ${formData.addressDetail}`,
+    }),
+    ...(selectedRole === 'CLEANER' && {
+      // TODO: 기사님 활동 지역 정보 추가
+      regions: ['서울 전체'], // 임시 데이터
+    })
+  };
+
+  // 2. 유효성 검사 (예시)
+  if (!finalData.name || !formData.phoneMiddle || !formData.phoneLast) {
+    alert('필수 정보를 모두 입력해주세요.');
+    return;
+  }
+  if (selectedRole === 'OWNER' && (!finalData.storeName || !finalData.storeAddress)) {
+    alert('매장 정보를 모두 입력해주세요.');
+    return;
+  }
 
   try {
     const response = await axiosInstance.post('/api/auth/signup/complete', finalData);
 
-    // response.data 전체를 먼저 출력해서 구조를 확인해보세요
     console.log("서버 전체 응답:", response.data);
-
     if (response.status === 200 || response.status === 201) {
-      // 서버 응답 구조가 response.data.data.user 인지 확인이 필요합니다.
-      // 만약 구조가 다르다면 아래처럼 안전하게 추출하세요.
-      const user = response.data?.data?.user || response.data?.user;
+      const user = response.data?.user;
 
       if (user) {
-        dispatch(setCredentials({ user }));
+        const accessToken = response.data.accessToken;
+        dispatch(setCredentials({ user, accessToken }));
         alert("회원가입이 완료되었습니다!");
-        //  성공 시에만 페이지 이동
         navigate('/', { replace: true });
       } else {
-        // 유저 정보가 없으면 수동으로라도 이동 시키거나 로그인을 다시 유도
         console.warn("유저 정보가 응답에 없습니다.");
         navigate('/login');
       }
     }
   } catch (error) {
-    // 에러가 났을 때 어떤 에러인지 상세히 출력
     console.error("handleSubmit 에러 발생:", error);
-    
-    // 네트워크 탭의 'me' 401 에러 때문일 가능성이 큽니다.
-    const errorMessage = error.response?.data?.message || "등록은 되었으나 로그인 정보를 가져오지 못했습니다. 다시 로그인해주세요.";
-    alert(`등록 알림: ${errorMessage}`);
-    
-    // 저장은 되었으니 로그인 페이지로 보내버리는 것도 방법입니다.
-    navigate('/login');
+    const errorMessage = error.response?.data?.message || "등록 중 오류가 발생했습니다. 다시 시도해주세요.";
+    alert(`오류: ${errorMessage}`);
+    // 실패 시 로그인 페이지로 보내지 않고, 사용자가 폼을 다시 확인하게 둠
   }
 };
 
@@ -89,13 +117,13 @@ const handleSubmit = async () => {
         {/* 이름 입력 */}
         <div className="sociallogininfo-info-box">
           <label htmlFor="name">이름</label>
-          <input type="text" id="name" name="name" placeholder="기존이름출력" onChange={handleChange} />
+          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
         </div>
 
         {/* 이메일(출력) */}
         <div className="sociallogininfo-info-box">
           <p>이메일</p>
-          <p className="sociallogininfo-email">kakao@kakao</p>
+          <p className="sociallogininfo-email">{email}</p>
         </div>
 
         {/* 개인 전화번호 */}
@@ -188,7 +216,7 @@ const handleSubmit = async () => {
                 검색하기
               </button>
             </div>
-            <input type="text" className="detail-address" placeholder="상세 주소를 입력하세요" />
+            <input type="text" name="addressDetail" className="detail-address" placeholder="상세 주소를 입력하세요" value={formData.addressDetail} onChange={handleChange}/>
           </div>
         </div>
       )}

@@ -16,7 +16,7 @@ function authenticate(req) {
   // 1. 토큰 획득 (req에서 토큰을 추출하는 로직이 jwtUtil.getToken(req) 형태라고 가정)
   // 기존 코드에 jwtUtil.generateAccessToken(req)라고 되어있는데, 
   // 검증 시에는 보통 getToken이나 추출 로직이 와야 합니다.
-  const token = jwtUtil.extractToken(req);
+  const token = req.cookies.accessToken;
 
   if (!token) {
     throw myError('인증 토큰이 없습니다.', UNAUTHORIZED_ERROR);
@@ -30,6 +30,8 @@ function authenticate(req) {
     id: claims.id || claims.sub,
     role: claims.role // 토큰 생성 시 넣었던 ROLE.OWNER 또는 ROLE.CLEANER
   };
+
+  console.log("미들웨어에서 생성된 req.user:", req.user);
 }
 
 /**
