@@ -18,15 +18,14 @@ postsRouter.get('/inquiries', ownerInquiryController.getAllInquiries);
 postsRouter.post('/inquiries', authUserMiddleware, ownerInquiryController.ownerCreateInquiry);
 // 문의사항 작성(비회원용)
 postsRouter.post('/inquiries/guest', multerMiddleware.inquiryImageUploader, ownerInquiryController.guestCreateInquiry);
+
 // CKEditor 내부 이미지 업로드용 라우트
 postsRouter.post('/images/editor', authUserMiddleware, ownerInquiryController.uploadEditorImage)
+
 // 내 문의사항 조회(점주)
 postsRouter.get('/owner/inquiries', authUserMiddleware, ownerInquiryController.getOwnerInquiries);
 // 내 문의상세 조회(점주)
 postsRouter.get('/owner/inquiries/:inquiryId', authUserMiddleware, ownerInquiryController.getOwnerInquiriesShow);
-
-// CKEditor 내부 이미지 업로드용
-postsRouter.post('/images/editor', multerMiddleware.editorImageUploader, ownerInquiryController.uploadEditorImage);
 
 // 문의사항 답변(관리자 전용)
 // postsRouter.post('/inquiries/:inquiryId/answers', authAdminMiddleware, ownerInquiryController.createAnswer);

@@ -54,6 +54,10 @@ export default function Estimates() {
     navigate('/chatroom/:id');
   }
 
+  function reservationShow() {
+    navigate('/owners/reservation/:id');
+  }
+
   return (
     <div className="estimates-page">
       <div className="estimates-tab-container">
@@ -135,7 +139,7 @@ export default function Estimates() {
                     </div>
   
                     <div className="estimates-card-action-row">
-                      <button className="estimates-btn-light">견적서 보기</button>
+                      <button className="estimates-btn-light" onClick={reservationShow}>견적서 보기</button>
                       <button className="estimates-btn-primary" onClick={chatroom}>채팅하기</button>
                     </div>
                   </div>

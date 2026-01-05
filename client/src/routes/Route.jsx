@@ -23,6 +23,7 @@ import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
 import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
 import OwnerReservation from "../components/owner/OwnerReservation.jsx";
+import OwnerReservationShow from "../components/owner/OwnerReservationShow.jsx";
 // 관리자 관련
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
@@ -141,6 +142,11 @@ const router = createBrowserRouter([
             path: 'reservation',
             element: <OwnerReservation />,
           },
+          {
+            // 점주가 확인하는 요청서 페이지
+            path: 'reservation/:id',
+            element: <OwnerReservationShow />
+          }
         ]
       },
       {
