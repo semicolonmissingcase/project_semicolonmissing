@@ -17,6 +17,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER]}, // 둘 다 허용
     { path: /^\/api\/payments\/ready$/,  roles: [OWNER, CLEANER]},
     { path: /^\/api\/payments\/confirm$/, roles: [OWNER] },
+    { path: /^\/api\/admin\/logout$/, roles: [ADMIN] },
   ],
   PUT: [
   ],
