@@ -33,15 +33,10 @@ cleanersRouter.post('/quotations', authCleanerMiddleware, async (req, res) => {
       cleanerId,
       estimatedAmount,
       description
-
     });
 
-    const RESERVATION_STATUS = {
-      REQUEST: '요청',
-    };
-
     await db.Reservation.update(
-      { status: RESERVATION_STATUS.IN_PROGRESS },
+      { status: 'PENDING' }, 
       { where: { id: reservationId } }
     );
 

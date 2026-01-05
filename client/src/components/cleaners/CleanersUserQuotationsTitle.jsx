@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select'; 
 import { IoMdAddCircleOutline } from "react-icons/io"; 
-import cleanersThunk from "../../store/thunks/cleanersThunk.js";
+import { titleThunk } from "../../store/thunks/cleanersThunk.js";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { getMe } from "../../store/thunks/cleanersThunk.js";
 import { clearCleaners } from "../../store/slices/cleanersSlice.js";
 import { CiUser } from "react-icons/ci";
 import { MdHomeWork } from "react-icons/md";
@@ -33,18 +34,57 @@ const filterOptions = [
   { value: '취소', label: '취소/반려' },
 ];
 
+
 function CleanersUserQuotationsTitle() {
+
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { submissions, loading, user } = useSelector((state) => state.cleaners);
-  
-  const [filter, setFilter] = useState(filterOptions[0]); 
-  const [visibleCount, setVisibleCount] = useState(4); 
+  // 1. 상태들을 먼저 다 가져옵니다.
+  const { isInitialized, isLoggedIn } = useSelector((s) => s.auth);
+  const { 
+    cleaner, 
+    submissions, 
+    loading, // 👈 여기서 loading이 정의됩니다.
+    isLoggedIn: cleanersLoggedIn 
+  } = useSelector((state) => state.cleaners);
 
-  useEffect(() => {
-    dispatch(cleanersThunk.titleThunk());
-    return () => dispatch(clearCleaners());
-  }, [dispatch]);
+  // 2. 변수 정의가 끝난 "후에" 콘솔로그나 로직을 작성해야 합니다.
+  console.log("체크1 - 로딩중인가?:", loading);
+  console.log("체크2 - cleaner 데이터:", cleaner);
+
+  const [filter, setFilter] = useState(filterOptions[0]); 
+  const [visibleCount, setVisibleCount] = useState(4);
+
+ useEffect(() => {
+  // 초기화 전이면 대기
+  if (!isInitialized) return;
+
+  // 로그인이 안 되어 있으면 중단
+  if (!isLoggedIn) {
+    console.log("로그인이 필요합니다.");
+    return;
+  }
+
+  // 핵심 로직: 로그인은 됐는데 cleaner 정보가 없으면 직접 getMe 호출
+  if (!cleaner) {
+    console.log("기사 정보가 비어있어 getMe를 직접 요청합니다.");
+    dispatch(getMe());
+    return; // 데이터를 받아올 때까지 이번 턴은 종료
+  }
+
+  // 이제 cleaner가 확실히 있을 때만 리스트 요청
+  if (cleaner.id) {
+    console.log("데이터 확인 완료! 리스트를 불러옵니다. ID:", cleaner.id);
+    dispatch(titleThunk(cleaner.id));
+  }
+  }, [isInitialized, isLoggedIn, cleaner, dispatch]); 
+
+  const auth = useSelector((s) => s.auth);
+  console.log("--- 디버깅 로그 ---");
+  console.log("1. Auth 로그인 여부:", auth.isLoggedIn);
+  console.log("2. Cleaner 데이터 존재 여부:", cleaner ? "있음" : "없음(null)");
+  console.log("3. 로딩 상태:", loading);
 
   const processedData = useMemo(() => {
     const dataArray = Array.isArray(submissions) ? submissions : (submissions?.submissions || []);
@@ -74,7 +114,7 @@ function CleanersUserQuotationsTitle() {
     });
   }, [submissions]);
 
-  // 🟢 데이터 구조에 맞게 수정한 상태 판별 로직
+  //  데이터 구조에 맞게 수정한 상태 판별 로직
   const getStatusInfo = (item) => {
     const res = item.reservation;
     const currentStatus = res?.status; // 예: "요청"
@@ -113,9 +153,15 @@ function CleanersUserQuotationsTitle() {
   return (
     <div className="all-container cleaners-user-quotations-title-container"> 
       
-        <span className="cleaners-user-quotations-title-text">
-          안녕하세요, {user?.name || "기사"} 님! 요청 의뢰서입니다.
-        </span>
+      <div>
+      {/* auth의 isLoggedIn과 cleaner 데이터가 모두 있을 때만 이름을 띄웁니다 */}
+      {isLoggedIn && cleaner ? (
+        <p>{cleaner.name} 님! 요청 의뢰서입니다</p>
+      ) : (
+        <p>로그인 정보를 확인 중입니다...</p>
+      )}
+    </div>
+    
         <div style={{ width: '140px' }}>
           <Select
             options={filterOptions} 

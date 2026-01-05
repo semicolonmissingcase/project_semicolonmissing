@@ -33,12 +33,53 @@ export const fetchLocations = createAsyncThunk(
   }
 );
 
+export const loginCleaner = createAsyncThunk(
+  "cleaners/login",
+  async (loginData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/login/cleaner", loginData);
+      
+      // 로그인 성공 시 토큰을 로컬스토리지에 저장 (선택 사항)
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+      
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getMe = createAsyncThunk(
+  "cleaners/getMe",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("cleanerToken"); // <- 키 분리 추천
+      if (!token) return rejectWithValue({ status: 401, message: "토큰이 없습니다." });
+
+      const response = await axios.get("/api/cleaners/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      return response.data; 
+    } catch (error) {
+      return rejectWithValue({
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.response?.data?.message || error.message,
+      });
+    }
+  }
+);
+
 export const titleThunk = createAsyncThunk(
   'cleaners/titleThunk',
-  async (cleanerId, { rejectWithValue }) => { // 컴포넌트에서 cleanerId를 보낸다고 가정
+  async (cleanerId, { rejectWithValue }) => {
     try {
-
-      const url = `/api/owners/quotations`; 
+      // 5173(Vite)이 아닌 3000(Express)으로 직접 쏩니다.
+      const url = `/api/owners/quotations/${cleanerId}`;
+      
       const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
@@ -47,18 +88,17 @@ export const titleThunk = createAsyncThunk(
   }
 );
 
+
 export const showThunk = createAsyncThunk(
   'cleaners/showThunk',
   async (id, { rejectWithValue }) => {
     try {
-      // 기존 URL: 견적서(quotations) 정보를 가져오는 엔드포인트
-      const url = `/api/owners/quotations/${id}`;
+      // 주소를 백틱(`)으로 감싸고 ${id}가 정확히 들어갔는지 확인하세요.
+      const url = `/api/owners/quotations/${id}`; 
 
       const response = await axiosInstance.get(url);
-
       return response.data;
     } catch (error) {
-      // 에러 처리 시, HTTP 응답의 데이터를 포함하여 디버깅에 용이하게 합니다.
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -97,8 +137,9 @@ export const fetchTemplateThunk = createAsyncThunk(
 
       return response.data; 
     } catch (error) {
-      // 에러를 catch해서 rejected 상태로 보냅니다.
-      return thunkAPI.rejectWithValue(error.message);
+  const data = error.response?.data;
+  const msg = data?.message || data?.error || error.message || "요청 실패";
+  return thunkAPI.rejectWithValue({ status: error.response?.status, data, msg });
     }
   }
 );
@@ -167,6 +208,8 @@ export const submitQuotationThunk = createAsyncThunk(
 export default {
   registerCleaner,
   fetchLocations,
+  loginCleaner,   
+  getMe,          
   titleThunk,
   showThunk,        
   accountInfoThunk,

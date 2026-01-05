@@ -10,6 +10,8 @@ import validationHandler from "../app/middlewares/validations/validationHandler.
 import ownerUserValidators from '../app/middlewares/validations/validatiors/owner/owner.user.validators.js';
 import db from '../app/models/index.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import authCleanerMiddleware from '../app/middlewares/auth/auth.cleaner.middleware.js';
 // import cleanerUserValidators from '../app/middlewares/validations/validatiors/cleaner/cleaner.user.validators.js';
 // import cleanerUserController from "../app/controllers/cleaner/cleaner.user.controller.js";
 
@@ -71,6 +73,89 @@ usersRouter.post('/cleaner', async (req, res) => {
     errorStack: error.stack 
   });
 }
+});
+
+// 기사 로그인
+usersRouter.post('/login/cleaner', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1. 이메일로 기사 찾기
+    const cleaner = await db.Cleaner.findOne({ where: { email } });
+    if (!cleaner) {
+      return res.status(401).json({ message: "존재하지 않는 이메일입니다." });
+    }
+
+    // 2. 비밀번호 비교
+    // bcrypt.compare(입력비밀번호, DB저장비밀번호)
+    const isMatch = await bcrypt.compare(password, cleaner.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "비밀번호가 일치하지 않습니다." });
+    }
+
+    // 3. 로그인 성공 시 처리 (JWT 토큰 예시)
+    // 실제 서비스에서는 env 파일에 SECRET_KEY를 관리해야 합니다.
+    const token = jwt.sign(
+      { id: cleaner.id, email: cleaner.email, role: 'cleaner' },
+      'your_jwt_secret_key', 
+      { expiresIn: '1d' }
+    );
+
+    // 4. 비밀번호를 제외한 정보와 토큰 반환
+    const result = cleaner.toJSON(); // 모델에서 이미 password 제거되도록 설정하셨으므로 안전합니다.
+
+    return res.status(200).json({
+      success: true,
+      message: "로그인 성공",
+      token,
+      user: result
+    });
+
+  } catch (error) {
+    console.error("로그인 에러:", error);
+    return res.status(500).json({ message: "서버 오류", error: error.message });
+  }
+});
+
+usersRouter.get('/cleaner/me', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: "토큰이 없습니다." });
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, 'your_jwt_secret_key'); // 로그인 때 쓴 시크릿 키와 동일해야 함
+
+    const cleaner = await db.Cleaner.findByPk(decoded.id);
+    if (!cleaner) return res.status(404).json({ message: "유저를 찾을 수 없습니다." });
+
+    return res.status(200).json({ success: true, user: cleaner });
+  } catch (error) {
+    return res.status(401).json({ message: "유효하지 않은 토큰입니다." });
+  }
+});
+
+
+usersRouter.get('/me', authCleanerMiddleware, async (req, res) => {
+  try {
+    // 미들웨어에서 성공하면 req.user에 이미 유저 정보를 담아두었습니다.
+    // 그래서 DB를 다시 조회할 필요 없이 바로 사용하면 됩니다.
+    const cleaner = req.user;
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: cleaner.id,
+        name: cleaner.name,
+        email: cleaner.email,
+        gender: cleaner.gender,
+        phoneNumber: cleaner.phoneNumber,
+        // 비밀번호(password)는 보안상 제외하고 보내는 것이 좋습니다.
+      }
+    });
+  } catch (error) {
+    console.error("getMe 에러:", error);
+    return res.status(500).json({ message: "서버 오류 발생" });
+  }
 });
 
 export default usersRouter;
