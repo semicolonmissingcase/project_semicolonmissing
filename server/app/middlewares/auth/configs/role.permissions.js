@@ -30,6 +30,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/owners\/profile$/, roles: [OWNER] }, // 점주 프로필 이미지 업로드
     { path: /^\/api\/owners\/cleaners\/\d+\/like$/, roles: [OWNER] }, // 기사님 좋아요
     { path: /^\/api\/posts\/inquiries$/, roles: [OWNER, CLEANER] }, // 문의 생성
+    { path: /^\/api\/owners\/quotations$/, roles: [OWNER] }, // 견적 요청서 작성
   ],
   PUT: [
     { path: /^\/api\/auth\/me$/, roles: [OWNER] }, // 점장 정보수정용

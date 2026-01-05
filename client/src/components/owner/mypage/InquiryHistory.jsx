@@ -78,7 +78,7 @@ export default function InquiryHistory() {
                 <span className="inquiryhistory-q-prefix">Q.</span>
                 <span className="inquiryhistory-title-text">{item.title}</span>
                 <span className={`inquiryhistory-status ${item.status === 'PENDING' ? 'status-pending' : 'status-completed'}`}>
-                  {item.status === 'PENDING' ? '답변 대기중' : '답변 완료'}
+                  {item.status === 'PENDING' ? '답변 완료' : '답변 대기중'}
                 </span>
                 <span className="inquiryhistory-arrow-icon">
                   {activeIndex === index ? '▲' : '▼'}

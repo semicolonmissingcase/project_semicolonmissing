@@ -22,11 +22,9 @@ export default function Estimates() {
       try {
         setLoading(true);
         const data = await getOwnerReservations();
-        console.log('API에서 받은 예약 목록 데이터:', data);
         setReservations(data);
       } catch (err) {
         setError(err);
-        console.error("예약 목록 불러오기 실패:", err);
       } finally {
         setLoading(false);
       }

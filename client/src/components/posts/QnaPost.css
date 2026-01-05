@@ -76,24 +76,23 @@
 /* 1. 상단 컨트롤 (검색 우측 / 페이지선택 좌측) */
 .qnapost-table-section > div:first-of-type,
 .qnapost-table-section .table-header-controls {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  width: 100% !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   margin-bottom: 15px;
 }
 
-/* 검색창 오른쪽 끝 */
 .qnapost-table-section input[type="text"] {
-  width: 180px !important;
-  margin-left: auto !important;
+  width: 180px;
+  margin-left: auto;
   order: 2;
 }
 
 /* 페이지 선택 왼쪽 끝 */
 .qnapost-table-section select {
-  margin-right: auto !important;
+  margin-right: auto;
   order: 1;
 }
 
@@ -104,8 +103,8 @@
 }
 
 .qnapost-table-section table {
-  width: 100% !important;
-  table-layout: fixed !important; /* 너비를 고정하여 텍스트에 밀리지 않게 함 */
+  width: 100%;
+  table-layout: fixed; /* 너비를 고정하여 텍스트에 밀리지 않게 함 */
   border-collapse: collapse;
 }
 
@@ -135,7 +134,7 @@
   .qnapost-table-section th:nth-child(2), .qnapost-table-section td:nth-child(2),
   .qnapost-table-section th:nth-child(5), .qnapost-table-section td:nth-child(5),
   .qnapost-table-section th:nth-child(6), .qnapost-table-section td:nth-child(6) {
-    display: none !important;
+    display: none;
   }
 
   .qnapost-table-section th:nth-child(1) { width: 80px; }
@@ -156,12 +155,12 @@
   .qnapost-container > h2 { font-size: 1.3rem; }
 
   /* 상단 버튼 가로 정렬 유지 */
-  .qnapost-btn-container { flex-direction: row !important; gap: 8px; }
+  .qnapost-btn-container { flex-direction: row; gap: 8px; }
   .qnapost-btn-container button { padding: 0.6rem; font-size: 0.8rem; flex: 1; }
 
   /* 검색창 및 페이지 선택 소형화 */
-  .qnapost-table-section input[type="text"] { width: 100px !important; font-size: 11px; }
-  .qnapost-table-section select { width: 85px !important; font-size: 11px; }
+  .qnapost-table-section input[type="text"] { width: 100px; font-size: 11px; }
+  .qnapost-table-section select { width: 85px; font-size: 11px; }
 
   /* 테이블 폰트 및 열 너비 재조정 */
   .qnapost-table-section th, 
@@ -174,15 +173,15 @@
   /* 컬럼 비율 강제 조정 (합계 100%) */
   .qnapost-table-section th:nth-child(1), 
   .qnapost-table-section td:nth-child(1) { 
-    width: 45px !important; /* 상태 열 최소화 */
+    width: 45px; /* 상태 열 최소화 */
   } 
   .qnapost-table-section th:nth-child(4), 
   .qnapost-table-section td:nth-child(4) { 
-    width: 60px !important; /* 작성자 열 공간 고정 */
+    width: 60px; /* 작성자 열 공간 고정 */
   }
   .qnapost-table-section th:nth-child(3), 
   .qnapost-table-section td:nth-child(3) { 
-    width: auto !important; /* 제목이 남은 공간을 차지 */
+    width: auto; /* 제목이 남은 공간을 차지 */
     text-align: left;
   }
 

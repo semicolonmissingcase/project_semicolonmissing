@@ -37,6 +37,7 @@ async function getInquiriesByOwner(ownerId) {
     id: inquiry.id,
     ownerId: inquiry.ownerId,
     title: inquiry.title,
+    content: inquiry.content,
     status: inquiry.status,
     createdAt: inquiry.createdAt,
   }));
@@ -48,26 +49,26 @@ async function getInquiriesByOwner(ownerId) {
  * @param {number} ownerId 
  * @returns 
  */
-async function  getInquiryDetailsForOwner(inquiryId, ownerId) {
+async function getInquiryDetailsForOwner(inquiryId, ownerId) {
+  // Repository에서 단일 객체를 가져오도록 수정 권장
   const inquiry = await ownerInquiryRepository.findInquiryByIdAndOwnerId({ inquiryId, ownerId });
   
-  if (!inquiries) {
+  // 오타 수정: inquiries -> inquiry
+  if (!inquiry || inquiry.length === 0) {
     throw new Error('해당 문의를 찾을 수 없거나 접근 권한이 없습니다.');
   }
 
+  // findAll을 썼으므로 배열의 첫 번째 요소를 사용 (Repository를 findOne으로 바꾸면 더 좋음)
+  const target = Array.isArray(inquiry) ? inquiry[0] : inquiry;
+
   return {
-    id: inquiry.id,
-    ownerId: inquiry.ownerId,
-    title: inquiry.title,
-    status: inquiry.status,
-    createdAt: inquiry.createdAt,
-    updateAt: inquiry.updateAt,
-    answers: inquiry.answers ? inquiry.answers.map(answer => ({
-      id: answer.id,
-      adminId: answer.adminId,
-      content: answer.content,
-      createdAt: answer.createdAt,
-    })) : [],
+    id: target.id,
+    ownerId: target.ownerId,
+    title: target.title,
+    content: target.content, // 내용 추가 필요
+    status: target.status,
+    createdAt: target.createdAt,
+    answers: target.answers || []
   };
 }
 

@@ -5,6 +5,7 @@
  */
 
 import db from '../../models/index.js';
+import dayjs from 'dayjs';
 const { Inquiry, Owner, Cleaner, Admin, Answer, Review, Reservation, Store} = db;
 
 /**
@@ -71,6 +72,7 @@ async function findAllInquiries(limit, offset) {
       'title',
       'category',
       'createdAt',
+      'content',
       'guestName', // 비회원은 이메일이 됨
       'ownerId',
       'cleanerId',

@@ -64,17 +64,42 @@
 }
 
 /* 버튼 그룹 */
-.favoritecleaner-btn-profile {
-  flex: 1;
-  background-color: var(--color-blue); 
-  color: var(--color-white);
+/* 버튼 그룹: 버튼 두 개를 나란히 배치 */
+.favoritecleaner-fav-btn-group {
+  display: flex;
+  gap: 10px; /* 버튼 사이 간격 */
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* 공통 버튼 스타일 (기존 스타일 활용) */
+.favoritecleaner-btn-profile,
+.favoritecleaner-btn-request {
+  flex: 1; /* 동일한 너비 공유 */
   border: none;
-  width: 100%;
   padding: 0.8rem;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
   font-size: 14px;
+  white-space: nowrap; /* 글자 줄바꿈 방지 */
+}
+
+/* 요청서 보내기 버튼 색상 (예: 녹색 또는 테두리 스타일) */
+.favoritecleaner-btn-request {
+  background-color: var(--color-light-gray);
+  color: var(--color-black);
+  transition: all 0.2s ease;
+}
+
+.favoritecleaner-btn-request:hover {
+  background-color: #f0f7ff;
+}
+
+/* 프로필 버튼 색상 (기존 유지) */
+.favoritecleaner-btn-profile {
+  background-color: var(--color-blue); 
+  color: var(--color-white);
 }
 
 /* --- 반응형 미디어 쿼리 --- */
@@ -104,6 +129,12 @@
   }
 
   .favoritecleaner-fav-btn-group {
-    flex-direction: column; /* 모바일에서 버튼 위아래 배치 */
+    flex-direction: column; 
+    gap: 8px;
+  }
+
+  .favoritecleaner-btn-profile,
+  .favoritecleaner-btn-request {
+    width: 100%;
   }
 }

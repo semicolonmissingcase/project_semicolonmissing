@@ -3,8 +3,10 @@ import './FavoriteCleaner.css';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
 import { getLikedCleaners } from '../../../api/axiosOwner.js';
 import CleanerProfileModal from '../../commons/CleanerProfileModal.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function FavoriteCleaner() {
+  const navigate = useNavigate();
   const [likedCleaners, setLikedCleaners] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,6 +42,10 @@ export default function FavoriteCleaner() {
       });
     }
   };
+
+  function ownerQuteList() {
+    navigate('/owners/reservation'); 
+  }
 
   // 프로필 모달
   const openProfile = (cleaner) => {
@@ -97,9 +103,19 @@ export default function FavoriteCleaner() {
             </div>
 
             <div className="favoritecleaner-fav-btn-group">
-              <button className="favoritecleaner-btn-profile"
+              <button 
+                className="favoritecleaner-btn-request"
+                onClick={ownerQuteList}
+              >
+                요청서 보내기
+              </button>
+              
+              <button 
+                className="favoritecleaner-btn-profile"
                 onClick={() => openProfile(cleaner)}
-              >프로필</button>
+              >
+                프로필
+              </button>
             </div>
           </div>
         ))}

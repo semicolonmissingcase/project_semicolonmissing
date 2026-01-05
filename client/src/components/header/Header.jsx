@@ -80,12 +80,12 @@ export default function Header() {
 
   // 점주(owner)
   function ownerQuteList() {
-    navigate('owners/reservation'); 
+    navigate('/owners/reservation'); 
   }
 
   // 기사님(cleaners)
-  function cleanerQuotelist() {
-    navigate('cleaners/userquotelist');
+  function cleanerQuotation() {
+    navigate('/cleaners/quotations');
   }
 
   // 모바일 네비게이션 관련

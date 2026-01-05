@@ -26,7 +26,7 @@ postsRouter.get('/owner/inquiries', authUserMiddleware, ownerInquiryController.g
 postsRouter.get('/owner/inquiries/:inquiryId', authUserMiddleware, ownerInquiryController.getOwnerInquiriesShow);
 
 // CKEditor 내부 이미지 업로드용
-postsRouter.post('/images/editor', multerMiddleware.editorImageUploader, ownerInquiryController.uploadEditorImage)
+postsRouter.post('/images/editor', multerMiddleware.editorImageUploader, ownerInquiryController.uploadEditorImage);
 
 // 문의사항 답변(관리자 전용)
 // postsRouter.post('/inquiries/:inquiryId/answers', authAdminMiddleware, ownerInquiryController.createAnswer);
@@ -34,6 +34,6 @@ postsRouter.post('/images/editor', multerMiddleware.editorImageUploader, ownerIn
 // 리뷰 작성
 // postsRouter.post('/reviews', authUserMiddleware, ownerInquiryController.createReview);
 // 리뷰 목록 조회
-postsRouter.get('owner/reviews', authUserMiddleware, ownerInquiryController.getOwnerReviews);
+postsRouter.get('/owner/reviews', authUserMiddleware, ownerInquiryController.getOwnerReviews);
 
 export default postsRouter;

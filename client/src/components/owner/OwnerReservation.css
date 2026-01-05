@@ -55,6 +55,7 @@
 .owner-reservation-profile {
   width: 5rem;
   height: 5rem;
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -85,14 +86,30 @@
   width: 100%;
 }
 
-.owner-reservation-date-input-set .owner-reservation-btn-blue {
-  flex: 1.5; 
-  height: 2.8rem; 
+/* 체크박스의 버튼화 (날짜 협의 가능) */
+.owner-reservation-negotiable-check input[type="checkbox"] {
+  display: none;
+}
+
+.owner-reservation-negotiable-check label {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 48px; /* DatePicker 인풋 높이와 동일하게 */
+  padding: 0 1.25rem;
+  border: 1px solid #1e3a8a;
+  color: #1e3a8a;
+  background: #fff;
+  border-radius: 0.375rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.owner-reservation-negotiable-check input[type="checkbox"]:checked + label {
+  background: #1e3a8a;
+  color: #fff;
 }
 
 .owner-reservation-time-row {
@@ -271,7 +288,7 @@
   display: grid;
   grid-template-columns: 2fr 3fr;
   gap: 1.25rem;
-  align-items: start;
+  align-items: baseline;
 }
 
 .owner-reservation-textarea-item {
@@ -297,6 +314,7 @@
 .owner-reservation-q-radio-group { 
   display: flex; 
   gap: 1.875rem; 
+  justify-content: space-around;
 }
 
 .owner-reservation-q-radio-group label {

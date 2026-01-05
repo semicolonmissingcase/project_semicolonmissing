@@ -37,8 +37,8 @@
 
 /* --- 스마트에디터2 내부 레이아웃 강제 교정 --- */
 .smart-editor-wrapper {
-  width: 100% !important;
-  max-width: 100% !important;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden; /* 밖으로 튀어나오는 것 원천 차단 */
 }
 
@@ -48,15 +48,15 @@
 .smart-editor-wrapper .se2_main,
 .smart-editor-wrapper .se2_content_container,
 .smart-editor-wrapper table {
-  width: 100% !important;
-  min-width: 0 !important;
-  table-layout: fixed !important; /* 테이블이 너비를 넘지 못하게 함 */
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed; /* 테이블이 너비를 넘지 못하게 함 */
 }
 
 /* 툴바 아이콘들이 좁은 화면에서 줄바꿈되도록 설정 */
 .smart-editor-wrapper .se2_tool {
-  white-space: normal !important;
-  height: auto !important;
+  white-space: normal;
+  height: auto;
 }
 
 @media (max-width: 430px) {
@@ -67,6 +67,6 @@
   
   /* 에디터 하단 버튼 영역 최적화 */
   .se2_conversion_mode {
-    padding: 0 5px !important;
+    padding: 0 5px;
   }
 }

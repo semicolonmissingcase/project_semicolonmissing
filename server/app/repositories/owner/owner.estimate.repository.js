@@ -42,7 +42,7 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
             model: Reservation,
             as: 'reservations',
             attributes: [],
-            where: { status: '완료' },
+            where: { status: '완료'},
             duplicating: false,
           },
           {
@@ -54,6 +54,21 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
           },
         ],
       },
+    ],
+    // 정렬 로직 적용
+    order: [
+      [
+        Sequelize.literal(`
+          CASE 
+            WHEN "Estimate"."status" = '요청' THEN 1 
+            WHEN "Estimate"."status" = '승인' THEN 2 
+            WHEN "Estimate"."status" = '완료' THEN 3 
+            ELSE 4 
+          END
+        `), 
+        'ASC'
+      ],
+      ['createdAt', 'ASC'],
     ],
     group: ['Estimate.id', 'cleaner.id', 'cleaner->likes.id'],
     order: [

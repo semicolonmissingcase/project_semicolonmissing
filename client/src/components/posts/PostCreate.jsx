@@ -33,41 +33,6 @@ export default function PostCreate() {
     '불만/개선사항',
   ];
 
-  const handleImageChange = (e, index) => {
-    const file = e.target.files[0];
-    if(file) {
-      // 선택된 파일 업데이트
-      setSelectedImages(prev => {
-        const newFiles = [...prev];
-        newFiles[index] = file;
-        return newFiles;
-      });
-
-      // 미리보기 URL 생성
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrls(prev => {
-          const newUrls = [...prev];
-          newUrls[index] = reader.result;
-          return newUrls;
-        });
-      };
-      reader.readAsDataURL(file);
-    } else {
-      // 파일이 선택되지 않은 경우 초기화
-      setSelectedImages(prev => {
-        const newFiles = [...prev];
-        newFiles[index] = null;
-        return newFiles;
-      });
-      setPreviewUrls(prev => {
-        const newUrls = [...prev];
-        newUrls[index] = null;
-        return newUrls;
-      });
-    }
-  };
-
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
     setPostData(prev => ({
@@ -172,35 +137,6 @@ export default function PostCreate() {
     }
   }
 
-    // 최종 데이터 통합 (Express 서버로 보낼 객체)
-    // const finalSubmission = {
-    //   title: `${postData.category}: ${postData.title}`,
-    //   content: content // CKEditor에서 전달받은 HTML 문자열
-    // };
-
-    // try {
-    //   if(isLoggedIn) {
-    //     // 로그인한(유저) 문의 생성
-    //     await createInquiry(finalSubmission);
-    //     alert('문의가 성공적으로 등록되었습니다.');
-    //     navigate('/owner/mypage/inquiries')
-    //   } else {
-    //     // 비회원 문의 생성
-    //     const guestInquiryData = {
-    //       ...finalSubmission,
-    //       guestName: postData.email,
-    //       guestPassword: isPasswordProtectedGuestPost ? postData.password : null,
-    //     };
-    //     await createGuestInquiry(guestInquiryData);
-    //     alert('문의가 성공적으로 등록되었습니다.');
-    //     navigate('/some-guest-inquiry-success-page');
-    //     }
-    //   } catch (error) {
-    //     console.error("문의 등록 실패:", error);
-    //     alert('문의 등록에 실패했습니다. 다시 시도해주세요.');
-    //   }
-    // }   
-
   return (
     <div className="postcreate-background">
       <div className="all-container postcreate-container"> 
@@ -290,46 +226,7 @@ export default function PostCreate() {
           <div className="postcreate-editor-container">
             {/* 에디터 내용을 부모 상태에 저장 */}
             <WritePost onContentChange={setContent} />
-          </div>*
-
-          {/* 이미지용 */}
-            <div className="postcreate-image-upload-section">
-              <h3>문의 사진 첨부 (선택)</h3>
-              <div className="postcreate-image-inputs">
-                {[0, 1].map((index) => (
-                  <div key={index} className="postcreate-image-field">
-                    <input
-                      type="file"
-                      id={`inquiry-image-${index}`}
-                      accept="image/*"
-                      onChange={(e) => handleImageChange(e, index)}
-                      style={{ display: 'none' }} // 실제 input은 숨김
-                    />
-                    <label htmlFor={`inquiry-image-${index}`} className="postcreate-image-upload-btn">
-                      {previewUrls[index] ? (
-                        <img 
-                          src={previewUrls[index]} 
-                          alt={`미리보기 ${index + 1}`} 
-                          className="postcreate-image-preview" 
-                        />
-                      ) : (
-                        <span>+ 이미지 {index + 1}</span>
-                      )}
-                    </label>
-                    {previewUrls[index] && (
-                      <button
-                        type="button"
-                        className="postcreate-image-remove-btn"
-                        onClick={() => handleImageChange({ target: { files: [] } }, index)} // 파일 제거
-                      >
-                        X
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
+          </div>
         </div>
 
         <div className="postcreate-btn-container">

@@ -1,7 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import './QnaPostShow.css';
+import { getInquiryDetails } from '../../api/axiosPost.js';
 
 export default function QnaPostShow() {
+  const { inquiryId } = useParams();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        if (!inquiryId) {
+          throw new Error("유효한 문의글 ID가 없습니다.");
+        }
+
+        const response = await getInquiryDetails(inquiryId);
+        setPost(response.data);
+
+      } catch (error) {
+        console.error("문의글 조회에 실패했습니다.", error);
+        setError("문의글을 불러오는데 실패했습니다.");
+        setPost(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
+  }, [inquiryId]);
+
+
   return (
     <div className="qnapostshow-page">
       <div className="all-container qnapostshow-container">
@@ -20,7 +52,7 @@ export default function QnaPostShow() {
                 </div>
                 <div className="qnapostshow-cell">
                   <span className="qnapostshow-label">등록일</span>
-                  <span className="qnapostshow-value">2025/12/03</span>
+                  <span className="qnapostshow-value"></span>
                 </div>
               </div>
               

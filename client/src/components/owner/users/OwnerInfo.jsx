@@ -72,7 +72,7 @@ export default function OwnerInfo() {
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // ---------수정 오나료 모달 띄우기------------
+      // ---------수정 완료 모달 띄우기------------
       setModalConfig({
         message: "회원 정보가 수정되었습니다.",
         confirmText: "확인",

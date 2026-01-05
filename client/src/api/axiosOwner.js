@@ -8,7 +8,18 @@ export const getOwnerStats = async () => {
   return response.data.data;
 };
 
-// 견적 요청서
+// 견적 요청서 작성
+export const createReservation = async (reservationData) => {
+  try {
+    const response = await axiosInstance.post(`${OWNER_API_URL}/quotations`, reservationData);
+    return response.data.data;  
+  } catch (error) {
+    console.error('견적 요청서 생성 실패:', error);
+    throw error;
+  }
+};
+
+// 견적 요청서 조회
 export const getOwnerReservations = async () => {
   const response = await axiosInstance.get(`${OWNER_API_URL}/reservations`);
   return response.data.data;
