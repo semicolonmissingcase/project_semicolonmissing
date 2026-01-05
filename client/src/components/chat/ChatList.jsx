@@ -12,12 +12,9 @@ const ChatList = () => {
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. 목록 가져오기 함수 (useCallback으로 메모이제이션)
   const fetchRooms = useCallback(async () => {
     try {
-      console.log("📡 [Front] 채팅 목록 API 요청 시작..."); // 이 로그가 찍히는지 확인하세요
       const response = await axiosInstance.get('/api/chat/rooms');
-      console.log("✅ [Front] 서버 응답 데이터:", response.data.data);
       
       setChatRooms(response.data.data || []);
     } catch (error) {
@@ -27,7 +24,6 @@ const ChatList = () => {
     }
   }, []);
 
-  // 2. 컴포넌트 마운트 시 즉시 실행
   useEffect(() => {
     fetchRooms();
   }, [fetchRooms]);
@@ -109,15 +105,23 @@ const ChatList = () => {
                   
                   <div className="chatlist-info-bottom">
                     <p className="chatlist-last-message">
-                      {room.lastMessage || "메시지가 없습니다."}
+                    {room.lastMessage?.includes('storage/images') || room.lastMessage?.match(/\.(jpeg|jpg|gif|png)$/i)
+                          ? "(사진)"
+                          : (room.lastMessage || "메시지가 없습니다.")
+                        }
                     </p>
                     <div className="chatlist-meta">
+                      {/* 1. 안 읽은 메시지 배지 (값이 0보다 클 때만 표시) */}
+                      {room.unreadCount > 0 && (
+                        <span className="chatlist-unread-badge">
+                          {room.unreadCount > 99 ? '99+' : room.unreadCount}
+                        </span>
+                      )}
+                      
+                      {/* 2. 마지막 메시지 시간 */}
                       <span className="chatlist-last-time">
                         {dayjs(room.lastMessageTime).format('A h:mm')}
                       </span>
-                      {room.unreadCount > 0 && (
-                        <span className="chatlist-unread-badge">{room.unreadCount}</span>
-                      )}
                     </div>
                   </div>
                 </div>

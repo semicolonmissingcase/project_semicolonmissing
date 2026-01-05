@@ -65,10 +65,27 @@ async function logout(t = null, id) {
   );
 }
 
+/**
+ * ID로 점주 정보 수정
+ * @param {import("sequelize").Transaction | null} t 
+ * @param {number} id 
+ * @param {object} data 
+ * @returns 
+ */
+async function updateById(t = null, id, data) {
+  return await Owner.update(data, 
+    {
+      where: { id },
+      transaction: t
+    }
+  );  
+}
+
 export default {
   findByEmail,
   save,
   findByPk,
   create,
   logout,
+  updateById,
 }

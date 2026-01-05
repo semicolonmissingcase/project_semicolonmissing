@@ -12,6 +12,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import adminRouter from './routes/admin.router.js';
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
+import storesRouter from './routes/store.router.js'; // 매장 관리 관련
+import postsRouter from './routes/post.router.js'; // 글쓰기 관려(문의, 리뷰)
 
 // 채팅 관련 import
 import { createServer } from 'http'; // HTTP 서버 생성
@@ -22,6 +24,7 @@ import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 import ownersRouter from './routes/owners.routes.js';
 import filesRouter from './routes/files.router.js';
 import cleanersRouter from './routes/cleaners.router.js';
+import estimateRouter from './routes/estimate.router.js';
 
 // 결제 관련 import
 import paymentsRouter from './routes/payments.router.js';
@@ -35,7 +38,7 @@ app.use(cors({
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
 app.use('/storage/images/posts', express.static('storage/images/posts'));
-app.use('/storage/images/profile', express.static('storage/images/profiles'));
+app.use('/storage/images/profiles', express.static('storage/images/profiles'));
 app.use('/storage/images/chat', express.static('storage/images/chat'));
 
 // -----------------
@@ -49,6 +52,9 @@ app.use('/api/files', filesRouter);
 app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 app.use('/api/payments', paymentsRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/stores', storesRouter); // 매장관리 관련
+app.use('/api/reservations', estimateRouter); // 견적서 관련 
+app.use('/api/posts', postsRouter); // 글쓰기 관련
 
 // 에러 핸들러 등록
 app.use(errorHandler);

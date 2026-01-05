@@ -127,6 +127,8 @@ const Reservation = {
     db.Reservation.hasMany(db.Submission, { sourceKey: 'id', foreignKey: 'reservationId', as: 'submission' });
     db.Reservation.hasMany(db.ReservationImage, { sourceKey: 'id', foreignKey: 'reservationId', as: 'ReservationImage' });
     db.Reservation.hasMany(db.VirtualAccount, { sourceKey: 'id', foreignKey: 'reservationId', as: 'virtualAccount' });
+    db.Reservation.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'reservationId', as: 'reviews' });
+    db.Reservation.hasOne(db.Estimate, { sourceKey: 'id', foreignKey: 'reservationId', as: 'estimate' });
   }
 }
 

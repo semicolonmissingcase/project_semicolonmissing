@@ -1,0 +1,83 @@
+/* 전체 컨테이너 */
+.cleaners-inquiries-container {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 개별 카드 */
+.cleaners-inquiries-card {
+  padding: 0.875rem;
+  background-color: #ffffff; /* 흰색 배경 */
+  border: 1px solid #e5e7eb; /* 연한 회색 테두리 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 2px 4px rgba(64, 87, 146, 0.4); /* 은은한 그림자 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 내용 균등 배치 */
+  transition: box-shadow 0.2s ease; /* 호버 시 부드러운 전환 */
+}
+
+/* 카드 호버 효과 */
+.cleaners-inquiries-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
+}
+
+/* 카드 내 각 행 */
+.cleaners-inquiries-card-row {
+  display: flex;
+  justify-content: space-between; /* 좌우 정렬 */
+  align-items: center;
+  font-size: 0.875rem; /* 14px */
+}
+
+/* 라벨 (매장명, 시간, 위치, 점주) */
+.cleaners-inquiries-card-label {
+  color: #6b7280; /* 회색 */
+  width: 4rem; /* 최소 너비로 정렬 맞추기 */
+}
+
+/* 카카오맵 URL 스킴 위치 변경 */
+.completedjoblist-card-place {
+  display: flex;
+  align-items: center;
+}
+
+/* 값 (실제 데이터) */
+.cleaners-inquiries-card-value {
+  color: #1f2937; /* 진한 회색 */
+  text-align: right; /* 오른쪽 정렬 */
+  flex: 1; /* 남은 공간 차지 */
+}
+
+/* 작업이 없을 때 메시지 */
+.cleaners-inquiries-empty {
+  text-align: center;
+  color: #9ca3af; /* 연한 회색 */
+  font-size: 0.875rem; /* 14px */
+  padding: 2rem 0;
+}
+
+/* 태블릿 크기 (820px ~ 501px) */
+@media (max-width: 820px) {
+  .cleaners-inquiries-date {
+    font-size: 1.125rem; /* 18px */
+  }
+}
+
+/* 모바일 크기 (500px 이하) */
+@media (max-width: 500px) {
+  .cleaners-inquiries-date {
+    font-size: 1rem; /* 16px */
+    margin-bottom: 0.75rem;
+  }
+
+  .cleaners-inquiries-card-row {
+    font-size: 0.8125rem; /* 13px */
+  }
+
+  .cleaners-inquiries-card-label {
+    min-width: 2.5rem; /* 모바일에서 라벨 너비 축소 */
+  }
+}

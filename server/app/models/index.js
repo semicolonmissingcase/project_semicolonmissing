@@ -57,6 +57,7 @@ const sequelize = new Sequelize(
 );
 
 db.sequelize = sequelize; // 생성한 sequelize 인스턴스 db에 저장
+db.Sequelize = Sequelize;
 
 // 모델 초기화
 db.Owner = Owner.init(sequelize);

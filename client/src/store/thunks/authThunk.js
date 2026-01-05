@@ -61,3 +61,41 @@ export const getMeThunk = createAsyncThunk(
     }
   }
 );
+
+// 점주 정보 수정하기
+export const updateOwnerInfoThunk = createAsyncThunk(
+  'auth/updateOwnerInfoThunk',
+  async(updateData, {rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.put('/api/auth/me', updateData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const uploadProfileImageThunk = createAsyncThunk(
+  'auth/uploadProfileImageThunk',
+  async(file, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('profile', file);
+
+      const uploadResponse = await axiosInstance.post('/api/files/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+
+      const imageUrl = uploadResponse.data.data.path;
+
+      const updateResponse = await axiosInstance.put(`/api/owners/mypage/profile`, { profile: imageUrl });
+
+      return updateResponse.data;
+    } catch (error) {
+      console.error("프로필 이미지 업로드 및 업데이트 실패:", error.response?.data || error.message);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)

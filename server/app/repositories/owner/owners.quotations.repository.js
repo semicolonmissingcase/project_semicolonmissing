@@ -6,7 +6,7 @@
 
 import modelsConstants from '../../constants/models.constants.js';
 import db from '../../models/index.js';
-const { sequelize, Reservation, Submission, Question, QuestionOption, Store, Owner, Like } = db;
+const { sequelize, Reservation, Submission, Question, QuestionOption, Store, Owner, Like, ReservationImage } = db;
 
 async function reservationFindByIdAndStatusIsRequest(t = null, id) {
   return await Reservation.findOne(
@@ -81,8 +81,34 @@ async function likeFindByOwnerIdAndCleanerId(t = null, {ownerId, cleanerId}) {
   );
 }
 
+/**
+ * 새로운 견적 요청서 작성
+ * @param {object | null} t 
+ * @param {object} reservationData 
+ */
+async function createReservation(t = null, reservationData) {
+  const newReservation = await Reservation.create(reservationData, { transaction: t });
+  return newReservation;
+}
+
+async function findQuestionByCode(t = null, code) {
+  return await Question.findOne({ where: { code } }, { transaction: t });
+}
+
+async function createSubmission(t = null, submissionData) {
+  return await Submission.create(submissionData, { transaction: t });
+}
+
+async function createReservationImage(t = null, imageData) {
+  return await ReservationImage.create(imageData, { transaction: t });
+}
+
 export default {
   reservationFindByIdAndStatusIsRequest,
   submissionFindByReservationId,
   likeFindByOwnerIdAndCleanerId,
+  createReservation,
+  findQuestionByCode,
+  createSubmission,
+  createReservationImage,
 }

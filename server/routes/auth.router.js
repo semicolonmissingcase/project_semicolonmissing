@@ -10,6 +10,7 @@ import validationHandler from '../app/middlewares/validations/validationHandler.
 import { userController } from '../app/controllers/auth/user.controller.js';
 import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
 import socialValidator from '../app/middlewares/validations/validatiors/auth/social.validator.js';
+import ownerUpdateValidator from '../app/middlewares/validations/validatiors/owner/owner.update.validator.js';
  
 const authRouter = express.Router();
 

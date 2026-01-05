@@ -4,10 +4,21 @@
  * 251224 v1.0.0 ck init 
  */
 
-import { body } from "express-validator";
+import { body, param } from "express-validator";
+
+// 매장 PK
+const id = param('storeId')
+  .trim()
+  .notEmpty()
+  .withMessage('필수 항목입니다.')
+  .bail()
+  .isNumeric()
+  .withMessage('숫자만 허용합니다.')
+  .toInt()
+;
 
 const storeName = body('store.name')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('매장 이름을 입력해주세요.')
@@ -17,7 +28,7 @@ const storeName = body('store.name')
 ;
 
 const storeAddr1 = body('store.addr1')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('시/도 주소를 입력해주세요.')
@@ -27,7 +38,7 @@ const storeAddr1 = body('store.addr1')
 ;
 
 const storeAddr2 = body('store.addr2')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('상세 주소(군/구/읍/면/동)를 입력해주세요.')
@@ -37,7 +48,7 @@ const storeAddr2 = body('store.addr2')
 ;
 
 const storeAddr3 = body('store.addr3')
-  .optional() // 이 필드는 선택 사항입니다.
+  .optional({ checkFalsy: true }) // 이 필드는 선택 사항입니다.
   .trim()
   .notEmpty()
   .withMessage('상세 주소를 입력해주세요.')
@@ -49,11 +60,12 @@ const storeAddr3 = body('store.addr3')
 const storePhoneNumber = body('store.phoneNumber')
   .optional({ checkFalsy: true }) // 빈 문자열도 optional로 처리
   .trim()
-  .matches(/^\d{2,3}-\d{3,4}-\d{4}$/)
-  .withMessage('유효한 전화번호 형식이 아닙니다. (예: 02-1234-5678)')
+  .matches(/^\d{2,3}\d{3,4}\d{4}$/)
+  .withMessage('유효한 전화번호 형식이 아닙니다. (예: 0212345678)')
 ;
 
 export default {
+  id,
   storeName,
   storeAddr1,
   storeAddr2,

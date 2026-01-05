@@ -3,6 +3,7 @@ import "./MainCleaningInfo.css";
 import "./MainServiceProcess.css";
 import "./MainQnA.css";
 import { useState } from "react";
+import MainQna from "./MainQna.jsx";
 
 export default function Main() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -89,8 +90,8 @@ export default function Main() {
       </div>
 
       {/* 주요문의 */}
-      <div className="main-qna-board">
-        <div className="main-qna-box"></div>
+      <div>
+        <MainQna />
       </div>
     </>
   )
