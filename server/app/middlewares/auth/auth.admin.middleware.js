@@ -4,7 +4,7 @@
  * 251223 v1.0.0 jae init
  */
 
-import { FORBIDDEN_ERROR } from "../../../configs/responseCode.config.js";
+import { FORBIDDEN_ERROR, UNAUTHORIZED_ERROR } from "../../../configs/responseCode.config.js";
 import myError from "../../errors/customs/my.error.js";
 import jwtUtil from "../../utils/jwt/jwt.util.js";
 import ROLE_PERMISSIONS from "./configs/role.permissions.js";
@@ -18,7 +18,12 @@ import ROLE_PERMISSIONS from "./configs/role.permissions.js";
  */
 function adminAuthenticate(req) {
   // 토큰 획득
-  const token = jwtUtil.generateAccessToken(req);
+  const token = jwtUtil.extractToken(req);
+
+  // 토큰이 없는 경우에 대한 예외 처리
+  if(!token) {
+    throw myError('인증 토큰이 없습니다.', UNAUTHORIZED_ERROR);
+  }
 
   // 토큰 검증 및 페이로드 획득
   const claims = jwtUtil.getClaimsWithVerifyToken(token);
@@ -35,7 +40,7 @@ function adminAuthorize(req) {
   const matchRole = ROLE_PERMISSIONS[req.method].find(item => {
     
     // express는 경우에 따라 가장 마지막에 `/`를 붙이는 경우도 있어서, 그럴 경우 가장 마지막 `/`제거 
-    const path = req.path.endswith('/') ? req.path.slice(0, -1) : req.path;
+    const path = req.path.endsWith('/') ? req.path.slice(0, -1) : req.path;
     return item.path.test(`${req.baseUrl}${req.path}`);
   });
 

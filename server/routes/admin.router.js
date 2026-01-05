@@ -8,10 +8,12 @@ import express from 'express';
 import adminLoginValidator from '../app/middlewares/validations/validatiors/auth/adminLogin.validator.js';
 import validationHandler from '../app/middlewares/validations/validationHandler.js';
 import { adminController } from '../app/controllers/auth/admin.controller.js';
-
+import authAdminMiddleware from '../app/middlewares/auth/auth.admin.middleware.js';
  
 const adminRouter = express.Router();
 
 adminRouter.post('/login', adminLoginValidator, validationHandler, adminController.adminLogin);
+adminRouter.post('/logout', authAdminMiddleware, validationHandler, adminController.adminLogout);
+adminRouter.post('/reissue', adminController.reissue);
 
 export default adminRouter;
