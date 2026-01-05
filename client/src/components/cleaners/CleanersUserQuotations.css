@@ -43,10 +43,9 @@
 
 .cleaners-user-quotations-btn {
   padding: 5px;
-  background-color: #7C7F88;
+  background-color: var(--color-gray);
   border-radius: 10px;
   color: var(--color-white);
-  word-break: keep-all;
 }
 
 .cleaners-user-quotations-grid {
@@ -161,14 +160,6 @@
   outline: none;
 }
 
-.cleaners-user-quotations-input-layout-custom {
-  padding: 10px;
-  border: solid 1px var(--color-gray);
-  font-size: 18px;
-  border-radius: 5px;
-  flex: 1;
-}
-
 .cleaners-user-quotations-toggle-question {
   cursor: pointer;
   user-select: none;
@@ -183,12 +174,6 @@
 .cleaners-user-quotations-items-box-question {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.cleaners-user-quotations-items-box-additional-question {
-  display: grid;
-  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
@@ -219,7 +204,7 @@
 }
 
 /* 배경 레이어: 화면 전체를 어둡게 덮음 */
-.cleaners-user-quotations-modal-overlay {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -233,7 +218,7 @@
 }
 
 /* 실제 모달 박스 */
-.cleaners-user-quotations-modal-content {
+.modal-content {
   background-color: white;
   width: 90%;
   max-width: 1000px; /* 원하는 너비로 조절 */
@@ -246,7 +231,7 @@
 }
 
 /* 우측 상단 닫기 버튼 */
-.cleaners-user-quotations-modal-close-x {
+.modal-close-x {
   position: absolute;
   top: 15px;
   right: 15px;

@@ -48,7 +48,6 @@ app.use('/api/owners', ownersRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 app.use('/api/payments', paymentsRouter); 
-// app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 
 // 에러 핸들러 등록
 app.use(errorHandler);
