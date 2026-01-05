@@ -21,6 +21,7 @@ import socketHandler from './app/sockets/socketHandler.js'; // 소켓 로직
 // import cleanersRouter from './routes/cleaners.router.js'; // TODO: 추후 코멘트 해제
 import ownersRouter from './routes/owners.routes.js';
 import filesRouter from './routes/files.router.js';
+import cleanersRouter from './routes/cleaners.router.js';
 
 // 결제 관련 import
 import paymentsRouter from './routes/payments.router.js';
@@ -45,9 +46,9 @@ app.use('/api/chat', chatRouter);
 app.use('/api/users', usersRouter); // 회원가입 관련
 app.use('/api/owners', ownersRouter);
 app.use('/api/files', filesRouter);
+app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 app.use('/api/payments', paymentsRouter);
 app.use('/api/admin', adminRouter);
-// app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
 
 // 에러 핸들러 등록
 app.use(errorHandler);

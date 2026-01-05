@@ -1,5 +1,10 @@
 import { useRef, useState } from "react";
 import { CleanersRegionDropdown, ConfirmModal } from "./cleaners-region-dropdown/CleanersRegionDropdown";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import cleanersThunk from "../../store/thunks/cleanersThunk.js";
+import { clearCleaners } from "../../store/slices/cleanersSlice.js";
 import "./CleanersProfileEdit.css";
 import styles from "./CleanersProfileEdit.module.css";
 
@@ -10,6 +15,10 @@ function CleanersProfileEdit() {
   const [profileImage, setProfileImage] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState("/icons/default-profile.png");
   const profileImageInput = useRef(null);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
 
 
   function handleFileChange(e) {
@@ -46,7 +55,7 @@ function CleanersProfileEdit() {
   };
 
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [confirmType, setConfirmType] = useState(null); // "cancel" | "save"
+  const [confirmType, setConfirmType] = useState(null);
 
   const openCancelModal = () => {
   setConfirmType("cancel");
@@ -65,15 +74,13 @@ function CleanersProfileEdit() {
 
   const onConfirm = () => {
   if (confirmType === "cancel") {
-    // TODO: 취소 확정 동작 (예: 뒤로가기, 페이지 이동, 상태 초기화 등)
-    // navigate(-1) 여기서 처리
+
     closeConfirmModal();
     return;
   }
 
   if (confirmType === "save") {
-    // TODO: 저장 확정 동작 (API 호출, submit 등)
-    // handleSubmit() 여기서 호출
+
     closeConfirmModal();
     return;
   }
@@ -109,7 +116,7 @@ function CleanersProfileEdit() {
                       alt="Profile"
                       className={`${styles.profileImage} ${profileImage ? styles.imageSelected : ""}`}
                     />
-                    <img src="/icons/edit-icon.png" alt="Edit" className={styles.editIcon} />
+                      <div className={styles.editIcon}></div>
                   </div>
                 </div>
 
@@ -134,7 +141,8 @@ function CleanersProfileEdit() {
                 </div>
 
 
-              <div className="cleaners-profile-edit-attachment">  
+              <div className="cleaners-profile-edit-attachment">
+                <span className="cleaners-profile-edit-attachment-title">자격증</span>
                 <label className="cleaners-profile-edit-attachment-button" htmlFor="file">업로드</label>
                 <input
                   className="cleaners-profile-edit-attachment-input"
@@ -164,7 +172,7 @@ function CleanersProfileEdit() {
 
                 <span className="cleaners-profile-edit-buttons">
                   <button type="button" className="cleaners-profile-edit-button-small-custom2" onClick={openCancelModal} >취소</button>
-                  <button type="submit" className="cleaners-profile-edit-button-small-custom2" onClick={openSaveModal} >완료</button>
+                  <button type="button" className="cleaners-profile-edit-button-small-custom2" onClick={openSaveModal} >완료</button>
                 </span>
               </div>
               </div>     

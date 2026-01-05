@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { RiArrowDropDownFill } from "react-icons/ri";
 import { RiArrowDropUpFill } from "react-icons/ri";
+import "./CleanersRegionDropdown.css";
 import styles from "./CleanersRegionDropdown.module.css";
 
 
