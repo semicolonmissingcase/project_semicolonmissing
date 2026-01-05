@@ -1,71 +1,56 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ReviewShowModal.css';
 
 export default function ReviewShowModal({ isOpen, onClose, targetData }) {
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState('');
+  if (!isOpen || !targetData) return null;
 
-  if (!isOpen) return null;
-
-  const handleRatingClick = (index) => {
-    setRating(index + 1);
-  };
-
-  const handleSubmit = () => {
-    const reviewData = {
-      cleanerId: targetData?.id,
-      rating: rating,
-      comment: comment
-    };
-    console.log("리뷰 제출 데이터:", reviewData);
-    // TODO: 서버 전송 로직 (axios.post 등)
-    onClose();
+  const renderStars = (rating) => {
+    return [...Array(5)].map((_, i) => (
+      <span 
+        key={i} 
+        className={`review-view-star ${i < rating ? 'active' : ''}`}
+      >
+        ★
+      </span>
+    ));
   };
 
   return (
-    <div className="reviewshowmodal-overlay" onClick={onClose}>
-      <div className="reviewshowmodal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="review-view-overlay" onClick={onClose}>
+      <div className="review-view-content" onClick={(e) => e.stopPropagation()}>
         {/* 상단 닫기 버튼 */}
-        <button className="reviewshowmodal-close-x" onClick={onClose}>X</button>
+        <button className="review-view-close-x" onClick={onClose}>&times;</button>
 
-        {/* 대상 기사님 정보 */}
-        <h2 className="reviewshowmodal-title">{targetData?.name || 'OOOO'}기사님</h2>
+        {/* 리뷰 작성자 또는 대상 정보 */}
+        <h2 className="review-view-title">{targetData.name} 기사님 후기</h2>
 
-        {/* 별점 선택 영역 */}
-        <div className="reviewshowmodal-rating-container">
-          {[...Array(5)].map((_, i) => (
-            <span 
-              key={i} 
-              className={`reviewshowmodal-star ${i < rating ? 'active' : ''}`}
-              onClick={() => handleRatingClick(i)}
-            >
-              ★
-            </span>
-          ))}
-          <span className="reviewshowmodal-dropdown-icon">▼</span>
+        {/* 고정된 별점 표시 */}
+        <div className="review-view-rating-display">
+          {renderStars(targetData.rating || 0)}
+          <span className="review-view-rating-num">{targetData.rating}.0</span>
         </div>
 
-        {/* 매장 및 일시 정보 */}
-        <div className="reviewshowmodal-info-text">
-          <p>{targetData?.storeName || 'B매장'}</p>
-          <p>{targetData?.date || '2025-10-25 16:00 ~ 17:00'}</p>
-          <p className="reviewshowmodal-price">견적 금액 {targetData?.price?.toLocaleString() || '150,000'}원</p>
+        {/* 매장 및 이용 정보 요약 */}
+        <div className="review-view-info-box">
+          <p><strong>이용 매장:</strong> {targetData.storeName}</p>
+          <p><strong>방문 일시:</strong> {targetData.date}</p>
         </div>
 
-        {/* 첨부파일 버튼 */}
-        <button className="reviewshowmodal-file-btn">첨부파일</button>
+        {/* 리뷰 본문 (텍스트 영역이 아닌 일반 div/p로 변경) */}
+        <div className="review-view-comment-container">
+          {targetData.comment || "작성된 리뷰 내용이 없습니다."}
+        </div>
 
-        {/* 리뷰 텍스트 영역 */}
-        <textarea 
-          className="reviewshowmodal-textarea"
-          placeholder="리뷰 내용을 입력해주세요."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
+        {/* 첨부 파일이 있을 경우 이미지 표시 (선택사항) */}
+        {targetData.imageUrl && (
+          <div className="review-view-photo">
+             <img src={targetData.imageUrl} alt="리뷰 사진" />
+          </div>
+        )}
 
-        {/* 하단 확인 버튼 */}
-        <button className="reviewshowmodal-submit-btn" onClick={handleSubmit}>
-          확인
+        {/* 하단 닫기 버튼 */}
+        <button className="review-view-confirm-btn" onClick={onClose}>
+          닫기
         </button>
       </div>
     </div>
