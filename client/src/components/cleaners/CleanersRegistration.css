@@ -340,7 +340,7 @@
   margin: 1rem 0 2rem 0;
 }
 
-..cleaners-registration-phone-inputs {
+.cleaners-registration-phone-inputs {
   display: grid;
   grid-template-columns: 100px auto 1fr auto 1fr;
   align-items: center;
@@ -368,6 +368,7 @@
 
 .cleaners-registration-phone-separator label {
   margin-bottom: 30px
+}
 
 /* 반응형 */
 @media (max-width: 820px) {
