@@ -79,7 +79,6 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     
     const init = async () => {
       try {
-        // 1. 방 정보 먼저 세팅 (UI 제목 등)
         const roomRes = await getChatRoomDetail(roomId);
         const responseData = roomRes.data?.data; 
         if (responseData) {
@@ -90,15 +89,12 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
           setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
         }
 
-        // 2. [핵심] 읽음 처리 API를 먼저 호출하고 '기다림'
         await markMessageAsRead(roomId);
-        
-        // 3. 소켓으로 읽음 신호 전송
+      
         if (socket) {
           socket.emit("mark_as_read", { roomId, userRole });
         }
 
-        // 4. DB가 업데이트된 '후'에 메시지 목록을 가져옴
         setHasMore(true);
         setPage(1);
         await fetchMessages(1, true);
@@ -106,7 +102,6 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
       } catch (err) { 
         console.warn("초기화 중 오류 발생", err); 
         setOpponentName("채팅방");
-        // 에러가 나더라도 메시지는 시도
         fetchMessages(1, true);
       }
     };

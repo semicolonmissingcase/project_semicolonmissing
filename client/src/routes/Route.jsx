@@ -25,6 +25,7 @@ import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.jsx";
+import AdminQna from "../components/admin/pages/AdminQna.jsx"
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -201,6 +202,11 @@ const router = createBrowserRouter([
             // 기사 프로필 관리 페이지
             path: 'cleanerprofile',
             element: <AdminCleanerProfile />
+          },
+          {
+            // 문의 관리 페이지
+            path: 'qna',
+            element: <AdminQna />
           }
         ]
       }

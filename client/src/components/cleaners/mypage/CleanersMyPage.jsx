@@ -4,15 +4,9 @@ import { useSelector } from 'react-redux'; // 리덕스 연결
 // 출력 카드 컴포넌트
 import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
-<<<<<<< HEAD
-import CancelledJobList from './MyQnaList.jsx';
-import CompletedJobList from './ReviewList.jsx';
-=======
-import CleanersInquiries from './CleanersInquiries.jsx';
-import CleanersReview from './CleanersReview.jsx';
-import CleanersSettlementStatus from "./CleanersSettlementStatus.jsx";
-import './CleanersMyPage.css';
->>>>>>> dev
+import CleanersInquiries from './MyQnaList.jsx';
+import CleanersReview from './ReviewList.jsx';
+import './CleanersMyPage.css'
 
 function CleanersMyPage() {
   const [activeTab, setActiveTab] = useState('오늘 작업'); // 초기 탭 설정
@@ -77,26 +71,19 @@ function CleanersMyPage() {
                 <p>오늘의 예약 건수: <strong>{user?.todayReservations || 0}건</strong></p>
               </div>
             </div>
-<<<<<<< HEAD
             
             {/* 이게 뭐가 출력되는 부분인지 몰라서 버튼만 만들었습니다.
             <div className="cleanermypage-action-btn-container">
               <button className="cleanermypage-action-btn">현재 정산 상태</button>
               <button className="cleanermypage-action-btn">오늘 예정 일정</button>
             </div> */}
-=======
->>>>>>> dev
           </div>
         </div>
       </header>
 
       {/* 2. 기사님 전용 탭 메뉴 */}
       <nav className="cleanermypage-tabs">
-<<<<<<< HEAD
         {['대기 작업', '오늘 일정', '정산 대기', '문의내역', '리뷰내역'].map(tab => (
-=======
-        {['오늘 작업', '예약 완료', '정산', '문의 내역', '리뷰'].map(tab => (
->>>>>>> dev
           <button 
             key={tab}
             className={`cleanermypage-tab-item ${activeTab === tab ? 'cleanermypage-active' : ''}`}
