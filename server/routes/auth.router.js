@@ -12,6 +12,7 @@ import { userController } from '../app/controllers/auth/user.controller.js';
 import { adminController } from '../app/controllers/auth/admin.controller.js';
 import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
 import socialValidator from '../app/middlewares/validations/validatiors/auth/social.validator.js';
+import ownerUpdateValidator from '../app/middlewares/validations/validatiors/owner/owner.update.validator.js';
  
 const authRouter = express.Router();
 
@@ -25,5 +26,7 @@ authRouter.get('/callback/:provider', userController.socialCallback);
 authRouter.post('/signup/complete', userController.completeSignup);
 authRouter.get('/me', authUserMiddleware, userController.getMe);
 authRouter.post('/login', adminLoginValidator, validationHandler, adminController.adminLogin);
+//점주 정보수정용
+authRouter.put('/me', authUserMiddleware, ownerUpdateValidator, validationHandler, userController.updateOwner);
 
 export default authRouter;

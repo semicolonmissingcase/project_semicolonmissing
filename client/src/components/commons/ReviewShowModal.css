@@ -1,0 +1,121 @@
+.review-view-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.review-view-content {
+  background: #fff;
+  width: 90%;
+  max-width: 450px;
+  padding: 40px 30px;
+  border-radius: 25px;
+  position: relative;
+  text-align: center;
+}
+
+.review-view-close-x {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+}
+
+.review-view-title {
+  font-size: 22px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* 별점 스타일 (읽기 전용) */
+.review-view-rating-display {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.review-view-star {
+  font-size: 28px;
+  color: #e0e0e0; /* 비활성 별 */
+}
+
+.review-view-star.active {
+  color: #ffc107; /* 활성 별 */
+}
+
+.review-view-rating-num {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #4a5a95;
+}
+
+/* 정보 박스 */
+.review-view-info-box {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.8;
+}
+
+.review-view-info-box strong {
+  color: #333;
+}
+
+/* 리뷰 본문 스타일 */
+.review-view-comment-container {
+  width: 100%;
+  min-height: 100px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #444;
+  margin-bottom: 25px;
+  white-space: pre-wrap; /* 줄바꿈 허용 */
+}
+
+/* 이미지 첨부 시 스타일 */
+.review-view-photo img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* 하단 버튼 */
+.review-view-confirm-btn {
+  width: 100%;
+  background-color: #4a5a95;
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.review-view-confirm-btn:hover {
+  background-color: #3b4a7d;
+}

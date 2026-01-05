@@ -45,6 +45,22 @@
   width: 5rem;
 }
 
+/* 프로필 이미지 */
+.header-profile-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.header-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;;
+}
+
+/* 기본 이미지 */
 .header-profile-default {
   background-image: url("/icons/default-profile.png");
   background-position: center;

@@ -3,6 +3,7 @@ import App from "../App";
 import Main from "../components/main/Main.jsx";
 import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
+import QnaPostShow from "../components/posts/QnaPostShow.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import Result from "../components/result/Result.jsx";
@@ -19,8 +20,9 @@ import CleanersUserQuotationsTitle from "../components/cleaners/CleanersUserQuot
 import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
-import OwnerMyPage from "../components/owner/maypage/OwnerMyPage.jsx";
+import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
 import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
+import OwnerReservation from "../components/owner/OwnerReservation.jsx";
 // 관리자 관련
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
@@ -133,7 +135,12 @@ const router = createBrowserRouter([
             // 점주 정보 수정페이지
             path: 'info',
             element: <OwnerInfo />
-          }
+          },
+          {
+            // 점주 견적 요청서 작성 페이지
+            path: 'reservation',
+            element: <OwnerReservation />,
+          },
         ]
       },
       {
@@ -149,6 +156,11 @@ const router = createBrowserRouter([
             // 글작성 페이지
             path: 'create',
             element: <PostCreate />
+          },
+          {
+            // 게시글 확인 페이지
+            path: 'show/:id',
+            element: <QnaPostShow />
           }
         ]
       },

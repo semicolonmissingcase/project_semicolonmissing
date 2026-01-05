@@ -4,7 +4,7 @@
  * 251229 v1.0.0 jh init
  */
 
-import { SUCCESS } from "../../../configs/responseCode.config.js";
+import { BAD_REQUEST_ERROR, SUCCESS } from "../../../configs/responseCode.config.js";
 import ownersQuotationsService from "../../services/owner/owners.quotations.service.js";
 import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
 
@@ -23,6 +23,49 @@ async function show(req, res, next) {
   return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
 }
 
+/**
+ * 새로운 견적 요청서 작성
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function createReservation(req, res, next) {
+  try {
+    console.log('컨트롤러 수신 req.body:', req.body);
+    console.log('컨트롤러 수신 req.files:', req.files);
+    const { storeId, date, time, cleanerId } = req.body;
+    let submissions = req.body.submissions;
+
+    if(typeof submissions === 'string') {
+      submissions = JSON.parse(submissions);
+    }
+
+    const files = req.files;
+
+    if(!storeId || !date || !time) {
+      return res.status(BAD_REQUEST_ERROR.status).send(createBaseResponse(BAD_REQUEST_ERROR, '매장, 날짜, 시간은 필수 입력 항목입니다.'));
+    }
+
+    const result = await ownersQuotationsService.createReservation(
+      null,
+      {
+        ownerId: req.user.id,
+        storeId,
+        date,
+        time,
+        cleanerId,
+        submissions,
+        files,
+      }
+    );
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function index(req, res, next) {
   const id = req.params.id;
   // 서비스에 모든 견적서를 가져오는 index 함수가 있다고 가정
@@ -32,5 +75,6 @@ async function index(req, res, next) {
 
 export default {
   show,
-  index
+  index,
+  createReservation,
 };

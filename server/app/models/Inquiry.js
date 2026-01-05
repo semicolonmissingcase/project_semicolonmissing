@@ -23,13 +23,13 @@ const attributes = {
   field: 'owner_id',
   type: DataTypes.BIGINT.UNSIGNED,
   allowNull: true,
-  comment: '점주 PK',
+  comment: '점주 PK(nullable 설정해야함)',
  },
  cleanerId: {
   field: 'cleaner_id',
   type: DataTypes.BIGINT.UNSIGNED,
   allowNull: true,
-  comment: '기사 PK',
+  comment: '기사 PK(nullable 설정해야함)',
  },
   title: {
     field: 'title',

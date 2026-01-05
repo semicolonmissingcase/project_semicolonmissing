@@ -1,0 +1,66 @@
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* 배경 어둡기 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.custom-modal-window {
+  background-color: var(--color-white);
+  width: 90%;
+  max-width: 420px;
+  padding: 50px 30px 40px; /* 상단 여백 넉넉히 */
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-modal-message {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  white-space: pre-wrap;
+}
+
+.custom-modal-footer {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* 버튼 사이 간격 */
+}
+
+.custom-modal-btn {
+  flex: 1; /* 버튼 너비 동일하게 */
+  max-width: 140px;
+  padding: 12px 0;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* 확인/작성완료 버튼 (이미지의 네이비 컬러) */
+.btn-confirm {
+  background-color: #4A5F95;
+  color: var(--color-white);
+}
+
+/* 삭제하기 버튼 (이미지의 레드 컬러) */
+.btn-delete {
+  background-color: #C1272D;
+  color: var(--color-white);
+}
+
+/* 취소하기 버튼 (이미지의 연한 회색/블루 톤) */
+.btn-cancel {
+  background-color: #E5EAF2;
+  color: #333;
+}

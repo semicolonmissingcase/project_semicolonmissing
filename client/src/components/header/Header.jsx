@@ -57,14 +57,6 @@ export default function Header() {
     }
   })
   
-  // 로그 아웃 처리 함수 (저희는 이거 메뉴바 만듭니다.)
-  //function handleLogout() {
-  //  localStorage.removeItem('accessToken'); // 스토리지 삭제
-  //  localStorage.removeItem('user');
-  //  dispatch(clearAuth()); // 리덕스 상태 초기화
-  //  navigate('/');
-  //}
-
   // 버튼 네비게이터
   function mainPage() {
     navigate('/');
@@ -88,12 +80,12 @@ export default function Header() {
 
   // 점주(owner)
   function ownerQuteList() {
-    navigate('cleaners/userquotelistdetails'); // TODO: 라우트 다시 확인하기
+    navigate('/owners/reservation'); 
   }
 
   // 기사님(cleaners)
-  function cleanerQuotelist() {
-    navigate('cleaners/userquotelist');
+  function cleanerQuotation() {
+    navigate('/cleaners/quotations');
   }
 
   // 모바일 네비게이션 관련
@@ -135,9 +127,9 @@ export default function Header() {
                     <div className='header-profile-icon'
                       onClick={() => setIsDropDown((prev) => !prev)}>
                       {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
-                      {user?.profileImage ? (
+                      {user?.profile ? (
                         <img 
-                          src={user.profileImage} 
+                          src={user.profile} 
                           alt="프로필" 
                           className='header-profile-img'
                         />
@@ -170,9 +162,9 @@ export default function Header() {
                     <div className='header-profile-icon'
                       onClick={() => setIsDropDown((prev) => !prev)}>
                       {/* 프로필 이미지가 있으면 이미지 표시, 없으면 기본 아이콘 */}
-                      {user?.profileImage ? (
+                      {user?.profile ? (
                         <img 
-                          src={user.profileImage} 
+                          src={user.profile} 
                           alt="프로필" 
                           className='header-profile-img'
                         />
