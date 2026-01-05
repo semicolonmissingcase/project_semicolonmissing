@@ -1,3 +1,11 @@
+/* 부모: 일반 클래스명인 경우 */
+.cleaners-profile-edit-profile-title {
+  display: grid;
+  grid-template-columns: 1fr; /* 칸을 나누지 않고 하나로 합침 */
+  justify-items: center;      /* 가로 가운데 정렬 */
+  margin-top: 1rem;
+}
+
 .cleaners-profile-edit-container {
   padding: 1.5rem;
   display: flex;
@@ -46,35 +54,6 @@
   gap: 1rem;
 }
 
-.cleaners-profile-edit-profile-title {
-  display: grid;
-  margin-top: 1rem;
-  grid-template-columns: 1fr 1fr; /* 2개의 동일한 너비 열 */
-  grid-template-rows: 150px 150px; /* 2개의 동일한 높이 행 */
-  gap: 10px; /* 셀 간 간격 */
-}
-
-.cleaners-profile-edit-profile-title > input {
-  grid-area: 1 / 3 ; /* 모든 이미지가 1행1열부터 3행3열 영역을 차지 (겹침) */
-  width: 100%;
-  height: 100%;
-  z-index: 1; /* 기본 쌓임 순서 */
-}
-
-.cleaners-profile-edit-profile-title > img:last-child {
-  grid-area: 1 / 1 / -1 / -1; /* 두 번째 이미지는 2행 2열 셀만 차지 */
-  z-index: 2; /* 더 높은 z-index로 겹쳐 보이게 함 */
-  /* 원하는 모양으로 크기 조절 가능 */
-}
-
-.cleaners-profile-edit-input {
-  width: 100%;
-  height: 43px;
-  border: 1px solid var(--color-gray);
-  font-size: 18px;
-  border-radius: 5px;
-}
-
 .cleaners-profile-edit-layout-flex-column {
   padding: 10px;
   display: flex;
@@ -85,10 +64,15 @@
 
 .cleaners-profile-edit-layout-flex-column > label {
   border: soild 1px var(--color-gray);
-  border: none;
   font-size: 18px;
   border-radius: 5px;
   width: 100%;
+}
+
+.cleaners-profile-edit-input {
+  height: 43px;
+  border-radius: 5px;
+  border: solid 1px var(--color-gray);
 }
 
 .cleaners-profile-edit-attachment {
@@ -97,8 +81,13 @@
   gap: 1rem;
 }
 
-.cleaners-profile-edit-attachment-button {
+.cleaners-profile-edit-attachment-title {
+  font-size: 18px;
+  text-indent: 10px;
   margin-top: 1rem;
+}
+
+.cleaners-profile-edit-attachment-button {
   width: 90px;
   height: 30px;
   font-size: 16px;
@@ -110,6 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 10px;
 }
 
 .cleaners-profile-edit-attachment-input {
@@ -242,7 +232,7 @@
   gap: 1rem;
 }
 
-.cleaners-profile-edit-modal-button-row {
+.cleaners-profile-edit-modcleaners-profile-edit-attachment-titleal-button-row {
   display: flex;
   gap: 12px;
   justify-content: center;
