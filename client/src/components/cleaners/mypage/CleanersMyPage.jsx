@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import './CleanersMyPage.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'; // 리덕스 연결
-
 // 출력 카드 컴포넌트
 import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
 import CleanersInquiries from './CleanersInquiries.jsx';
 import CleanersReview from './CleanersReview.jsx';
-import CleanersSettlementStatus from "../CleanersSettlementStatus.jsx";
+import CleanersSettlementStatus from "./CleanersSettlementStatus.jsx";
+import './CleanersMyPage.css';
 
 function CleanersMyPage() {
   const [activeTab, setActiveTab] = useState('오늘 작업'); // 초기 탭 설정
@@ -61,12 +60,12 @@ function CleanersMyPage() {
             <div className="cleanermypage-profile-info">
               {/* 유저 이름 동적 표시 */}
               <p className="cleanermypage-welcome">
-                안녕하세요, <strong>{user?.name || '기사'}</strong> 기사님!
+                안녕하세요, {user?.name || '김기사'} 기사님!
               </p>
               {/* 실제 정산 데이터가 있다면 user.totalSettlement 등으로 교체 */}
-              <h2 className="cleanermypage-total-amount">
+              <h4 className="cleanermypage-total-amount">
                 총 정산금액: <span>{formatCurrency(user?.totalSettlement || 0)}</span>
-              </h2>
+              </h4>
               <div className="cleanermypage-today-summary">
                 {/* 이 부분은 추후 API에서 받아온 데이터로 연결 */}
                 <p>오늘의 의뢰 건수: <strong>{user?.todayWorks || 0}건</strong></p>

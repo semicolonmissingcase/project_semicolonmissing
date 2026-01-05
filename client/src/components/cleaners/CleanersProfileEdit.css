@@ -81,8 +81,13 @@
   gap: 1rem;
 }
 
-.cleaners-profile-edit-attachment-button {
+.cleaners-profile-edit-attachment-title {
+  font-size: 18px;
+  text-indent: 10px;
   margin-top: 1rem;
+}
+
+.cleaners-profile-edit-attachment-button {
   width: 90px;
   height: 30px;
   font-size: 16px;
@@ -94,6 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 10px;
 }
 
 .cleaners-profile-edit-attachment-input {
@@ -226,7 +232,7 @@
   gap: 1rem;
 }
 
-.cleaners-profile-edit-modal-button-row {
+.cleaners-profile-edit-modcleaners-profile-edit-attachment-titleal-button-row {
   display: flex;
   gap: 12px;
   justify-content: center;

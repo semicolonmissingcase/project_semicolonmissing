@@ -6,8 +6,6 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { titleThunk } from "../../store/thunks/cleanersThunk.js";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { getMe } from "../../store/thunks/cleanersThunk.js";
-// authThunk의 getMeThunk를 별칭으로 가져옵니다.
-import { getMeThunk as authGetMeThunk } from "../../store/thunks/authThunk.js";
 import { clearCleaners } from "../../store/slices/cleanersSlice.js";
 import { CiUser } from "react-icons/ci";
 import { MdHomeWork } from "react-icons/md";
@@ -42,49 +40,50 @@ function CleanersUserQuotationsTitle() {
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  // isInitialized를 다시 사용합니다.
+  // 1. 상태들을 먼저 다 가져옵니다.
   const { isInitialized, isLoggedIn } = useSelector((s) => s.auth);
   const { 
     cleaner, 
     submissions, 
-    loading, 
+    loading, // 👈 여기서 loading이 정의됩니다.
     isLoggedIn: cleanersLoggedIn 
   } = useSelector((state) => state.cleaners);
 
+  // 2. 변수 정의가 끝난 "후에" 콘솔로그나 로직을 작성해야 합니다.
   console.log("체크1 - 로딩중인가?:", loading);
   console.log("체크2 - cleaner 데이터:", cleaner);
 
   const [filter, setFilter] = useState(filterOptions[0]); 
   const [visibleCount, setVisibleCount] = useState(4);
 
-  // 1. 앱 초기화 시, 전역 인증 상태 확인을 이 컴포넌트가 담당합니다.
-  useEffect(() => {
-    // 아직 전역 인증 확인을 안했다면 실행합니다.
-    if (!isInitialized) {
-      dispatch(authGetMeThunk());
-    }
-  }, [dispatch, isInitialized]);
+ useEffect(() => {
+  // 초기화 전이면 대기
+  if (!isInitialized) return;
 
-  // 2. 전역 인증 상태 확인이 끝나면(isInitialized), 클리너 전용 데이터를 가져옵니다.
-  useEffect(() => {
-    // 아직 인증확인 전이거나, 로그인이 안되어있으면 실행하지 않습니다.
-    if (!isInitialized || !isLoggedIn) return;
+  // 로그인이 안 되어 있으면 중단
+  if (!isLoggedIn) {
+    console.log("로그인이 필요합니다.");
+    return;
+  }
 
-    // cleaner 정보가 아직 없으면 서버에 요청합니다.
-    if (!cleaner) {
-      console.log("getMe 요청 시작 (from cleanersThunk)...");
-      dispatch(getMe())
-        .unwrap()
-        .then((res) => {
-          console.log("✅ getMe (cleaners) 서버 응답 성공:", res);
-        })
-        .catch((err) => {
-          console.error("❌ getMe (cleaners) 서버 응답 실패:", err);
-        });
-      return;
-    }
-  }, [isInitialized, isLoggedIn, cleaner, dispatch]);
+  // 핵심 로직: 로그인은 됐는데 cleaner 정보가 없으면 직접 getMe 호출
+  if (!cleaner) {
+    console.log("기사 정보가 비어있어 getMe를 직접 요청합니다.");
+    dispatch(getMe());
+    console.error("에러 상태 코드:", error.response?.status); // 404, 400, 500 등
+      console.log("status:", err.response?.status);
+  console.log("data:", err.response?.data);          // 여기 핵심
+  console.log("sent:", err.config?.data);            // 내가 보낸 값
+  console.log("url:", err.config?.url, err.config?.method);
+    return; // 데이터를 받아올 때까지 이번 턴은 종료
+  }
+
+  // 이제 cleaner가 확실히 있을 때만 리스트 요청
+  if (cleaner.id) {
+    console.log("데이터 확인 완료! 리스트를 불러옵니다. ID:", cleaner.id);
+    dispatch(titleThunk(cleaner.id));
+  }
+  }, [isInitialized, isLoggedIn, cleaner, dispatch]); 
 
   const auth = useSelector((s) => s.auth);
   console.log("--- 디버깅 로그 ---");
