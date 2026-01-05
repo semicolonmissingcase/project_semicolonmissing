@@ -25,6 +25,7 @@ authRouter.get('/social/:provider', socialValidator, validationHandler, userCont
 authRouter.get('/callback/:provider', userController.socialCallback);
 authRouter.post('/signup/complete', userController.completeSignup);
 authRouter.get('/me', authUserMiddleware, userController.getMe);
+authRouter.post('/login', adminLoginValidator, validationHandler, adminController.adminLogin);
 //점주 정보수정용
 authRouter.put('/me', authUserMiddleware, ownerUpdateValidator, validationHandler, userController.updateOwner);
 

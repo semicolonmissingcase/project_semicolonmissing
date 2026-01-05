@@ -10,7 +10,7 @@ import errorHandler from './app/errors/errorHandler.js';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
+import adminRouter from './routes/admin.router.js';
 import usersRouter from './routes/user.router.js'; // 회원가입 관련
 import storesRouter from './routes/store.router.js'; // 매장 관리 관련
 import postsRouter from './routes/post.router.js'; // 글쓰기 관려(문의, 리뷰)
@@ -50,7 +50,8 @@ app.use('/api/users', usersRouter); // 회원가입 관련
 app.use('/api/owners', ownersRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/cleaners', cleanersRouter); // TODO: 추후 코멘트 해제
-app.use('/api/payments', paymentsRouter); 
+app.use('/api/payments', paymentsRouter);
+app.use('/api/admin', adminRouter);
 app.use('/api/stores', storesRouter); // 매장관리 관련
 app.use('/api/reservations', estimateRouter); // 견적서 관련 
 app.use('/api/posts', postsRouter); // 글쓰기 관련
