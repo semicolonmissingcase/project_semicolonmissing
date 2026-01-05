@@ -1,6 +1,7 @@
 /**
  * @file app/controllers/chat.controller.js
  * @description
+ * 251222 seon init
  */
 import chatService from '../services/chat.service.js'
 
