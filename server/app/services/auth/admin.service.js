@@ -27,8 +27,10 @@ async function adminLogin(body) {
     const { email, password } = body;
 
     // email로 관리자 정보 획득
+    // email로 관리자 정보 획득
     const admin = await adminRepository.findByEmail(t, email);
 
+    // 관리자 존재 여부 체크
     // 관리자 존재 여부 체크
     if(!admin) {
       throw myError('관리자 미존재', NOT_REGISTERED_ERROR);
@@ -76,6 +78,7 @@ async function reissue(token) {
   const adminId = claims.sub;
 
   return await db.sequelize.transaction(async t => {
+    // 관리자 정보 획득
     // 관리자 정보 획득
     const admin = await adminRepository.findByPk(t, adminId);
 
