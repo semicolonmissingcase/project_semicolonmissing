@@ -26,7 +26,10 @@ const adminAuthSlice = createSlice({
       })
       .addCase(adminLoginThunk.fulfilled, (state, action) => {
         const { admin } = action.payload.data;
-        state.admin = admin;
+        state.admin = {
+          ...admin,
+          role: 'ADMIN'
+        };
         state.isLoggedIn = true;
         state.isLoading = false;
         state.error = null;
@@ -46,7 +49,10 @@ const adminAuthSlice = createSlice({
       // 토큰 재발급 (새로 고침 시 로그인 유지)
       .addCase(adminReissueThunk.fulfilled, (state, action) => {
         const { admin } = action.payload.data;
-        state.admin = admin;
+        state.admin = {
+          ...admin,
+          role: 'ADMIN'
+        };
         state.isLoggedIn = true;
       })
       .addCase(adminReissueThunk.rejected, (state) => {
