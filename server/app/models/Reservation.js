@@ -57,6 +57,12 @@ const attributes = {
     allowNull: false,
     comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
   },
+  isAssign: {
+    field: 'is_assign',
+    type: DataTypes.ENUM('지정', '일반'),
+    allowNull: false,
+    comment: '기사 지정 상태'
+  },
   dateAgreedUpon: {
     field: 'date_agreed_upon',
     type: DataTypes.BOOLEAN,
