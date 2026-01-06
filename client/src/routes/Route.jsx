@@ -3,6 +3,7 @@ import App from "../App";
 import Main from "../components/main/Main.jsx";
 import QnaPost from "../components/posts/QnaPost.jsx";
 import PostCreate from "../components/posts/PostCreate.jsx";
+import QnaPostShow from "../components/posts/QnaPostShow.jsx";
 import Login from "../components/auth/Login.jsx";
 import Registration from "../components/users/Registration.jsx";
 import Result from "../components/result/Result.jsx";
@@ -19,17 +20,19 @@ import CleanersUserQuotationsTitle from "../components/cleaners/CleanersUserQuot
 import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
-import OwnerMyPage from "../components/owner/maypage/OwnerMyPage.jsx";
+import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
 import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
+import OwnerReservation from "../components/owner/OwnerReservation.jsx";
 // 관리자 관련
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.jsx";
+import AdminQna from "../components/admin/pages/AdminQna.jsx"
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
 // 결제 관련 
-import PaymentRequest from "../components/payment/paymentCheckout.jsx";
+import PaymentModal from "../components/payment/paymentModal.jsx";
 import PaymentSuccess from "../components/payment/paymentSuccess.jsx";
 import PaymentFail from "../components/payment/paymentFail.jsx";
 
@@ -132,7 +135,12 @@ const router = createBrowserRouter([
             // 점주 정보 수정페이지
             path: 'info',
             element: <OwnerInfo />
-          }
+          },
+          {
+            // 점주 견적 요청서 작성 페이지
+            path: 'reservation',
+            element: <OwnerReservation />,
+          },
         ]
       },
       {
@@ -148,6 +156,26 @@ const router = createBrowserRouter([
             // 글작성 페이지
             path: 'create',
             element: <PostCreate />
+          },
+          {
+            // 게시글 확인 페이지
+            path: 'show/:id',
+            element: <QnaPostShow />
+          }
+        ]
+      },
+      // 결제 관련 라우트 추가
+      {
+        path: '/payment',
+        element: <Outlet />,
+        children: [
+          {
+            path: 'success',
+            element: <PaymentSuccess />
+          },
+          {
+            path: 'fail',
+            element: <PaymentFail />
           }
         ]
       },      
@@ -164,23 +192,6 @@ const router = createBrowserRouter([
         // 결과 페이지(ex. 문의가 등록되었습니다!)
         path: '/result',
         element: <Result />
-      },
-      // 결제 관련 라우트 
-      {
-        path: '/payment',
-        element: <Outlet />,
-        children: [
-          {
-            // 결제 성공
-            path: '/payment/success',
-            element: <PaymentSuccess />
-          }, 
-          {
-            // 결제 실패
-            path: '/payment/fail',
-            element: <PaymentFail />
-          }
-        ]
       },
       {
         // 관리자페이지
@@ -201,6 +212,11 @@ const router = createBrowserRouter([
             // 기사 프로필 관리 페이지
             path: 'cleanerprofile',
             element: <AdminCleanerProfile />
+          },
+          {
+            // 문의 관리 페이지
+            path: 'qna',
+            element: <AdminQna />
           }
         ]
       }

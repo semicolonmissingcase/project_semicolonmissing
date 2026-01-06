@@ -7,7 +7,7 @@
 }
 
 .login-logo {
-  width: 100%;
+  width: 480px;
   aspect-ratio: 70 / 9;
   margin: 2rem 0 4rem 0;
 }
@@ -76,12 +76,31 @@
   margin-bottom: 1rem;
 }
 
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.password-toggle-btn:hover {
+  color: #333;
+}
+
 /* 태블릿 크기 (820px ~ 431px) */
 @media (max-width: 820px) {
   .login-logo {
-    width: 100%;
-    max-width: 400px;
-    aspect-ratio: 70 / 9;
+    width: 80%;
+    height: 3.5rem; /* 크기가 줄어들 때 높이도 살짝 조절 */
     margin: 2rem 0 3rem 0;
   }
   
@@ -98,10 +117,9 @@
   }
   
   .login-logo {
-    width: 90%;
-    max-width: 280px;
-    aspect-ratio: 70 / 9;
-    margin: 1.5rem 0 2rem 0;
+    width: 80%;
+    height: 2.6rem;
+    margin: 1.5rem auto 2rem auto;
   }
   
   .login-form-container {
@@ -121,7 +139,6 @@
   .login-redirect > button {
     font-size: 0.8rem;
     width: 100%;
-    padding: 0;
   }
 
   .login-redirect button:nth-of-type(2) {

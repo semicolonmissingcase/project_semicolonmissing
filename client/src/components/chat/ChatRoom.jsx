@@ -77,39 +77,39 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
   useEffect(() => {
     if (!roomId) return;
     
-    const init = async () => {
-      try {
-        // 1. 방 정보 먼저 세팅 (UI 제목 등)
-        const roomRes = await getChatRoomDetail(roomId);
-        const responseData = roomRes.data?.data; 
-        if (responseData) {
-          onOpenSidebar(responseData, false);
-          const detail = responseData.data;
-          const isMeOwner = responseData.sideType === 'OWNER';
-          setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
-          setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
-        }
+  const init = async () => {
+  try {
+    //1. 방 정보 먼저 세팅 (UI 제목 등)
+    const roomRes = await getChatRoomDetail(roomId);
+    const responseData = roomRes.data?.data;
+    if (responseData) {
+      onOpenSidebar(responseData, false);
+      const detail = responseData.data; 
+      const isMeOwner = responseData.sideType === 'OWNER';
+      setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
+      setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
+    }
 
-        // 2. [핵심] 읽음 처리 API를 먼저 호출하고 '기다림'
-        await markMessageAsRead(roomId);
-        
-        // 3. 소켓으로 읽음 신호 전송
-        if (socket) {
-          socket.emit("mark_as_read", { roomId, userRole });
-        }
+    // 2. [핵심] 읽음 처리 API를 먼저 호출하고 '기다림'
+    await markMessageAsRead(roomId);
 
-        // 4. DB가 업데이트된 '후'에 메시지 목록을 가져옴
-        setHasMore(true);
-        setPage(1);
-        await fetchMessages(1, true);
+    // 3. 소켓으로 읽음 신호 전송
+    if (socket) {
+      socket.emit("mark_as_read", { roomId, userRole });
+    }
 
-      } catch (err) { 
-        console.warn("초기화 중 오류 발생", err); 
-        setOpponentName("채팅방");
-        // 에러가 나더라도 메시지는 시도
-        fetchMessages(1, true);
-      }
-    };
+    // 4. DB가 업데이트된 '후'에 메시지 목록을 가져옴
+    setHasMore(true);
+    setPage(1);
+    await fetchMessages(1, true);
+
+  } catch (err) { 
+    console.warn("초기화 중 오류 발생:", err);
+    setOpponentName("채팅방");
+    // 에러가 나더라도 메시지는 시도
+    fetchMessages(1, true);
+  }
+};
 
     init();
   }, [roomId, socket]);

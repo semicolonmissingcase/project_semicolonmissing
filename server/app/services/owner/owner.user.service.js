@@ -8,7 +8,7 @@ import { CONFLICT_ERROR } from "../../../configs/responseCode.config.js";
 import ownerStoreRepository from "../../repositories/owner/owner.store.repository.js";
 import ownerUserRepository from "../../repositories/owner/owner.user.repository.js";
 import ownerRepository from "../../repositories/auth/owner.repository.js";
-import cleanerRepository from "../../repositories/auth/cleaner.repository.js"
+import cleanerRepository from "../../repositories/auth/cleaner.repository.js";
 import db from "../../models/index.js";
 import myError from "../../errors/customs/my.error.js";
 import bcrypt from 'bcrypt';
@@ -25,10 +25,7 @@ async function store(data) {
     email, 
     password, 
     phone, 
-    storeName, 
-    storePhone, 
-    address, 
-    addressDetail 
+    store
   } = data;
   
   // 트랜잭션 시작
@@ -63,21 +60,15 @@ async function store(data) {
     });
 
     // 매장 필수 아님
-    if (storeName) {
-      // 매장 주소 데이터 주소 가공
-      const addressParts = address.split(' ');
-      const addr1 = addressParts[0] || null; // 시/도
-      const addr2 = addressParts.slice(1).join(' ') || null // 시/군/구/읍/면/동
-      const addr3 = addressDetail || null; // 상세주소
-  
+    if (store && store.name && store.addr1 && store.addr2  && store.addr3) {
       // 매장 데이터 준비 및 생성
-      await ownerStoreRepository.create(t, {
+      await ownerStoreRepository.createStore(t, {
         ownerId: createdOwner.id,
-        name: storeName,
-        phoneNumber: storePhone,
-        addr1: addr1,
-        addr2: addr2,
-        addr3: addr3,
+        name: store.name,
+        phoneNumber: store.phoneNumber || null,
+        addr1: store.addr1,
+        addr2: store.addr2,
+        addr3: store.addr3,
       });
     }
 
@@ -89,6 +80,24 @@ async function store(data) {
   return result.toJSON();
 }
 
+/**
+ * 점주 통계 조회
+ * @param {number} ownerId 
+ */
+async function getOwnerStats(ownerId) {
+  return await ownerUserRepository.getStatsByOwnerId(ownerId);
+}
+
+/**
+ * 점주 예약 목록 조회
+ * @param {number} ownerId 
+ */
+async function getOwnerReservations(ownerId) {
+  return await ownerUserRepository.getReservationsByOwnerId(ownerId);
+}
+
 export default {
   store,
+  getOwnerStats,
+  getOwnerReservations,
 }
