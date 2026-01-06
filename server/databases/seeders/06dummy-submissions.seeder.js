@@ -37,6 +37,6 @@ export default {
 
   async down (queryInterface, Sequelize) {
     // 데이터 삭제 : queryInterface.bulkDelete(tabelName, null, options)
-    await Submission.destroy({ force: true });
+    await Submission.destroy({ truncate: true, force: true });
   }
 };

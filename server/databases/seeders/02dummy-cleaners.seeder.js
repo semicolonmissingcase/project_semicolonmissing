@@ -114,6 +114,6 @@ export default {
 
   async down (queryInterface, Sequelize) {
     // 데이터 삭제 : queryInterface.bulkDelete(tabelName, null, options)
-    await queryInterface.bulkDelete(tableName, null, {});
+    await Cleaner.destroy({ truncate: true, force: true });
   }
 };
