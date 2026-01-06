@@ -1,13 +1,13 @@
 /**
  * @file app/repositories/cleaner/cleaner.mypage.repository.js
- * @description Cleaner MyPage Repository (Final Stable Version)
- * 260106 seon init
+ * @description Cleaner MyPage Repository
+ * 260105 seon init
  */
 
 import db from '../../models/index.js';
 import { Op } from 'sequelize';
 
-const { Reservation, Estimate, Owner, Store, Review } = db;
+const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption } = db;
 
 /**
  * 기사님용 대기 작업 조회
@@ -20,6 +20,7 @@ async function reservationFindPendingByCleanerIdAndRole(t = null, { cleanerId, u
       cleanerId: cleanerId,
       status: '승인'
     },
+    attributes: ['id', 'date', 'time', 'status', 'createdAt'],
     include: [
       { 
         model: Estimate, 
@@ -28,7 +29,7 @@ async function reservationFindPendingByCleanerIdAndRole(t = null, { cleanerId, u
         attributes: ['id', 'estimated_amount', 'description', 'status'] 
       },
       { model: Owner, as: 'owner', required: true, attributes: ['id', 'name'] },
-      { model: Store, as: 'store', required: false, attributes: ['id', 'name'] }
+      { model: Store, as: 'store', required: false, attributes: ['id', 'name', 'addr1'] }
     ],
     order: [['createdAt', 'ASC']], 
     transaction: t
@@ -47,8 +48,38 @@ async function reservationFindById(t = null, id) {
         as: 'estimate',
         attributes: ['id', 'estimated_amount', 'description']
       },
-      { model: Owner, as: 'owner' },
-      { model: Store, as: 'store' }
+      { model: Owner, as: 'owner', attributes: ['id', 'name', 'phone'] },
+      { model: Store, as: 'store', attributes: ['id', 'name', 'addr1'] }
+    ],
+    transaction: t
+  });
+}
+
+/**
+ * 특정 예약의 질문 답변(Submissions) 조회
+ */
+async function submissionFindByReservationId(t = null, id) {
+  return await Submission.findAll({
+    where: { reservationId: id },
+    include: [
+      {
+        model: Question,
+        as: 'question',
+        attributes: ['id', 'code', 'content'],
+        required: false,
+        include: [
+          {
+            model: QuestionOption,
+            as: 'questionOptions',
+            attributes: ['id', 'correct'],
+            required: false
+          },
+        ],
+      },
+    ],
+    order: [
+      [sequelize.literal('`question`.`code` IS NULL'), 'ASC'],
+      [{ model: Question, as: 'question' }, 'code', 'ASC']
     ],
     transaction: t
   });
@@ -81,7 +112,8 @@ async function reservationFindTodayByCleanerId(t = null, { cleanerId, userRole }
         as: 'estimate',
         attributes: ['id', 'estimated_amount', 'description']
       }, 
-      { model: Owner, as: 'owner' }
+      { model: Owner, as: 'owner' },
+      { model: Store, as: 'store', attributes: ['id', 'name', 'addr1'] }
     ],
     transaction: t
   });
@@ -119,6 +151,7 @@ async function reviewFindByCleanerId(t = null, cleanerId) {
 export default {
   reservationFindPendingByCleanerIdAndRole,
   reservationFindById,
+  submissionFindByReservationId,
   reservationUpdateStatus,
   reservationFindTodayByCleanerId,
   reservationFindSettlementPending,

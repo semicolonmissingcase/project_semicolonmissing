@@ -10,14 +10,16 @@ import chatService from '../services/chat.service.js'
  */
 const createRoom = async (req, res, next) => {
   try {
-    const ownerId = req.user.id; 
+    const { id, role } = req.user; 
     const { estimate_id, cleaner_id } = req.body;
 
-    const result = await chatService.createOrGetRoom({
+    const roomData = {
       estimate_id,
-      cleaner_id,
-      owner_id: ownerId
-    });
+      cleaner_id: role === 'CLEANER' ? id : cleaner_id,
+      owner_id: role === 'OWNER' ? id : owner_id
+    };
+
+    const result = await chatService.createOrGetRoom(roomData);
 
     res.status(200).json({ success: true, data: result.room, isNew: result.isNew });
   } catch (error) {
