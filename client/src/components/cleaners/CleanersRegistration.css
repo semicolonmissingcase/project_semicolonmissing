@@ -16,6 +16,16 @@
   margin: 0 auto;
 }
 
+.cleaners-registration-list {
+  display: grid;
+  list-style: none;
+  font-size: 0.8rem;
+  text-indent: 0.2rem;
+  gap: 0.2rem;
+  margin-top: 0.4rem;
+  color: var(--color-gray);
+}
+
 /* 섹션 */
 .cleaners-registration-section {
   background-color: var(--color-white);
@@ -23,7 +33,6 @@
   border-radius: 15px;
   padding: 30px;
   margin-bottom: 30px;
-  
 }
 
 .cleaners-registration-section-title {
@@ -183,19 +192,42 @@
   text-align: center;
 }
 
-/* 주소 검색 */
-.cleaners-registration-address-search-wrapper {
-  display: flex;
-  gap: 10px;
+/* 이용약관 */
+.cleaners-registration-cleaners-agreement {
+  overflow-y: scroll;
+  background-color: var(--color-white);
+  border: 2px solid var(--color-light-gray);
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  height: 300px;
 }
 
-.cleaners-registration-address-search-wrapper input {
-  flex: 1;
+.cleaners-registration-cleaners-agreement::-webkit-scrollbar {
+  width: 15px; 
 }
 
-.cleaners-registration-address-search-btn {
-  white-space: nowrap;
-  border-radius: 10px;
+.cleaners-registration-cleaners-agreement::-webkit-scrollbar-track {
+  width: 0;
+  height: 0;
+}
+
+.cleaners-registration-cleaners-agreement::-webkit-scrollbar-thumb {
+  width: 15px;
+  background: var(--color-light-gray); 
+  border-radius: 2rem;
+}
+
+.cleaners-registration-cleaners-agreement-title {
+  margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+.cleaners-registration-hr {
+  border: none;
+  height: 1px;
+  background-color: var(--color-light-gray);
+  margin: 1rem 0;
 }
 
 /* 회원가입 버튼 */
