@@ -57,6 +57,12 @@ const attributes = {
     allowNull: false,
     comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
   },
+  dateAgreedUpon: {
+    field: 'date_agreed_upon',
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    comment: '날짜 협의 가능',
+  },
   cleanerId: {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
