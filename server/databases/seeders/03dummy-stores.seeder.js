@@ -193,6 +193,6 @@ export default {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete(tableName, null, {});
+    await Store.destroy({ truncate: true, force: true });
   }
 };
