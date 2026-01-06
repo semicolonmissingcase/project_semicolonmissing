@@ -111,16 +111,19 @@ async function findReviewsByOwnerId(ownerId) {
         model: Cleaner,
         as: 'cleaner',
         attributes: ['id', 'name', 'profile'],
+        required: false,
       },
       {
         model: Reservation,
         as: 'reservationData',
         attributes: ['id', 'date', 'time', 'status'],
+        required: false,
         include: [
           {
             model: Store,
             as: 'store',
             attributes: ['name'],
+            required: false,
           }
         ]
       },

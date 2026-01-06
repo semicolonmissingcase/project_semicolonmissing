@@ -27,7 +27,6 @@ async function getAcceptedEstimatesByReservationId(reservationId, ownerId) {
 
 /**
  * 점주 ID에 대한 '수락' 상태의 견적 목록 조회
- * @param {number} reservationId
  * @param {number} ownerId 
  */
 async function getAcceptedEstimatesByOwnerId(ownerId) {

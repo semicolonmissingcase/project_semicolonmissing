@@ -14,6 +14,6 @@ const estimateRouter = express.Router();
 // 특정 예약 ID에 대한 견적 목록 조회
 estimateRouter.get('/:reservationId/estimates', authMiddleware, ownerEstimateController.getEstimatesByReservationId);
 // 특정 예약 ID에 대한 '수락' 상태의 견적 목록 조회
-estimateRouter.get('/estimates/accepted', authMiddleware, ownerEstimateController.getAcceptedEstimatesByOwnerId)
+estimateRouter.get('/estimates/accepted', authMiddleware, ownerEstimateController.getEstimatesByOwnerId)
 
 export default estimateRouter;

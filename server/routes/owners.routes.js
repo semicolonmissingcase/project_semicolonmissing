@@ -22,7 +22,7 @@ const ownersRouter = express.Router();
 ownersRouter.get('/quotations', validationHandler, ownersController.index); // 견적요청서 조회
 ownersRouter.post('/quotations', authMiddleware, reservationImageUploader, ownersController.createReservation); // 견적요청서 작성
 ownersRouter.get('/mypage/stats', authMiddleware, ownerUserController.getOwnerStats); // 점주 마이페이지 통계
-ownersRouter.get('/reservations', authMiddleware, ownerUserController.getEstimateByOwnerId); // 점주 예약 목록 조회
+ownersRouter.get('/reservations', authMiddleware, ownerUserController.getEstimateByOwnerId); // 점주 예약 완료 목록 조회
 ownersRouter.post('/cleaners/:cleanerId/like', authMiddleware, ownerLikeController.toggleFavorite); // 기사님 좋아요
 ownersRouter.get('/mypage/favorite-cleaners', authMiddleware, ownerLikeController.getFavoriteCleaners); // 찜한 기사님 조회
 ownersRouter.put('/mypage/profile', authMiddleware, userController.updateOwner); // 점주 프로필 정보 수정

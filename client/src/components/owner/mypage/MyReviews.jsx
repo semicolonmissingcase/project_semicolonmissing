@@ -85,7 +85,7 @@ export default function MyReviews() {
   return (
     <div className="myreviews-tab-container">
       <div className="myreviews-section-group">
-        <h4 className="myreviews-section-label">리뷰 대기 중인 기사님</h4>
+        <h4 className="myreviews-section-label">리뷰 대기 중인</h4>
         {reviews.filter(r => r.status === 'pending').length > 0 ? (
           reviews.filter(r => r.status === 'pending').map(renderReviewCard)
         ) : (
@@ -94,7 +94,7 @@ export default function MyReviews() {
       </div>
 
       <div className="myreviews-section-group" style={{ marginTop: '40px' }}>
-        <h4 className="myreviews-section-label">리뷰 등록 완료 기사님</h4>
+        <h4 className="myreviews-section-label">리뷰 등록 완료</h4>
         {reviews.filter(r => r.status === 'completed').length > 0 ? (
           reviews.filter(r => r.status === 'completed').map(renderReviewCard)
         ) : (

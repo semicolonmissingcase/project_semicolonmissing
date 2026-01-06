@@ -135,7 +135,7 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
             Sequelize.literal(`(
               SELECT COUNT(*)
               FROM likes
-              WHERE likes.cleaner_id = cleaner.id AND likes.owner_id = ${ownerId}
+              WHERE likes.cleaner_id = cleaner.id AND likes.owner_id = :ownerId
             )`),
             'isFavorited'
           ],
@@ -151,7 +151,8 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
         required: true, // 견적에는 반드시 기사님이 있어야 함
       },
     ],
-    order: [['createdAt', 'DESC']]
+    order: [['createdAt', 'DESC']],
+    replacements: { ownerId: ownerId },
   });
 
   // 후처리하여 isFavorited 속성 추가
