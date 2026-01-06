@@ -8,7 +8,6 @@ export default function MyReviews() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const APP_SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 
   // 서버에서 리뷰 데이터 가져오기
   useEffect(() => {
@@ -48,36 +47,41 @@ export default function MyReviews() {
     );
   }
 
+  // 카드 디자인
   const renderReviewCard = (item) => (
     <div key={item.id} className="myreviews-status-card">
-      {/* 실제 이미지가 들어갈 원형 박스 */}
-      <div className="myreviews-avatar-circle">
-        <img
-          src={item.cleanerProfile ? item.cleanerProfile : "/icons/default-profile.png"} // 기사 프로필 이미지 사용
-          alt={`${item.name} 기사님`}
-          className="myreviews-avatar-img"
-        />
+      <div className="myreviews-not-btn">
+        <div className="myreviews-avatar-circle">
+          <img
+            src={item.cleanerProfile ? item.cleanerProfile : "/icons/default-profile.png"}
+            alt={`${item.name} 기사님`}
+            className="myreviews-avatar-img"
+          />
+        </div>
+
+        <div className="myreviews-text-content">
+          <h4 className="myreviews-driver-name">
+            {item.name} <span className="myreviews-heart-icon">
+              <FavoriteButton cleanerId={item.cleanerId} initialIsFavorited={item.heart} />
+            </span>
+          </h4>
+          <p className="myreviews-sub-info">{item.time}</p>
+          <p className="myreviews-sub-info">{item.store}</p>
+          <p className="myreviews-price-info">견적 금액 {item.price}</p>
+        </div>
       </div>
 
-      <div className="myreviews-text-content">
-        <h4 className="myreviews-driver-name">
-          {item.name} <span className="myreviews-heart-icon">
-            {/* [수정] FavoriteButton 컴포넌트 사용 */}
-            <FavoriteButton cleanerId={item.cleanerId} initialIsFavorited={item.heart} />
-          </span>
-        </h4>
-        <p className="myreviews-sub-info">{item.time}</p> {/* 예약 시간 */}
-        <p className="myreviews-sub-info">{item.store}</p> {/* 매장명 */}
-        <p className="myreviews-price-info">견적 금액 {item.price}</p> {/* 견적 금액 */}
-        <p className="myreviews-rating-star">
-          <span className="myreviews-star-star-icon">★</span>
-          {item.star ? Number(item.star).toFixed(1) : '0.0'} {/* 평점 */}
-        </p>
+      {/* 버튼 영역 수정 */}
+      <div className="myreviews-button-group">
+        {item.status === 'completed' ? (
+          <button className="myreviews-action-btn myreviews-write">리뷰쓰기</button>
+        ) : (
+          <>
+            <button className="myreviews-action-btn myreviews-view">리뷰보기</button>
+            <button className="myreviews-action-btn myreviews-edit">수정하기</button>
+          </>
+        )}
       </div>
-
-      <button className={`myreviews-action-btn ${item.status === 'completed' ? 'myreviews-edit' : 'myreviews-write'}`}>
-        {item.status === 'completed' ? '리뷰쓰기' : '수정하기'}
-      </button>
     </div>
   );
 

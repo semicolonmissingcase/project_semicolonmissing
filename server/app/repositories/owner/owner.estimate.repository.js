@@ -133,33 +133,30 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
           'id', 'name', 'profile',
           [
             Sequelize.literal(`(
-              SELECT COUNT(*)
-              FROM likes
-              WHERE likes.cleaner_id = cleaner.id AND likes.owner_id = :ownerId
-            )`),
-            'isFavorited'
-          ],
-          [
-            Sequelize.literal(`(
               SELECT COALESCE(AVG(star), 0)
               FROM reviews
               WHERE reviews.cleaner_id = cleaner.id
             )`),
             'avgReviewScore'
-          ]
+          ],
         ],
-        required: true, // 견적에는 반드시 기사님이 있어야 함
+        required: false, // 견적에는 반드시 기사님이 있어야 함
+        include: [{
+          model: Like,
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }],
       },
     ],
     order: [['createdAt', 'DESC']],
-    replacements: { ownerId: ownerId },
   });
 
   // 후처리하여 isFavorited 속성 추가
   return estimates.map(estimate => {
     const plainEstimate = estimate.get({ plain: true });
-
-    const heartStatus = plainEstimate.cleaner?.isFavorited > 0 || false;
+    const heartStatus = plainEstimate.cleaner?.likes?.length > 0
     const cleanerName = plainEstimate.cleaner?.name || '정보 없음';
     const cleanerProfile = plainEstimate.cleaner?.profile || '/icons/default-profile.png';
     const storeName = plainEstimate.reservation?.store?.name || '정보 없음';

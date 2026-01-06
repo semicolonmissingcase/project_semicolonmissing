@@ -123,7 +123,7 @@ export default function Estimates() {
                         <h4>{estimate.cleaner?.name} 기사님 
                             <FavoriteButton 
                             cleanerId={estimate.cleaner?.id}
-                            initialIsFavorited={!!estimate.cleaner?.isFavorited}
+                            initialIsFavorited={estimate.cleaner?.isFavorited}
                             />
                         </h4>
                         <p>리뷰 점수 {Number(estimate.cleaner?.avgReviewScore || 0).toFixed(1)}</p>

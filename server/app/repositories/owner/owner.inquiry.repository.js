@@ -4,9 +4,10 @@
  * 260102 v1.0.0 ck init
  */
 
+import { Sequelize } from 'sequelize';
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
-const { Inquiry, Owner, Cleaner, Admin, Answer, Review, Reservation, Store} = db;
+const { Inquiry, Owner, Cleaner, Admin, Answer, Review, Reservation, Store, Like } = db;
 
 /**
  * 점주 문의 생성
@@ -111,7 +112,14 @@ async function findReviewsByOwnerId(ownerId) {
         model: Cleaner,
         as: 'cleaner',
         attributes: ['id', 'name', 'profile'],
-        required: false,
+        required: true,
+        include: [{
+          model: Like, 
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }]
       },
       {
         model: Reservation,
@@ -129,22 +137,24 @@ async function findReviewsByOwnerId(ownerId) {
       },
     ],
     order: [['createdAt', 'DESC']],
+    replacements: { ownerId: ownerId },
   });
   return reviews.map(review => {
     const plainReview = review.get({ plain: true });
+    const heartStatus = plainReview.cleaner?.likes?.length > 0;
 
     return {
       id: plainReview.id,
-      status: plainReview.status,
       name: plainReview.cleaner?.name || '기사님 정보 없음',
       cleanerProfile: plainReview.cleaner?.profile || '/icons/default-profile.png',
-      heart: false,
+      heart: heartStatus,
       time: `${dayjs(plainReview.reservationData?.date).format('YYYY-MM-DD')}${plainReview.reservationData?.time}`,
       store: plainReview.reservationData?.store?.name || '매장 정보 없음',
       price: '정보 없음',
       star: plainReview.star,
       content: plainReview.content,
       createdAt: plainReview.createdAt,
+      cleanerId: plainReview.cleaner?.id,
     };
   });
 }
