@@ -70,14 +70,13 @@ export default function MyReviews() {
         <p className="myreviews-sub-info">{item.store}</p> {/* 매장명 */}
         <p className="myreviews-price-info">견적 금액 {item.price}</p> {/* 견적 금액 */}
         <p className="myreviews-rating-star">
-          <span className="myreviews-star-icon">★</span>
+          <span className="myreviews-star-star-icon">★</span>
           {item.star ? Number(item.star).toFixed(1) : '0.0'} {/* 평점 */}
         </p>
-        <p className="myreviews-content">{item.content}</p> {/* 리뷰 내용 */}
       </div>
 
       <button className={`myreviews-action-btn ${item.status === 'completed' ? 'myreviews-edit' : 'myreviews-write'}`}>
-        {item.status === 'completed' ? '수정하기' : '리뷰 쓰기'}
+        {item.status === 'completed' ? '리뷰쓰기' : '수정하기'}
       </button>
     </div>
   );
@@ -86,17 +85,13 @@ export default function MyReviews() {
     <div className="myreviews-tab-container">
       <div className="myreviews-section-group">
         <h4 className="myreviews-section-label">리뷰 대기 중인</h4>
-        {reviews.filter(r => r.status === 'pending').length > 0 ? (
-          reviews.filter(r => r.status === 'pending').map(renderReviewCard)
-        ) : (
           <p className="myreviews-no-items">작성할 리뷰가 없습니다.</p>
-        )}
       </div>
 
       <div className="myreviews-section-group" style={{ marginTop: '40px' }}>
         <h4 className="myreviews-section-label">리뷰 등록 완료</h4>
-        {reviews.filter(r => r.status === 'completed').length > 0 ? (
-          reviews.filter(r => r.status === 'completed').map(renderReviewCard)
+        {reviews.length > 0 ? (
+          reviews.map(renderReviewCard)
         ) : (
           <p className="myreviews-no-items">작성 완료된 리뷰가 없습니다.</p>
         )}

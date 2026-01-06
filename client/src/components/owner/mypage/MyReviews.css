@@ -74,6 +74,10 @@
   color: var(--color-black);
 }
 
+.myreviews-star-star-icon {
+  color: var(--color-yellow);
+}
+
 /* 우측 하단 버튼 */
 .myreviews-action-btn {
   position: absolute;
