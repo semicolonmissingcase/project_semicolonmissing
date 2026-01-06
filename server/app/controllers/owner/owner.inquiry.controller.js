@@ -208,6 +208,7 @@ async function guestCreateInquiry(req, res, next) {
   }
 }
 
+// -----------------------리뷰관련----------------------- 
 /**
  * 점주 내 리뷰 목록 조회
  * @param {import("express").Request} req 
@@ -226,6 +227,25 @@ async function getOwnerReviews(req, res, next) {
   }
 }
 
+/**
+ * 점주 내 쓴 리뷰 상세 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+async function getReviewDetails(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+    const { reviewId } = req.params;
+
+    const result = await ownerInquiryService.getReviewDetails(Number(reviewId), ownerId);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+  } catch (error) {
+    next(error);
+  }
+}
+
 export default {
   ownerCreateInquiry,
   getOwnerInquiries,
@@ -234,4 +254,5 @@ export default {
   uploadEditorImage,
   guestCreateInquiry,
   getOwnerReviews,
+  getReviewDetails
 }

@@ -84,6 +84,7 @@ async function getAllInquiries(page = 1, pageSize = 10) {
   return { count, rows };
 }
 
+// -----------------------리뷰관련----------------------- 
 /**
  * 점주 내 리뷰 목록 조회
  */
@@ -92,10 +93,41 @@ async function getOwnerReviews(ownerId) {
   return reviews;
 }
 
+/**
+ * 점주 내 리뷰 상세 조회
+ * @param {number} reviewId 
+ * @param {number} ownerId 
+ * @returns 
+ */
+async function getReviewDetails(reviewId, ownerId) {
+  const review = await ownerInquiryRepository.findReviewByIdAndOwnerId(reviewId, ownerId);
+
+  if (!review) {
+    throw new Error('해당 리뷰를 찾을 수 없거나 접근 권한이 없습니다.');
+  }
+
+  return {
+    id: review.id,
+    cleanerId: review.cleaner?.id,
+    cleanerName: review.cleaner?.name,
+    cleanerProfile: review.cleaner?.profile,
+    reservationDate: review.reservationData?.date,
+    reservationTime: review.reservationData?.time,
+    storeName: review.reservationData?.store?.name,
+    price: review.price,
+    star: review.star,
+    content: review.content,
+    reviewPicture1: review.reviewPicture1,
+    reviewPicture2: review.reviewPicture2,
+    createdAt: review.createdAt,
+  };
+}
+
 export default {
   createInquiry,
   getInquiriesByOwner,
   getInquiryDetailsForOwner,
   getAllInquiries,
   getOwnerReviews,
+  getReviewDetails,
 }

@@ -29,13 +29,15 @@ postsRouter.get('/owner/inquiries/:inquiryId', authMiddleware, ownerInquiryContr
 // ---------------------------
 // 리뷰 관리
 // ---------------------------
-// 리뷰 목록/디테일 조회
+// 리뷰 목록 조회
 postsRouter.get('/owner/reviews', authMiddleware, ownerInquiryController.getOwnerReviews);
+// 개별 리뷰 상세 조회
+postsRouter.get('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.getReviewDetails);
 // 리뷰 작성
-// postsRouter.post('/reviews', authUserMiddleware, ownerInquiryController.createReview);
+postsRouter.post('/owner/reviews', authMiddleware, ownerInquiryController.createReview);
 // 리뷰 수정
-// postsRouter.put('/reviews', authUserMiddleware, ownerInquiryController.createReview);
+postsRouter.put('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.updateReview);
 // 리뷰 삭제
-// postsRouter.delete('/reviews', authUserMiddleware, ownerInquiryController.createReview);
+postsRouter.delete('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.deleteReview);
 
 export default postsRouter;

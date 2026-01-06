@@ -100,6 +100,7 @@ async function findAllInquiries(limit, offset) {
   return { count, rows };
 }
 
+// -----------------------리뷰관련----------------------- 
 /**
  * 점주 ID로 리뷰 목록 조회
  * @param {number} ownderId 
@@ -167,10 +168,98 @@ async function findReviewsByOwnerId(ownerId) {
   });
 }
 
+/**
+ * 점주 내 특정 리뷰 상세 조회
+ * @param {number} reviewId 
+ * @param {number} ownerId 
+ */
+async function findReviewByIdAndOwnerId(reviewId, ownerId) {
+  const review = await Review.findOne({
+    where: {
+      id: reviewId,
+      ownerId: ownerId,
+    },
+    include: [
+      {
+        model: Cleaner,
+        as: 'cleaner',
+        attributes: [ 
+          'id', 'name', 'profile', 
+          [
+            Sequelize.literal(`(
+              SELECT COALESCE(AVG(star), 0)
+              FROM reviews
+              WHERE reviews.cleaner_id = cleaner.id
+            )`), 'avgReviewScore'
+          ]
+        ],
+        include: [{
+          model: Like,
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }],
+      },
+      {
+        model: Reservation,
+        as: 'reservationData',
+        attributes: ['id', 'date', 'time', 'status'],
+        include: [
+          {
+            model: Store,
+            as: 'store',
+            attributes: ['name'],
+          },
+          {
+            model: Estimate,
+            as: 'estimate',
+            attributes: ['estimatedAmount'],
+            required: false,
+          },
+        ],
+      },
+    ],
+  });
+
+  if(!review) {
+    return null;
+  }
+
+  const plainReview = review.get({ plain: true });
+
+  const heartStatus = plainReview.cleaner?.likes?.length > 0;
+  const avgReviewScore = plainReview.cleaner?.avgReviewScore
+      ? Number(plainReview.cleaner.avgReviewScore).toFixed(1)
+      : '0.0';
+  const price = plainReview.reservationData?.estimate?.estimatedAmount
+      ? plainReview.reservationData.estimate.estimatedAmount.toLocaleString()
+      : '미정';
+  
+  return {
+    id: plainReview.id,
+    cleanerId: plainReview.cleaner?.id,
+    cleanerName: plainReview.cleaner?.name || '정보 없음',
+    cleanerProfile: plainReview.cleaner?.profile || '/icons/default-profile.png',
+    avgReviewScore: avgReviewScore,
+    reservationDate: plainReview.reservationData?.date,
+    reservationTime: plainReview.reservationData?.time,
+    storeName: plainReview.reservationData?.store?.name || '정보 없음',
+    price: price,
+    star: plainReview.star,
+    content: plainReview.content,
+    reviewPicture1: plainReview.reviewPicture1,
+    reviewPicture2: plainReview.reviewPicture2,
+    createdAt: plainReview.createdAt,
+    heart: heartStatus,
+  };
+}
+
 export default {
   createInquiry,
   findInquiriesByOwnerId,
   findInquiryByIdAndOwnerId,
   findAllInquiries,
   findReviewsByOwnerId,
+  findReviewByIdAndOwnerId,
 }

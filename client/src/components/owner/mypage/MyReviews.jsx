@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react';
 import './MyReviews.css';
 import { getOwnerReviews } from '../../../api/axiosPost.js';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
+import ReviewModal from '../../commons/ReviewModal.jsx';
+import ReviewShowModal from '../../commons/ReviewShowModal.jsx';
 
 // 내 리뷰
 export default function MyReviews() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // 모달 관련 상태
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState('write'); 
+  const [selectedItem, setSelectedItem] = useState(null);
 
   // 서버에서 리뷰 데이터 가져오기
   useEffect(() => {
@@ -27,6 +34,13 @@ export default function MyReviews() {
 
     fetchReviews();
   }, []); // 컴포넌트 마운트 시 한 번만 호출
+
+  // 모달 열기 핸들러
+  const openReviewModal = (item, mode) => {
+    setModalMode(mode);
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
 
   // 로딩 중일 때
   if (loading) {
