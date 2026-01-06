@@ -5,7 +5,7 @@
  */
 
 import express from 'express';
-import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
+import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 import validationHandler from "../app/middlewares/validations/validationHandler.js";
 import ownerStoreController from '../app/controllers/owner/owner.store.controller.js';
 import createStoreValidator from '../app/middlewares/validations/validatiors/owner/store.create.validator.js';
@@ -13,8 +13,8 @@ import destroyStoreValidator from '../app/middlewares/validations/validatiors/ow
 
 const storesRouter = express.Router();
 
-storesRouter.post('/', authUserMiddleware, createStoreValidator, validationHandler, ownerStoreController.createStore); // 매장 생성
-storesRouter.get('/', authUserMiddleware, ownerStoreController.getOwnerStores); // 매장 목록 조회
-storesRouter.delete('/:storeId', authUserMiddleware, destroyStoreValidator, validationHandler, ownerStoreController.deleteStore); // 삭제
+storesRouter.post('/', authMiddleware, createStoreValidator, validationHandler, ownerStoreController.createStore); // 매장 생성
+storesRouter.get('/', authMiddleware, ownerStoreController.getOwnerStores); // 매장 목록 조회
+storesRouter.delete('/:storeId', authMiddleware, destroyStoreValidator, validationHandler, ownerStoreController.deleteStore); // 삭제
 
 export default storesRouter;

@@ -1,6 +1,7 @@
 /**
  * @file app/services/chat.service.js
- * @description Chat Service (Quotation Repository 연동 및 전체 기능 통합본)
+ * @description Chat Service
+ * 251220 seon init
  */
 
 import chatRepository from '../repositories/chat.repository.js';

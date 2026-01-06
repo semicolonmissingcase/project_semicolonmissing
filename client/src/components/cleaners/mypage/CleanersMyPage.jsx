@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'; // 리덕스 연결
 // 출력 카드 컴포넌트
 import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
-import CleanersInquiries from './MyQnaList.jsx';
-import CleanersReview from './ReviewList.jsx';
+import CleanersInquiries from './CleanersInquiries.jsx';
+import CleanersReview from './CleanersReview.jsx';
 import './CleanersMyPage.css'
 
 function CleanersMyPage() {
@@ -22,11 +22,11 @@ function CleanersMyPage() {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case '정산': return <CleanersSettlementStatus />;
-      case '예약 완료': return <ReservationCompletedList />;
-      case '오늘 작업': return <TodayJobList />;
+      case '정산 대기': return <CleanersSettlementStatus />;
+      case '대기 작업': return <ReservationCompletedList />;
+      case '오늘 일정': return <TodayJobList />;
       case '문의 내역': return <CleanersInquiries />;
-      case '리뷰': return <CleanersReview />
+      case '리뷰 내역': return <CleanersReview />
       default: return <div className="tab-placeholder">내용을 불러오는 중...</div>;
     }
   };
@@ -72,11 +72,6 @@ function CleanersMyPage() {
               </div>
             </div>
             
-            {/* 이게 뭐가 출력되는 부분인지 몰라서 버튼만 만들었습니다.
-            <div className="cleanermypage-action-btn-container">
-              <button className="cleanermypage-action-btn">현재 정산 상태</button>
-              <button className="cleanermypage-action-btn">오늘 예정 일정</button>
-            </div> */}
           </div>
         </div>
       </header>

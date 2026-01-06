@@ -52,10 +52,9 @@
   margin-bottom: 15px;
 }
 
-/* [수정] 버블과 숫자를 가로로 배치하기 위한 컨테이너 */
 .chatroom-bubble-row {
   display: flex;
-  align-items: flex-end; /* 숫자와 버블이 바닥 정렬 */
+  align-items: flex-end;
   gap: 6px;
 }
 
@@ -64,11 +63,11 @@
 }
 
 .mine .chatroom-bubble-row {
-  flex-direction: row; /* 숫자가 왼쪽, 버블이 오른쪽 */
+  flex-direction: row;
 }
 
 .other .chatroom-bubble-row {
-  flex-direction: row-reverse; /* 버블이 왼쪽, 숫자가 오른쪽 (상대방은 보통 숫자 없음) */
+  flex-direction: row-reverse;
 }
 
 .chatroom-message-item.mine .chatroom-bubble {
@@ -97,7 +96,6 @@
   border: 1px solid #ddd;
 }
 
-/* [추가] 읽음 숫자 스타일 */
 .unread-count {
   font-size: 11px;
   color: var(--color-dark-blue);

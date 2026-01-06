@@ -5,8 +5,7 @@
  */
 
 import express from 'express';
-import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
-import authAdminMiddleware from '../app/middlewares/auth/auth.admin.middleware.js';
+import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 import ownerInquiryController from '../app/controllers/owner/owner.inquiry.controller.js';
 import multerMiddleware from '../app/middlewares/multer/multer.middleware.js';
 
@@ -15,15 +14,15 @@ const postsRouter = express.Router();
 // 문의사항 페이지 테이블 조회(비회원도 가능)
 postsRouter.get('/inquiries', ownerInquiryController.getAllInquiries);
 // 문의사항 작성(회원용)
-postsRouter.post('/inquiries', authUserMiddleware, ownerInquiryController.ownerCreateInquiry);
+postsRouter.post('/inquiries', authMiddleware, ownerInquiryController.ownerCreateInquiry);
 // 문의사항 작성(비회원용)
 postsRouter.post('/inquiries/guest', multerMiddleware.inquiryImageUploader, ownerInquiryController.guestCreateInquiry);
 // CKEditor 내부 이미지 업로드용 라우트
-postsRouter.post('/images/editor', authUserMiddleware, ownerInquiryController.uploadEditorImage)
+postsRouter.post('/images/editor', authMiddleware, ownerInquiryController.uploadEditorImage)
 // 내 문의사항 조회(점주)
-postsRouter.get('/owner/inquiries', authUserMiddleware, ownerInquiryController.getOwnerInquiries);
+postsRouter.get('/owner/inquiries', authMiddleware, ownerInquiryController.getOwnerInquiries);
 // 내 문의상세 조회(점주)
-postsRouter.get('/owner/inquiries/:inquiryId', authUserMiddleware, ownerInquiryController.getOwnerInquiriesShow);
+postsRouter.get('/owner/inquiries/:inquiryId', authMiddleware, ownerInquiryController.getOwnerInquiriesShow);
 
 // CKEditor 내부 이미지 업로드용
 postsRouter.post('/images/editor', multerMiddleware.editorImageUploader, ownerInquiryController.uploadEditorImage);
@@ -34,6 +33,6 @@ postsRouter.post('/images/editor', multerMiddleware.editorImageUploader, ownerIn
 // 리뷰 작성
 // postsRouter.post('/reviews', authUserMiddleware, ownerInquiryController.createReview);
 // 리뷰 목록 조회
-postsRouter.get('/owner/reviews', authUserMiddleware, ownerInquiryController.getOwnerReviews);
+postsRouter.get('/owner/reviews', authMiddleware, ownerInquiryController.getOwnerReviews);
 
 export default postsRouter;

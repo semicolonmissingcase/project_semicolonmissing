@@ -1,6 +1,7 @@
 /**
  * @file app/repositories/chat.repository.js
- * @description Chat Repository - 기사/점주 목록 조회 및 메시지 관리
+ * @description Chat Repository
+ * 251218 seon init
  */
 import db from '../models/index.js';
 import { Op } from 'sequelize';
@@ -33,8 +34,6 @@ const chatRepository = {
 
   /**
    * 사용자별 채팅방 목록 조회
-   * [수정] 목록이 안 뜨는 문제를 방지하기 위해 LeavedAt 조건을 제거하거나 
-   * null뿐만 아니라 빈 값도 허용하도록 안전하게 조회합니다.
    */
   findByUser: async (transaction, userId, userRole) => {
     const roleStr = String(userRole || '').toUpperCase();
@@ -43,8 +42,6 @@ const chatRepository = {
     return await db.ChatRoom.findAll({
       where: {
         [isOwner ? 'ownerId' : 'cleanerId']: userId,
-        // 기사님 목록이 안 뜨는 주범인 조건을 주석 처리하거나 null로 엄격히 제한 해제
-        // [isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt']: null 
       },
       include: [
         { model: db.Estimate, as: 'estimate', required: false },
@@ -99,7 +96,6 @@ const chatRepository = {
 findMessagesByRoomId: async (transaction, room_id, limit = 50, offset = 0) => {
   const messages = await db.ChatMessage.findAll({
     where: { chatRoomId: room_id },
-    // attributes를 명시해서 isRead(is_read)가 확실히 포함되게 합니다.
     attributes: ['id', 'chatRoomId', 'content', 'senderId', 'senderType', 'messageType', 'isRead', 'createdAt'],
     limit: parseInt(limit),
     offset: parseInt(offset),
@@ -141,17 +137,15 @@ findMessagesByRoomId: async (transaction, room_id, limit = 50, offset = 0) => {
    * 읽음 처리 업데이트
    */
 markAsRead: async (transaction, room_id, user_id, user_role) => {
-  // 1. role이 없을 경우를 대비한 안전 장치 (서비스/컨트롤러에서 누락 시)
   const roleStr = String(user_role || '').toUpperCase();
   
-  // 2. 타겟팅: 내가 OWNER면 상대방인 CLEANER의 글을 읽음 처리
   const opponentRole = roleStr.includes('OWNER') ? 'CLEANER' : 'OWNER';
   const result = await db.ChatMessage.update(
     { isRead: 1 },
     {
       where: {
         chatRoomId: room_id,
-        senderType: opponentRole, // DB에 저장된 'CLEANER' 또는 'OWNER' 문자열과 매칭
+        senderType: opponentRole,
         isRead: 0
       },
       transaction

@@ -6,14 +6,14 @@
 
 import express from 'express';
 import ownerEstimateController from '../app/controllers/owner/owner.estimate.controller.js';
-import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
+import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 import ownerUserController from '../app/controllers/owner/owner.user.controller.js';
 
 const estimateRouter = express.Router();
 
 // 특정 예약 ID에 대한 견적 목록 조회
-estimateRouter.get('/:reservationId/estimates', authUserMiddleware, ownerEstimateController.getEstimatesByReservationId);
+estimateRouter.get('/:reservationId/estimates', authMiddleware, ownerEstimateController.getEstimatesByReservationId);
 // 특정 예약 ID에 대한 '수락' 상태의 견적 목록 조회
-estimateRouter.get('/estimates/accepted', authUserMiddleware, ownerEstimateController.getAcceptedEstimatesByOwnerId)
+estimateRouter.get('/estimates/accepted', authMiddleware, ownerEstimateController.getAcceptedEstimatesByOwnerId)
 
 export default estimateRouter;
