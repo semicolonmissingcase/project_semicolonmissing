@@ -21,17 +21,13 @@ export default {
         estimatedAmount: 300000,
         description: '사장님, 제빙기 내부 상태 확인해봤는데요. 스케일이랑 물때가 꽤 쌓여 있어서 분해 세척이 필요합니다.',
         status: '전송',
-        // created_at: new Date(),
-        // updated_at: new Date(),
       },
        {
-        cleanerId: 1,
+        cleanerId: 2,
         reservationId: 2,
         estimatedAmount: 250000,
         description: '견적 금액 확인 부탁드립니다.',
         status: '수락',
-        // created_at: new Date(),
-        // updated_at: new Date(),
       },
     ];
 
