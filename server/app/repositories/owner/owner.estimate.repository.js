@@ -112,6 +112,7 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
     where: {
       status: '수락' // 견적서 상태가 '수락'인 것만 필터링
     },
+    attributes: ['id', 'cleanerId', 'reservationId', 'estimatedAmount', 'description', 'status', 'createdAt',],
     include: [
       {
         model: Reservation,
@@ -124,7 +125,7 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
           as: 'store',
           attributes: ['name'], // 매장 이름만
           required: true,
-        }]
+        },]
       },
       {
         model: Cleaner,
@@ -140,7 +141,7 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
             'avgReviewScore'
           ],
         ],
-        required: false, // 견적에는 반드시 기사님이 있어야 함
+        required: true, // 견적에는 반드시 기사님이 있어야 함
         include: [{
           model: Like,
           as: 'likes',
@@ -160,8 +161,8 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
     const cleanerName = plainEstimate.cleaner?.name || '정보 없음';
     const cleanerProfile = plainEstimate.cleaner?.profile || '/icons/default-profile.png';
     const storeName = plainEstimate.reservation?.store?.name || '정보 없음';
-    const estimatedAmount = plainEstimate.estimated_amount;
-    const price = estimatedAmount ? estimatedAmount.toLocaleString() : '미정';
+    const estimatedAmount = plainEstimate.estimatedAmount;
+    const price = estimatedAmount ? estimatedAmount.toLocaleString() : '정보 없음';
     const avgReviewScore = plainEstimate.cleaner?.avgReviewScore 
       ? Number(plainEstimate.cleaner.avgReviewScore).toFixed(1) 
       : '0.0';

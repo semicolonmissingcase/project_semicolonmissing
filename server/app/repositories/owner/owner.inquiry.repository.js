@@ -7,7 +7,7 @@
 import { Sequelize } from 'sequelize';
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
-const { Inquiry, Owner, Cleaner, Admin, Answer, Review, Reservation, Store, Like } = db;
+const { Inquiry, Owner, Cleaner, Admin, Answer, Review, Reservation, Store, Like, Estimate } = db;
 
 /**
  * 점주 문의 생성
@@ -132,6 +132,12 @@ async function findReviewsByOwnerId(ownerId) {
             as: 'store',
             attributes: ['name'],
             required: false,
+          },
+          {
+            model: Estimate,
+            as: 'estimate',
+            attributes: ['estimatedAmount'],
+            required: false,
           }
         ]
       },
@@ -142,6 +148,8 @@ async function findReviewsByOwnerId(ownerId) {
   return reviews.map(review => {
     const plainReview = review.get({ plain: true });
     const heartStatus = plainReview.cleaner?.likes?.length > 0;
+    const estimatedAmount = plainReview.reservationData?.estimate?.estimatedAmount;
+    const price = estimatedAmount ? estimatedAmount.toLocaleString() : '정보없음';
 
     return {
       id: plainReview.id,
@@ -150,7 +158,7 @@ async function findReviewsByOwnerId(ownerId) {
       heart: heartStatus,
       time: `${dayjs(plainReview.reservationData?.date).format('YYYY-MM-DD')}${plainReview.reservationData?.time}`,
       store: plainReview.reservationData?.store?.name || '매장 정보 없음',
-      price: '정보 없음',
+      price: price,
       star: plainReview.star,
       content: plainReview.content,
       createdAt: plainReview.createdAt,
