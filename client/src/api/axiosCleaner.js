@@ -9,3 +9,7 @@ export const getPendingJobs = () =>
 // 오늘 일정 목록 가져오기
 export const getTodayJobs = () => 
   axiosInstance.get(`${CLEANER_API_URL}/mypage/today`);
+
+// 기사님 문의 목록 가져오기
+export const getCleanerInquiries = () => 
+  axiosInstance.get(`${CLEANER_API_URL}/mypage/qna`);

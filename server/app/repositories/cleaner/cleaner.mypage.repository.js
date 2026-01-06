@@ -7,7 +7,7 @@
 import db from '../../models/index.js';
 import { Op } from 'sequelize';
 
-const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption } = db;
+const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry } = db;
 
 /**
  * 기사님용 대기 작업 조회
@@ -101,10 +101,14 @@ async function reservationUpdateStatus(t = null, { id, status }) {
 async function reservationFindTodayByCleanerId(t = null, { cleanerId, userRole }) {
   if (!userRole) return [];
 
+  const today = new Date();
+  const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
+
   return await Reservation.findAll({
     where: {
       cleanerId: cleanerId,
-      status: '승인'
+      status: '승인',
+      date: todayString
     },
     include: [
       { 
@@ -148,6 +152,20 @@ async function reviewFindByCleanerId(t = null, cleanerId) {
   });
 }
 
+/**
+ * 기사님이 작성한 문의 조회
+ */
+async function inquiryFindByCleanerId(t = null, cleanerId) {
+  return await Inquiry.findAll({
+    where: { 
+      cleanerid: cleanerId
+    },
+    attributes: ['id', 'title', 'category', 'content', 'status', 'guest_name', 'created_at'],
+    order: [['created_at', 'DESC']],
+    transaction: t
+  });
+}
+
 export default {
   reservationFindPendingByCleanerIdAndRole,
   reservationFindById,
@@ -156,4 +174,5 @@ export default {
   reservationFindTodayByCleanerId,
   reservationFindSettlementPending,
   reviewFindByCleanerId,
+  inquiryFindByCleanerId,
 };

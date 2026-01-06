@@ -92,7 +92,6 @@ async function getCleanerReviews(req, res, next) {
   try {
     const { id } = req.user; // 토큰에서 추출한 기사님 ID
 
-    // 레포지토리의 reviewFindByCleanerId 호출
     const reviews = await cleanerMypageRepository.reviewFindByCleanerId(null, id);
 
     return res.status(200).json({
@@ -106,10 +105,27 @@ async function getCleanerReviews(req, res, next) {
   }
 }
 
-// 라우터에서 사용할 수 있도록 export
+/**
+ * 기사님이 작성한 문의 목록 조회
+ */
+const getCleanerInquiries = async (req, res, next) => {
+  try {
+    const cleanerId = req.user.id; 
+    console.log("조회하려는 기사 ID:", cleanerId);
+
+    const inquiries = await cleanerMypageRepository.findInquiriesByCleanerId(null, cleanerId);
+
+    return res.status(200).json(inquiries);
+  } catch (error) {
+    console.error("컨트롤러 에러:", error);
+    next(error);
+  }
+};
+
 export default {
   getPendingJobs,
   getTodayJobs,
   updateReservationStatus,
-  getCleanerReviews
+  getCleanerReviews,
+  getCleanerInquiries
 };

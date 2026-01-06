@@ -6,6 +6,7 @@ import ReservationCompletedList from './ReservationCompletedList.jsx';
 import TodayJobList from './TodayJobList.jsx';
 import CleanersInquiries from './CleanersInquiries.jsx';
 import CleanersReview from './CleanersReview.jsx';
+import CleanersSettlementStatus from './CleanersSettlementStatus.jsx';
 import './CleanersMyPage.css'
 
 function CleanersMyPage() {
