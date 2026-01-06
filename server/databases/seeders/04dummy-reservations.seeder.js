@@ -21,6 +21,7 @@ export default {
         date: '2025-12-30',
         time: '14:00:00',
         status: '요청',
+        isAssign: '일반',
         cleanerId: null,
       },
       {
@@ -30,6 +31,7 @@ export default {
         date: '2025-12-31',
         time: '10:00:00',
         status: '승인',
+        status: '일반',
         cleanerId: null,
       },
       {
@@ -39,6 +41,7 @@ export default {
         date: '2025-12-26',
         time: '12:00:00',
         status: '완료',
+        status: '요청',
         cleanerId: 1, 
       },
       {
@@ -48,6 +51,7 @@ export default {
         date: '2025-12-28',
         time: '09:30:00',
         status: '취소',
+        status: '지정',
         cleanerId: null,
       },
       {
@@ -57,6 +61,7 @@ export default {
         date: '2025-12-20',
         time: '15:00:00',
         status: '완료',
+        status: '지정',
         cleanerId: 2,
       },
       {
@@ -66,7 +71,8 @@ export default {
         date: '2025-12-22',
         time: '11:00:00',
         status: '요청',
-        cleanerId: null,
+        status: '지정',
+        cleanerId: 1,
       },
       {
         id: 7,
@@ -75,6 +81,7 @@ export default {
         date: '2025-12-25',
         time: '13:00:00',
         status: '승인',
+        status: '일반',
         cleanerId: null,
       },
       {
@@ -84,6 +91,7 @@ export default {
         date: '2025-12-27',
         time: '16:00:00',
         status: '취소',
+        status: '일반',
         cleanerId: null,
       },
       {
@@ -93,6 +101,7 @@ export default {
         date: '2025-12-19',
         time: '10:30:00',
         status: '요청',
+        status: '일반',
         cleanerId: null,
       },
       {
@@ -102,6 +111,7 @@ export default {
         date: '2025-12-21',
         time: '14:00:00',
         status: '승인',
+        status: '일반',
         cleanerId: null,
       }
     ];
