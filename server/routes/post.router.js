@@ -26,9 +26,16 @@ postsRouter.get('/owner/inquiries/:inquiryId', authMiddleware, ownerInquiryContr
 // 문의사항 답변(관리자 전용)
 // postsRouter.post('/inquiries/:inquiryId/answers', authAdminMiddleware, ownerInquiryController.createAnswer);
 
+// ---------------------------
+// 리뷰 관리
+// ---------------------------
+// 리뷰 목록/디테일 조회
+postsRouter.get('/owner/reviews', authMiddleware, ownerInquiryController.getOwnerReviews);
 // 리뷰 작성
 // postsRouter.post('/reviews', authUserMiddleware, ownerInquiryController.createReview);
-// 리뷰 목록 조회
-postsRouter.get('/owner/reviews', authMiddleware, ownerInquiryController.getOwnerReviews);
+// 리뷰 수정
+// postsRouter.put('/reviews', authUserMiddleware, ownerInquiryController.createReview);
+// 리뷰 삭제
+// postsRouter.delete('/reviews', authUserMiddleware, ownerInquiryController.createReview);
 
 export default postsRouter;
