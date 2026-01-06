@@ -11,6 +11,19 @@ import ownersQuotationsRepository from "../../repositories/owner/owners.quotatio
 import db from '../../models/index.js';
 const { sequelize, Submission } = db
 
+
+
+/**
+ * 견적 요청서 전체 목록 (CleanersUserQuotationsTitle용)
+ */// cleanerId를 인자로 받도록 수정
+async function index(cleanerId) {
+  // 세 번째 인자로 cleanerId 전달
+  const submissions = await ownersQuotationsRepository.submissionFindByReservationId(null, null, cleanerId);
+
+
+  return { submissions: submissions || [] };
+}
+
 /**
  * 견적 요청서 상세
  * @param {number} id Reservation PK
@@ -99,7 +112,9 @@ async function createReservation(t_unused = null, { ownerId, storeId, date, time
   }   
 }
 
+
 export default {
+  index,
   show,
   createReservation,
 }
