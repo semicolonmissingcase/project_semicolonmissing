@@ -1,11 +1,11 @@
 import express from 'express';
 import chatController from '../app/controllers/chat.controller.js';
 import chatUpload from '../app/middlewares/multer/uploaders/chat.upload.js';
-import chatAuth from '../app/middlewares/chat.auth.middleware.js';
+import authMiddleWare from '../app/middlewares/auth/auth.middleware.js';
 
 const chatRouter = express.Router();
 
-chatRouter.use(chatAuth);
+chatRouter.use(authMiddleWare);
 
 // 방 목록 관련
 chatRouter.route('/rooms')
