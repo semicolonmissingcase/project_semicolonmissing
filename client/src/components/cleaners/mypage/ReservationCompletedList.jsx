@@ -13,7 +13,6 @@ export default function ReservationCompletedList() {
         setLoading(true);
         const response = await getPendingJobs(); 
         if (response.data.success) {
-          // 백엔드에서 data: pendingJobs 형태로 보냄
           setJobs(response.data.data);
         }
       } catch (error) {
@@ -64,21 +63,13 @@ export default function ReservationCompletedList() {
                 </div>
               </div>
 
-              {/* 일시 - 백엔드에서 준 createdAt 활용 */}
               <div className="reservation-completedlist-card-row">
                 <span className="reservation-completedlist-card-label">일시</span>
                 <span className="reservation-completedlist-card-value">
-                  {job.createdAt ? new Date(job.createdAt).toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  }) : '시간 정보 없음'}
+                  {job.date} {job.time?.slice(0, 5)}
                 </span>
               </div>
 
-              {/* 금액 - DB 컬럼명 estimated_amount 반영 */}
               <div className="reservation-completedlist-card-row">
                 <span className="reservation-completedlist-card-label">금액</span>
                 <span className="reservation-completedlist-card-value" style={{ color: '#007bff', fontWeight: 'bold' }}>
@@ -86,19 +77,10 @@ export default function ReservationCompletedList() {
                 </span>
               </div>
 
-              {/* 점주 이름 */}
               <div className="reservation-completedlist-card-row">
                 <span className="reservation-completedlist-card-label">점주</span>
                 <span className="reservation-completedlist-card-value">
                   {job.owner?.name || '익명'}
-                </span>
-              </div>
-              
-              {/* 상세 내용 (설명) - description 활용 */}
-              <div className="reservation-completedlist-card-row">
-                <span className="reservation-completedlist-card-label">내용</span>
-                <span className="reservation-completedlist-card-value text-truncate">
-                  {job.estimate?.description || '상세 내용 없음'}
                 </span>
               </div>
               

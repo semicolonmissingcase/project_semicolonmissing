@@ -86,15 +86,18 @@ async function updateReservationStatus(req, res, next) {
 }
 
 /**
- * 기사님 본인에게 달린 리뷰 목록 조회
+ * 기사님에게 작성된 리뷰 목록 조회
  */
 async function getCleanerReviews(req, res, next) {
   try {
-    const { id } = req.user;
+    const { id } = req.user; // 토큰에서 추출한 기사님 ID
+
+    // 레포지토리의 reviewFindByCleanerId 호출
     const reviews = await cleanerMypageRepository.reviewFindByCleanerId(null, id);
 
     return res.status(200).json({
       success: true,
+      message: "리뷰 목록 조회 성공",
       data: reviews
     });
   } catch (error) {
