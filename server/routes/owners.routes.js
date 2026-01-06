@@ -8,7 +8,7 @@ import express from 'express';
 import validationHandler from '../app/middlewares/validations/validationHandler.js';
 import ownersController from '../app/controllers/owner/owners.quotations.controller.js';
 import ownerQuotationsShow from '../app/middlewares/validations/validatiors/owner/owner.quotations.show.js';
-import authUserMiddleware from '../app/middlewares/auth/auth.user.middleware.js';
+import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 import ownerUserController from '../app/controllers/owner/owner.user.controller.js';
 import ownerLikeController from '../app/controllers/owner/owner.like.controller.js';
 import { userController } from '../app/controllers/auth/user.controller.js';
@@ -17,14 +17,14 @@ import ownerInquiryController from '../app/controllers/owner/owner.inquiry.contr
 
 const ownersRouter = express.Router();
 
-ownersRouter.get('/questionslist', authUserMiddleware, ownerInquiryController.getQuestions); // 요청서 질문 조회
+// ownersRouter.get('/questionslist', authUserMiddleware, ownerInquiryController.getQuestions); // 요청서 질문 조회
 // TODO: 추후 authMiddleware 추가 필요 (Permission도 같이)
 ownersRouter.get('/quotations', validationHandler, ownersController.index); // 견적요청서 조회
-ownersRouter.post('/quotations', authUserMiddleware, reservationImageUploader, ownersController.createReservation); // 견적요청서 작성
-ownersRouter.get('/mypage/stats', authUserMiddleware, ownerUserController.getOwnerStats); // 점주 마이페이지 통계
-ownersRouter.get('/reservations', authUserMiddleware, ownerUserController.getEstimateByOwnerId); // 점주 예약 목록 조회
-ownersRouter.post('/cleaners/:cleanerId/like', authUserMiddleware, ownerLikeController.toggleFavorite); // 기사님 좋아요
-ownersRouter.get('/mypage/favorite-cleaners', authUserMiddleware, ownerLikeController.getFavoriteCleaners); // 찜한 기사님 조회
-ownersRouter.put('/mypage/profile', authUserMiddleware, userController.updateOwner); // 점주 프로필 정보 수정
+ownersRouter.post('/quotations', authMiddleware, reservationImageUploader, ownersController.createReservation); // 견적요청서 작성
+ownersRouter.get('/mypage/stats', authMiddleware, ownerUserController.getOwnerStats); // 점주 마이페이지 통계
+ownersRouter.get('/reservations', authMiddleware, ownerUserController.getEstimateByOwnerId); // 점주 예약 목록 조회
+ownersRouter.post('/cleaners/:cleanerId/like', authMiddleware, ownerLikeController.toggleFavorite); // 기사님 좋아요
+ownersRouter.get('/mypage/favorite-cleaners', authMiddleware, ownerLikeController.getFavoriteCleaners); // 찜한 기사님 조회
+ownersRouter.put('/mypage/profile', authMiddleware, userController.updateOwner); // 점주 프로필 정보 수정
 
 export default ownersRouter;
