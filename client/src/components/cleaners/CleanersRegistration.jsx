@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from "../../api/axiosInstance.js";
 import cleanersThunk from '../../store/thunks/cleanersThunk.js';
-import { clearCleaners } from '../../store/slices/cleanersSlice.js';
 import Select from "react-select";
-import imageCompression from 'browser-image-compression';
 import './CleanersRegistration.css';
+import { MdBorderColor } from 'react-icons/md';
 
 export default function CleanersRegistration() {
 
@@ -28,8 +27,30 @@ export default function CleanersRegistration() {
   const selectStyle ={
     menulist: (base) => ({
       ...base,
-      maxHeight: 140,
       overflowY: "auto",
+      maxHeight: '140px',
+      borderRadius: "8px",
+      outline: 'none',
+    }),
+    menu: (base) => ({
+      ...base,
+      borderColor: "#7C7F88",
+      borderWidth: '1px', 
+      borderStyle: 'solid', 
+      boxShadow: 'none',
+      borderRadius: '8px',
+    }),
+    control: (baseStyles) => ({
+      ...baseStyles,
+      borderColor: '#7C7F88',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      boxShadow: 'none',
+      '&:hover': {
+          borderColor: '#7C7F88',
+      },
+      borderRadius: '8px',
+      minHeight: '43px',
     }),
   };
   
@@ -43,31 +64,6 @@ export default function CleanersRegistration() {
       label: cityName
     }));
   }, [locations]);
-
-  // 이미지 변경 핸들러
-  const handleProfileChange = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  try {
-    const options = { maxSizeMB: 0.2, maxWidthOrHeight: 480 };
-    const compressedFile = await imageCompression(file, options);
-    
-    const reader = new FileReader();
-    reader.readAsDataURL(compressedFile);
-    reader.onloadend = () => {
-      const base64data = reader.result;
-      setProfilePreview(base64data);
-      
-      setFormData(prev => ({
-        ...prev,
-        profile: base64data 
-      }));
-    };
-  } catch (error) {
-    console.error(error);
-  }
-};
 
   const handleGenderChange = (e) => {
     setFormData(prev => ({
@@ -142,7 +138,6 @@ export default function CleanersRegistration() {
 
 
   const validate = () => {
-    if (!formData.profile) return "프로필 이미지를 등록해주세요.";
     if (!formData.name) return "이름을 입력해주세요.";
     if (formData.password.length < 8) return "비밀번호는 8자 이상이어야 합니다.";
     if (formData.password !== formData.passwordChk) return "비밀번호가 일치하지 않습니다.";
@@ -252,7 +247,7 @@ export default function CleanersRegistration() {
             
             {/* 시/도 선택 */}
             <Select
-              style={selectStyle}
+              styles={selectStyle}
               className="cleaners-registration-location-city-select"
               options={options}
               onChange={(option) => setSelectedCity(option.value)}
@@ -310,25 +305,6 @@ export default function CleanersRegistration() {
             </div>
           </div>
 
-          {/* 프로필 이미지 업로드 추가 */}
-          <div className="cleaners-registration-form-group">
-            <label>프로필 이미지</label>
-            <div 
-              className="cleaners-registration-profile-preview-circle" 
-              onClick={() => fileInputRef.current.click()}
-              style={{ backgroundImage: `url(${profilePreview || '/icons/default-profile.png'})` }}
-            >
-              {!profilePreview && <span>이미지 등록</span>}
-            </div>
-            <input 
-              type="file" 
-              ref={fileInputRef} 
-              style={{ display: 'none' }} 
-              accept="image/*" 
-              onChange={handleProfileChange} 
-            />
-            <p className="cleaners-registration-profile-upload-help">프로필 사진은 필수입니다.</p>
-          </div>      
           
         </div>
 
