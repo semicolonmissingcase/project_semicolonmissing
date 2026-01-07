@@ -11,15 +11,15 @@ import PROVIDER from '../../../auth/configs/provider.enum.js';
     .notEmpty()
     .withMessage('성별은 필수 항목입니다.')
 
-  export const provider = param('provider')
-    .trim()
-    .notEmpty()
-    .withMessage('필수 항목입니다.')
-    .bail()
-    .custom((val) => {
-      return PROVIDER[val.toUpperCase()] ? true : false;
-    })
-    .withMessage('사용할 수 없는 문자가 있습니다. 다시 한번 확인해 주세요.')
+  // export const provider = param('provider')
+  //   .trim()
+  //   .notEmpty()
+  //   .withMessage('필수 항목입니다.')
+  //   .bail()
+  //   .custom((val) => {
+  //     return PROVIDER[val.toUpperCase()] ? true : false;
+  //   })
+  //   .withMessage('사용할 수 없는 문자가 있습니다. 다시 한번 확인해 주세요.')
 
   export const email = body('email')
     .trim()
@@ -58,32 +58,32 @@ import PROVIDER from '../../../auth/configs/provider.enum.js';
       .notEmpty()
       .withMessage("지역은 필수 항목입니다.")
 
-  export const profile = body("profile")
-      .trim()
-      .notEmpty()
-      .withMessage("프로필 이미지는 필수 항목입니다.")
-      .bail()
-      .custom(val => {
+  // export const profile = body("profile")
+  //     .trim()
+  //     .notEmpty()
+  //     .withMessage("프로필 이미지는 필수 항목입니다.")
+  //     .bail()
+  //     .custom(val => {
 
-        if(!val.startsWith(`${process.env.APP_URL}${process.env.ACCESS_FILE_USER_PROFILE_PATH}`)) {
-          return false;
-        }
+  //       if(!val.startsWith(`${process.env.APP_URL}${process.env.ACCESS_FILE_USER_PROFILE_PATH}`)) {
+  //         return false;
+  //       }
 
-        return true;
+  //       return true;
 
-      })
-      .withMessage("프로필 이미지 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.");
+  //     })
+  //     .withMessage("프로필 이미지 업로드에 실패했습니다. 잠시 후 다시 시도해주세요.");
 
     export default {
       name,
       gender,
-      provider,
+      // provider,
       email,
       password,
       passwordChk,
       phoneNumber,
       locationId,
-      profile,
+      // profile,
     }
     
     //회원가입할 때 자격증 등록하는 구조인지 아니면 나중에 프로필 수정할 때 자격증 등록하는 구조인지?1
