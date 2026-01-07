@@ -1,7 +1,7 @@
 /**
  * @file app/services/chat.service.js
  * @description Chat Service
- * 251220 seon init
+ * 260106 seon init
  */
 
 import chatRepository from '../repositories/chat.repository.js';
@@ -15,6 +15,7 @@ import db from '../models/index.js';
  */
 async function createOrGetRoom({ owner_id, cleaner_id, estimate_id }) {
   return await db.sequelize.transaction(async (t) => {
+    // 필드명 모델 정의(estimateId)에 맞춰 수정
     let room = await db.ChatRoom.findOne({
       where: {
         estimateId: estimate_id,
@@ -84,11 +85,11 @@ async function getMessages(room_id, page = 1, limit = 50) {
  * 메시지 저장
  */
 async function saveMessage(data) {
-  if(!data.sender_role) {
-    data.sender_role = data.role;
-  }
+  // 인자 구조 통일 (sender_role 우선 사용)
+  const role = data.sender_role || data.role;
+  
   return await db.sequelize.transaction(async t => {
-    const { room_id, content, sender_id, sender_role, type = 'TEXT' } = data;
+    const { room_id, content, sender_id, type = 'TEXT' } = data;
 
     if (!content || (type === 'TEXT' && !content.trim())) {
       throw myError('메시지 내용을 입력해주세요', BAD_REQUEST_ERROR);
@@ -98,7 +99,7 @@ async function saveMessage(data) {
       room_id,
       content,
       sender_id,
-      sender_role,
+      sender_role: role,
       type
     });
 
@@ -122,19 +123,17 @@ async function saveMessage(data) {
  */
 async function markAsRead(room_id, user_id, user_role) {
   return await db.sequelize.transaction(async t => {
-    // 3개의 인자를 모두 정확히 전달
     return await chatRepository.markAsRead(t, room_id, user_id, user_role);
   });
 }
 
 /**
- * 채팅방 정보 및 사이드바 상세 데이터 조회 (레포지토리 연동)
+ * 채팅방 정보 및 사이드바 상세 데이터 조회
  */
 async function getChatRoomWithSidebar(roomId, userRole) {
   return await db.sequelize.transaction(async (t) => {
     const isOwner = /OWNER/i.test(String(userRole));
 
-    // 1. 기본 정보 조회
     const room = await db.ChatRoom.findOne({
       where: { id: roomId },
       include: [
@@ -167,21 +166,23 @@ async function getChatRoomWithSidebar(roomId, userRole) {
     const roomPlain = room.get({ plain: true });
     const reservationId = roomPlain.estimate?.reservationId;
 
-    // 2. [연동] 예약 상세 및 매장 정보 조회
-    const reservationDetail = await quotationRepository.reservationFindByIdAndStatusIsRequest(t, reservationId);
-    
-    // 3. [연동] 정렬된 질문 답변 리스트 조회
-    const submissions = await quotationRepository.submissionFindByReservationId(t, reservationId);
+    // 예약 데이터 및 서브미션 조회 (reservationId가 없을 경우를 대비해 null 처리)
+    let reservationDetail = null;
+    let submissions = [];
+
+    if (reservationId) {
+      reservationDetail = await quotationRepository.reservationFindByIdAndStatusIsRequest(t, reservationId);
+      submissions = await quotationRepository.submissionFindByReservationId(t, reservationId);
+    }
     
     const cleaner = roomPlain.cleaner;
     const store = reservationDetail?.store;
     
-    // 데이터 가공
+    // 데이터 가공 안전성 확보
     const hireCount = cleaner?.reservations?.filter((r) => r.status === '완료').length || 0;
     const primaryLoc = cleaner?.locations?.[0];
     const regionText = primaryLoc ? `${primaryLoc.city} ${primaryLoc.district}` : '지역 정보 없음';
     
-    // 전체 주소 생성
     const fullAddress = store 
       ? `${store.address1 || ''} ${store.address2 || ''} ${store.address3 || ''}`.trim() 
       : '주소 정보 없음';
@@ -198,19 +199,15 @@ async function getChatRoomWithSidebar(roomId, userRole) {
         introduction: cleaner?.introduction,
         hireCount: hireCount,
         star: roomPlain.star || 0,
-
-        // 의뢰 상세 내역
         storeName: store?.name || '정보 없음',
         storeAddress: fullAddress,
         wishDate: reservationDetail?.date,
         wishTime: reservationDetail?.time,
         estimateContent: roomPlain.estimate?.description,
         reservationId: reservationId,
-
-        // 정렬된 QA 리스트
         qaList: submissions?.map(s => ({
-          question: s.question?.content,
-          answer: s.answer_text
+          question: s.question?.content || '질문 정보 없음',
+          answer: s.answer_text || '답변 없음'
         })) || []
       },
     };
@@ -218,7 +215,7 @@ async function getChatRoomWithSidebar(roomId, userRole) {
 }
 
 /**
- * 사이드바 리뷰 목록 조회 (작성자 이름 포함 최종본)
+ * 사이드바 리뷰 목록 조회 (리뷰 작성자 직접 조인 방식)
  */
 async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
   const limit = 5;
@@ -230,24 +227,19 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
     low_rating: [['star', 'ASC']]
   };
 
+  // 1. 해당 채팅방의 기사 ID 확인
   const room = await db.ChatRoom.findByPk(roomId);
   if (!room) throw myError('방 정보를 찾을 수 없습니다.', BAD_REQUEST_ERROR);
-
   const targetCleanerId = room.cleanerId;
 
+  // 2. 리뷰 조회 (Reservation을 거치지 않고 Owner와 직접 조인 권장)
   const { count, rows } = await db.Review.findAndCountAll({
+    where: { cleanerId: targetCleanerId }, // 이 기사에 대한 리뷰만
     include: [
       {
-        model: db.Reservation,
-        as: 'reservationData',
-        where: { cleanerId: targetCleanerId },
-        include: [
-          {
-            model: db.Owner,
-            as: 'owner', // DB 관계 설정(as)에 따라 수정 필요할 수 있음
-            attributes: ['name'] 
-          }
-        ]
+        model: db.Owner,
+        as: 'owner', // Review 모델 정의 시 belongsTo(db.Owner, { as: 'owner', foreignKey: 'owner_id' }) 확인 필요
+        attributes: ['id', 'name'] 
       }
     ],
     order: orderMap[sort] || orderMap.latest,
@@ -255,7 +247,7 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
     offset
   });
 
-  // 데이터 가공: 프론트엔드에서 authorName으로 바로 접근 가능하도록 flatten
+  // 3. 데이터 가공
   const formattedReviews = rows.map(review => {
     const plainReview = review.get({ plain: true });
     return {
@@ -263,8 +255,8 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
       star: plainReview.star,
       content: plainReview.content,
       createdAt: plainReview.createdAt,
-      // 작성자 이름 추출 (없을 경우 익명 처리)
-      authorName: plainReview.reservationData?.owner?.name || '익명'
+      // Review 테이블과 직접 조인된 owner 객체에서 이름을 가져옴
+      authorName: plainReview.owner?.name || '익명'
     };
   });
 
@@ -275,6 +267,7 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
     reviews: formattedReviews
   };
 }
+
 /**
  * 채팅방 나가기
  */

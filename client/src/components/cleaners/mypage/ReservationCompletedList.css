@@ -58,11 +58,15 @@
 }
 
 /* 작업이 없을 때 메시지 */
-.reservation-completedlist-empty {
+.reservatuin-no-data {
+  display: flex;             /* 중앙 정렬을 위해 추가 */
+  justify-content: center;    /* 가로 중앙 */
+  align-items: center;        /* 세로 중앙 */
+  min-height: 200px;         /* 화면 중앙에 오도록 높이값 부여 */
+  
   text-align: center;
-  color: #9ca3af; /* 연한 회색 */
-  font-size: 0.875rem; /* 14px */
-  padding: 2rem 0;
+  color: #888888;            /* 리뷰 내역과 동일한 회색 */
+  font-size: 1rem;           /* 14px보다 조금 더 키워 가독성 확보 */
 }
 
 /* 태블릿 크기 (820px ~ 501px) */
