@@ -11,6 +11,7 @@ const cleanersRouter = express.Router();
 cleanersRouter.get('/mypage/pending', authMiddleware, cleanerReservationController.getPendingJobs);
 cleanersRouter.get('/mypage/today', authMiddleware, cleanerReservationController.getTodayJobs);
 cleanersRouter.get('/mypage/qna', authMiddleware, cleanerReservationController.getCleanerInquiries );
+cleanersRouter.get('/mypage/reviews', authMiddleware, cleanerReservationController.getCleanerReviews);
 cleanersRouter.get('/quotations', authMiddleware, cleanerQuotationsController.index); // 최신 견적요청서 리스트 조회
 cleanersRouter.post('/quotations', authMiddleware, cleanerQuotationsValidator.quotationsStore, validationHandler, cleanerQuotationsController.store); // 견적 요청서 요청 확인 작성
 cleanersRouter.get('/accountinfo', authMiddleware, cleanerAccountController.getCleanerAccounts);

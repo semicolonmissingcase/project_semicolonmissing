@@ -1,84 +1,100 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getCleanerReviews } from '../../../api/axiosCleaner.js';
 import { FaStar, FaRegStar, FaQuoteLeft } from 'react-icons/fa';
-import { MdOutlineRateReview, MdEventNote } from 'react-icons/md';
+import { MdOutlineRateReview, MdEventNote, MdStorefront } from 'react-icons/md';
 import './CleanersReview.css';
 
-  const reviewData = [
-    {
-      "id": 1,
-      "owner_id": 1,
-      "reservation_id": 3,
-      "content": "청소 과정도 상세히 설명해 주시고, 평소 관리 방법까지 친절하게 알려주셔서 큰 도움이 되었습니다. 다음에도 꼭 이 기사님께 부탁드리고 싶어요.",
-      "star": 5,
-      "created_at": "2026-01-01 13:24:57",
-    }
-  ];
-
 function CleanersReview() {
-  // 2. 배열의 첫 번째 객체를 선택
-  const data = reviewData[0];
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        setLoading(true);
+        const response = await getCleanerReviews();
+        setReviews(response.data?.data || response.data || []);
+      } catch (error) {
+        console.error("리뷰 로드 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
 
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       stars.push(
         i <= rating ? (
-          <FaStar key={i} style={{ color: '#FFD700' }} />
+          <FaStar key={i} className="cleaners-review-star-filled" />
         ) : (
-          <FaRegStar key={i} style={{ color: '#DDD' }} />
+          <FaRegStar key={i} className="cleaners-review-star-empty" />
         )
       );
     }
     return stars;
   };
 
-  // 데이터가 없을 경우 처리
-  if (!data) return <p>리뷰가 없습니다.</p>;
+  if (loading) return <div className="cleaners-review-status">리뷰를 불러오는 중입니다...</div>;
+  if (reviews.length === 0) return <div className="cleaners-review-status">아직 등록된 리뷰가 없습니다.</div>;
 
   return (
     <div className="cleaners-review-container">
-      <div className="cleaners-review-card">
-        <div className="cleaners-review-card-row" style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px', marginBottom: '10px' }}>
-          <div className="completedjoblist-card-place">
-            <MdOutlineRateReview style={{ fontSize: '1.2rem', color: '#FF7A00' }} />
-            <div style={{ display: 'flex', gap: '2px', fontSize: '1.1rem' }}>
-              {renderStars(data.star)} {/* data.star로 변경 */}
+      {reviews.map((data) => (
+        <div key={data.id} className="cleaners-review-card">
+          
+          {/* 상단 섹션: 매장명 및 별점 */}
+          <div className="cleaners-review-header">
+            <div className="cleaners-review-store-group">
+              <MdStorefront className="cleaners-review-store-icon" />
+              <span className="cleaners-review-store-name">
+                {data.reservationData?.store?.name || "익명 매장"}
+              </span>
             </div>
-          <span style={{ fontSize: '0.85rem', color: '#888', fontWeight: '500' }}>
-            {data.star}.0 / 5.0
-          </span>
+            
+            <div className="cleaners-review-rating-group">
+              <div className="cleaners-review-stars">
+                {renderStars(data.star)}
+              </div>
+              <span className="cleaners-review-rating-num">
+                {data.star}.0 / 5.0
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div className="cleaners-review-card-row">
-          <span className="cleaners-review-card-label">
-            <FaQuoteLeft style={{ fontSize: '1rem', color: '#CCC', marginRight: '1rem' }} />
-          </span>
-          <span className="cleaners-review-card-value" style={{ color: '#333', fontSize: '0.95rem' }}>
-            {data.content} {/* data.content로 변경 */}
-          </span>
-        </div>
+          {/* 본문 섹션: 리뷰 내용 */}
+          <div className="cleaners-review-body">
+            <div className="cleaners-review-quote-box">
+              <FaQuoteLeft className="cleaners-review-quote-icon" />
+            </div>
+            <div className="cleaners-review-content">
+              {data.content}
+            </div>
+          </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #EEE' }}>
-          <div className="cleaners-review-card-row" style={{ margin: 0 }}>
-            <span className="cleaners-review-card-label" style={{ fontSize: '0.8rem' }}>
-              <MdEventNote style={{ marginRight: '4px' }} /> 작성일
-            </span>
-            <span className="cleaners-review-card-value" style={{ fontSize: '0.8rem' }}>
-              {data.created_at?.split(' ')[0]}
-            </span>
-          </div>
-          <div className="cleaners-review-card-row" style={{ margin: 0 }}>
-            <span className="cleaners-review-card-label" style={{ fontSize: '0.8rem' }}>예약번호</span>
-            <span className="cleaners-review-card-value" style={{ fontSize: '0.8rem' }}>
-              #{data.reservation_id}
-            </span>
+          {/* 하단 섹션: 예약일, 작성일 */}
+          <div className="cleaners-review-footer">
+            <div className="cleaners-review-info-group">
+              <div className="cleaners-review-info-item">
+                <MdEventNote className="cleaners-review-footer-icon" />
+                <span className="cleaners-review-info-label">예약일</span>
+                <span className="cleaners-review-info-value">{data.reservationData?.date || "-"}</span>
+              </div>
+              <div className="cleaners-review-info-divider">|</div>
+              <div className="cleaners-review-info-item">
+                <span className="cleaners-review-info-label">작성일</span>
+                <span className="cleaners-review-info-value">
+                  {data.createdAt?.split(' ')[0] || data.created_at?.split(' ')[0] || "-"}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 }
 
 export default CleanersReview;
-

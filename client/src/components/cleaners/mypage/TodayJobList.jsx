@@ -59,7 +59,7 @@ export default function TodayJobList() {
     return (
       <div className="todayJobList-container">
         <h4 className="todayJobList-date">{todayDate}</h4>
-        <div className="todayJobList-no-jobs card-shadow">
+        <div className="todayJobList-empty">
           <p>오늘은 예정된 작업이 없습니다.</p>
         </div>
       </div>

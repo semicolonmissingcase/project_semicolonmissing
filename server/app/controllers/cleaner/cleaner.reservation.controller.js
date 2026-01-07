@@ -90,7 +90,15 @@ async function updateReservationStatus(req, res, next) {
  */
 async function getCleanerReviews(req, res, next) {
   try {
-    const { id } = req.user; // 토큰에서 추출한 기사님 ID
+    // 1. req.user 존재 여부 확인 (에러 방지 핵심)
+    if (!req.user) {
+      return res.status(401).json({ 
+        success: false, 
+        message: "인증 정보가 없습니다. 다시 로그인해주세요." 
+      });
+    }
+
+    const { id } = req.user; 
 
     const reviews = await cleanerMypageRepository.reviewFindByCleanerId(null, id);
 
@@ -111,14 +119,17 @@ async function getCleanerReviews(req, res, next) {
 const getCleanerInquiries = async (req, res, next) => {
   try {
     const cleanerId = req.user.id; 
-    console.log("조회하려는 기사 ID:", cleanerId);
 
-    const inquiries = await cleanerMypageRepository.findInquiriesByCleanerId(null, cleanerId);
+    const inquiries = await cleanerMypageRepository.inquiryFindByCleanerId(null, cleanerId);
 
-    return res.status(200).json(inquiries);
-  } catch (error) {
-    console.error("컨트롤러 에러:", error);
-    next(error);
+  return res.status(200).json({
+        success: true,
+        message: "문의 내역 조회 성공",
+        data: inquiries
+      });
+    } catch (error) {
+      console.error("❌ getCleanerInquiries Controller Error:", error);
+      next(error);
   }
 };
 

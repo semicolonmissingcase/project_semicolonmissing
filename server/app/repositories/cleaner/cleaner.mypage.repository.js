@@ -56,7 +56,7 @@ async function reservationFindById(t = null, id) {
 }
 
 /**
- * 특정 예약의 질문 답변(Submissions) 조회
+ * 특정 예약의 질문 답변 조회
  */
 async function submissionFindByReservationId(t = null, id) {
   return await Submission.findAll({
@@ -145,8 +145,25 @@ async function reservationFindSettlementPending(t = null, cleanerId) {
  */
 async function reviewFindByCleanerId(t = null, cleanerId) {
   return await Review.findAll({
-    where: { targetId: cleanerId, targetType: 'CLEANER' },
-    include: [{ model: Owner, as: 'owner', attributes: ['name'] }],
+    where: { cleanerId },
+    include: [
+      {
+        model: db.Reservation,
+        as: 'reservationData', 
+        attributes: [
+          'id', 
+          // DB의 실제 컬럼명은 'date'이므로 아래와 같이 명시해줍니다.
+          ['date', 'date'] 
+        ],
+        include: [
+          {
+            model: db.Store,
+            as: 'store', 
+            attributes: ['name']
+          }
+        ]
+      }
+    ],
     order: [['createdAt', 'DESC']],
     transaction: t
   });
@@ -158,10 +175,18 @@ async function reviewFindByCleanerId(t = null, cleanerId) {
 async function inquiryFindByCleanerId(t = null, cleanerId) {
   return await Inquiry.findAll({
     where: { 
-      cleanerid: cleanerId
+      cleanerId: cleanerId 
     },
-    attributes: ['id', 'title', 'category', 'content', 'status', 'guest_name', 'created_at'],
-    order: [['created_at', 'DESC']],
+    attributes: [
+      'id', 
+      'title', 
+      'category', 
+      'content', 
+      'status', 
+      'ownerId',
+      'createdAt',
+    ],
+    order: [['createdAt', 'DESC']],
     transaction: t
   });
 }
