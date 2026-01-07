@@ -26,6 +26,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅 메시지 내역 조회
     { path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
     { path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
+    {path: /^\/api\/owners\/quotations$/, roles: [OWNER],}, // 견적 리스트 조회
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },
@@ -40,6 +41,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/owners\/quotations$/, roles: [OWNER] }, // 견적 요청서 작성
     { path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅메시지 전송
     { path: /^\/api\/chat\/rooms\/\d+\/upload$/, roles: [OWNER, CLEANER] }, // 채팅 이미지 업로드
+    { path: /^\/api\/cleaners\/quotations$/, roles: [CLEANER] }, // 견적 요청서 수락
   ],
   PATCH: [
     { path: /^\/api\/chat\/rooms\/\d+\/read$/, roles: [OWNER, CLEANER] }, // 메세지 읽음 처리

@@ -9,6 +9,7 @@ export default configureStore({
     auth: authReducer,
     adminAuth: adminAuthReducer,
     cleaners: cleanersReducer,
+    cleanersLocation: cleanersReducer,
     store: storeReducer,
   }
 });
