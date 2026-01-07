@@ -41,6 +41,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/owners\/quotations$/, roles: [OWNER] }, // 견적 요청서 작성
     { path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅메시지 전송
     { path: /^\/api\/chat\/rooms\/\d+\/upload$/, roles: [OWNER, CLEANER] }, // 채팅 이미지 업로드
+    { path: /^\/api\/cleaners\/quotations$/, roles: [CLEANER] }, // 견적 요청서 수락
   ],
   PATCH: [
     { path: /^\/api\/chat\/rooms\/\d+\/read$/, roles: [OWNER, CLEANER] }, // 메세지 읽음 처리

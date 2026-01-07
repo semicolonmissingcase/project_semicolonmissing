@@ -28,6 +28,22 @@ async function index(req, res, next) {
   }
 }
 
+async function store(req, res,next) {
+  try {
+    const cleanerId = req.user.id;
+    const reservationId = Number(req.body.reservationId);
+    const estimatedAmount = Number(req.body.estimatedAmount);
+    const description = req.body.description;
+
+    await cleanerQuotationsService.storeQuotation({ cleanerId, reservationId, estimatedAmount, description });
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS));
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export default {
   index,
+  store,
 }

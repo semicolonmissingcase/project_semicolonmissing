@@ -25,43 +25,74 @@ function CleanersUserQuotationsShow () {
     setToggleDetails(!toggleDetails)
   };
 
-  // form submit handler
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  useEffect(() => {
-  (async () => {
-    const result = await dispatch(cleanersThunk.showThunk(params.id));
-    if (result.type.endsWith("/rejected")) {
-      alert("정보 획득 실패");
-      navigate(-1);
-    }
-  })();
-
-  return () => dispatch(clearCleaners());
-}, [dispatch, navigate, params.id]);
-
-  // --- 1. 견적서 입력을 위한 상태 관리 ---
+  // --- 견적서 입력을 위한 상태 관리 ---
   const [quoteData, setQuoteData] = useState({
-    estimated_amount: "", // 가격 필드명 반영
+    estimatedAmount: null, // 가격 필드명 반영
     description: ""
-  }); 
+  });
 
-  // --- 2. 모달에서 "불러오기" 클릭 시 실행될 함수 ---
-  const handleSelectTemplate = (template) => {
-    setQuoteData({
-      estimated_amount: template.estimated_amount, // DB 필드명에 맞춤
-      description: template.content || template.description // 템플릿의 내용 반영
-    });
-    closeModal();
+  // ---  견적서 입력 변경시 스테이트 수정 ---
+  function changeQuoteData(key, val) {
+    setQuoteData({...quoteData, [key]: val});
+  }
+
+  // form submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = {
+        reservationId: params.id,
+        estimatedAmount: quoteData.estimatedAmount,
+        description: quoteData.description
+      }
+      const result = await dispatch(cleanersThunk.quotationStore(data));
+
+      if(result.type.endsWith("/rejected")) {
+        throw result;
+      }
+
+      alert('견적서 요청 승락 성공');
+    } catch (error) {
+      console.error(error);
+      alert('견적서 요청 승락 실패');
+    } finally {
+      navigate('/cleaners/quotations');
+    }
   };
 
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // ----------------------------------
+  // 모달 관련
+  // ----------------------------------
+  // --- 모달에서 "불러오기" 클릭 시 실행될 함수 --- 
+  // TODO: 시간 남으면 하기
+  // const handleSelectTemplate = (template) => {
+  //   setQuoteData({
+  //     estimatedAmount: template.estimatedAmount, // DB 필드명에 맞춤
+  //     description: template.content || template.description // 템플릿의 내용 반영
+  //   });
+  //   closeModal();
+  // };
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const openModal = () => setIsModalOpen(true);
+  // const closeModal = () => setIsModalOpen(false);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
+  // ----------------------------------
+  // useEffect 관련
+  // ----------------------------------
+  useEffect(() => {
+    (async () => {
+      const result = await dispatch(cleanersThunk.showThunk(params.id));
+      if (result.type.endsWith("/rejected")) {
+        alert("정보 획득 실패");
+        navigate(-1);
+      }
+    })();
+
+    return () => dispatch(clearCleaners());
+  }, [dispatch, navigate, params.id]);
 
   return (
     <>
@@ -122,110 +153,109 @@ function CleanersUserQuotationsShow () {
           )
         }
 
-        <form onSubmit={handleSubmit}>
-          {/* 추가 정보 */}
-          <div className="cleaners-user-quotations-items-box-column">
-            <span className="cleaners-user-quotations-items-box-title cleaners-user-quotations-toggle-question" onClick={toggleMenuDetailsMenu}>추가 정보{ toggleDetails ? <RiArrowDropUpFill size={20} /> : <RiArrowDropDownFill size={20} /> }</span>
-            {
-              submissions && submissions.map(submission => {
-                return (
-                  <div className="cleaners-user-quotations-items-box-question" key={`${submission.id}`}>
-                    {
-                      submission.question && (
-                        <>
-                          <span className="cleaners-user-quotations-items-box-question-title" htmlFor={submission.question.code}>{`${submission.question.code}. ${submission.question.content}`}</span>
-                          <div className="cleaners-user-quotations-items-box-question-answers">
-                            {
-                              submission.question.questionOptions.map(questionOption => {
-                                return (
-                                  <div className="cleaners-user-quotations-items-box-question-answer" key={`${submission.id}-${questionOption.id}`}>
-                                    <input 
-                                      type="radio" 
-                                      name={submission.question.code} 
-                                      id={`${submission.question.code}-${questionOption.id}`} 
-                                      checked={submission.questionOptionId === questionOption.id} 
-                                      value={questionOption.id} 
-                                      readOnly 
-                                      className={styles.radioInput} // 클래스 추가
-                                    />
-                                    <label 
-                                      htmlFor={`${submission.question.code}-${questionOption.id}`}
-                                      className={styles.radioLabel} // 클래스 추가
-                                    >
-                                      {questionOption.correct}
-                                    </label>
-                                  </div>
-                                )
-                              })
-                            }
-                          </div>
-                        </>
-                      )
-                    }
-                    {
-                      !submission.question && (
-                        <div className="cleaners-user-quotations-items-box-question-grid-col2">
-                          <span className="cleaners-user-quotations-items-box-question-title">추가 요청 사항</span>
-                          <textarea name="at" className="cleaners-user-quotations-textarea" readOnly value={submission.answerText}></textarea>
-                        </div>
-                      )
-                    }
-                  </div>
-                )
-              })
-            }
-          </div> 
-
-        {/* 기사님 견적서 작성 카드 */}
+        {/* 추가 정보 */}
         <div className="cleaners-user-quotations-items-box-column">
-          <div className="cleaners-user-quotations-items-box-title-box">
-            <span className="cleaners-user-quotations-items-box-title">기사님 견적서</span>
-            <button type="button" className="cleaners-user-quotations-btn" onClick={openModal}>
-              임시 저장 견적서 불러오기
-            </button>
-
-            {/* 모달 렌더링 */}
-            {isModalOpen && (
-              <div className="modal-overlay" onClick={closeModal}>
-                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                  <button type="button" className="modal-close-x" onClick={closeModal}>&times;</button>
-                  {/* 모달에 데이터 선택 함수를 props로 전달 */}
-                  <CleanersQuotationsPreparationSave onSelect={handleSelectTemplate} />
+          <span className="cleaners-user-quotations-items-box-title cleaners-user-quotations-toggle-question" onClick={toggleMenuDetailsMenu}>추가 정보{ toggleDetails ? <RiArrowDropUpFill size={20} /> : <RiArrowDropDownFill size={20} /> }</span>
+          {
+            submissions && submissions.map(submission => {
+              return (
+                <div className="cleaners-user-quotations-items-box-question" key={`${submission.id}`}>
+                  {
+                    submission.question && (
+                      <>
+                        <span className="cleaners-user-quotations-items-box-question-title" htmlFor={submission.question.code}>{`${submission.question.code}. ${submission.question.content}`}</span>
+                        <div className="cleaners-user-quotations-items-box-question-answers">
+                          {
+                            submission.question.questionOptions.map(questionOption => {
+                              return (
+                                <div className="cleaners-user-quotations-items-box-question-answer" key={`${submission.id}-${questionOption.id}`}>
+                                  <input 
+                                    type="radio" 
+                                    name={submission.question.code} 
+                                    id={`${submission.question.code}-${questionOption.id}`} 
+                                    checked={submission.questionOptionId === questionOption.id} 
+                                    value={questionOption.id} 
+                                    readOnly 
+                                    className={styles.radioInput} // 클래스 추가
+                                  />
+                                  <label 
+                                    htmlFor={`${submission.question.code}-${questionOption.id}`}
+                                    className={styles.radioLabel} // 클래스 추가
+                                  >
+                                    {questionOption.correct}
+                                  </label>
+                                </div>
+                              )
+                            })
+                          }
+                        </div>
+                      </>
+                    )
+                  }
+                  {
+                    !submission.question && (
+                      <div className="cleaners-user-quotations-items-box-question-grid-col2">
+                        <span className="cleaners-user-quotations-items-box-question-title">추가 요청 사항</span>
+                        <textarea name="at" className="cleaners-user-quotations-textarea" readOnly value={submission.answerText}></textarea>
+                      </div>
+                    )
+                  }
                 </div>
-              </div>
-            )}
+              )
+            })
+          }
+        </div> 
+
+        <form onSubmit={handleSubmit}>
+          {/* 기사님 견적서 작성 카드 */}
+          <div className="cleaners-user-quotations-items-box-column">
+            <div className="cleaners-user-quotations-items-box-title-box">
+              <span className="cleaners-user-quotations-items-box-title">기사님 견적서</span>
+              {/* <button type="button" className="cleaners-user-quotations-btn" onClick={openModal} style={{display: 'none'}}>임시 저장 견적서 불러오기</button> */}
+
+              {/* 모달 렌더링 */}
+              {
+                // isModalOpen && (
+                //   <div className="modal-overlay" onClick={closeModal}>
+                //     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                //       <button type="button" className="modal-close-x" onClick={closeModal}>&times;</button>
+                //       {/* 모달에 데이터 선택 함수를 props로 전달 */}
+                //       <CleanersQuotationsPreparationSave onSelect={handleSelectTemplate} />
+                //     </div>
+                //   </div>
+                // )
+              }
+            </div>
+
+            {/* 견적 금액 입력 필드 */}
+            <div className="cleaners-user-quotations-input-box cleaners-user-quotations-grid-1">
+              <label htmlFor="estimatedAmount">견적 금액</label>
+              <input 
+                type="number" 
+                className="cleaners-user-quotations-input-layout input-remove-arrows" 
+                id="estimatedAmount"
+                value={quoteData.estimatedAmount}
+                onChange={(e) => changeQuoteData('estimatedAmount', e.target.value)}
+                placeholder="0"
+              />
+            </div>
+
+            {/* 견적 설명 입력 필드 */}
+            <div className="cleaners-user-quotations-textarea-box">
+              <label htmlFor="description">견적 설명</label>
+              <textarea 
+                id="description" 
+                className="cleaners-user-quotations-textarea"
+                value={quoteData.description}
+                onChange={(e) => changeQuoteData('description', e.target.value)}
+                placeholder="견적에 대한 상세 설명을 입력하거나 임시 저장 견적을 불러오세요."
+              ></textarea>
+            </div>
           </div>
 
-          {/* 견적 금액 입력 필드 */}
-          <div className="cleaners-user-quotations-input-box cleaners-user-quotations-grid-1">
-            <label htmlFor="estimated_amount">견적 금액</label>
-            <input 
-              type="number" 
-              className="cleaners-user-quotations-input-layout input-remove-arrows" 
-              id="estimated_amount"
-              value={quoteData.estimated_amount}
-              onChange={(e) => setQuoteData({ ...quoteData, estimated_amount: e.target.value })}
-              placeholder="0"
-            />
-          </div>
-
-          {/* 견적 설명 입력 필드 */}
-          <div className="cleaners-user-quotations-textarea-box">
-            <label htmlFor="description">견적 설명</label>
-            <textarea 
-              id="description" 
-              className="cleaners-user-quotations-textarea"
-              value={quoteData.description}
-              onChange={(e) => setQuoteData({ ...quoteData, description: e.target.value })}
-              placeholder="견적에 대한 상세 설명을 입력하거나 임시 저장 견적을 불러오세요."
-            ></textarea>
-          </div>
-        </div>
-        
-        <button type="submit" className="btn-medium bg-light">요청 수락하기</button>
-      </form>
-
-      </div> 
+          <button type="submit" className="btn-medium bg-light">요청 수락하기</button>
+        </form>
+      </div>
     </>
   )
 }

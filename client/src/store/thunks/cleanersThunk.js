@@ -5,11 +5,11 @@ const locationThunk = createAsyncThunk(
   'cleaners/locationThunk',
   async (_, { rejectWithValue }) => {
     try {
-      const url = '/api/users/cleaner'; 
+      const url = '/api/users/cleaner';
       const response = await axiosInstance.get(url);
       
 
-      return response.data.rows; 
+      return response.data.rows;
     } catch (error) {
 
       return rejectWithValue(error.response?.data || error.message);
@@ -71,10 +71,23 @@ const fetchAccounts = createAsyncThunk(
   }
 );
 
+const quotationStore = createAsyncThunk(
+  'cleaners/quotationStore',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`/api/cleaners/quotations`, data);
+      
+      return response.data; 
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.msg || "견적서 요청 승락 실패");
+    }
+  }
+);
 
 export default {
   indexThunk,
   showThunk,
-  locationThunk,   
-  fetchAccounts, 
+  locationThunk,
+  fetchAccounts,
+  quotationStore,
 };
