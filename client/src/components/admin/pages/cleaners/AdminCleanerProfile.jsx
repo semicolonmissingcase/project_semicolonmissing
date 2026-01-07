@@ -1,5 +1,5 @@
 import "./AdminCleanerProfile.css";
-import AdminLayout from "../../AdminLayout.jsx";
+import AdminLayout from "../AdminLayout.jsx";
 
 export default function AdminCleanerProfile () {
   

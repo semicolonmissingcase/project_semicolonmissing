@@ -1,4 +1,4 @@
-import AdminNav from "./common/AdminNav.jsx";
+import AdminNav from "../common/AdminNav.jsx";
 import "./AdminLayout.css";
 
 export default function AdminLayout({ children }) {

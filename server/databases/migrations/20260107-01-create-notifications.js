@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-15-create-payments.js
- * @description payments migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20260107-01-create-notifications.js
+ * @description notifications migration file
+ * 260107 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'payments';
+const tableName = 'notifications';
 
 // 컬럼 정의
 const attributes = {
@@ -17,73 +17,37 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '결제 PK',
+    comment: '알림 PK',
   },
-  estimateId: {
-    field: 'estimate_id',
+  ownerId: {
+    field: 'owner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '견적서 PK',
+    comment: '점주 PK'
   },
-  reservationId: {
-    field: 'reservation_id',
+  cleanerId: {
+    field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '예약 PK',
+    comment: '기사 PK',
   },
-  totalAmount: {
-    field: 'total_amount',
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    comment: '실제 결제 금액',
-  },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
-    allowNull: true,
-    comment: '상태(대기, 성공, 취소, 만료, 실패)'
-  },
-  paymentKey: {
-    field: 'payment_key',
-    type: DataTypes.STRING(255),
-    allowNull: true,
-    comment: '결제고유키'
-  },
-  orderId: {
-    field: 'order_id',
-    type: DataTypes.STRING(64),
-    allowNull: false,
-    comment: '주문 번호',
-  },
-  method: {
-    field: 'method',
-    type: DataTypes.STRING(30),
-    allowNull: true,
-    comment: '결제 수단',
-  },
-  approvedAt: {
-    field: 'approved_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '결제 승인 일시',
-  },
-  receiptUrl: {
-    field: 'recipt_url',
-    type: DataTypes.TEXT,
-    allowNull: true,
-    comment: '영수증 주소',
-  },
-  cancelReason: {
-    field: 'cancel_reason',
+  title: {
+    field: 'title',
     type: DataTypes.STRING(200),
-    allowNull: true,
-    comment: '취소 이유',
+    allowNull: false,
+    comment: '제목',
   },
-  cancelAt: {
-    field: 'cancel_at',
-    type: DataTypes.DATE,
-    allowNull: true,
-    comment: '취소 날짜',
+  content: {
+    field: 'content',
+    type: DataTypes.STRING(1000),
+    allowNull: false,
+    comment: '내용'
+  },
+  isRead: {
+    field: 'is_read',
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    comment: '읽음 여부'
   },
   createdAt: {
     field: 'created_at',

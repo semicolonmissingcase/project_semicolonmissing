@@ -7,8 +7,8 @@ const { PaymentStatus, ReservationStatus } = modelsConstants;
 import { 
   ALREADY_PROCESSED_ERROR, 
   BAD_REQUEST_ERROR, 
-  NOT_FOUND_ERROR, 
-  SYSTEM_ERROR 
+  NOT_FOUND_ERROR,
+  FORBIDDEN_ERROR, 
 } from '../../configs/responseCode.config.js';
 
 /**
@@ -139,11 +139,73 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
   }
 }
 
-async function cancelPayment() {
-  
+/**
+ * 결제 취소 
+ * @param {*} param
+ * @returns 
+ */
+async function cancelPayment({ paymentKey, cancelReason, userId }) {
+  // 결제 내역 존재 여부 및 본인 확인
+  const payment = await paymentRepository.findBypaymentKey(paymentKey);
+  if(!payment) {
+    throw myError("결제 내역을 찾을 수 없습니다.", NOT_FOUND_ERROR);
+  }
+  if(payment.reservation.ownerId !== userId) {
+    throw myError("본인의 결제 건만 취소할 수 있습니다.", FORBIDDEN_ERROR);
+  }
+  if(payment.status !== PaymentStatus.DONE) {
+    throw myError("취소할 수 없는 결제 상태입니다.", BAD_REQUEST_ERROR);
+  }
+
+  // 토스 취소 API 호출 
+  const authorizations = Buffer.from(`${process.env.TOSS_SECRET_KEY}`).toString("base64");
+  let tossCancelResult;
+
+  try {
+    const response = await axios.post(
+      `https://api.tosspayments.com/v1/payments/${paymentKey}/cancel`,
+      { cancelReason },
+      { 
+        headers: {
+          Authorization: `Basic ${authorizations}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 10000,
+      }
+    );
+    tossCancelResult = response.data; 
+  } catch(error) {
+    if(error.response) {
+      const { code, message } = error.response.data;
+      throw myError(`토스 취소 실패: ${code} - ${message}`, BAD_REQUEST_ERROR);
+    }
+    throw error;
+  }
+
+  // DB 상태 업데이트 
+  const t = await db.sequelize.transaction();
+  try {
+    await paymentRepository.updatePaymentAfterCancel(
+      {
+        paymentKey,
+        cacelReason,
+        caceledAt: tossCancelResult.cancels[0].caceledAt,
+      },
+      payment.reservationId,
+      t
+    );
+
+    await t.commit();
+    return tossCancelResult;
+  } catch(error) {
+    await t.rollback();
+    console.error("DB 반영 실패", error);
+    throw error;
+  }
 }
 
 export default { 
   readyPayment,
-  confirmPayment,  
+  confirmPayment,
+  cancelPayment,  
 };

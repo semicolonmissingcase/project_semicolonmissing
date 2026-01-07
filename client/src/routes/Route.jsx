@@ -17,8 +17,9 @@ import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
 import CleanersQuotationsPreparationSave from "../components/cleaners/CleanersQuotationsPreparationSave.jsx";
-import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
 import CleanersUserQuotationsShow from "../components/cleaners/CleanersUserQuotationsShow.jsx";
+import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
+
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
@@ -49,126 +50,101 @@ const router = createBrowserRouter([
         element: <Main />
       },
       {
-        element: <ProtectedRouter />, // 여기서 로그인 여부 체크하여 '게스트'인지 확인
-        children: [
-          {
-            path: '/login',
-            element: <Login />
-          },
-          {
-            path: '/socialinfo',
-            element: <SocialLoginInfo />
-          },         
-          {
-            path: '/registration',
-            element: <Outlet />,
-            children: [
-              {
-                // 회원가입 선택 페이지
-                path: '',
-                element: <Registration />
-              },
-              {
-                // 점주 회원가입 페이지
-                path: 'owners',
-                element: <OwnerRegistration />,
-              },
-               {
-                // 기사 회원가입 페이지
-                path: 'cleaners',
-                element: <CleanersRegistration />
-               },
-            ]
-          },
-        ] 
+        path: '/login',
+        element: <Login />
       },
-      // ---------------------------------------------
-      // 기사만 이용 가능한 페이지 (ProtectedRouter)
-      // --------------------------------------------
       {
-        element: <ProtectedRouter />, 
+        path: '/socialinfo',
+        element: <SocialLoginInfo />
+      },
+      {
+        path: '/registration',
+        element: <Outlet />,
         children: [
           {
-            path: '/cleaners',
-            element: <Outlet />,
-            children: [
-               {
-                // 기사 계좌 수정 페이지
-                path: 'accountedit/:id',
-                element: <CleanersAccountEdit />
-              },
-              {
-                // 기사 계좌 저장 페이지
-                path: 'accountsave',
-                element: <CleanersAccountSave />,
-              },
-              {
-                // 기사 정보 수정 페이지
-                path: 'infoedit',
-                element: <CleanersInfoEdit />
-              },
-              {
-                // 기사 프로필 수정 페이지
-                path: 'profileedit/:id',
-                element: <CleanersProfileEdit />,
-              },
-              { 
-                // 기사 마이 페이지
-                path: 'mypage',
-                element: <CleanersMyPage />,
-              },
-              {
-                // 기사 견적 작성 임시저장 페이지
-                path: 'quotationspreparationsave',
-                element: <CleanersQuotationsPreparationSave />,
-              },
-              {
-                // 유저 견적 작성 페이지
-                path: 'quotations',
-                element: <CleanersUserQuotations />,
-              },
-              {
-                // 유저 견적 작성 페이지 상세
-                path: 'quotations/:id',
-                element: <CleanersUserQuotationsShow />,
-              },
-            ]
+            // 회원가입 선택 페이지
+            path: '',
+            element: <Registration />
+          },
+          {
+            // 점주 회원가입 페이지
+            path: 'owners',
+            element: <OwnerRegistration />,
+          },
+           {
+            // 기사 회원가입 페이지
+            path: 'cleaners',
+            element: <CleanersRegistration />
+           },
+        ]
+      },
+      {
+        path: '/cleaners',
+        element: <Outlet />,
+        children: [
+           {
+            // 기사 계좌 수정 페이지
+            path: 'accountedit/:id',
+            element: <CleanersAccountEdit />
+          },
+          {
+            // 기사 계좌 저장 페이지
+            path: 'accountsave',
+            element: <CleanersAccountSave />,
+          },
+          {
+            // 기사 정보 수정 페이지
+            path: 'infoedit',
+            element: <CleanersInfoEdit />
+          },
+          {
+            // 기사 프로필 수정 페이지
+            path: 'profileedit/:id',
+            element: <CleanersProfileEdit />,
+          },
+          { 
+            // 기사 마이 페이지
+            path: 'mypage',
+            element: <CleanersMyPage />,
+          },
+          {
+            // 기사 견적 작성 임시저장 페이지
+            path: 'quotationspreparationsave',
+            element: <CleanersQuotationsPreparationSave />,
+          },
+          {
+            // 유저 견적 작성 페이지
+            path: 'quotations',
+            element: <CleanersUserQuotations />,
+          },
+          {
+            // 유저 견적 작성 페이지 상세
+            path: 'quotations/:id',
+            element: <CleanersUserQuotationsShow />,
           },
         ]
       },
-      // --------------------------------------
-      // 유저만 이용 가능한 페이지(ProtectedRouter)
-      // --------------------------------------
       {
-        element: <ProtectedRouter />,
+        path: '/owners',
+        element: <Outlet />,
         children: [
           {
-            path: '/owners',
-            element: <Outlet />,
-            children: [
-              {
-                // 점주 마이페이지
-                path: 'mypage',
-                element: <OwnerMyPage />
-              },
-              {
-                // 점주 정보 수정페이지
-                path: 'info',
-                element: <OwnerInfo />
-              },
-              {
-                // 점주 견적 요청서 작성 페이지
-                path: 'reservation',
-                element: <OwnerReservation />,
-              },
-            ]
+            // 점주 마이페이지
+            path: 'mypage',
+            element: <OwnerMyPage />
           },
-
+          {
+            // 점주 정보 수정페이지
+            path: 'info',
+            element: <OwnerInfo />
+          },
+          {
+            // 점주 견적 요청서 작성 페이지
+            path: 'reservation',
+            element: <OwnerReservation />,
+          },
         ]
       },
-      // ------------------------------------
-      // 비회원도 이용 가능
-      // ------------------------------------
       {
         path: '/qnaposts',
         element: <Outlet />,

@@ -135,6 +135,7 @@ const Owner = {
     db.Owner.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'ownerId', as: 'reviews'});
     db.Owner.hasMany(db.Like, { sourceKey: 'id', foreignKey: 'ownerId', as: 'likes'});
     db.Owner.hasMany(db.Inquiry, { sourceKey: 'id', foreignKey: 'ownerId', as: 'inquiries'});
+    db.Owner.hasMany(db.Notification, { sourceKey: 'id', foreignKey: 'ownerId', as: 'notifications'});
   }
 }
 

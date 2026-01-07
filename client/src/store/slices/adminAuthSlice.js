@@ -12,7 +12,7 @@ const adminAuthSlice = createSlice({
   name: 'adminAuth',
   initialState,
   reducers: {
-    clearAuth(state) {
+    clearAdminAuth(state) {
       state.admin = null;
       state.isLoggedIn = false;
       state.isLoading = null;
@@ -64,7 +64,7 @@ const adminAuthSlice = createSlice({
 });
 
 export const {
-  clearAuth,
+  clearAdminAuth,
 } = adminAuthSlice.actions; // redcuer에서 한 actions를 export, import할 때 구조 분해 해서 사용
 
 export default adminAuthSlice.reducer; // slice 자체를 반환, store에서 받아서 사용
