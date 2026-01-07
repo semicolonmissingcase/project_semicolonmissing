@@ -65,7 +65,7 @@ const attributes = {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: true,
-    comment: '기사 PK(nullable 고려)'
+    comment: '기사 PK'
   },
   createdAt: {
     field: 'created_at',

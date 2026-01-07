@@ -55,7 +55,7 @@ const attributes = {
     field: 'status',
     type: DataTypes.STRING(20),
     allowNull: false,
-    comment: '상태(요청, 승인, 진행중, 완료, 동의, 취소)'
+    comment: '상태(요청, 승인, 완료, 취소)'
   },
   isAssign: {
     field: 'is_assign',
