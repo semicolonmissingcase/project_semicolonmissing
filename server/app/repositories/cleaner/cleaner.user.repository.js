@@ -1,5 +1,5 @@
 /**
- * @file app/repositories/cleaner/cleaner.account.repository.js
+ * @file app/repositories/cleaner/cleaner.user.repository.js
  * @description cleaner user Repository
  * 251230 yh init
  */

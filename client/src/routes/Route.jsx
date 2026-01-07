@@ -16,7 +16,7 @@ import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
 import CleanersQuotationsPreparationSave from "../components/cleaners/CleanersQuotationsPreparationSave.jsx";
-import CleanersUserQuotationsTitle from "../components/cleaners/CleanersUserQuotationsTitle.jsx";
+import CleanersUserQuotationsShow from "../components/cleaners/CleanersUserQuotationsShow.jsx";
 import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
@@ -27,7 +27,7 @@ import OwnerReservationShow from "../components/owner/OwnerReservationShow.jsx";
 // 관리자 관련
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
-import AdminCleanerProfile from "../components/admin/pages/AdminCleanerProfile.jsx";
+import AdminCleanerProfile from "../components/admin/pages/cleaners/AdminCleanerProfile.jsx";
 import AdminQna from "../components/admin/pages/AdminQna.jsx"
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
@@ -114,12 +114,12 @@ const router = createBrowserRouter([
           {
             // 유저 견적 작성 페이지
             path: 'quotations',
-            element: <CleanersUserQuotationsTitle />,
+            element: <CleanersUserQuotations />,
           },
           {
             // 유저 견적 작성 페이지 상세
             path: 'quotations/:id',
-            element: <CleanersUserQuotations />,
+            element: <CleanersUserQuotationsShow />,
           },
         ]
       },

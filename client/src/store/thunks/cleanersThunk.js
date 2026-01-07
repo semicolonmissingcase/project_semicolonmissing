@@ -1,28 +1,35 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
 
-const titleThunk = createAsyncThunk(
-  'cleaners/titleThunk',
-  async (cleanerId, { rejectWithValue }) => { // 컴포넌트에서 cleanerId를 보낸다고 가정
+const locationThunk = createAsyncThunk(
+  'cleaners/locationThunk',
+  async (_, { rejectWithValue }) => {
     try {
-
-      const url = `/api/owners/quotations`; 
+      const url = '/api/users/cleaner';
       const response = await axiosInstance.get(url);
-      return response.data;
+      
+
+      return response.data.rows;
     } catch (error) {
+
       return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
-const showThunk = createAsyncThunk(
-  'cleaners/showThunk',
-  async (id, { rejectWithValue }) => {
+const indexThunk = createAsyncThunk(
+  'cleaners/indexThunk',
+  async (_, { rejectWithValue, getState }) => {
     try {
-      // 기존 URL: 견적서(quotations) 정보를 가져오는 엔드포인트
-      const url = `/api/owners/quotations/${id}`;
+      const { cleaners } = getState();
+      const { page, offset } = cleaners;
+      const url = `/api/cleaners/quotations`;
+      const params = {
+        page: page + 1,
+        offset
+      };
 
-      const response = await axiosInstance.get(url);
+      const response = await axiosInstance.get(url, { params });
 
       return response.data;
     } catch (error) {
@@ -32,27 +39,55 @@ const showThunk = createAsyncThunk(
   }
 );
 
-const accountInfoThunk = createAsyncThunk(
-  // Thunk 액션 타입: accounts 슬라이스에서 계정 정보 조회
-  'accounts/fetchAccountInfo',
-  // id는 accountinfo/:id 경로에서 사용될 ID (예: cleaner_id)
+const showThunk = createAsyncThunk(
+  'cleaners/showThunk',
   async (id, { rejectWithValue }) => {
     try {
-      // 새로운 URL: 계좌 정보(adjustments)를 가져오는 엔드포인트
-      const url = `/api/cleaners/accountinfo/${id}`; 
+      
+      const url = `/api/owners/quotations/${id}`;
 
       const response = await axiosInstance.get(url);
 
       return response.data;
     } catch (error) {
+      
       return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
+const fetchAccounts = createAsyncThunk(
+  'cleaners/fetchAccounts',
+  async (cleanerId, { rejectWithValue }) => {
+    try {
+      
+      const response = await axiosInstance.get(`/api/users/cleaner/accountinfo/${cleanerId}`);
+      
+      
+      return response.data.data.rows; 
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.msg || "계좌 정보를 불러오지 못했습니다.");
+    }
+  }
+);
+
+const quotationStore = createAsyncThunk(
+  'cleaners/quotationStore',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`/api/cleaners/quotations`, data);
+      
+      return response.data; 
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.msg || "견적서 요청 승락 실패");
+    }
+  }
+);
 
 export default {
-  titleThunk,
-  showThunk,        
-  accountInfoThunk, 
+  indexThunk,
+  showThunk,
+  locationThunk,
+  fetchAccounts,
+  quotationStore,
 };
