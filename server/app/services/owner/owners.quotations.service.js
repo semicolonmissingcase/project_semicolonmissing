@@ -38,14 +38,10 @@ async function show(id) {
     throw myError('이미 처리된 견적서', ALREADY_PROCESSED_ERROR)
   }
 
-  // 기사 찜 정보 획득
-  const {ownerId, cleanerId} = reservation;
-  const cleanerLike = await ownersQuotationsRepository.likeFindByOwnerIdAndCleanerId(null, {ownerId, cleanerId});
-
   // 질문정보 획득
   const submissions = await ownersQuotationsRepository.submissionFindByReservationId(null, id);
 
-  return {cleanerLike, reservation, submissions};
+  return {reservation, submissions};
 }
 
 /**

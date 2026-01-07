@@ -26,6 +26,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅 메시지 내역 조회
     { path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
     { path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
+    {path: /^\/api\/owners\/quotations$/, roles: [OWNER],}, // 견적 리스트 조회
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },

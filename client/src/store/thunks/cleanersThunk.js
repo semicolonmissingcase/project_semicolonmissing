@@ -17,15 +17,23 @@ const locationThunk = createAsyncThunk(
   }
 );
 
-const titleThunk = createAsyncThunk(
-  'cleaners/titleThunk',
-  async (_, { rejectWithValue }) => { 
+const indexThunk = createAsyncThunk(
+  'cleaners/indexThunk',
+  async (_, { rejectWithValue, getState }) => {
     try {
+      const { cleaners } = getState();
+      const { page, offset } = cleaners;
+      const url = `/api/cleaners/quotations`;
+      const params = {
+        page: page + 1,
+        offset
+      };
 
-      const url = `/api/owners/quotations`; 
-      const response = await axiosInstance.get(url);
+      const response = await axiosInstance.get(url, { params });
+
       return response.data;
     } catch (error) {
+      // 에러 처리 시, HTTP 응답의 데이터를 포함하여 디버깅에 용이하게 합니다.
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -65,8 +73,8 @@ const fetchAccounts = createAsyncThunk(
 
 
 export default {
-  locationThunk,
-  titleThunk,
-  showThunk,        
+  indexThunk,
+  showThunk,
+  locationThunk,   
   fetchAccounts, 
 };

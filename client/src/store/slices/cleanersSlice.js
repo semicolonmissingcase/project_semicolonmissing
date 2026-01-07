@@ -2,12 +2,22 @@ import { createSlice } from "@reduxjs/toolkit";
 import cleanersThunk from "../thunks/cleanersThunk.js";
 
 const initialState = {
-  submissions: null,
+  // Show 관련
+  submissions: null, // null 대신 빈 배열로 초기화하면 map 에러를 방지합니다.
   reservation: null,
-  cleanerLike: null,
-  accounts: [],
+
+  // index 관련
+  reservations: null,
+  page: 0,
+  offset: 4,
+  isLasted: false,
+
+  // 회원가입 관련
   locations: [],
-  loading: false,
+  accounts: [],
+  
+  // 기타
+  loading: true,
 };
 
 const slice = createSlice({
@@ -15,47 +25,46 @@ const slice = createSlice({
   initialState,
   reducers: {
     clearCleaners(state) {
-      state.cleanerLike = null;
       state.reservation = null;
       state.submissions = null;
+      state.reservations = null;
+      state.isLasted = false;
+      state.page = 0;
       state.accounts = [];
-      state.locations = null;
-      state.loading = false;
       state.locations = [];
+      state.loading = false;
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-        .addCase(cleanersThunk.titleThunk.fulfilled, (state, action) => {
-          console.log("Slice에 도착한 실제 페이로드:", action.payload);
-
-          // 데이터 구조가 action.payload.data.result 또는 action.payload.result 일 수 있습니다.
-          // 안전하게 데이터를 추출하기 위해 아래와 같이 작성합니다.
-          const result = action.payload.data || action.payload;
-
-          // 만약 result가 서버에서 보낸 { submissions, reservation } 등을 직접 가지고 있다면:
-          state.submissions = result.submissions || [];
-          
-          // 만약 리스트(배열)로 들어온다면 첫 번째 예약을 저장하거나 배열 전체를 저장
-          state.reservation = result.reservation || null;
-          state.cleanerLike = result.cleanerLike || null;
-          
-          state.loading = false;
-          state.error = null;
-        })
-
-      // 기존 showThunk 처리
       .addCase(cleanersThunk.showThunk.fulfilled, (state, action) => {
-        const { cleanerLike, reservation, submissions } = action.payload.data;
-        state.cleanerLike = cleanerLike;
+        const { reservation, submissions } = action.payload.data;
         state.reservation = reservation;
         state.submissions = submissions;
         state.loading = false;
         state.error = null;
       })
+      .addCase(cleanersThunk.indexThunk.fulfilled, (state, action) => {
+        const { total, currentPage, reservations } = action.payload.data;
 
-      .addCase(cleanersThunk.locationThunk.pending, (state) => {
+        // 예약 정보 리스트
+        if(state.reservations) {
+          state.reservations = [...state.reservations, ...reservations];
+        } else {
+          state.reservations = reservations;
+        }
+
+        // 마지막 페이지 플래그
+        if(currentPage === Math.ceil(total / state.offset)) {
+          state.isLasted = true;
+        }
+
+        // 현재 페이지
+        state.page = currentPage;
+
+        state.loading = false;
+      }).addCase(cleanersThunk.locationThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
@@ -83,7 +92,7 @@ const slice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
-        },      
+  },  
 });
 
 export const {

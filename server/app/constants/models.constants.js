@@ -21,10 +21,18 @@ const PaymentStatus = {
   CANCELED: '취소',
 }
 
+// 결제 관련 상태값 추가
+const IsAssignStatus = {
+  Assigned: '지정',
+  Normal: '일반',
+}
+
 Object.freeze(ReservationStatus);
 Object.freeze(PaymentStatus);
+Object.freeze(IsAssignStatus);
 
 export default {
   ReservationStatus,
   PaymentStatus,
+  IsAssignStatus,
 }

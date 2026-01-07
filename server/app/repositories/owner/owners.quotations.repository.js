@@ -38,6 +38,9 @@ async function reservationFindByIdAndStatusIsRequest(t = null, id) {
 async function submissionFindByReservationId(t = null, id) {
   return await Submission.findAll(
     {
+      where: {
+        reservationId: id
+      },
       include: [
         {
           attributes: ['id', 'code', 'content'],
