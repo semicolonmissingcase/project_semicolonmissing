@@ -1,17 +1,73 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from "../../api/axiosInstance.js";
+import cleanersThunk from '../../store/thunks/cleanersThunk.js';
+import { clearCleaners } from '../../store/slices/cleanersSlice.js';
+import Select from "react-select";
+import imageCompression from 'browser-image-compression';
 import './CleanersRegistration.css';
 
-const LOCATION_DATA = {
-  "서울": ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],
-  "경기도": ["수원시", "용인시", "성남시", "부천시", "화성시", "안산시", "안양시", "평택시", "시흥시", "김포시", "파주시", "의정부시"],
-  "인천": ["계양구", "미추홀구", "남동구", "동구", "부평구", "서구", "연수구", "중구"]
-};
-
 export default function CleanersRegistration() {
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null); // 파일 입력 참조
   const [isLoading, setIsLoading] = useState(false);
+  const [profilePreview, setProfilePreview] = useState(null); // 미리보기 상태
+    
+
+  const { locations } = useSelector((state) => state.cleaners);
+
+  useEffect(() => {
+    if (locations.length === 0) {
+      dispatch(cleanersThunk.locationThunk());
+    }
+  }, [dispatch, locations.length]);
+
+  const selectStyle ={
+    menulist: (base) => ({
+      ...base,
+      maxHeight: 140,
+      overflowY: "auto",
+    }),
+  };
+  
+  const options = useMemo(() => {
+    if (!Array.isArray(locations)) return [];
+    
+    const cityNames = [...new Set(locations.map(item => item.city))];
+    
+    return cityNames.map(cityName => ({
+      value: cityName,
+      label: cityName
+    }));
+  }, [locations]);
+
+  // 이미지 변경 핸들러
+  const handleProfileChange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    const options = { maxSizeMB: 0.2, maxWidthOrHeight: 480 };
+    const compressedFile = await imageCompression(file, options);
+    
+    const reader = new FileReader();
+    reader.readAsDataURL(compressedFile);
+    reader.onloadend = () => {
+      const base64data = reader.result;
+      setProfilePreview(base64data);
+      
+      setFormData(prev => ({
+        ...prev,
+        profile: base64data 
+      }));
+    };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const handleGenderChange = (e) => {
     setFormData(prev => ({
@@ -19,9 +75,6 @@ export default function CleanersRegistration() {
       gender: e.target.value
     }));
   };
-
-  // 현재 선택 중인 시/도 상태 (UI용)
-  const [selectedCity, setSelectedCity] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -34,22 +87,34 @@ export default function CleanersRegistration() {
     phoneMiddle: '',
     phoneLast: '',
     locations: [], // 선택된 지역들 저장 (최대 5개)
+    provider: 'NONE', 
+    profile: '',     
   });
+    
+  // 시/도 선택 시 구/군 목록을 띄우기 위한 상태
+  const [selectedCity, setSelectedCity] = useState('');
 
-  // 지역 선택/해제 로직
+  // 선택된 시/도에 해당하는 구/군 목록 필터링
+  const filteredDistricts = useMemo(() => {
+    if (!selectedCity) return [];
+    return locations
+      .filter(loc => loc.city === selectedCity)
+      .map(loc => loc.district);
+  }, [selectedCity, locations]);
+
+  //  구/군 토글 핸들러
   const handleLocationToggle = (district) => {
     const locationStr = `${selectedCity} ${district}`;
     
     setFormData(prev => {
+      // 이미 선택된 지역인지 확인
       const isExist = prev.locations.includes(locationStr);
       
       if (isExist) {
-        // 이미 있으면 제거
         return { ...prev, locations: prev.locations.filter(loc => loc !== locationStr) };
       } else {
-        // 없으면 추가 (단, 5개 제한)
         if (prev.locations.length >= 5) {
-          alert("활동 지역은 최대 5개까지 선택 가능합니다.");
+          alert("최대 5개까지만 선택 가능합니다.");
           return prev;
         }
         return { ...prev, locations: [...prev.locations, locationStr] };
@@ -75,7 +140,9 @@ export default function CleanersRegistration() {
     }
   };
 
+
   const validate = () => {
+    if (!formData.profile) return "프로필 이미지를 등록해주세요.";
     if (!formData.name) return "이름을 입력해주세요.";
     if (formData.password.length < 8) return "비밀번호는 8자 이상이어야 합니다.";
     if (formData.password !== formData.passwordChk) return "비밀번호가 일치하지 않습니다.";
@@ -88,24 +155,32 @@ export default function CleanersRegistration() {
     const errorMsg = validate();
     if (errorMsg) return alert(errorMsg);
 
+    // 서버의 Validator(검증기) 기준에 맞춘 페이로드
     const payload = {
-      ...formData,
+      name: formData.name,
+      gender: formData.gender === 'male' ? 'M' : 'F',
       email: `${formData.emailLocal}@${formData.emailDomain}`,
-      phone: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
-      address: `${formData.address} ${formData.addressDetail}`,
-      location: {
-        city: formData.city,
-        district: formData.district
-      }
+      password: formData.password,
+      passwordChk: formData.passwordChk, 
+      phoneNumber: `${formData.phonePrefix}-${formData.phoneMiddle}-${formData.phoneLast}`,
+      locationId: formData.locations.length > 0 ? formData.locations[0] : null, 
+      provider: formData.provider,
+      profile: profilePreview
     };
 
     try {
       setIsLoading(true);
-      await axiosInstance.post('/api/auth/register/cleaner', payload);
+      await axiosInstance.post('/api/users/cleaner', payload); 
       alert("회원가입이 완료되었습니다.");
       navigate('/login');
     } catch (error) {
-      alert(error.response?.data?.message || "오류 발생");
+
+      const serverErrors = error.response?.data?.data;
+      if (Array.isArray(serverErrors)) {
+        alert(serverErrors.join('\n'));
+      } else {
+        alert(error.response?.data?.msg || "오류 발생");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -176,75 +251,45 @@ export default function CleanersRegistration() {
             <label>희망 활동 지역 (1~5개)*</label>
             
             {/* 시/도 선택 */}
-            <select 
-              className="location-city-select"
-              value={selectedCity} 
-              onChange={(e) => setSelectedCity(e.target.value)}
-              style={{ marginBottom: '10px' }}
-            >
-              <option value="">시/도 선택</option>
-              {Object.keys(LOCATION_DATA).map(city => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
+            <Select
+              style={selectStyle}
+              className="cleaners-registration-location-city-select"
+              options={options}
+              onChange={(option) => setSelectedCity(option.value)}
+              placeholder="선택"
+              noOptionsMessage={() => "옵션 없음"}
+            />
 
-            {/* 구/군 선택 박스 (가로 스크롤 또는 grid) */}
-            {selectedCity && (
-              <div className="district-selection-box" style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '1fr 1fr 1fr', 
-                gap: '5px', 
-                maxHeight: '150px', 
-                overflowY: 'auto',
-                padding: '10px',
-                border: '1px solid #ddd',
-                borderRadius: '4px'
-              }}>
-                {LOCATION_DATA[selectedCity].map(dist => {
-                  const isSelected = formData.locations.includes(`${selectedCity} ${dist}`);
-                  return (
-                    <button
-                      type="button"
-                      key={dist}
-                      onClick={() => handleLocationToggle(dist)}
-                      style={{
-                        padding: '5px',
-                        fontSize: '12px',
-                        backgroundColor: isSelected ? 'var(--color-light-blue)' : '#fff',
-                        color: isSelected ? '#000' : '#000',
-                        border: '1px solid #ddd',
-                        borderRadius: '3px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {dist}
+            {/* 구/군 선택 박스 - 시/도가 선택되었을 때만 노출 */}
+              {selectedCity && (
+                <div className="cleaners-registration-district-selection-box">
+                  {filteredDistricts.map((dist) => {
+                    const isSelected = formData.locations.includes(`${selectedCity} ${dist}`);
+                    return (
+                      <button
+                        className="cleaners-registration-district-selection-button"
+                        type="button"
+                        key={dist}
+                        onClick={() => handleLocationToggle(dist)}>
+                        {dist}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* 선택된 지역 칩 리스트 (하단에 나열) */}
+              <div className="cleaners-registration-selected-locations-wrapper">
+                {formData.locations.map(loc => (
+                  <span key={loc} className="cleaners-registration-selected-badge-wrapper">
+                    {loc}
+                    <button 
+                      className="cleaners-registration-selected-location-badge"
+                      type="button" 
+                      onClick={() => removeLocation(loc)}>
+                      ×
                     </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* 선택된 지역 칩 리스트 */}
-            <div className="selected-locations-wrapper" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-              {formData.locations.map(loc => (
-                <span key={loc} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#e9ecef',
-                  padding: '4px 8px',
-                  borderRadius: '15px',
-                  fontSize: '12px',
-                  border: '1px solid #dee2e6'
-                }}>
-                  {loc}
-                  <button 
-                    type="button" 
-                    onClick={() => removeLocation(loc)}
-                    style={{ marginLeft: '5px', border: 'none', background: 'none', cursor: 'pointer', color: 'var(--color-blue)', fontWeight: 'bold' }}
-                  >
-                    ×
-                  </button>
-                </span>
+                  </span>
                 ))}
               </div>
             </div>
@@ -264,6 +309,27 @@ export default function CleanersRegistration() {
               <input type="tel" name="phoneLast" value={formData.phoneLast} onChange={handleChange} maxLength="4" className="cleaners-registration-phone-input" />
             </div>
           </div>
+
+          {/* 프로필 이미지 업로드 추가 */}
+          <div className="cleaners-registration-form-group">
+            <label>프로필 이미지</label>
+            <div 
+              className="cleaners-registration-profile-preview-circle" 
+              onClick={() => fileInputRef.current.click()}
+              style={{ backgroundImage: `url(${profilePreview || '/icons/default-profile.png'})` }}
+            >
+              {!profilePreview && <span>이미지 등록</span>}
+            </div>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              style={{ display: 'none' }} 
+              accept="image/*" 
+              onChange={handleProfileChange} 
+            />
+            <p className="cleaners-registration-profile-upload-help">프로필 사진은 필수입니다.</p>
+          </div>      
+          
         </div>
 
         <div className="cleaners-registration-cleaners-agreement">

@@ -1,7 +1,7 @@
 
-import {name, gender, provider, email, password,
-      passwordChk, phoneNumber, locationId, profile,} from '../../fields/cleaner/cleaner.field.js';
+import {name, gender,  email, password,
+      passwordChk, phoneNumber, locationId, profile, provider} from '../../fields/cleaner/cleaner.field.js';
 
       export default [
-        name, gender, provider, email, password,
-         passwordChk, phoneNumber, locationId, profile];
+        name, gender, email, password,
+         passwordChk, phoneNumber, locationId, profile, provider];

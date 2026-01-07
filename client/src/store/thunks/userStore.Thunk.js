@@ -19,3 +19,18 @@ export const ownerStoreThunk = createAsyncThunk(
 );
 
 // 기사님 회원가입 관련
+export const signUpCleanerThunk = createAsyncThunk(
+  'cleanercreate/signUpCleanerThunk',
+  async (cleanerData, { rejectWithValue }) => {
+    try {
+      const url = `api/users/cleaner`;
+      const response = await axiosInstance.post(url, cleanerData);
+      return response.data;
+    } catch (error) {
+      if(error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
