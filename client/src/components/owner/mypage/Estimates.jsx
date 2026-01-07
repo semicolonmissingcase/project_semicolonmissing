@@ -120,12 +120,14 @@ export default function Estimates() {
                         />
                       </div>
                       <div className="estimates-driver-brief">
-                        <h4>{estimate.cleaner?.name} 기사님 
-                            <FavoriteButton 
-                            cleanerId={estimate.cleaner?.id}
-                            initialIsFavorited={estimate.cleaner?.isFavorited}
-                            />
-                        </h4>
+                        <div className="estimates-driver-name">
+                          <h4>{estimate.cleaner?.name} 기사님 
+                          </h4>
+                              <FavoriteButton 
+                              cleanerId={estimate.cleaner?.id}
+                              initialIsFavorited={estimate.cleaner?.isFavorited}
+                              />
+                        </div>
                         <p>리뷰 점수 {Number(estimate.cleaner?.avgReviewScore || 0).toFixed(1)}</p>
                         <p>작업 건수 {estimate.cleaner?.jobCount || 0}건</p>
                       </div>

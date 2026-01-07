@@ -49,13 +49,13 @@ const attributes = {
     allowNull: false,
     comment: '별점',
   },
-  reviewePicture1: {
+  reviewPicture1: {
     field: 'review_picture_1',
     type: DataTypes.TEXT,
     allowNull: true,
     comment: '리뷰사진1',
   },
-  reviewePicture2: {
+  reviewPicture2: {
     field: 'review_picture_2',
     type: DataTypes.TEXT,
     allowNull: true,

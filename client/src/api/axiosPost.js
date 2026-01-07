@@ -44,6 +44,9 @@ export const getAllInquiries = async (page = 1, pageSize = 10) => {
   }
 };
 
+// ---------------------------
+// 리뷰 관련
+// ---------------------------
 // 리뷰 조회
 export const getOwnerReviews = async () => {
   try {
@@ -51,6 +54,38 @@ export const getOwnerReviews = async () => {
     return response.data.data;
   } catch (error) {
     console.error(`점주 리뷰 목록 조회 실패:`, error);
+    throw error;
+  }
+};
+
+// 리뷰 개별 조회
+export const getReviewsDetails = async (reviewId) => {
+  const response = await axiosInstance.get(`${POST_API_URL}/owner/reviews/${reviewId}`);
+  return response.data;
+};
+
+// 리뷰 작성 전 목록 조회
+export const getCompletedReservations = async () => {
+  try {
+    const response = await axiosInstance.get(`${POST_API_URL}/owner/reservations/completed`);
+    return response.data;
+  } catch (error) {
+    console.error("완료된 예약 목록 조회 실패:", error);
+    throw error;
+  }
+}
+
+// 리뷰 생성
+export const createReview = async (formData) => {
+  try {
+    const response = await axiosInstance.post(`${POST_API_URL}/owner/reviews`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 };

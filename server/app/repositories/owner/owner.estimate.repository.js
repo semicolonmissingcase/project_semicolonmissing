@@ -4,6 +4,8 @@
  * 260102 v1.0.0 ck init
  */
 
+import models from '../../constants/models.constants.js';
+const { ReservationStatus, EstimateStatus } = models
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
 const { Estimate, Reservation, Cleaner, Review, Like, Sequelize, Store } = db;
@@ -42,7 +44,7 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
             model: Reservation,
             as: 'reservations',
             attributes: [],
-            where: { status: '완료'},
+            where: { status: ReservationStatus.COMPLETED },
             duplicating: false,
           },
           {
@@ -60,9 +62,9 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
       [
         Sequelize.literal(`
           CASE 
-            WHEN "Estimate"."status" = '요청' THEN 1 
-            WHEN "Estimate"."status" = '승인' THEN 2 
-            WHEN "Estimate"."status" = '완료' THEN 3 
+            WHEN "Estimate"."status" = '${ReservationStatus.REQUEST}' THEN 1 
+            WHEN "Estimate"."status" = '${ReservationStatus.APPROVED}' THEN 2 
+            WHEN "Estimate"."status" = '${ReservationStatus.COMPLETED}' THEN 3 
             ELSE 4 
           END
         `), 
@@ -110,7 +112,7 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
 async function findAcceptedEstimatesByOwnerId(ownerId) {
   const estimates = await Estimate.findAll({
     where: {
-      status: '수락' // 견적서 상태가 '수락'인 것만 필터링
+      status: EstimateStatus.ACCEPTED // 견적서 상태가 '수락'인 것만 필터링
     },
     attributes: ['id', 'cleanerId', 'reservationId', 'estimatedAmount', 'description', 'status', 'createdAt',],
     include: [

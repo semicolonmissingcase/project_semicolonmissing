@@ -228,6 +228,23 @@ async function getOwnerReviews(req, res, next) {
 }
 
 /**
+ * 리뷰 작성이 필요한 '완료'된 예약 목록 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+async function getCompletedReservations(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+    const result = await ownerInquiryService.getCompletedReservationsForReview(ownerId);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * 점주 내 쓴 리뷰 상세 조회
  * @param {import("express").Request} req 
  * @param {import("express").Response} res 
@@ -246,6 +263,36 @@ async function getReviewDetails(req, res, next) {
   }
 }
 
+/**
+ * 점주 리뷰 쓰기
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+async function createReview(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+    const { cleanerId, reservationId, star, content } = req.body;
+    // 이미지용
+    const reviewPicture1 = req.files?.reviewPicture1?.[0]?.path || null;
+    const reviewPicture2 = req.files?.reviewPicture2?.[0]?.path || null;
+
+    const reviewBody = {
+      cleanerId,
+      reservationId,
+      star,
+      content,
+      reviewPicture1,
+      reviewPicture2,
+    };
+    const result = await ownerInquiryService.createReview(ownerId, reviewBody)
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   ownerCreateInquiry,
   getOwnerInquiries,
@@ -254,5 +301,7 @@ export default {
   uploadEditorImage,
   guestCreateInquiry,
   getOwnerReviews,
-  getReviewDetails
+  getCompletedReservations,
+  getReviewDetails,
+  createReview,
 }

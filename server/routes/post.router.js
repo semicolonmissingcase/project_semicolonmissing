@@ -8,6 +8,8 @@ import express from 'express';
 import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 import ownerInquiryController from '../app/controllers/owner/owner.inquiry.controller.js';
 import multerMiddleware from '../app/middlewares/multer/multer.middleware.js';
+import reviewCreateValidator from '../app/middlewares/validations/validatiors/owner/review.create.validator.js';
+import reviewUploader from '../app/middlewares/multer/uploaders/review.uploader.js';
 
 const postsRouter = express.Router();
 
@@ -31,13 +33,13 @@ postsRouter.get('/owner/inquiries/:inquiryId', authMiddleware, ownerInquiryContr
 // ---------------------------
 // 리뷰 목록 조회
 postsRouter.get('/owner/reviews', authMiddleware, ownerInquiryController.getOwnerReviews);
+// 리뷰 작성 전 목록 조회
+postsRouter.get('/owner/reservations/completed', authMiddleware, ownerInquiryController.getCompletedReservations);
 // 개별 리뷰 상세 조회
 postsRouter.get('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.getReviewDetails);
 // 리뷰 작성
-postsRouter.post('/owner/reviews', authMiddleware, ownerInquiryController.createReview);
-// 리뷰 수정
-postsRouter.put('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.updateReview);
+postsRouter.post('/owner/reviews', authMiddleware, reviewUploader, reviewCreateValidator, ownerInquiryController.createReview);
 // 리뷰 삭제
-postsRouter.delete('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.deleteReview);
+// postsRouter.delete('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.deleteReview);
 
 export default postsRouter;

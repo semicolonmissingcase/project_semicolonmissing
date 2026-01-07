@@ -1,73 +1,89 @@
 import React, { useEffect, useState } from 'react';
 import './MyReviews.css';
-import { getOwnerReviews } from '../../../api/axiosPost.js';
+import { getOwnerReviews, getCompletedReservations } from '../../../api/axiosPost.js';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
-import ReviewModal from '../../commons/ReviewModal.jsx';
-import ReviewShowModal from '../../commons/ReviewShowModal.jsx';
+import ReviewModal from '../../commons/ReviewModal.jsx'; 
+import ReviewShowModal from '../../commons/ReviewShowModal.jsx'; 
 
-// 내 리뷰
 export default function MyReviews() {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState([]); // 작성한 리뷰
+  const [reviewsToWrite, setReviewsToWrite] = useState([]); // 리뷰 작성해야하는 목록
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // 모달 관련 상태
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('write'); 
+  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false); 
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isShowModalOpen, setIsShowModalOpen] = useState(false); 
+  const [selectedReviewId, setSelectedReviewId] = useState(null); // reviewId만 전달
 
-  // 서버에서 리뷰 데이터 가져오기
-  useEffect(() => {
-    const fetchReviews = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getOwnerReviews(); // API 헬퍼 호출
-        setReviews(data); // 데이터 설정
-      } catch (err) {
-        console.error("리뷰 목록 불러오기 실패:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // 데이터 로드 함수
+  const fetchReviews = async () => {
+    setLoading(true);
+    try {
+      // api 두 개 동시 출력
+      const [completedReviewsData, reviewsToWriteData] = await Promise.all([
+        getOwnerReviews(),
+        getCompletedReservations()
+      ]);
 
-    fetchReviews();
-  }, []); // 컴포넌트 마운트 시 한 번만 호출
+      console.log("작성 완료된 리뷰 API 응답:", completedReviewsData);
+      console.log("작성할 리뷰 API 응답:", reviewsToWriteData);
 
-  // 모달 열기 핸들러
-  const openReviewModal = (item, mode) => {
-    setModalMode(mode);
-    setSelectedItem(item);
-    setIsModalOpen(true);
+      setReviews(completedReviewsData || []);
+      setReviewsToWrite(reviewsToWriteData?.data || []);
+
+    } catch (err) {
+      console.error("리뷰 목록 불러오기 실패:", err);
+      setError(err);
+
+      setReviews([]);
+      setReviewsToWrite([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // 로딩 중일 때
-  if (loading) {
-    return <div className="myreviews-tab-container"><p>리뷰 목록을 불러오는 중...</p></div>;
-  }
+  useEffect(() => {
+    fetchReviews();
+  }, []);
 
-  // 에러 발생 시
-  if (error) {
-    return <div className="myreviews-tab-container"><p>리뷰 목록을 불러오는데 오류가 발생했습니다: {error.message}</p></div>;
-  }
+  // 리뷰 작성 모달 열기
+  const openWriteModal = (item) => {
+    setSelectedItem(item);
+    setIsWriteModalOpen(true);
+  };
 
-  // 리뷰 목록이 없을 때
-  if (!reviews || reviews.length === 0) {
-    return (
-      <div className="myreviews-tab-container">
-        <p className="myreviews-no-items">아직 작성된 리뷰가 없습니다.</p>
-      </div>
-    );
-  }
+  // 리뷰 보기 모달 열기 
+  const openReviewShowModal = (item) => {
+    setSelectedReviewId(item.reviewId || item.id); 
+    setIsShowModalOpen(true);
+  };
 
-  // 카드 디자인
-  const renderReviewCard = (item) => (
+  // 리뷰 삭제 핸들러
+  const handleDeleteReview = async (reviewId) => {
+    if (window.confirm("정말 이 리뷰를 삭제하시겠습니까?")) {
+      try {
+        // TODO: await deleteReviewApi(reviewId); // 실제 삭제 API 호출
+        console.log("리뷰 삭제 ID:", reviewId);
+        
+        // 삭제 성공 후 리스트에서 즉시 제거
+        setReviews(prev => prev.filter(r => r.id !== reviewId));
+        alert("리뷰가 삭제되었습니다.");
+      } catch (err) {
+        console.error("리뷰 삭제 실패:", err);
+        alert("삭제 중 오류가 발생했습니다.");
+      }
+    }
+  };
+
+  // 리뷰 카드 컴포넌트
+  const ReviewCard = (item) => (
     <div key={item.id} className="myreviews-status-card">
       <div className="myreviews-not-btn">
         <div className="myreviews-avatar-circle">
           <img
-            src={item.cleanerProfile ? item.cleanerProfile : "/icons/default-profile.png"}
+            src={item.cleanerProfile || "/icons/default-profile.png"}
             alt={`${item.name} 기사님`}
             className="myreviews-avatar-img"
           />
@@ -75,45 +91,98 @@ export default function MyReviews() {
 
         <div className="myreviews-text-content">
           <h4 className="myreviews-driver-name">
-            {item.name} <span className="myreviews-heart-icon">
+            {item.name} 
+            <span className="myreviews-heart-icon">
               <FavoriteButton cleanerId={item.cleanerId} initialIsFavorited={item.heart} />
             </span>
           </h4>
           <p className="myreviews-sub-info">{item.time}</p>
           <p className="myreviews-sub-info">{item.store}</p>
-          <p className="myreviews-price-info">견적 금액 {item.price}</p>
+          <p className="myreviews-price-info">견적 금액 {item.price}원</p>
         </div>
       </div>
 
-      {/* 버튼 영역 수정 */}
       <div className="myreviews-button-group">
         {item.status === 'completed' ? (
-          <button className="myreviews-action-btn myreviews-write">리뷰쓰기</button>
+          // 리뷰 작성 전: 리뷰쓰기 버튼만 표시
+          <button 
+            className="myreviews-action-btn myreviews-write"
+            onClick={() => openWriteModal(item)}
+          >
+            리뷰쓰기
+          </button>
         ) : (
+          // 리뷰 작성 후: 리뷰보기, 삭제하기 버튼 표시
           <>
-            <button className="myreviews-action-btn myreviews-view">리뷰보기</button>
-            <button className="myreviews-action-btn myreviews-edit">수정하기</button>
+            <button 
+              className="myreviews-action-btn myreviews-view"
+              onClick={() => openReviewShowModal(item)}
+            >
+              리뷰보기
+            </button>
+            <button 
+              className="myreviews-action-btn myreviews-delete bg-red"
+              onClick={() => handleDeleteReview(item.reviewId || item.id)}
+            >
+              삭제하기
+            </button>
           </>
         )}
       </div>
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="myreviews-tab-container">
+        <p>로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="myreviews-tab-container">
+        <p>오류가 발생했습니다.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="myreviews-tab-container">
-      <div className="myreviews-section-group">
-        <h4 className="myreviews-section-label">리뷰 대기 중인</h4>
-          <p className="myreviews-no-items">작성할 리뷰가 없습니다.</p>
+      <div className="myreviews-section-noreview-group">
+        {reviewsToWrite.length > 0 && (
+          <>
+            {reviewsToWrite.map(ReviewCard)}
+          </>
+          )}
       </div>
 
-      <div className="myreviews-section-group" style={{ marginTop: '40px' }}>
-        <h4 className="myreviews-section-label">리뷰 등록 완료</h4>
-        {reviews.length > 0 ? (
-          reviews.map(renderReviewCard)
-        ) : (
-          <p className="myreviews-no-items">작성 완료된 리뷰가 없습니다.</p>
-        )}
+      <div className="myreviews-section-group">
+        <p className="myreviews-section-label">작성한 리뷰 목록</p>
+          {reviews.length > 0 ? (
+            reviews.map(ReviewCard)
+          ) : (
+            <p className="myreviews-no-items">작성한 리뷰 목록이 없습니다.</p>
+          )}
       </div>
+
+      {/* 리뷰 작성 모달 */}
+      <ReviewModal 
+        isOpen={isWriteModalOpen}
+        onClose={() => setIsWriteModalOpen(false)} 
+        targetData={selectedItem} 
+      />
+
+      {/* 리뷰 보기 모달 */}
+      <ReviewShowModal
+        isOpen={isShowModalOpen}
+        onClose={() => {
+          setIsShowModalOpen(false);
+          setSelectedReviewId(null);
+        }}
+        reviewId={selectedReviewId}
+      />
     </div>
   );
 }

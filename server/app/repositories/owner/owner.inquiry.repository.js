@@ -4,6 +4,8 @@
  * 260102 v1.0.0 ck init
  */
 
+import models from '../../constants/models.constants.js';
+const { ReservationStatus } = models
 import { Sequelize } from 'sequelize';
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
@@ -157,7 +159,7 @@ async function findReviewsByOwnerId(ownerId) {
       name: plainReview.cleaner?.name || '기사님 정보 없음',
       cleanerProfile: plainReview.cleaner?.profile || '/icons/default-profile.png',
       heart: heartStatus,
-      time: `${dayjs(plainReview.reservationData?.date).format('YYYY-MM-DD')}${plainReview.reservationData?.time}`,
+      time: `${dayjs(plainReview.reservationData?.date).format('YYYY-MM-DD')} ${plainReview.reservationData?.time}`,
       store: plainReview.reservationData?.store?.name || '매장 정보 없음',
       price: price,
       star: plainReview.star,
@@ -166,6 +168,51 @@ async function findReviewsByOwnerId(ownerId) {
       cleanerId: plainReview.cleaner?.id,
     };
   });
+}
+
+/**
+ * 점주ID로 '완료'상태인 예약 목록 조회(리뷰 작성해야하는 거)
+ * @param {number} ownerId 
+ */
+async function findCompletedReservations(ownerId) {
+  const reservations = await Reservation.findAll({
+    where: {
+      ownerId: ownerId,
+      status: ReservationStatus.COMPLETED,
+      [db.Sequelize.Op.and]: db.Sequelize.literal(`(
+        SELECT COUNT(*) FROM reviews WHERE reviews.reservation_id = Reservation.id
+        ) = 0`),
+    },
+    include: [
+      {
+        model: Review,
+        as: 'reviews',
+        required: false,
+      },
+      {
+        model: Cleaner,
+        as: 'cleaner',
+        attributes: ['id', 'name', 'profile'],
+        required: false,
+      },
+      {
+        model: Store,
+        as: 'store',
+        attributes: ['name'],
+        required: false,
+      },
+      {
+        model: Estimate,
+        as: 'estimate',
+        attributes: ['estimatedAmount'],
+        required: false,
+      },
+    ],
+    order: [['date', 'DESC']],
+  });
+
+  // 리뷰 작성 전 필터
+  return reservations.filter(reservation => !(reservation.reviews && reservation.reviews.length > 0));
 }
 
 /**
@@ -255,11 +302,23 @@ async function findReviewByIdAndOwnerId(reviewId, ownerId) {
   };
 }
 
+/**
+ * 리뷰 생성
+ * @param {object} reviewData 
+ * @returns 
+ */
+async function createReview(reviewData) {
+  const newReview = await Review.create(reviewData);
+  return newReview;
+}
+
 export default {
   createInquiry,
   findInquiriesByOwnerId,
   findInquiryByIdAndOwnerId,
   findAllInquiries,
   findReviewsByOwnerId,
+  findCompletedReservations,
   findReviewByIdAndOwnerId,
+  createReview,
 }

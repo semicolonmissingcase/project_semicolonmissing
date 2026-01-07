@@ -33,8 +33,16 @@ export default function FavoriteButton({ cleanerId, initialIsFavorited, onToggle
       onClick={handleToggleFavorite}
       disabled={loading}
       className={`favoritebtn-button ${isFavorited ? 'favoritebtn-favorited' : ''}`}
+      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }} // 버튼 기본 스타일 제거
     >
-      {isFavorited ? <IoIosHeart className="favoritebtn-heart-icon favoritebtn-favorited" /> : <IoMdHeartEmpty className="favoritebtn-heart-icon" />}
+      {/* 아이콘 대신 CSS 클래스를 가진 span 태그 사용 */}
+      {isFavorited ? (
+        <span className="icon-heart-fill" title="즐겨찾기 해제"></span>
+      ) : (
+        <span className="icon-heart-empty" title="즐겨찾기 추가"></span>
+      )}
+
+      {/* 로딩 스피너 (필요 시 유지) */}
       {loading && <span className="favoritebtn-loading-spinner"></span>}
     </button>
   )
