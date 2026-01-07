@@ -7,8 +7,8 @@
 import db from "../models/index.js";
 import constants from "../constants/models.constants.js";
 
-const { PaymentStatus, ReservationStatus, EstimateStatus } = constants;
-const { Payment, Reservation, Estimate, } = db;
+const { PaymentStatus, ReservationStatus, EstimateStatus, AdjustmentStatus } = constants;
+const { Payment, Reservation, Estimate, Adjustment, Cleaner } = db;
 
 /**
  * 대기 상태의 결제 정보 생성
@@ -79,6 +79,27 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
     transaction
   });
 
+  const payment = await db.Payment.findOne({
+    where: { orderId: orderId },
+    include: [{
+      model: db.Estimate,
+      as: 'estimate',
+      attributes: [ 'id', 'cleaner_id' ]
+    }],
+    transaction
+  });
+
+  if (db.Adjustment) {
+    await db.Adjustment.create({
+      reservationId: reservationId,
+      paymentId: payment.id,
+      estimateId: payment.EstimateId,
+      cleanerId: payment.Estimate.cleaner.id,
+      settlementAmount: amount,
+      status: AdjustmentStatus.READY, // 정산 대기 상태
+    }, { transaction });
+  }
+
   return updatedRows;
 }
 
@@ -124,7 +145,19 @@ async function updateStatusAfterCancel(cancelData, reservationId, transaction) {
     transaction
   });
 
-  return updatedPaymentRows;
+  // 정산 테이블 업데이트
+  // 정산 상태를 '정산 취소'로 변경
+  if(db.Adjustment) {
+    await db.Adjustment.update({
+      status: AdjustmentStatus.CANCELED, 
+      memo: '결제 취소로 인한 정산 제외'
+    }, {
+      where: { reservationId: reservationId },
+      transaction
+    });
+  }
+
+  return updatedRows;
 }
 
 export default {

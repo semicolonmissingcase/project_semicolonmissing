@@ -47,7 +47,10 @@ async function confirmPayment(req, res, next) {
   try {
     const { paymentKey, orderId, amount } = req.body;
 
-    if(!req.user) {
+    // 유저 정보 추출
+    const currentUser = req.admin || req.user;
+
+    if(!currentUser) {
       throw myError("인증 정보가 없습니다. 로그인을 다시 해주세요.", UNAUTHORIZED_ERROR);
     }
 
@@ -55,7 +58,7 @@ async function confirmPayment(req, res, next) {
       paymentKey,
       orderId,
       amount,
-      userId: req.user.id,
+      userId: currentUser.id,
     });
 
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
@@ -64,8 +67,37 @@ async function confirmPayment(req, res, next) {
   }
 }
 
+/**
+ * 결제 취소 컨트롤러
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function cancelPayment(req, res, next) {
+  try {
+    const { paymentKey, cancelReason } = req.body;
+
+    const currentUser = req.admin || req.user;
+
+    if(!currentUser) {
+      throw myError("인증 정보가 없습니다.", UNAUTHORIZED_ERROR);
+    }
+
+    const result = await paymentService.cancelPayment({
+      paymentKey,
+      cancelReason: cancelReason || "사용자 요청에 의한 취소",
+      userId: currentUser.id,
+    });
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+  } catch (error) {
+    return next(error);
+  }
+}
 
 export default {
   readyPayment,
   confirmPayment,
+  cancelPayment,
 };
