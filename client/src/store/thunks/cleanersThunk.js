@@ -5,7 +5,7 @@ const locationThunk = createAsyncThunk(
   'cleaners/locationThunk',
   async (_, { rejectWithValue }) => {
     try {
-      const url = '/api/users/cleaner';
+      const url = '/api/locations';
       const response = await axiosInstance.get(url);
       
 
