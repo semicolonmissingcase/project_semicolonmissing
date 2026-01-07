@@ -21,16 +21,20 @@ import usersService from "../../services/cleaner/cleaners.user.service.js";
   try {
     const data = {
       ...req.body,
-      provider: req.params.provider,
+  
+      provider: req.params.provider || req.body.provider || 'NONE',
     };
 
+    // 데이터가 잘 들어오는지 디버깅용 로그 (나중에 지우세요)
+    console.log("전송된 데이터 확인:", data);
+
     const result = await usersService.store(data);
-    return res.json(result);
+
+    return res.json(createBaseResponse(SUCCESS, result));
   } catch (err) {
     next(err);
   }
 }
-
 
 export default {
   registerCleaner

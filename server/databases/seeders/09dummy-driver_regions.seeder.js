@@ -30,6 +30,6 @@ export default {
 
   async down(queryInterface, Sequelize) {
     // cleanerId가 1인 데이터만 지우거나 전체 삭제
-    await queryInterface.bulkDelete(tableName, { cleanerId: 1 }, {});
+    await DriverRegion.destroy({ truncate: true, force: true });
   }
 };
