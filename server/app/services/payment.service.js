@@ -93,17 +93,21 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
     // 3. 토스 승인 API 호출
     const response = await axios.post(
       "https://api.tosspayments.com/v1/payments/confirm",
-      { paymentKey, orderId, amount },
+      { 
+        paymentKey, 
+        orderId, 
+        amount: Number(amount)  
+      },
       { 
         headers: {
           Authorization: `Basic ${authorizations}`,
           "Content-Type": "application/json", 
         },
-        timeout: 5000 
+        timeout: 10000 
       }
     );
 
-    const tossResult = response.data; // 여기서 tossResult 정의
+    const tossResult = response.data;
 
     // 4. 승인 성공 시 DB 상태 업데이트 
     await paymentRepository.updatePaymentAfterSuccess(
@@ -133,6 +137,10 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
     
     throw error;
   }
+}
+
+async function cancelPayment() {
+  
 }
 
 export default { 
