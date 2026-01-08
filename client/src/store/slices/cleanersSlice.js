@@ -2,6 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import cleanersThunk from "../thunks/cleanersThunk.js";
 
 const initialState = {
+  // 회원가입 관련
+  locations: [],
+  isInitialized: false,
+  accounts: [],
+
   // Show 관련
   submissions: null, // null 대신 빈 배열로 초기화하면 map 에러를 방지합니다.
   reservation: null,
@@ -11,10 +16,6 @@ const initialState = {
   page: 0,
   offset: 4,
   isLasted: false,
-
-  // 회원가입 관련
-  locations: [],
-  accounts: [],
   
   // 기타
   loading: true,
@@ -32,6 +33,7 @@ const slice = createSlice({
       state.page = 0;
       state.accounts = [];
       state.locations = [];
+      state.isInitialized = false;
       state.loading = false;
       state.error = null;
     },
@@ -39,9 +41,10 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(cleanersThunk.showThunk.fulfilled, (state, action) => {
-        const { reservation, submissions } = action.payload.data;
+        const { reservation, submissions, locations } = action.payload.data;
         state.reservation = reservation;
         state.submissions = submissions;
+        state.locations = locations;
         state.loading = false;
         state.error = null;
       })
@@ -65,13 +68,15 @@ const slice = createSlice({
 
         state.loading = false;
       }).addCase(cleanersThunk.locationThunk.pending, (state) => {
-        state.loading = true;
+        state.loading = false;
+        state.isInitialized = false;
         state.error = null;
       })
       .addCase(cleanersThunk.locationThunk.fulfilled, (state, action) => {
+        console.log('Fulfilled Payload:', action.payload);
         state.loading = false;
-        
-        state.locations = action.payload || []; 
+        state.isInitialized = true;
+        state.locations = action.payload;
         state.error = null;
       })
       .addCase(cleanersThunk.locationThunk.rejected, (state, action) => {

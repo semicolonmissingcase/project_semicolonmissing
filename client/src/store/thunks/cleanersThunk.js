@@ -5,11 +5,16 @@ const locationThunk = createAsyncThunk(
   'cleaners/locationThunk',
   async (_, { rejectWithValue }) => {
     try {
-      const url = '/api/locations';
+      const url = '/api/users/locations';
       const response = await axiosInstance.get(url);
       
+      // 🚨 1-1. 여기서 response를 콘솔에 찍어봅니다.
+      console.log('Thunk 내부: Axios 응답 객체:', response); 
 
-      return response.data.rows;
+      // 🚨 1-2. 실제 데이터가 있는지 확인합니다.
+      console.log('Thunk 내부: 추출된 데이터:', response.data);
+
+      return response.data;
     } catch (error) {
 
       return rejectWithValue(error.response?.data || error.message);
