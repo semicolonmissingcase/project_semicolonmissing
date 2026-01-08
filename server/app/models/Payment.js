@@ -67,11 +67,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('createdAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }, 
+    },
     comment: '결제 승인 일시',
   },
   receiptUrl: {
@@ -86,17 +86,17 @@ const attributes = {
     allowNull: true,
     comment: '취소 이유',
   },
-  cancelAt: {
-    field: 'cancel_at',
+  canceledAt: {
+    field: 'canceled_at',
     type: DataTypes.DATE,
     allowNull: true,
     get() {
       const val = this.getDataValue('createdAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }, 
+    },
     comment: '취소 날짜',
   },
   createdAt: {
@@ -105,11 +105,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('createdAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
+    }
   },
   updatedAt: {
     field: 'updated_at',
@@ -117,11 +117,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('updatedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }     
+    }
   },
   deletedAt: {
     field: 'deleted_at',
@@ -129,11 +129,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('deletedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }    
+    }
   }
 };
 
@@ -148,7 +148,7 @@ const Payment = {
     const define = sequelize.define(modelName, attributes, options);
 
     // JSON으로 serialize시, 제외할 컬럼을 지정
-    define.prototype.toJSON = function() {
+    define.prototype.toJSON = function () {
       const attributes = this.get();
 
       return attributes;

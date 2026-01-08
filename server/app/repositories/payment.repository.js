@@ -42,11 +42,11 @@ async function findByOrderId(orderId, transaction = null) {
   });
 }
 
-/**
- * 결제 승인 성공 후 상태 업데이트
- */
+// /**
+//  * 결제 승인 성공 후 상태 업데이트
+//  */
 async function updatePaymentAfterSuccess(paymentData, reservationId, transaction) {
-  const { orderId, paymentKey, method, approvedAt, receiptUrl } = paymentData;
+  const { orderId, paymentKey, method, approvedAt, receiptUrl, totalAmount } = paymentData;
 
   // 결제 테이블 업데이트 
   const [updatedRows] = await Payment.update({
@@ -54,9 +54,10 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
     method,
     approvedAt,
     receiptUrl,
-    status: PaymentStatus.DONE, // 성공 시 상태 '완료'로 변경
+    status: PaymentStatus.DONE, // 성공 시 상태 '성공'으로 변경
   }, {
     where: { orderId: orderId },
+    transaction
   });
 
   if (updatedRows === 0) {
@@ -64,7 +65,7 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
   }
 
   // 예약 상태 업데이트 
-  await Reservation.update({
+  await db.Reservation.update({
     status: ReservationStatus.APPROVED
   }, {
     where: { id: reservationId },
@@ -72,31 +73,38 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
   });
 
   // 견적서 상태 업데이트
-  await Estimate.update({
+  await db.Estimate.update({
     status: EstimateStatus.COMPLETED
   }, {
     where: { reservationId: reservationId },
     transaction
   });
 
-  const payment = await db.Payment.findOne({
+  // 정산 생성을 위한 데이터 조회
+  const paymentResult = await db.Payment.findOne({
     where: { orderId: orderId },
     include: [{
       model: db.Estimate,
       as: 'estimate',
-      attributes: [ 'id', 'cleaner_id' ]
     }],
     transaction
   });
 
-  if (db.Adjustment) {
+  // 조회 결과 가공
+  const paymentRecord = paymentResult.get({ plain: true });
+  const targetEstimate = paymentRecord.estimate;
+
+  // 정산 데이터 주입
+  if (db.Adjustment && targetEstimate) {
+    const finalCleanerId = targetEstimate.cleanerId || targetEstimate.cleaner_id;
+
     await db.Adjustment.create({
       reservationId: reservationId,
-      paymentId: payment.id,
-      estimateId: payment.EstimateId,
-      cleanerId: payment.Estimate.cleaner.id,
-      settlementAmount: amount,
-      status: AdjustmentStatus.READY, // 정산 대기 상태
+      paymentId: paymentRecord.id,
+      estimateId: targetEstimate.id,
+      cleanerId: finalCleanerId,
+      settlementAmount: totalAmount || paymentRecord.totalAmount,
+      status: AdjustmentStatus.READY, // '정산 대기'
     }, { transaction });
   }
 
@@ -111,13 +119,13 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
  * @returns 
  */
 async function updateStatusAfterCancel(cancelData, reservationId, transaction) {
-  const { paymentKey, cancelReason, cancelAt } = cancelData;
+  const { paymentKey, cancelReason, canceledAt } = cancelData;
 
   // 결제 테이블 업데이트
   const [updatedPaymentRows] = await Payment.update({
     status: PaymentStatus.CANCELED,
     cancelReason: cancelReason,
-    cancelAt: cancelAt // 토스에서 받은 공식 취소 일시
+    canceledAt: canceledAt // 토스에서 받은 공식 취소 일시
   }, {
     where: { paymentKey: paymentKey },
     transaction
@@ -129,8 +137,8 @@ async function updateStatusAfterCancel(cancelData, reservationId, transaction) {
 
   // 예약 테이블 업데이트
   // 결제가 취소되었으므로 예약 상태 '취소'로 변경
-  await Reservation.update({
-    status: Reservation.CANCELED
+  await db.Reservation.update({
+    status: ReservationStatus.CANCELED
   }, {
     where: { id: reservationId },
     transaction
@@ -138,8 +146,8 @@ async function updateStatusAfterCancel(cancelData, reservationId, transaction) {
 
   // 견적서 테이블 업데이트
   // 견적 상태를 '수락'으로 변경
-  await Estimate.update({
-    status: 'ACCEPTED'
+  await db.Estimate.update({
+    status: EstimateStatus.ACCEPTED
   }, {
     where: { reservationId: reservationId },
     transaction
@@ -147,17 +155,26 @@ async function updateStatusAfterCancel(cancelData, reservationId, transaction) {
 
   // 정산 테이블 업데이트
   // 정산 상태를 '정산 취소'로 변경
-  if(db.Adjustment) {
+  if (db.Adjustment) {
     await db.Adjustment.update({
-      status: AdjustmentStatus.CANCELED, 
-      memo: '결제 취소로 인한 정산 제외'
+      status: AdjustmentStatus.CANCELED, // '정산 취소'
     }, {
       where: { reservationId: reservationId },
       transaction
     });
   }
 
-  return updatedRows;
+  return updatedPaymentRows;
+}
+
+async function findByPaymentKey(paymentKey) {
+  return await Payment.findOne({
+    where: { paymentKey },
+    include: [{
+      model: db.Reservation,
+      as: 'reservation'
+    }]
+  });
 }
 
 export default {
@@ -165,4 +182,5 @@ export default {
   findByOrderId,
   updatePaymentAfterSuccess,
   updateStatusAfterCancel,
+  findByPaymentKey,
 };

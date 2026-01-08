@@ -4,9 +4,9 @@ import paymentRepository from '../repositories/payment.repository.js';
 import myError from '../errors/customs/my.error.js';
 import modelsConstants from '../constants/models.constants.js';
 const { PaymentStatus, ReservationStatus } = modelsConstants;
-import { 
-  ALREADY_PROCESSED_ERROR, 
-  BAD_REQUEST_ERROR, 
+import {
+  ALREADY_PROCESSED_ERROR,
+  BAD_REQUEST_ERROR,
   NOT_FOUND_ERROR,
   FORBIDDEN_ERROR,
   DB_ERROR,
@@ -25,7 +25,7 @@ async function readyPayment({ reservationId, userId }) {
     if (!reservation) {
       throw myError('결제할 예약 정보를 찾을 수 없습니다.', NOT_FOUND_ERROR);
     }
-    
+
     if (reservation.status !== ReservationStatus.REQUEST) {
       throw myError('이미 처리되었거나 진행중인 예약입니다.', ALREADY_PROCESSED_ERROR);
     }
@@ -68,14 +68,14 @@ async function readyPayment({ reservationId, userId }) {
 async function confirmPayment({ paymentKey, orderId, amount, userId }) {
   // 1. 트랜잭션 시작
   const t = await db.sequelize.transaction();
-  
+
   try {
     const payment = await paymentRepository.findByOrderId(orderId, t);
-    
+
     if (!payment) {
       throw myError("해당 주문 내역을 찾을 수 없습니다.", NOT_FOUND_ERROR);
     }
-    
+
     if (Number(payment.totalAmount) !== Number(amount)) {
       throw myError("결제 금액이 일치하지 않습니다.", BAD_REQUEST_ERROR);
     }
@@ -92,31 +92,23 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
     const authorizations = Buffer.from(process.env.TOSS_SECRET_KEY + ":").toString("base64");
 
     // 3. 토스 승인 API 호출
-    // const response = await axios.post(
-    //   "https://api.tosspayments.com/v1/payments/confirm",
-    //   { 
-    //     paymentKey, 
-    //     orderId, 
-    //     amount: Number(amount)  
-    //   },
-    //   { 
-    //     headers: {
-    //       Authorization: `Basic ${authorizations}`,
-    //       "Content-Type": "application/json", 
-    //     },
-    //     timeout: 10000 
-    //   }
-    // );
+    const response = await axios.post(
+      "https://api.tosspayments.com/v1/payments/confirm",
+      {
+        paymentKey,
+        orderId,
+        amount: Number(amount)
+      },
+      {
+        headers: {
+          Authorization: `Basic ${authorizations}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 10000
+      }
+    );
 
-    // const tossResult = response.data;
-
-    const tossResult = {
-      orderId: orderId,
-      paymentKey: paymentKey,
-      method: "카드",
-      approvedAt: new Date().toISOString(),
-      receipt: { url: "https://test-receipt-url.com" }
-    };
+    const tossResult = response.data;
 
     // 4. 승인 성공 시 DB 상태 업데이트 
     await paymentRepository.updatePaymentAfterSuccess(
@@ -125,10 +117,10 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
         paymentKey: tossResult.paymentKey,
         method: tossResult.method,
         approvedAt: tossResult.approvedAt,
-        receiptUrl: tossResult.receipt?.url, 
-      }, 
-      payment.reservationId, 
-      t 
+        receiptUrl: tossResult.receipt?.url,
+      },
+      payment.reservationId,
+      t
     );
 
     // 5. 모든 작업 성공 시 커밋
@@ -143,7 +135,7 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
       const { code, message } = error.response.data;
       throw myError(`${code}: ${message}`, BAD_REQUEST_ERROR);
     }
-    
+
     throw error;
   }
 }
@@ -155,55 +147,48 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
  */
 async function cancelPayment({ paymentKey, cancelReason, userId }) {
   // 결제 내역 존재 여부 및 본인 확인
-  const payment = await paymentRepository.findBypaymentKey(paymentKey);
-  if(!payment) {
+  const payment = await paymentRepository.findByPaymentKey(paymentKey);
+  console.log("조회된 결제 데이터", JSON.stringify(payment, null, 2));
+
+  if (!payment) {
     throw myError("결제 내역을 찾을 수 없습니다.", NOT_FOUND_ERROR);
   }
-  if(payment.reservation.ownerId !== userId) {
+  if (payment.reservation.ownerId !== userId) {
     throw myError("본인의 결제 건만 취소할 수 있습니다.", FORBIDDEN_ERROR);
   }
-  if(payment.status !== PaymentStatus.DONE) {
+  if (payment.status !== PaymentStatus.DONE) {
     throw myError("취소할 수 없는 결제 상태입니다.", BAD_REQUEST_ERROR);
   }
 
   // 토스 취소 API 호출 
-  // const authorizations = Buffer.from(`${process.env.TOSS_SECRET_KEY}:`).toString("base64");
-  // let tossCancelResult;
+  const authorizations = Buffer.from(`${process.env.TOSS_SECRET_KEY}:`).toString("base64");
+  let tossCancelResult;
 
-  // try {
-  //   const response = await axios.post(
-  //     `https://api.tosspayments.com/v1/payments/${paymentKey}/cancel`,
-  //     { cancelReason },
-  //     { 
-  //       headers: {
-  //         Authorization: `Basic ${authorizations}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       timeout: 10000,
-  //     }
-  //   );
-  //   tossCancelResult = response.data; 
-  // } catch(error) {
-  //   if(error.response) {
-  //     const { code, message } = error.response.data;
-  //     throw myError(`토스 취소 실패: ${code} - ${message}`, BAD_REQUEST_ERROR);
-  //   }
-  //   throw error;
-  // }
-
-  const tossCancelResult = {
-  cancels: [
-    {
-      canceledAt: new Date().toISOString(),
-      cancelReason: cancelReason || "테스트 취소"
+  try {
+    const response = await axios.post(
+      `https://api.tosspayments.com/v1/payments/${paymentKey}/cancel`,
+      { cancelReason },
+      {
+        headers: {
+          Authorization: `Basic ${authorizations}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 10000,
+      }
+    );
+    tossCancelResult = response.data;
+  } catch (error) {
+    if (error.response) {
+      const { code, message } = error.response.data;
+      throw myError(`토스 취소 실패: ${code} - ${message}`, BAD_REQUEST_ERROR);
     }
-  ]
-};
+    throw error;
+  }
 
   // DB 상태 업데이트 
   const t = await db.sequelize.transaction();
   try {
-    await paymentRepository.updatePaymentAfterCancel(
+    await paymentRepository.updateStatusAfterCancel(
       {
         paymentKey,
         cancelReason,
@@ -215,15 +200,15 @@ async function cancelPayment({ paymentKey, cancelReason, userId }) {
 
     await t.commit();
     return tossCancelResult;
-  } catch(error) {
+  } catch (error) {
     await t.rollback();
     console.error("결제 취소는 성공했으나, DB 반영 실패", error);
     throw myError("결제는 취소되었으나 정보 동기화에 실패했습니다. 문의해주세요.", DB_ERROR);
   }
 }
 
-export default { 
+export default {
   readyPayment,
   confirmPayment,
-  cancelPayment,  
+  cancelPayment,
 };
