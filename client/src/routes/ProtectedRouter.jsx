@@ -21,6 +21,10 @@ const AUTH_REQUIRED_ROUTES = [
  */
 const GUEST_ONLY_ROUTES = [/^\/login$/, /^\/registration$/, /^\/hospital\/login$/];
 
+/**
+ * 
+ * @returns 
+ */
 export default function ProtectedRouter() {
   const location = useLocation();
   const navigate = useNavigate();
