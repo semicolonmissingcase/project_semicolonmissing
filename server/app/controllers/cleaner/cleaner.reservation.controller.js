@@ -90,9 +90,16 @@ async function updateReservationStatus(req, res, next) {
  */
 async function getCleanerReviews(req, res, next) {
   try {
-    const { id } = req.user; // 토큰에서 추출한 기사님 ID
+    // 1. req.user 존재 여부 확인 (에러 방지 핵심)
+    if (!req.user) {
+      return res.status(401).json({ 
+        success: false, 
+        message: "인증 정보가 없습니다. 다시 로그인해주세요." 
+      });
+    }
 
-    // 레포지토리의 reviewFindByCleanerId 호출
+    const { id } = req.user; 
+
     const reviews = await cleanerMypageRepository.reviewFindByCleanerId(null, id);
 
     return res.status(200).json({
@@ -106,10 +113,30 @@ async function getCleanerReviews(req, res, next) {
   }
 }
 
-// 라우터에서 사용할 수 있도록 export
+/**
+ * 기사님이 작성한 문의 목록 조회
+ */
+const getCleanerInquiries = async (req, res, next) => {
+  try {
+    const cleanerId = req.user.id; 
+
+    const inquiries = await cleanerMypageRepository.inquiryFindByCleanerId(null, cleanerId);
+
+  return res.status(200).json({
+        success: true,
+        message: "문의 내역 조회 성공",
+        data: inquiries
+      });
+    } catch (error) {
+      console.error("❌ getCleanerInquiries Controller Error:", error);
+      next(error);
+  }
+};
+
 export default {
   getPendingJobs,
   getTodayJobs,
   updateReservationStatus,
-  getCleanerReviews
+  getCleanerReviews,
+  getCleanerInquiries
 };

@@ -39,7 +39,6 @@ const ChatList = () => {
     }
 
     newSocket.on("receive_message", () => {
-      console.log("🔔 새 메시지 수신: 목록 새로고침");
       fetchRooms();
     });
 

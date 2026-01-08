@@ -1,13 +1,13 @@
 /**
- * @file databases/migrations/20251218-06-create-reservations.js
- * @description reservations migration file
- * 251218 v1.0.0 jae init
+ * @file databases/migrations/20260107-01-create-notifications.js
+ * @description notifications migration file
+ * 260107 v1.0.0 jae init
  */
 
 import { DataTypes } from "sequelize";
 
 // 테이블명 
-const tableName = 'reservations';
+const tableName = 'notifications';
 
 // 컬럼 정의
 const attributes = {
@@ -17,55 +17,37 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '예약 PK',
+    comment: '알림 PK',
   },
   ownerId: {
     field: 'owner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 PK',
-  },
-  storeId: {
-    field: 'store_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '매장 PK',
-  },
-  date: {
-    field: 'date',
-    type: DataTypes.DATEONLY,
-    allowNull: false,
-    comment: '희망 날짜',
-  },
-  time: {
-    field: 'time',
-    type: DataTypes.TIME,
-    allowNull: false,
-    comment: '희망 시간(nullable 고려중)', 
-  },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
-    allowNull: false,
-    comment: '상태(요청, 승인, 완료, 취소)'
-  },
-  isAssign: {
-    field: 'is_assign',
-    type: DataTypes.ENUM('지정', '일반'),
-    allowNull: false,
-    comment: '기사 지정 상태'
-  },
-  dateAgreedUpon: {
-    field: 'date_agreed_upon',
-    type: DataTypes.BOOLEAN,
-    allowNull: true,
-    comment: '날짜 협의 가능',
+    comment: '점주 PK'
   },
   cleanerId: {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: true,
-    comment: '기사 PK'
+    allowNull: false,
+    comment: '기사 PK',
+  },
+  title: {
+    field: 'title',
+    type: DataTypes.STRING(200),
+    allowNull: false,
+    comment: '제목',
+  },
+  content: {
+    field: 'content',
+    type: DataTypes.STRING(1000),
+    allowNull: false,
+    comment: '내용'
+  },
+  isRead: {
+    field: 'is_read',
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    comment: '읽음 여부'
   },
   createdAt: {
     field: 'created_at',

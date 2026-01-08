@@ -1,7 +1,7 @@
 /**
  * @file app/controllers/chat.controller.js
- * @description
- * 251222 seon init
+ * @description 채팅 컨트롤러 
+ * 260106 v1.0.0 seon init
  */
 import chatService from '../services/chat.service.js'
 
@@ -11,12 +11,14 @@ import chatService from '../services/chat.service.js'
 const createRoom = async (req, res, next) => {
   try {
     const { id, role } = req.user; 
-    const { estimate_id, cleaner_id } = req.body;
+    // body에서 필요한 정보 추출 (owner_id가 들어올 수도 있음을 고려)
+    const { estimate_id, cleaner_id, owner_id } = req.body;
 
     const roomData = {
       estimate_id,
+      // 현재 로그인한 유저의 역할에 따라 ID를 강제 할당하여 보안 강화
       cleaner_id: role === 'CLEANER' ? id : cleaner_id,
-      owner_id: role === 'OWNER' ? id : owner_id
+      owner_id: role === 'OWNER' ? id : (owner_id || null) 
     };
 
     const result = await chatService.createOrGetRoom(roomData);
@@ -28,15 +30,15 @@ const createRoom = async (req, res, next) => {
 };
 
 /**
- * 사이드바 기본 정보 조회 (점주용 프로필 또는 기사용 의뢰서 요약)
- * GET /api/chat/room/:roomId/sidebar
+ * 사이드바 기본 정보 조회
+ * GET /api/chat/rooms/:roomId/sidebar
  */
 const getSidebarInfo = async (req, res, next) => {
   try {
     const { roomId } = req.params;
-    const { role } = req.user;
+    const { id, role } = req.user;
 
-    const result = await chatService.getChatRoomWithSidebar(roomId, role);
+    const result = await chatService.getChatRoomWithSidebar(roomId, role, id);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     next(error);
@@ -44,8 +46,8 @@ const getSidebarInfo = async (req, res, next) => {
 };
 
 /**
- * 사이드바 리뷰 목록 조회 (페이징 및 정렬 필터)
- * GET /api/chat/room/:roomId/reviews?page=1&sort=latest
+ * 사이드바 리뷰 목록 조회
+ * GET /api/chat/rooms/:roomId/reviews
  */
 const getSidebarReviews = async (req, res, next) => {
   try {
@@ -120,7 +122,7 @@ const chatSendMessage = async (req, res, next) => {
 const markAsRead = async (req, res, next) => {
   try {
     const { roomId } = req.params;
-    const { id, role } = req.user; // 토큰에 담긴 정보 활용
+    const { id, role } = req.user;
 
     await chatService.markAsRead(roomId, id, role);
     res.status(200).json({ success: true });

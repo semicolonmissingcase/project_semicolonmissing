@@ -43,41 +43,49 @@ const attributes = {
     allowNull: false,
     comment: '결제 PK',
   },
-  bank: {
-    field: 'bank',
-    type: DataTypes.STRING(20),
-    allowNull: false, 
-    comment: '은행',
-  },
-  depositor: {
-    field: 'depositor',
-    type: DataTypes.STRING(50),
-    allowNull: false,
-    comment: '예금주',
-  },
-  accountNumber: {
-    field: 'account_nuber',
-    type: DataTypes.STRING(20), // TO-DO 추가 논의 필요
-    allowNull: false,
-    comment: '계좌번호',
-  },
-  isPrimary: {
-    field: 'is_primary',
-    type: DataTypes.BOOLEAN,
-    allowNull: true,   // TO-DO 추가 논의 필요
-    comment: '주계좌여부'
-  },
-  status: {
-    field: 'status',
-    type: DataTypes.STRING(20),
-    allowNull: false,
-    comment: '상태(완료/미완료)'
-  },
   settlementAmount: {
     field: 'settlement_amount',
     type: DataTypes.INTEGER,
     allowNull: false,
     comment: '정산금액'
+  },
+  status: {
+    field: 'status',
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    comment: '상태(정산 대기, 지급 대기, 정산 완료, 보류, 정산 취소)'
+  },
+  receiptUrl: {
+    field: 'receipt_url',
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: '정산 영수증',
+  },
+  scheduledAt: {
+    field: 'scheduled_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    get() {
+      const val = this.getDataValue('scheduledAt')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+    }, 
+    comment: '정산 예정일',
+  },
+  completedAt: {
+    field: 'completed_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    get() {
+      const val = this.getDataValue('completedAt')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+    }, 
+    comment: '정산 완료일',
   },
   createdAt: {
     field: 'created_at',

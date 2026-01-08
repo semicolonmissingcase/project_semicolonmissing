@@ -1,13 +1,13 @@
 /**
- * @file app/models/Review.js
- * @description Review model
- * 251222 v1.0.0 jae init
+ * @file app/models/Notification.js
+ * @description Notification model
+ * 260107 v1.0.0 jae init
  */
 
 import dayjs from 'dayjs';
 import { DataTypes } from 'sequelize';
 
-const modelName = 'Review'; // 모델명
+const modelName = 'Notification'; // 모델명
 
 // 컬럼 정의
 const attributes = {
@@ -17,19 +17,13 @@ const attributes = {
     primaryKey: true,
     allowNull: false,
     autoIncrement: true,
-    comment: '리뷰 PK',
+    comment: '알림 PK',
   },
   ownerId: {
     field: 'owner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 PK',
-  },
-  reservationId: {
-    field: 'reservation_id',
-    type: DataTypes.BIGINT.UNSIGNED,
-    allowNull: false,
-    comment: '예약 PK',
+    comment: '점주 PK'
   },
   cleanerId: {
     field: 'cleaner_id',
@@ -37,29 +31,23 @@ const attributes = {
     allowNull: false,
     comment: '기사 PK',
   },
+  title: {
+    field: 'title',
+    type: DataTypes.STRING(200),
+    allowNull: false,
+    comment: '제목',
+  },
   content: {
     field: 'content',
-    type: DataTypes.STRING(255),
-    allowNull: true,
-    comment: '내용',
-  },
-  star: {
-    field: 'star',
-    type: DataTypes.INTEGER(5),
+    type: DataTypes.STRING(1000),
     allowNull: false,
-    comment: '별점',
+    comment: '내용'
   },
-  reviewPicture1: {
-    field: 'review_picture_1',
-    type: DataTypes.TEXT,
-    allowNull: true,
-    comment: '리뷰사진1',
-  },
-  reviewPicture2: {
-    field: 'review_picture_2',
-    type: DataTypes.TEXT,
-    allowNull: true,
-    comment: '리뷰사진2',
+  isRead: {
+    field: 'is_read',
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    comment: '읽음 여부'
   },
   createdAt: {
     field: 'created_at',
@@ -100,12 +88,12 @@ const attributes = {
 };
 
 const options = {
-  tableName: 'reviews',        // 실제 DB 테이블명
-  timestamps: true,             // createdAt, updatedAt를 자동 관리
-  paranoid: true,              // soft delete 설정 (deletedAt 자동 관리)
+  tableName: 'notifications',           // 실제 DB 테이블명
+  timestamps: true,                     // createdAt, updatedAt를 자동 관리
+  paranoid: true,                       // soft delete 설정 (deletedAt 자동 관리)
 }
 
-const Review = {
+const Notification = {
   init: (sequelize) => {
     const define = sequelize.define(modelName, attributes, options);
 
@@ -113,17 +101,15 @@ const Review = {
     define.prototype.toJSON = function() {
       const attributes = this.get();
 
-
       return attributes;
     }
 
     return define;
   },
   associate: (db) => {
-    db.Review.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
-    db.Review.belongsTo(db.Reservation, { targetKey: 'id', foreignKey: 'reservationId', as: 'reservationData' });
-    db.Review.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
+    db.Notification.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
+    db.Notification.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
   }
 }
 
-export default Review;
+export default Notification;

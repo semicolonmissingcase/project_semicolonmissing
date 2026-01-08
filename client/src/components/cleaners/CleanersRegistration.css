@@ -244,12 +244,13 @@
 
 .cleaners-registration-selected-badge-wrapper {
   background-color: var(--color-light-gray);
-  padding: 0.2rem;
+  padding: 0.4rem;
   border-radius: 1rem;
   text-align: center;
+  font-size: 0.9rem;  
 }
 
-.cleaners-registration-selected-location-badge {
+.cleaners-registration-selected-locations-badge {
   margin-left: 6px;
   cursor: pointer;
   color: var(--color-light-blue);

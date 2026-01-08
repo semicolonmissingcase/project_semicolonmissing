@@ -73,6 +73,18 @@ const attributes = {
     allowNull: true,
     comment: '영수증 주소',
   },
+  cancelReason: {
+    field: 'cancel_reason',
+    type: DataTypes.STRING(200),
+    allowNull: true,
+    comment: '취소 이유',
+  },
+  cancelAt: {
+    field: 'cancel_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: '취소 날짜',
+  },
   createdAt: {
     field: 'created_at',
     type: DataTypes.DATE,

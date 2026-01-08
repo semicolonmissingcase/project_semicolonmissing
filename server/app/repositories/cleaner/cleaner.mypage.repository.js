@@ -7,7 +7,7 @@
 import db from '../../models/index.js';
 import { Op } from 'sequelize';
 
-const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption } = db;
+const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry } = db;
 
 /**
  * 기사님용 대기 작업 조회
@@ -56,7 +56,7 @@ async function reservationFindById(t = null, id) {
 }
 
 /**
- * 특정 예약의 질문 답변(Submissions) 조회
+ * 특정 예약의 질문 답변 조회
  */
 async function submissionFindByReservationId(t = null, id) {
   return await Submission.findAll({
@@ -101,10 +101,14 @@ async function reservationUpdateStatus(t = null, { id, status }) {
 async function reservationFindTodayByCleanerId(t = null, { cleanerId, userRole }) {
   if (!userRole) return [];
 
+  const today = new Date();
+  const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
+
   return await Reservation.findAll({
     where: {
       cleanerId: cleanerId,
-      status: '승인'
+      status: '승인',
+      date: todayString
     },
     include: [
       { 
@@ -141,8 +145,47 @@ async function reservationFindSettlementPending(t = null, cleanerId) {
  */
 async function reviewFindByCleanerId(t = null, cleanerId) {
   return await Review.findAll({
-    where: { targetId: cleanerId, targetType: 'CLEANER' },
-    include: [{ model: Owner, as: 'owner', attributes: ['name'] }],
+    where: { cleanerId },
+    include: [
+      {
+        model: db.Reservation,
+        as: 'reservationData', 
+        attributes: [
+          'id', 
+          // DB의 실제 컬럼명은 'date'이므로 아래와 같이 명시해줍니다.
+          ['date', 'date'] 
+        ],
+        include: [
+          {
+            model: db.Store,
+            as: 'store', 
+            attributes: ['name']
+          }
+        ]
+      }
+    ],
+    order: [['createdAt', 'DESC']],
+    transaction: t
+  });
+}
+
+/**
+ * 기사님이 작성한 문의 조회
+ */
+async function inquiryFindByCleanerId(t = null, cleanerId) {
+  return await Inquiry.findAll({
+    where: { 
+      cleanerId: cleanerId 
+    },
+    attributes: [
+      'id', 
+      'title', 
+      'category', 
+      'content', 
+      'status', 
+      'ownerId',
+      'createdAt',
+    ],
     order: [['createdAt', 'DESC']],
     transaction: t
   });
@@ -156,4 +199,5 @@ export default {
   reservationFindTodayByCleanerId,
   reservationFindSettlementPending,
   reviewFindByCleanerId,
+  inquiryFindByCleanerId,
 };

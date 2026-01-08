@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import ProtectedRouter from "./ProtectedRouter.jsx";
 import App from "../App";
 import Main from "../components/main/Main.jsx";
 import QnaPost from "../components/posts/QnaPost.jsx";
@@ -18,6 +19,7 @@ import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
 import CleanersQuotationsPreparationSave from "../components/cleaners/CleanersQuotationsPreparationSave.jsx";
 import CleanersUserQuotationsShow from "../components/cleaners/CleanersUserQuotationsShow.jsx";
 import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
+
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
@@ -164,62 +166,83 @@ const router = createBrowserRouter([
           }
         ]
       },
-      // 결제 관련 라우트 추가
+      // -------------------------------------
+      // 결제 관련 라우트 추가 (ProtectedRouter)
+      // -------------------------------------
       {
-        path: '/payment',
-        element: <Outlet />,
+        element: <ProtectedRouter />,
         children: [
           {
-            path: 'success',
-            element: <PaymentSuccess />
+            path: '/payment',
+            element: <Outlet />,
+            children: [
+              {
+                path: 'success',
+                element: <PaymentSuccess />
+              },
+              {
+                path: 'fail',
+                element: <PaymentFail />
+              }
+            ]
+          },      
+        ]
+      },
+      // -----------------------------------------------------
+      // 채팅 관련 라우트(기사, 점주만 이용 가능 / ProtectedRouter)
+      // -----------------------------------------------------
+      {
+        element: <ProtectedRouter />,
+        children: [
+          {
+            path: '/chatroom/:id',
+            element: <ChatMain />
           },
           {
-            path: 'fail',
-            element: <PaymentFail />
-          }
+            path: '/chatlist',
+            element: <ChatList />
+          },
         ]
-      },      
-      // 채팅 관련 라우트
-      {
-        path: '/chatroom/:id',
-        element: <ChatMain />
-      },
-      {
-        path: '/chatlist',
-        element: <ChatList />
       },
       {
         // 결과 페이지(ex. 문의가 등록되었습니다!)
         path: '/result',
         element: <Result />
       },
+      // -------------------------------------
+      // 관리자 페이지 (ProtectedRouter)
+      // -------------------------------------
       {
-        // 관리자페이지
-        path: '/hospital',
-        element: <Outlet />,
+        element: <ProtectedRouter />,
         children: [
           {
-            // 관리자 로그인
-            path: 'login',
-            element: <AdminLogin />
-          },
-          {
-            // 통합모니터링
-            path: '',
-            element: <AdminMain />
-          },
-          {
-            // 기사 프로필 관리 페이지
-            path: 'cleanerprofile',
-            element: <AdminCleanerProfile />
-          },
-          {
-            // 문의 관리 페이지
-            path: 'qna',
-            element: <AdminQna />
+            path: '/hospital',
+            element: <Outlet />,
+            children: [
+              {
+                // 관리자 로그인
+                path: 'login',
+                element: <AdminLogin />
+              },
+              {
+                // 통합모니터링
+                path: '',
+                element: <AdminMain />
+              },
+              {
+                // 기사 프로필 관리 페이지
+                path: 'cleanerprofile',
+                element: <AdminCleanerProfile />
+              },
+              {
+                // 문의 관리 페이지
+                path: 'qna',
+                element: <AdminQna />
+              }
+            ]
           }
         ]
-      }
+      },
     ]
   }]
 );

@@ -116,53 +116,54 @@ async function reissue(token) {
   // 1. 토큰 검증 및 유저id 획득
   const claims = jwtUtil.getClaimsWithVerifyToken(token);
   const userId = claims.id || claims.sub;
+  const userRole = claims.role; 
 
-  let user = null;
-    const payloadData = {
-      id: userId,
-      role: ROLE.OWNER // 기본값 설정
-  };
+  if(!userRole) {
+    throw myError('토큰에 권한 정보가 없습니다.', REISSUE_ERROR);
+  }
 
   return await db.sequelize.transaction(async t => {
-    // 2. 점주 테이블에서 유저 찾기
-    user = await ownerRepository.findByPk(t, userId);
+    let user = null;
 
-    if(!user) {
-      // 3. 점주가 없다면 청소 기사 테이블에서 찾기
+    if(userRole === ROLE.OWNER) {
+      user = await ownerRepository.findByPk(t, userId);
+    } else if (userRole === ROLE.CLEANER) {
       user = await cleanerRepository.findByPk(t, userId);
-      payloadData.role = ROLE.CLEANER // 찾았으니 role을 기사로 변경
     }
 
-    // 4. 어느 테이블에도 유저가 없는 경우
+    // 유저가 없는 경우
     if (!user) {
       throw myError('유효하지 않은 유저 정보입니다.', REISSUE_ERROR);
     }
 
-    // 5. DB에 저장된 리프레시 토큰과 클라이언트가 보낸 토큰 비교
+    // 리프레시 토큰 비교 
     if(token !== user.refreshToken) {
       throw myError('리프래시 토큰 불일치', REISSUE_ERROR);
     }
 
-    // 6. JWT 생성
+    // 새로운 페이로드 구성 
+    const payloadData = { id: userId, role: userRole };
+
+    // 새로운 토큰 생성 
     const accessToken = jwtUtil.generateAccessToken(payloadData);
     const refreshToken = jwtUtil.generateRefreshToken(payloadData);
 
-    // 7. 리프래시 토큰 DB에 저장
+    // DB 업데이트 
     user.refreshToken = refreshToken;
     await user.save({transaction: t});
 
-    // 8. DB에서 가져온 순수 데이터만 추출 
+    // DB에서 가져온 순수 데이터만 추출 
     const userResponse = user.toJSON();
 
     // DB에는 없는 'role' 정보를 수동으로 주입 (프론트 권한 체크용)
-    userResponse.role = payloadData.role;
+    userResponse.role = userRole;
 
     // 9. 최종 반환 
     return {
       accessToken,
       refreshToken,
       user: userResponse, // 정리된 유저 객체 반환
-    }
+    };
   });
 } 
 

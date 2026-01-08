@@ -65,6 +65,13 @@ const attributes = {
     field: 'approved_at',
     type: DataTypes.DATE,
     allowNull: true,
+    get() {
+      const val = this.getDataValue('createdAt')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+    }, 
     comment: '결제 승인 일시',
   },
   receiptUrl: {
@@ -72,6 +79,25 @@ const attributes = {
     type: DataTypes.TEXT,
     allowNull: true,
     comment: '영수증 주소',
+  },
+  cancelReason: {
+    field: 'cancel_reason',
+    type: DataTypes.STRING(200),
+    allowNull: true,
+    comment: '취소 이유',
+  },
+  cancelAt: {
+    field: 'cancel_at',
+    type: DataTypes.DATE,
+    allowNull: true,
+    get() {
+      const val = this.getDataValue('createdAt')
+      if(!val) {
+        return null;
+      }
+      return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
+    }, 
+    comment: '취소 날짜',
   },
   createdAt: {
     field: 'created_at',

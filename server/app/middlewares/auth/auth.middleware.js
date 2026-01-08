@@ -1,5 +1,5 @@
 /**
- * @file /app/middlewares/auth/admin.middleware.js
+ * @file /app/middlewares/auth/auth.middleware.js
  * @description 관리자 인증 및 인가 처리 미들웨어
  * 260106 v1.0.0 yh init
  */

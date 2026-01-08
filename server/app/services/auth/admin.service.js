@@ -7,7 +7,7 @@
 import bcrypt from 'bcrypt';
 import adminRepository from '../../repositories/auth/admin.repository.js';
 import myError from '../../errors/customs/my.error.js';
-import { NOT_REGISTERED_ERROR } from '../../../configs/responseCode.config.js';
+import { NOT_REGISTERED_ERROR, REISSUE_ERROR } from '../../../configs/responseCode.config.js';
 import jwtUtil from '../../utils/jwt/jwt.util.js';
 import db from '../../models/index.js';
 
