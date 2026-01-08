@@ -51,32 +51,46 @@ const PaymentSuccess = () => {
   }, []);
 
   return (
-    <div className="payment-success-container">
-      {status === "processing" && <h2>결제 승인 처리 중입니다...</h2>}
-
-      {status === "success" && (
-        <div className="payment-success-box">
-          <div></div>
-          <h2 className="payment-success-title">결제가 완료되었습니다!</h2>
-          <p className="payment-success-desc">기사님과의 예약이 정상적으로 확정되었습니다.</p>
-          
-          <div className="payment-success-button-group">
-            <button className="payment-move-action" onClick={() => navigate("/owners/mypage")}>
-              마이페이지로 이동
-            </button>
-            <button className="payment-move-action" onClick={() => navigate("/")}>
-              홈으로 가기
-            </button>
+    <div className="payment-success-overlay">
+      <div className="payment-success-container">
+        
+        {/* 결제 승인 중 (Loading) */}
+        {status === "processing" && (
+          <div className="payment-success-processing-status">
+            <h2 className="payment-success-status-title">결제 승인 중입니다</h2>
+            <p className="payment-success-status-desc">잠시만 기다려 주시면 예약이 확정됩니다.</p>
           </div>
-        </div>
-      )}
+        )}
 
-      {status === "error" && (
-        <div>
-          <h2>결제 승인에 실패했습니다.</h2>
-          <button onClick={() => navigate(-1)}>다시 시도</button>
-        </div>
-      )}
+        {/* 결제 완료 (Success) */}
+        {status === "success" && (
+          <div className="payment-success-content">
+            <div className="payment-success-icon-box">
+              <span className="payment-success-check">✓</span>
+            </div>
+            <h2 className="payment-success-status-title">결제가 완료되었습니다!</h2>
+            <p className="payment-success-status-desc">
+              기사님과의 예약이 정상적으로 확정되었습니다.
+            </p>
+            
+            <div className="payment-success-button-group">
+              <button 
+                className="payment-success-button-primary" 
+                onClick={() => navigate("/owners/mypage")}
+              >
+                예약 내역 확인
+              </button>
+              <button 
+                className="payment-success-button-secondary" 
+                onClick={() => navigate("/")}
+              >
+                홈으로 가기
+              </button>
+            </div>
+          </div>
+        )}
+        
+      </div>
     </div>
   );
 };
