@@ -31,6 +31,7 @@ import QuestionOption from './QuestionOption.js';
 import ReservationImage from './ReservationImage.js';
 import VirtualAccount from './VirtualAccount.js';
 import CleanerAccount from './CleanerAccount.js';
+import Notification from './Notification.js';
 
 const db = {}; // 생성할 db 인스턴스 저장용 
 // Sequelize 인스턴스 생성
@@ -57,7 +58,6 @@ const sequelize = new Sequelize(
 );
 
 db.sequelize = sequelize; // 생성한 sequelize 인스턴스 db에 저장
-db.Sequelize = Sequelize;
 
 // 모델 초기화
 db.Owner = Owner.init(sequelize);
@@ -85,6 +85,7 @@ db.Adjustment = Adjustment.init(sequelize);
 db.ReservationImage = ReservationImage.init(sequelize);
 db.VirtualAccount = VirtualAccount.init(sequelize);
 db.CleanerAccount = CleanerAccount.init(sequelize);
+db.Notification = Notification.init(sequelize);
 
 // 모델 관계 설정
 Owner.associate(db);
@@ -112,5 +113,6 @@ Adjustment.associate(db);
 ReservationImage.associate(db);
 VirtualAccount.associate(db);
 CleanerAccount.associate(db);
+Notification.associate(db);
 
 export default db;

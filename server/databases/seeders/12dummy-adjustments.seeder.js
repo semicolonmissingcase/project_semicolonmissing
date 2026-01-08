@@ -4,6 +4,7 @@
  * 231231 v1.0.0 jae init
  */
 import db from '../../app/models/index.js';
+import modelsConstants from '../../app/constants/models.constants.js';
 const { Adjustment } = db;
 
 // 테이블명 (down 메소드에서 사용)
@@ -19,11 +20,8 @@ export default {
         estimateId: 2,
         reservationId: 3,
         paymentId: 1,
-        bank: 'IBK기업은행',
-        depositor: '곽기사',
-        accountNumber: '000-00000-00-000',
-        status: '완료',
-        settlementAmount: 250000,
+        status: '지급 대기',
+        settlementAmount: 300000,
       },
     ];
 

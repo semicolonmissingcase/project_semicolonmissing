@@ -35,14 +35,25 @@ const EstimateStatus = {
   COMPLETED: '결제 완료'
 };
 
+// 정산 관련 상태값
+const AdjustmentStatus = {
+  READY: '정산 대기',
+  PENDING: '지급 대기',
+  COMPLETED: '정산 완료',
+  HOLD: '보류',
+  CANCELED: '정산 취소'
+};
+
 Object.freeze(ReservationStatus);
 Object.freeze(PaymentStatus);
 Object.freeze(IsAssignStatus);
 Object.freeze(EstimateStatus);
+Object.freeze(AdjustmentStatus);
 
 export default {
   ReservationStatus,
   PaymentStatus,
   IsAssignStatus,
   EstimateStatus,
+  AdjustmentStatus,
 }

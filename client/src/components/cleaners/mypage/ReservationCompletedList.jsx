@@ -88,7 +88,7 @@ export default function ReservationCompletedList() {
             </div>
           ))
         ) : (
-          <div className="no-data">현재 대기 중인 작업이 없습니다.</div>
+          <div className="reservatuin-no-data">현재 대기 중인 작업이 없습니다.</div>
         )}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import AdminLayout from "../AdminLayout.jsx";
+import AdminLayout from "../pages/AdminLayout.jsx";
 import TableUi from "../../posts/table/TableUi.jsx";
 import "./AdminMain.css";
 // 아이콘용

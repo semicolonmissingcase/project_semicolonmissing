@@ -57,7 +57,7 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
       
       <div className="ChatSidebarProfile-profile-section">
         <img 
-          src={data.cleanerImageUrl || 'https://via.placeholder.com/64'} 
+          src={data.cleanerImageUrl ||'/icons/default-profile.png'} 
           alt={`${data.cleanerName} 프로필`} 
           className="ChatSidebarProfile-avatar" 
         />
