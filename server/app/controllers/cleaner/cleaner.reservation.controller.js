@@ -4,6 +4,9 @@
  * 260106 seon init
  */
 import cleanerMypageRepository from '../../repositories/cleaner/cleaner.mypage.repository.js';
+import constants from '../../constants/models.constants.js';
+
+const { ReservationStatus } = constants;
 
 /**
  * 대기 작업 목록 조회
@@ -86,6 +89,35 @@ async function updateReservationStatus(req, res, next) {
 }
 
 /**
+ * 정산 요약 정보 조회 (추가됨 ✨)
+ */
+async function getSettlementSummary(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: "인증 정보가 없습니다." });
+    }
+
+    const { id } = req.user;
+    const { yearMonth } = req.query; 
+    const targetDate = yearMonth || new Date().toISOString().slice(0, 7);
+
+    const summary = await cleanerMypageRepository.settlementFindSummaryByCleanerId(null, {
+      cleanerId: id,
+      yearMonth: targetDate
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: `${targetDate} 정산 요약 조회 성공`,
+      data: summary
+    });
+  } catch (error) {
+    console.error("❌ getSettlementSummary Error:", error);
+    next(error);
+  }
+}
+
+/**
  * 기사님에게 작성된 리뷰 목록 조회
  */
 async function getCleanerReviews(req, res, next) {
@@ -138,5 +170,6 @@ export default {
   getTodayJobs,
   updateReservationStatus,
   getCleanerReviews,
-  getCleanerInquiries
+  getCleanerInquiries,
+  getSettlementSummary
 };
