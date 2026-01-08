@@ -72,7 +72,7 @@ function CleanerAccountSave() {
             <p className="cleaners-account-edit-new-account-message">정산 계좌 설정</p>
           </div>
 
-          <div className={toggleNew ? "cleaners-account-edit-toggle-updown-new-contents-toggledown" : "cleaners-account-edit-toggle-updown-new-contents"}>
+          <div className={toggleNew ? "cleaners-account-edit-toggle-updown-new-contents-closed" : "cleaners-account-edit-toggle-updown-new-contents"}>
             <div className="cleaners-account-edit-form-edit">
               
               {/* 1. 계좌가 없거나 수정 모드가 아닐 때 보여주는 UI */}
@@ -100,9 +100,9 @@ function CleanerAccountSave() {
                   <form className="cleaners-account-edit-form" onSubmit={openSaveModal}>
                     <span className="cleaners-account-edit-remove-layout">
                       <label className="cleaners-account-edit-account-title">정산 계좌 정보 입력</label>
-                      <FaRegTrashCan 
-                      onClick={openCancelModal}
-                      size={20}/>
+                      <button type="reset" onClick={openCancelModal}>
+                      <FaRegTrashCan size={20}/>
+                      </button>
                     </span>
 
                     <span className="cleaners-account-edit-layout-inputs">

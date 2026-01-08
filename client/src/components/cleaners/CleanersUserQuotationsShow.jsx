@@ -253,7 +253,7 @@ function CleanersUserQuotationsShow () {
             </div>
           </div>
 
-          <button type="submit" className="btn-medium bg-light">요청 수락하기</button>
+          <button type="submit" className="btn-medium bg-light">견적서 보내기</button>
         </form>
       </div>
     </>
