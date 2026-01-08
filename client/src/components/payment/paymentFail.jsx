@@ -1,3 +1,9 @@
+/**
+ * @file src/components/payment/paymentFail.jsx 
+ * @description 토스 페이먼츠 결제 실패 후 나오는 페이지
+ * 260108 v1.0.0 jae init
+ */
+
 import { useSearchParams } from 'react-router-dom';
 
 const PaymentFail = () => {
