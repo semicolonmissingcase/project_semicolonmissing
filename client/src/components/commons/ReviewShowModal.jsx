@@ -3,7 +3,6 @@ import './ReviewShowModal.css';
 import { getReviewsDetails } from '../../api/axiosPost.js';
 
 const API_BASE_URL = import.meta.env.VITE_APP_SERVER_URL;
-console.log("API_BASE_URL:", API_BASE_URL);
 
 export default function ReviewShowModal({ isOpen, onClose, reviewId }) {
   const [review, setReview] = useState(null);

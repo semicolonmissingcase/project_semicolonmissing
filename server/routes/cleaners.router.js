@@ -5,6 +5,7 @@ import cleanerQuotationsController from '../app/controllers/cleaner/cleaner.quot
 import cleanerAccountController from '../app/controllers/cleaner/cleaner.account.controller.js';
 import cleanerQuotationsValidator from '../app/middlewares/validations/validatiors/cleaner/cleaner.quotations.validator.js';
 import validationHandler from '../app/middlewares/validations/validationHandler.js';
+import cleanerProfileController from '../app/controllers/cleaner/cleaner.profile.controller.js';
 
 const cleanersRouter = express.Router();
 
@@ -16,5 +17,8 @@ cleanersRouter.get('/mypage/settlement', authMiddleware, cleanerReservationContr
 cleanersRouter.get('/quotations', authMiddleware, cleanerQuotationsController.index); // 최신 견적요청서 리스트 조회
 cleanersRouter.post('/quotations', authMiddleware, cleanerQuotationsValidator.quotationsStore, validationHandler, cleanerQuotationsController.store); // 견적 요청서 요청 확인 작성
 cleanersRouter.get('/accountinfo', authMiddleware, cleanerAccountController.getCleanerAccounts);
+
+// ck 작업
+cleanersRouter.put('/mypage/info', authMiddleware, cleanerProfileController.updateInfo); // 점주 정보 수정
 
 export default cleanersRouter;

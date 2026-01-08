@@ -1,0 +1,105 @@
+.owner-pw-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.owner-pw-modal-container {
+  background-color: #ffffff;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.owner-pw-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.owner-pw-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.owner-pw-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+}
+
+.owner-pw-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.owner-pw-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.owner-pw-modal-field label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.owner-pw-modal-input {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f1f5f9; /* 기사용 페이지 인풋 배경색 반영 */
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.owner-pw-modal-input:focus {
+  border-color: #4a5f97;
+}
+
+.owner-pw-modal-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.owner-pw-modal-btn-cancel,
+.owner-pw-modal-btn-submit {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.owner-pw-modal-btn-cancel {
+  background-color: #e2e8f0;
+  color: #333;
+}
+
+.owner-pw-modal-btn-submit {
+  background-color: #4a5f97; /* 기사용 페이지 포인트 컬러 반영 */
+  color: #ffffff;
+}
+
+.owner-pw-modal-btn-submit:hover {
+  background-color: #3b4d7a;
+}

@@ -1,36 +1,24 @@
-import db from "../../models/index.js";
-const { Cleaner, CleanerLocation } = db;
+/**
+ * @file app/services/cleaner/cleaner.profile.service.js
+ * @description 기사님 정보 관련 Service
+ * 260108 CK init
+ */
 
-async function updateProfile(cleanerId, data, file) {
-  const { name, introduction, experience, locations } = data;
-  const locationIds = typeof locations === 'string' ? JSON.parse(locations) : locations;
+import cleanerProfileRepository from '../../repositories/cleaner/cleaner.profile.repository.js';
 
-  // [임시] 경력 데이터 로그 출력 (DB 컬럼 추가 전까지)
-  if (experience) console.log(`[Temp Save] Cleaner(${cleanerId}) Experience: ${experience}`);
+/**
+ * 기사 정보 수정 
+ */
+async function updateCleaner(id, role, updateData) {
+  const updatedCleaner = await cleanerProfileRepository.updateCleaner(id, updateData);
 
-  return await db.sequelize.transaction(async t => {
-    const updateData = { name, introduction };
-    
-    // 사진이 업로드된 경우 경로 저장
-    if (file) {
-      updateData.profile = `/uploads/profiles/${file.filename}`;
-    }
+  if(!updatedCleaner) {
+    throw new Error("정보를 찾을 수 없습니다.");
+  }
 
-    // 1. 기사님 정보 업데이트
-    await Cleaner.update(updateData, { where: { id: cleanerId }, transaction: t });
-
-    // 2. 기존 지역 매핑 삭제 후 새 지역 등록
-    await CleanerLocation.destroy({ where: { cleaner_id: cleanerId }, transaction: t });
-
-    const locationMappings = locationIds.map(locId => ({
-      cleaner_id: cleanerId,
-      location_id: locId
-    }));
-
-    await CleanerLocation.bulkCreate(locationMappings, { transaction: t });
-
-    return { success: true, profile: updateData.profile };
-  });
+  return updatedCleaner;
 }
 
-export default { updateProfile };
+export default {
+  updateCleaner,
+}

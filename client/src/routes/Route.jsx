@@ -100,7 +100,7 @@ const router = createBrowserRouter([
           },
           {
             // 기사 프로필 수정 페이지
-            path: 'profileedit/:id',
+            path: 'profileedit',
             element: <CleanersProfileEdit />,
           },
           { 

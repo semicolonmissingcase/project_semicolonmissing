@@ -55,6 +55,7 @@ const ROLE_PERMISSIONS = {
   ],
   PUT: [
     { path: /^\/api\/auth\/me$/, roles: [OWNER] }, // 점주 정보수정용
+    { path: /^\/api\/cleaners\/mypage\/info$/, roles: [CLEANER] }, // 기사님 정보 수정
     { path: /^\/api\/owners\/mypage\/profile$/, roles: [OWNER] }, // 점주 프로필용
   ],
   DELETE: [

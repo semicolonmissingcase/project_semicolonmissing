@@ -1,308 +1,233 @@
-/* 부모: 일반 클래스명인 경우 */
-.cleaners-profile-edit-profile-title {
-  display: grid;
-  grid-template-columns: 1fr; /* 칸을 나누지 않고 하나로 합침 */
-  justify-items: center;      /* 가로 가운데 정렬 */
-  margin-top: 1rem;
+/* 컨테이너 */
+.cleaner-profile-edit-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  background-color: #fff;
+  min-height: 100vh;
 }
 
-.cleaners-profile-edit-container {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.cleaners-profile-edit-items-box {
-  border: 1px solid var(--color-gray);
-  border-radius: 15px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.cleaner-profile-edit-card {
   width: 100%;
-}
-
-.cleaners-profile-edit-layout {
-  display: grid;
-}
-
-
-.cleaners-profile-edit-title {
-  font-size: 1.5rem;
-  font-weight: bold;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
+}
+
+/* 프로필 헤더 및 이미지 */
+.cleaner-profile-edit-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.cleaner-profile-edit-img-container {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin-bottom: 15px;
+}
+
+.cleaner-profile-edit-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  border: 4px solid #b2d8d8; /* 이미지에 나타난 민트 테두리 */
+  background-color: #f8f9fa;
+}
+
+.cleaner-profile-edit-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #fff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  background-image: url("/icons/edit-icon.png"); /* 연필 아이콘 */
+  background-position: center;
+  background-size: 60%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cleaner-profile-edit-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cleaner-profile-edit-input-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  width: auto;
+  text-align: center;
+  max-width: 200px;
+}
+
+.cleaner-profile-edit-icon-pencil-small {
+  width: 18px;
+  height: 18px;
+  background: url("/icons/edit-icon.png") no-repeat center / contain;
   cursor: pointer;
 }
 
-.cleaners-profile-edit-image {
-  display: grid;
-  border-radius: 5px;
+.cleaner-profile-edit-email {
+  color: #888;
+  font-size: 0.95rem;
+  margin-top: 4px;
 }
 
-.cleaners-profile-edit-image-edit {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 5px;
-}
-
-.cleaners-profile-edit-layout-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-}
-
-.cleaners-profile-edit-layout-flex-column {
-  padding: 10px;
+/* 입력 폼 바디 */
+.cleaner-profile-edit-body {
   display: flex;
   flex-direction: column;
+  gap: 25px;
+}
+
+.cleaner-profile-edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cleaner-profile-edit-field label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.cleaner-profile-edit-textarea,
+.cleaner-profile-edit-file-name-box {
+  background-color: #f1f5f9; /* 이미지 가이드 회색 배경 */
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 1rem;
+}
+
+.cleaner-profile-edit-textarea {
+  height: 120px;
+  resize: none;
+}
+
+/* 파일 업로드 행 */
+.cleaner-profile-edit-file-row {
+  display: flex;
   gap: 10px;
-  width: 100%;
 }
 
-.cleaners-profile-edit-layout-flex-column > label {
-  border: soild 1px var(--color-gray);
-  font-size: 18px;
-  border-radius: 5px;
-  width: 100%;
-}
-
-.cleaners-profile-edit-input {
-  height: 43px;
-  border-radius: 5px;
-  border: solid 1px var(--color-gray);
-}
-
-.cleaners-profile-edit-attachment {
+.cleaner-profile-edit-file-name-box {
+  flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  color: #666;
 }
 
-.cleaners-profile-edit-attachment-title {
-  font-size: 18px;
-  text-indent: 10px;
-  margin-top: 1rem;
+.file-remove-x {
+  cursor: pointer;
+  color: #999;
+  font-weight: bold;
 }
 
-.cleaners-profile-edit-attachment-button {
-  width: 90px;
-  height: 30px;
-  font-size: 16px;
-  border-radius: 5px;
-  white-space: nowrap;
-  border: none;
-  text-align: center;
-  background-color: var(--color-light-gray);
+.cleaner-profile-edit-btn-upload {
+  background-color: #4a5f97; /* 브랜드 블루 */
+  color: #fff;
+  padding: 0 20px;
+  height: 54px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-left: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.cleaners-profile-edit-attachment-input {
-  display: none;
-}
-
-.cleaners-profile-edit-button-small-custom2 {
-  width: 80px;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: var(--color-light-gray);
-  white-space: nowrap;
-}
-
-.cleaners-profile-edit-buttons {
-  display: flex;
-  gap: 60px;
-  justify-content: end;
-  padding: 0 30px 30px 0;
-}
-
-.cleaners-profile-edit-region-picker {
-  position: relative;
-}
-
-.cleaners-profile-edit-region-panel {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  background: #fff;
-  border: 1px solid var(--color-gray);
-  border-radius: 15px;
-  z-index: 100;
-  overflow: hidden;
-  transition: width 0.3s ease;
-}
-
-.cleaners-profile-edit-region-panel.is-left-only {
-  width: 160px;
-}
-
-.cleaners-profile-edit-region-panel.is-split {
-  width: 520px;
-  max-width: 90vw;
-  min-width: 270px;
-}
-
-.cleaners-profile-edit-region-panel-body {
-  display: grid;
-  height: 100%;
-}
-
-.cleaners-profile-edit-region-panel-body.is-split {
-  grid-template-columns: 130px 1fr;
-}
-
-.cleaners-profile-edit-region-panel-body.is-left-only {
-  grid-template-columns: 1fr;
-}
-
-.cleaners-profile-edit-modal-text-button {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.cleaners-profile-edit-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;     
-  justify-content: center; 
-  z-index: 9999;  
-}
-
-.cleaners-profile-edit-last-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;     
-  justify-content: center; 
-  z-index: 9999;    
-}
-
-.cleaners-profile-edit-modal-box {
-  width: min(360px, 90%);
-  height: min(200px, 90%);
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  font-size: 16px;
-}
-
-.cleaners-profile-edit-last-modal-box {
-  width: min(360px, 90%);
-  height: min(200px, 90%);
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  font-size: 16px;
-}
-
-.cleaners-profile-edit-modal-button {
-  width: 80px;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: var(--color-light-gray);
-  white-space: nowrap;
-}
-
-.cleaners-profile-edit-modal-cancel-submit-text-button {
-  padding-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.cleaners-profile-edit-modcleaners-profile-edit-attachment-titleal-button-row {
+/* 하단 버튼 */
+.cleaner-profile-edit-footer {
   display: flex;
   gap: 12px;
+  margin-top: 40px;
+}
+
+.cleaner-profile-edit-btn-cancel,
+.cleaner-profile-edit-btn-submit {
+  flex: 1;
+  height: 56px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.cleaner-profile-edit-btn-cancel {
+  background-color: #e2e8f0;
+  color: #333;
+}
+
+.cleaner-profile-edit-btn-submit {
+  background-color: #4a5f97;
+  color: #fff;
+}
+
+/* 모달 스타일 */
+.cleaner-profile-edit-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
   justify-content: center;
-  width: 100%;
+  align-items: center;
+  z-index: 1000;
 }
 
-.cleaners-profile-edit-ul-title {
-  list-style: none;
+.cleaner-profile-edit-modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 380px;
+  width: 90%;
 }
 
-@media (min-width: 1200px) {
-
-  .cleaners-profile-edit-region-panel.is-left-only {                                                              
-  width: 250px;    
-  }
-  .cleaners-profile-edit-region-panel.is-split {                                                                  
-  width: 420px !important;  
-  }
+.cleaner-profile-edit-modal-preview-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 20px 0;
+  border: 4px solid #f1f5f9;
 }
 
-@media (max-width: 1200px) and (min-width: 830px) {
-  .cleaners-profile-edit-region-panel.is-split {                                                                  
-  width: 360px !important;      
-}   
+.cleaner-profile-edit-modal-btns {
+  display: flex;
+  gap: 10px;
 }
 
-@media (max-width: 830px) and (min-width: 714px) {
-  .cleaners-profile-edit-region-panel.is-split {                                                                  
-  width: 320px !important;      
-}   
+.cleaner-profile-edit-modal-btn-cancel,
+.cleaner-profile-edit-modal-btn-save {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-@media (max-width: 714px) {
-  .cleaners-profile-edit-profile-title {
-    justify-content: center;
-  }
+.cleaner-profile-edit-modal-btn-cancel { background: #e2e8f0; }
+.cleaner-profile-edit-modal-btn-save { background: #4a5f97; color: #fff; }
 
-  .cleaners-profile-edit-region-panel.is-split {                                                                  
-  width: 80% !important;    
- }  
-}
-
-@media (min-width: 535px) and (max-width: 745px) {                                                                                                                                  
-  .cleaners-profile-edit-region-panel.is-left-only {                                                              
-  width: 270px;                                                                                              
-} 
-
-.cleaners-profile-edit-region-panel.is-split {                                                                  
-  width: 80% !important;    
-}  
-
-}                                                                                           
-                                                                                                            
- @media ( max-width: 534px ) {
-  .cleaners-profile-edit-region-picker-trigger,
-  .cleaners-profile-edit-input {                                                                  
-  width: 100%;                                                                                             
-  }    
-  
-  .cleaners-profile-edit-layout-row {
-    grid-template-columns: 1fr;
-  }
-
-  .cleaners-profile-edit-region-panel.is-split {                                                                  
-  width: 250px; 
-  }           
-}
-
-@media (max-width: 370px) {
-.cleaners-profile-edit-region-panel.is-split {                                                                  
-  width: 200px !important;           
-  }
+/* 미디어 쿼리 */
+@media (max-width: 480px) {
+  .cleaner-profile-edit-card { padding: 10px; }
+  .cleaner-profile-edit-btn-upload { padding: 0 15px; font-size: 0.9rem; }
 }
