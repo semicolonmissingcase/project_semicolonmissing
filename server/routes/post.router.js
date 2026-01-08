@@ -40,6 +40,6 @@ postsRouter.get('/owner/reviews/:reviewId', authMiddleware, ownerInquiryControll
 // 리뷰 작성
 postsRouter.post('/owner/reviews', authMiddleware, reviewUploader, reviewCreateValidator, ownerInquiryController.createReview);
 // 리뷰 삭제
-// postsRouter.delete('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.deleteReview);
+postsRouter.delete('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.deleteReview);
 
 export default postsRouter;

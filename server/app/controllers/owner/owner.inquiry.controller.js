@@ -293,6 +293,25 @@ async function createReview(req, res, next) {
   }
 };
 
+/**
+ * 점주 리뷰 삭제
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+async function deleteReview(req, res, next) {
+  try {
+    const ownerId = req.user.id;
+    const { reviewId } = req.params;
+
+    await ownerInquiryService.deleteReviews(Number(reviewId), ownerId);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, null, '리뷰가 성공적으로 삭제되었습니다.'));
+  } catch (error) {
+    next(error);
+  }
+}
+
 export default {
   ownerCreateInquiry,
   getOwnerInquiries,
@@ -304,4 +323,5 @@ export default {
   getCompletedReservations,
   getReviewDetails,
   createReview,
+  deleteReview,
 }

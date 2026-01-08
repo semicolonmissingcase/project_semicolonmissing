@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './MyReviews.css';
-import { getOwnerReviews, getCompletedReservations } from '../../../api/axiosPost.js';
+import { getOwnerReviews, getCompletedReservations, deleteReview } from '../../../api/axiosPost.js';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
 import ReviewModal from '../../commons/ReviewModal.jsx'; 
 import ReviewShowModal from '../../commons/ReviewShowModal.jsx'; 
@@ -64,15 +64,15 @@ export default function MyReviews() {
   const handleDeleteReview = async (reviewId) => {
     if (window.confirm("정말 이 리뷰를 삭제하시겠습니까?")) {
       try {
-        // TODO: await deleteReviewApi(reviewId); // 실제 삭제 API 호출
-        console.log("리뷰 삭제 ID:", reviewId);
-        
-        // 삭제 성공 후 리스트에서 즉시 제거
+        await deleteReview(reviewId);
+
+        fetchReviews();
+
         setReviews(prev => prev.filter(r => r.id !== reviewId));
         alert("리뷰가 삭제되었습니다.");
       } catch (err) {
         console.error("리뷰 삭제 실패:", err);
-        alert("삭제 중 오류가 발생했습니다.");
+        alert(`리뷰 삭제에 실패했습니다: ${err.message || err.msg || '알 수 없는 오류'}`);
       }
     }
   };
@@ -122,7 +122,7 @@ export default function MyReviews() {
             </button>
             <button 
               className="myreviews-action-btn myreviews-delete bg-red"
-              onClick={() => handleDeleteReview(item.reviewId || item.id)}
+              onClick={() => handleDeleteReview(item.id)}
             >
               삭제하기
             </button>

@@ -188,6 +188,7 @@ async function findCompletedReservations(ownerId) {
         model: Review,
         as: 'reviews',
         required: false,
+        attributes: ['id'],
       },
       {
         model: Cleaner,
@@ -208,7 +209,8 @@ async function findCompletedReservations(ownerId) {
         required: false,
       },
     ],
-    order: [['date', 'DESC']],
+    having: Sequelize.literal('COUNT(reviews.id) = 0'),
+    group: ['reservation.id', 'store.id', 'cleaner.id'],
   });
 
   // 리뷰 작성 전 필터
@@ -312,6 +314,18 @@ async function createReview(reviewData) {
   return newReview;
 }
 
+/**
+ * 리뷰 삭제
+ * @param {number} reviewData 
+ * @param {number} ownerId 
+ * @returns 
+ */
+async function deleteReview(reviewId, ownerId) {
+  return await Review.destroy({
+    where: { id: reviewId, ownerId: ownerId },
+  });
+}
+
 export default {
   createInquiry,
   findInquiriesByOwnerId,
@@ -321,4 +335,5 @@ export default {
   findCompletedReservations,
   findReviewByIdAndOwnerId,
   createReview,
+  deleteReview,
 }

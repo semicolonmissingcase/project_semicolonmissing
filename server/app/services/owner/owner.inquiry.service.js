@@ -4,6 +4,8 @@
  * 260102 CK init
  */
 
+import { BAD_REQUEST_ERROR } from "../../../configs/responseCode.config.js";
+import myError from "../../errors/customs/my.error.js";
 import ownerInquiryRepository from "../../repositories/owner/owner.inquiry.repository.js";
 import dayjs from "dayjs";
 
@@ -165,6 +167,16 @@ async function createReview(ownerId, reviewBody) {
   return newReview;
 }
 
+/**
+ * 리뷰 삭제
+ */
+async function deleteReviews(reviewId, ownerId) {
+  const deletedCount = await ownerInquiryRepository.deleteReview(reviewId, ownerId);
+  if(deletedCount === 0) {
+    throw myError('삭제할 리뷰를 찾을 수 없거나 삭제 권한이 없습니다.', BAD_REQUEST_ERROR);
+  }
+  return deletedCount;
+}
 
 export default {
   createInquiry,
@@ -175,4 +187,5 @@ export default {
   getCompletedReservationsForReview,
   getReviewDetails,
   createReview,
+  deleteReviews,
 }

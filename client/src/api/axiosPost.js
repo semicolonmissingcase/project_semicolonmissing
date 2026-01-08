@@ -89,3 +89,14 @@ export const createReview = async (formData) => {
     throw error;
   }
 };
+
+// 리뷰 삭제
+export const deleteReview = async (reviewId) => {
+  try {
+    const response = await axiosInstance.delete(`${POST_API_URL}/owner/reviews/${reviewId}`)
+    return response.data;
+  } catch (error) {
+    console.error(`리뷰(${reviewId}) 삭제 실패:`, error);
+    throw error;
+  }
+};
