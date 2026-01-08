@@ -6,8 +6,11 @@
 
 import db from '../../models/index.js';
 import { Op } from 'sequelize';
+import dayjs from 'dayjs';
+import constants from '../../constants/models.constants.js'
 
-const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry } = db;
+const { ReservationStatus, AdjustmentStatus } = constants;
+const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry, Adjustment } = db;
 
 /**
  * 기사님용 대기 작업 조회
@@ -15,10 +18,14 @@ const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Quest
 async function reservationFindPendingByCleanerIdAndRole(t = null, { cleanerId, userRole }) {
   if (!userRole) return [];
 
+  const todayString = dayjs().format('YYYY-MM-DD');
+
   return await Reservation.findAll({
     where: {
       cleanerId: cleanerId,
-      status: '승인'
+      status: ReservationStatus.APPROVED,
+      date: {
+        [Op.gte]: todayString }
     },
     attributes: ['id', 'date', 'time', 'status', 'createdAt'],
     include: [
@@ -31,7 +38,10 @@ async function reservationFindPendingByCleanerIdAndRole(t = null, { cleanerId, u
       { model: Owner, as: 'owner', required: true, attributes: ['id', 'name'] },
       { model: Store, as: 'store', required: false, attributes: ['id', 'name', 'addr1'] }
     ],
-    order: [['createdAt', 'ASC']], 
+    order: [
+      ['date', 'ASC'], 
+      ['time', 'ASC']
+    ], 
     transaction: t
   });
 }
@@ -107,7 +117,7 @@ async function reservationFindTodayByCleanerId(t = null, { cleanerId, userRole }
   return await Reservation.findAll({
     where: {
       cleanerId: cleanerId,
-      status: '승인',
+      status: ReservationStatus.APPROVED,
       date: todayString
     },
     include: [
@@ -128,7 +138,7 @@ async function reservationFindTodayByCleanerId(t = null, { cleanerId, userRole }
  */
 async function reservationFindSettlementPending(t = null, cleanerId) {
   return await Reservation.findAll({
-    where: { cleanerId: cleanerId, status: '완료' },
+    where: { cleanerId: cleanerId, status: ReservationStatus.COMPLETED },
     include: [
       { 
         model: Estimate, 
@@ -191,6 +201,42 @@ async function inquiryFindByCleanerId(t = null, cleanerId) {
   });
 }
 
+/**
+ * 기사님 정산 요약 정보 조회 (당월 합계)
+ */
+async function settlementFindSummaryByCleanerId(t = null, { cleanerId, yearMonth }) {
+  const startOfMonth = dayjs(yearMonth).startOf('month').format('YYYY-MM-DD HH:mm:ss');
+  const endOfMonth = dayjs(yearMonth).endOf('month').format('YYYY-MM-DD HH:mm:ss');
+
+  const results = await Adjustment.findAll({
+    where: {
+      cleaner_id: cleanerId,
+      created_at: { [Op.between]: [startOfMonth, endOfMonth] }
+    },
+    attributes: [
+      'status',
+      [sequelize.fn('SUM', sequelize.col('settlement_amount')), 'totalSum']
+    ],
+    group: ['status'],
+    raw: true,
+    transaction: t
+  });
+
+  const summary = { pending: 0, completed: 0 };
+
+  results.forEach(row => {
+    const amount = parseInt(row.totalSum || 0, 10);
+    
+    if (row.status === AdjustmentStatus.PENDING) { // '지급 대기'
+      summary.pending = amount;
+    } else if (row.status === AdjustmentStatus.COMPLETED) { // '정산 완료'
+      summary.completed = amount;
+    }
+  });
+
+  return summary;
+}
+
 export default {
   reservationFindPendingByCleanerIdAndRole,
   reservationFindById,
@@ -200,4 +246,5 @@ export default {
   reservationFindSettlementPending,
   reviewFindByCleanerId,
   inquiryFindByCleanerId,
+  settlementFindSummaryByCleanerId,
 };
