@@ -7,7 +7,7 @@
   import { IoChevronForward } from "react-icons/io5";
   import  CleanersTopSummary  from "../cleaners-settlement-status/CleanersTopSummary.jsx";
   import  CleanersListItem  from "../cleaners-settlement-status/CleanersListItem.jsx";
-  import "./CleanersSettlementStatus.css";
+  import "./SettlementMain.css";
 
   // --- Mock Data ---
  const DUMMY_JOBS = [
