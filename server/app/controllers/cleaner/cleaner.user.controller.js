@@ -1,41 +1,74 @@
 /**
  * @file app/controllers/cleaners/cleaner.user.controller.js
- * @description user 관련 컨트롤러
- * 251230 v1.0.0 yh init
+ * @description 기사 회원가입 컨트롤러
+ * 20260108 yh init
  */
 
+import db from '../../models/index.js';
 import { SUCCESS } from "../../../configs/responseCode.config.js";
 import { createBaseResponse } from "../../../app/utils/createBaseResponse.util.js";
-import usersService from "../../services/cleaner/cleaners.user.service.js";
+
+
+async function registerCleaner(req, res, next) {
+
+    const {
+        name, gender, email, password, phoneNumber,
+        locationId 
+    } = req.body;
+    
  
+    const hashedPassword = password; 
+    
+    const validLocationIds = locationId 
+        ? (Array.isArray(locationId) ? locationId : [locationId]) //
+            .map(id => parseInt(id))
+            .filter(id => !isNaN(id))
+        : [];
+    
+    // 트랜잭션 시작
+    const transaction = await db.sequelize.transaction();
 
-/**
- * 회원가입 작성
- * @param {import("express").Request} req - Request 객체
- * @param {import("express").Response} res - Response 객체
- * @param {import("express").NextFunction} next - NextFunction 객체 
- * @returns
- */
+    try {
+       
+        const newCleaner = await db.Cleaner.create({
+            name,
+            gender,
+            email,
+            password,
+            phoneNumber,
+            provider: req.params.provider || req.body.provider || 'NONE',
+        }, { transaction });
 
-  async function registerCleaner(req, res, next) {
-  try {
-    const data = {
-      ...req.body,
-  
-      provider: req.params.provider || req.body.provider || 'NONE',
-    };
+        const cleanerId = newCleaner.id;
 
-    // 데이터가 잘 들어오는지 디버깅용 로그 (나중에 지우세요)
-    console.log("전송된 데이터 확인:", data);
 
-    const result = await usersService.store(data);
+        if (validLocationIds.length > 0) {
+            // 2. DriverRegion 데이터 생성 (지역 연결)
+            const regionRecords = validLocationIds.map(locationId => ({
+                cleanerId: cleanerId,
+                locationId: locationId, 
+            }));
 
-    return res.json(createBaseResponse(SUCCESS, result));
-  } catch (err) {
-    next(err);
-  }
+            await db.DriverRegion.bulkCreate(regionRecords, { transaction });
+        }
+
+        // 3. 트랜잭션 커밋
+        await transaction.commit();
+
+        // 4. 최종 응답 전송
+        return res.json(createBaseResponse(SUCCESS, newCleaner));
+        
+    } catch (err) {
+        // 5. 오류 발생 시 롤백
+        await transaction.rollback();
+        
+        // 6. 상세 에러 로그 출력 및 에러 핸들러로 이동
+        console.error('트랜잭션 중 에러 발생:', err.name, err.message, err.errors);
+        next(err);
+    }
 }
 
+
 export default {
-  registerCleaner
+    registerCleaner,
 }

@@ -248,6 +248,7 @@
   border-radius: 1rem;
   text-align: center;
   font-size: 0.9rem;  
+  margin-bottom: 0.5rem;
 }
 
 .cleaners-registration-selected-locations-badge {
@@ -304,7 +305,7 @@
   border: 2px solid var(--color-light-gray);
   border-radius: 15px;
   padding: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 30px;  
   height: 300px;
 }
 
