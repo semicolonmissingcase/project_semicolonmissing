@@ -92,12 +92,12 @@ async function getOwnerStats(ownerId) {
  * 점주 예약 목록 조회
  * @param {number} ownerId 
  */
-async function getOwnerReservations(ownerId) {
+async function getOwnerReservationsList(ownerId) {
   return await ownerUserRepository.getReservationsByOwnerId(ownerId);
 }
 
 export default {
   store,
   getOwnerStats,
-  getOwnerReservations,
+  getOwnerReservationsList,
 }

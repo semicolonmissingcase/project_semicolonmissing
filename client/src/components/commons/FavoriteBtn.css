@@ -1,8 +1,9 @@
 .favoritebtn-button {
-  color: var(--color-red);
-  transition: color 0.2s ease-in-out;
-  font-size: 1.5rem;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
 }
 
 .favoritebtn-button.favoritebtn-favorited {
@@ -17,11 +18,8 @@
   transform: scale(1.1);
 }
 
-.favoritebtn-button {
-  opacity: 0.6;
-}
-
 .favoritebtn-loading-spinner {
+  position: absolute;
   margin-left: 5px;
   font-size: 0.8rem;
 }

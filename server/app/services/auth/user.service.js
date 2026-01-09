@@ -334,7 +334,6 @@ async function getMe(id, role) {
 async function updateOwner(userId, role, updateData) {
   // 점주가 아닐 경우
   if(role !== ROLE.OWNER) {
-    throw myError('점주만 정보를 볼 수 있습니다.', FORBIDDEN_ERROR);
   }
   // 허용된 필드만 업뎃
   // 업데이트할 데이터 객체 생성(전화번호, 이미지)
@@ -343,7 +342,7 @@ async function updateOwner(userId, role, updateData) {
     fieldsToUpdate.name = updateData.name;
   } 
   if(updateData.phone !== undefined) {
-    fieldsToUpdate.phone = updateData.phone;
+    fieldsToUpdate.phoneNumber = updateData.phone;
   }
   if(updateData.profile !== undefined) {
     fieldsToUpdate.profile = updateData.profile;
@@ -352,7 +351,7 @@ async function updateOwner(userId, role, updateData) {
   // 트랜잭션 시작
   return await db.sequelize.transaction(async t => {
     // 리포지토리를 통해 db업뎃
-    await ownerRepository.updateById(t, userId, fieldsToUpdate);
+    const [affectedRows] = await ownerRepository.updateById(t, userId, fieldsToUpdate);
     
     // 업데이트된 정보 다시 조회 반환
     const updatedUserInstance = await ownerRepository.findByPk(t, userId);

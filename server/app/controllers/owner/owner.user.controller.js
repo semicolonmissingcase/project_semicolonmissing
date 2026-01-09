@@ -73,7 +73,7 @@ async function getOwnerStats(req, res, next) {
 async function getEstimateByOwnerId(req, res, next) {
   try {
     const ownerId = req.user.id;
-    const stats = await ownerUserService.getOwnerReservations(ownerId);
+    const stats = await ownerUserService.getOwnerReservationsList(ownerId);
 
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, stats));
   } catch (error) {

@@ -15,7 +15,7 @@ export default function ConfirmModal({ isOpen, onClose, config }) {
         </div>
         
         <div className="custom-modal-footer">
-          {/* 취소 버튼이 있을 때만 렌더링 (이미지 속 연한 회색 스타일) */}
+          {/* 취소 버튼이 있을 때만 렌더링 */}
           {cancelText && (
             <button className="custom-modal-btn btn-cancel" onClick={onClose}>
               {cancelText}

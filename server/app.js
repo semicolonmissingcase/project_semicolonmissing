@@ -41,6 +41,7 @@ app.use(cookieParser()); // 쿠키 파서
 app.use('/storage/images/posts', express.static('storage/images/posts'));
 app.use('/storage/images/profiles', express.static('storage/images/profiles'));
 app.use('/storage/images/chat', express.static('storage/images/chat'));
+app.use('/uploads', express.static('uploads'));
 
 // -----------------
 // 라우터 정의

@@ -4,9 +4,12 @@
  * 260102 v1.0.0 ck init
  */
 
+import models from '../../constants/models.constants.js';
+const { ReservationStatus } = models
+import { Sequelize } from 'sequelize';
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
-const { Inquiry, Owner, Cleaner, Admin, Answer, Review, Reservation, Store} = db;
+const { Inquiry, Owner, Cleaner, Admin, Answer, Review, Reservation, Store, Like, Estimate } = db;
 
 /**
  * 점주 문의 생성
@@ -99,6 +102,7 @@ async function findAllInquiries(limit, offset) {
   return { count, rows };
 }
 
+// -----------------------리뷰관련----------------------- 
 /**
  * 점주 ID로 리뷰 목록 조회
  * @param {number} ownderId 
@@ -111,6 +115,140 @@ async function findReviewsByOwnerId(ownerId) {
         model: Cleaner,
         as: 'cleaner',
         attributes: ['id', 'name', 'profile'],
+        required: true,
+        include: [{
+          model: Like, 
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }]
+      },
+      {
+        model: Reservation,
+        as: 'reservationData',
+        attributes: ['id', 'date', 'time', 'status'],
+        required: false,
+        include: [
+          {
+            model: Store,
+            as: 'store',
+            attributes: ['name'],
+            required: false,
+          },
+          {
+            model: Estimate,
+            as: 'estimate',
+            attributes: ['estimatedAmount'],
+            required: false,
+          }
+        ]
+      },
+    ],
+    order: [['createdAt', 'DESC']],
+    replacements: { ownerId: ownerId },
+  });
+  return reviews.map(review => {
+    const plainReview = review.get({ plain: true });
+    const heartStatus = plainReview.cleaner?.likes?.length > 0;
+    const estimatedAmount = plainReview.reservationData?.estimate?.estimatedAmount;
+    const price = estimatedAmount ? estimatedAmount.toLocaleString() : '정보없음';
+
+    return {
+      id: plainReview.id,
+      name: plainReview.cleaner?.name || '기사님 정보 없음',
+      cleanerProfile: plainReview.cleaner?.profile || '/icons/default-profile.png',
+      heart: heartStatus,
+      time: `${dayjs(plainReview.reservationData?.date).format('YYYY-MM-DD')} ${plainReview.reservationData?.time}`,
+      store: plainReview.reservationData?.store?.name || '매장 정보 없음',
+      price: price,
+      star: plainReview.star,
+      content: plainReview.content,
+      createdAt: plainReview.createdAt,
+      cleanerId: plainReview.cleaner?.id,
+    };
+  });
+}
+
+/**
+ * 점주ID로 '완료'상태인 예약 목록 조회(리뷰 작성해야하는 거)
+ * @param {number} ownerId 
+ */
+async function findCompletedReservations(ownerId) {
+  const reservations = await Reservation.findAll({
+    where: {
+      ownerId: ownerId,
+      status: ReservationStatus.COMPLETED,
+      [db.Sequelize.Op.and]: db.Sequelize.literal(`(
+        SELECT COUNT(*) FROM reviews WHERE reviews.reservation_id = Reservation.id
+        ) = 0`),
+    },
+    include: [
+      {
+        model: Review,
+        as: 'reviews',
+        required: false,
+        attributes: ['id'],
+      },
+      {
+        model: Cleaner,
+        as: 'cleaner',
+        attributes: ['id', 'name', 'profile'],
+        required: false,
+      },
+      {
+        model: Store,
+        as: 'store',
+        attributes: ['name'],
+        required: false,
+      },
+      {
+        model: Estimate,
+        as: 'estimate',
+        attributes: ['estimatedAmount'],
+        required: false,
+      },
+    ],
+    having: Sequelize.literal('COUNT(reviews.id) = 0'),
+    group: ['reservation.id', 'store.id', 'cleaner.id'],
+  });
+
+  // 리뷰 작성 전 필터
+  return reservations.filter(reservation => !(reservation.reviews && reservation.reviews.length > 0));
+}
+
+/**
+ * 점주 내 특정 리뷰 상세 조회
+ * @param {number} reviewId 
+ * @param {number} ownerId 
+ */
+async function findReviewByIdAndOwnerId(reviewId, ownerId) {
+  const review = await Review.findOne({
+    where: {
+      id: reviewId,
+      ownerId: ownerId,
+    },
+    include: [
+      {
+        model: Cleaner,
+        as: 'cleaner',
+        attributes: [ 
+          'id', 'name', 'profile', 
+          [
+            Sequelize.literal(`(
+              SELECT COALESCE(AVG(star), 0)
+              FROM reviews
+              WHERE reviews.cleaner_id = cleaner.id
+            )`), 'avgReviewScore'
+          ]
+        ],
+        include: [{
+          model: Like,
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }],
       },
       {
         model: Reservation,
@@ -121,28 +259,70 @@ async function findReviewsByOwnerId(ownerId) {
             model: Store,
             as: 'store',
             attributes: ['name'],
-          }
-        ]
+          },
+          {
+            model: Estimate,
+            as: 'estimate',
+            attributes: ['estimatedAmount'],
+            required: false,
+          },
+        ],
       },
     ],
-    order: [['createdAt', 'DESC']],
   });
-  return reviews.map(review => {
-    const plainReview = review.get({ plain: true });
 
-    return {
-      id: plainReview.id,
-      status: plainReview.status,
-      name: plainReview.cleaner?.name || '기사님 정보 없음',
-      cleanerProfile: plainReview.cleaner?.profile || '/icons/default-profile.png',
-      heart: false,
-      time: `${dayjs(plainReview.reservationData?.date).format('YYYY-MM-DD')}${plainReview.reservationData?.time}`,
-      store: plainReview.reservationData?.store?.name || '매장 정보 없음',
-      price: '정보 없음',
-      star: plainReview.star,
-      content: plainReview.content,
-      createdAt: plainReview.createdAt,
-    };
+  if(!review) {
+    return null;
+  }
+
+  const plainReview = review.get({ plain: true });
+
+  const heartStatus = plainReview.cleaner?.likes?.length > 0;
+  const avgReviewScore = plainReview.cleaner?.avgReviewScore
+      ? Number(plainReview.cleaner.avgReviewScore).toFixed(1)
+      : '0.0';
+  const price = plainReview.reservationData?.estimate?.estimatedAmount
+      ? plainReview.reservationData.estimate.estimatedAmount.toLocaleString()
+      : '미정';
+  
+  return {
+    id: plainReview.id,
+    cleanerId: plainReview.cleaner?.id,
+    cleanerName: plainReview.cleaner?.name || '정보 없음',
+    cleanerProfile: plainReview.cleaner?.profile || '/icons/default-profile.png',
+    avgReviewScore: avgReviewScore,
+    reservationDate: plainReview.reservationData?.date,
+    reservationTime: plainReview.reservationData?.time,
+    storeName: plainReview.reservationData?.store?.name || '정보 없음',
+    price: price,
+    star: plainReview.star,
+    content: plainReview.content,
+    reviewPicture1: plainReview.reviewPicture1,
+    reviewPicture2: plainReview.reviewPicture2,
+    createdAt: plainReview.createdAt,
+    heart: heartStatus,
+  };
+}
+
+/**
+ * 리뷰 생성
+ * @param {object} reviewData 
+ * @returns 
+ */
+async function createReview(reviewData) {
+  const newReview = await Review.create(reviewData);
+  return newReview;
+}
+
+/**
+ * 리뷰 삭제
+ * @param {number} reviewData 
+ * @param {number} ownerId 
+ * @returns 
+ */
+async function deleteReview(reviewId, ownerId) {
+  return await Review.destroy({
+    where: { id: reviewId, ownerId: ownerId },
   });
 }
 
@@ -152,4 +332,8 @@ export default {
   findInquiryByIdAndOwnerId,
   findAllInquiries,
   findReviewsByOwnerId,
+  findCompletedReservations,
+  findReviewByIdAndOwnerId,
+  createReview,
+  deleteReview,
 }

@@ -37,7 +37,7 @@ const inquiryImageUploader = multer({
     }
     cb(null, true);
   },
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5mb
 }).fields([
   { name: 'inquiryPicture1', maxCount: 1 },
   { name: 'inquiryPicture2', maxCount: 1 }
