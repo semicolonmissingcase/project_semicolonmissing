@@ -43,6 +43,12 @@ const attributes = {
     allowNull: false,
     comment: '발신자 유형 (ADMIN, SYSTEM)',
   },
+  type: {
+    field: 'type',
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    comment: '알림 유형',
+  },
   title: {
     field: 'title',
     type: DataTypes.STRING(200),
