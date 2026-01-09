@@ -15,12 +15,13 @@ async function updateInfo(req, res, next) {
 
     const { id, role } = req.user;
     const updateData = req.body;
+    const files = req.files;
 
     if (!id || !role) {
       return res.status(UNAUTHORIZED_ERROR.status).send(createBaseResponse(UNAUTHORIZED_ERROR));
     }
     
-    const updatedCleaner = await cleanerProfileService.updateCleaner(id, role, updateData);
+    const updatedCleaner = await cleanerProfileService.updateCleaner(id, role, updateData, files);
 
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { user: updatedCleaner }));
   } catch (err) {

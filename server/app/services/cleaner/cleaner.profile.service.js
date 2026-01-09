@@ -12,18 +12,75 @@ import bcrypt from "bcrypt";
 /**
  * 기사 정보 수정 
  */
-async function updateCleaner(id, role, updateData) {
-  if(updateData.password) {
-    console.log("비밀번호 해싱 로직을 여기에 구현해야 합니다."); // TODO: 실제 해싱 로직으로 대체
+/**
+ * 기사 정보 수정 (확장)
+ */
+async function updateCleaner(id, role, updateData, files) {
+  const t = await db.sequelize.transaction(); // 트랜잭션 시작
+
+  try {
+    const cleanerUpdateData = { ...updateData };
+
+    // 프로필 이미지 처리
+    if (files && files.profileImage) {
+      const newPath = files.profileImage[0].path;      
+      cleanerUpdateData.profile = newPath;
+    }
+
+    // 기본 정보 업데이트 
+    await cleanerProfileRepository.updateCleaner(id, cleanerUpdateData, t);
+
+    // 자격증 처리
+    if (files && files.certificateFiles) {
+      const newCertificates = files.certificateFiles.map(file => ({
+        cleanerId: id,
+        path: file.path,
+      }));
+
+      // 기존 자격증 DB에서 삭제 후 새로 추가
+      await cleanerProfileRepository.deleteCertificationsByCleanerId(id, t);
+      await cleanerProfileRepository.createCertifications(newCertificates, t);
+    }
+
+    // 작업 지역 처리
+    if (updateData.regions) {
+      const regionIds = JSON.parse(updateData.regions); // 프론트에서 '[1,2,3]' 형태의 JSON 문자열로 보냈다고 가정
+      const newDriverRegions = regionIds.map(locationId => ({
+        cleanerId: id,
+        locationId: locationId,
+      }));
+
+      // 기존 작업 지역 DB에서 삭제 후 새로 추가
+      await cleanerProfileRepository.deleteDriverRegionsByCleanerId(id, t);
+      await cleanerProfileRepository.createDriverRegions(newDriverRegions, t);
+    }
+
+    // 모든 작업이 성공
+    await t.commit();
+
+    // 최종적으로 업데이트된 기사 정보를 다시 조회하여 반환
+    const updatedCleaner = await cleanerProfileRepository.findById(id);
+    return updatedCleaner;
+
+  } catch (error) {
+    // 에러 발생 시 트랜잭션 롤백
+    await t.rollback();
+
+    // 롤백 후 업로드된 파일이 있다면 삭제
+    if (files) {
+      if (files.profileImage) {
+        await fs.unlink(files.profileImage[0].path).catch(err => console.error("임시 프로필 파일 삭제 실패:", err));
+      }
+      if (files.certificateFiles) {
+        for (const file of files.certificateFiles) {
+          await fs.unlink(file.path).catch(err => console.error("임시 자격증 파일 삭제 실패:", err));
+        }
+      }
+    }
+
+    // 에러를 상위로 전파
+    throw error;
   }
-
-  const updatedCleaner = await cleanerProfileRepository.updateCleaner(id, updateData);
-
-  if(!updatedCleaner) {
-    throw new Error("정보를 찾을 수 없습니다.");
-  }
-
-  return updatedCleaner;
 }
 
 /**
