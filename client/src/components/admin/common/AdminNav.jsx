@@ -37,7 +37,7 @@ export default function AdminNav() {
 
         {isDriverOpen && (
           <ul className="admin-nav-submenu">
-            <li className="admin-nav-subitem">프로필</li>
+            <li className="admin-nav-subitem" onClick={() => navigate('cleaners/profiles')}>프로필</li>
             <li className="admin-nav-subitem">작업 내역</li>
           </ul>
         )}

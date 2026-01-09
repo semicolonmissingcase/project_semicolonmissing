@@ -1,7 +1,7 @@
 /**
  * @file app/services/admin/admin.cleaners.service.js
  * @description 관리자 cleaners service
- * 260107 v1.0.0 yh init
+ * 260107 v1.0.0 pbj init
  */
 
 import adminCleanersRepositorie from "../../repositories/admin/admin.cleaners.repositorie.js"
@@ -12,12 +12,13 @@ async function getProfiles({limit, offset}) {
 }
 
 async function getStatistics() {
-  const now = dayjs().startOf('day').format('YYYY-MM-DD HH:mi:ss');
+  const nowStartOfDay = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+  const yesterdayEndOfDay = dayjs().add(-1, 'day').endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
   const totalCnt = await adminCleanersRepositorie.findCleanersCount(null);
-  // const newCnt = await adminCleanersRepositorie.findCleanersCount(null, { startAt:  });
-  const oldCnt = await adminCleanersRepositorie.findCleanersCount(null);
-  const withdrawCnt = await adminCleanersRepositorie.findCleanersCount(null);
+  const newCnt = await adminCleanersRepositorie.findCleanersCount(null, { startAt: nowStartOfDay });
+  const oldCnt = await adminCleanersRepositorie.findCleanersCount(null, { endAt: yesterdayEndOfDay });
+  const withdrawCnt = await adminCleanersRepositorie.findCleanersCount(null, { isWithdraw: true });
   return { totalCnt, newCnt, oldCnt, withdrawCnt };
 }
 

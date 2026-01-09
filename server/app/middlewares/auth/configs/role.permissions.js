@@ -21,14 +21,16 @@ const ROLE_PERMISSIONS = {
     {path: /^\/api\/posts\/owner\/inquiries\/\d+$/, roles: [OWNER, CLEANER] }, // 내 문의 상세 조회
     {path: /^\/api\/cleaners\/mypage\/pending$/, roles: [CLEANER],}, // 대기 작업 조회
     {path: /^\/api\/cleaners\/mypage\/today$/, roles: [CLEANER],},   // 오늘 일정 조회
-    {path: /^\/api\/cleaners\/mypage\/qna$/, roles: [CLEANER] }, // 기사님 문의
-    {path: /^\/api\/cleaners\/mypage\/reviews$/, roles: [CLEANER] }, // 기사님 본인 리뷰 조회
     {path: /^\/api\/posts\/owner\/reviews$/, roles: [OWNER],}, // 리뷰 조회
-    {path: /^\/api\/chat\/rooms$/, roles: [OWNER, CLEANER] }, // 채팅방 목록 조회
-    {path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅 메시지 내역 조회
-    {path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
-    {path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
-    {path: /^\/api\/owners\/quotations$/, roles: [OWNER],}, // 견적 리스트 조회
+    { path: /^\/api\/chat\/rooms$/, roles: [OWNER, CLEANER] }, // 채팅방 목록 조회
+    { path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅 메시지 내역 조회
+    { path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
+    { path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
+    { path: /^\/api\/owners\/quotations$/, roles: [OWNER] }, // 견적 리스트 조회
+    // -------------------------
+    // 관리자 관련
+    // -------------------------
+    { path: /^\/api\/admin\/cleaners\/profiles$/, roles: [ADMIN] }, // 관리자 기사 관리 조회
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },

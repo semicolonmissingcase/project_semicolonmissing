@@ -10,6 +10,7 @@ import myError from '../../errors/customs/my.error.js';
 import { NOT_REGISTERED_ERROR, REISSUE_ERROR } from '../../../configs/responseCode.config.js';
 import jwtUtil from '../../utils/jwt/jwt.util.js';
 import db from '../../models/index.js';
+import ROLE from '../../middlewares/auth/configs/role.enum.js';
 
 /**
  * 관리사 로그인 
@@ -81,6 +82,7 @@ async function reissue(token) {
     // 관리자 정보 획득
     // 관리자 정보 획득
     const admin = await adminRepository.findByPk(t, adminId);
+    admin.role = ROLE.ADMIN;
 
     // 토큰 일치 검증
     if(token !== admin.refreshToken) {
