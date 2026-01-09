@@ -16,12 +16,13 @@
 }
 
 .cleaners-account-edit-account-management-title {
+  display: flex;
   align-items: center;
 }
 
 .cleaners-account-edit-new-account-message {
   display: inline-block;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
 
@@ -70,16 +71,15 @@
 .cleaners-account-edit-button {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 1.4rem;
+  margin-top: 10px;
 }
 
 .cleaners-account-edit-cancel-button,
 .cleaners-account-edit-submit-button {
-  padding: 10px;
+  padding: 0.7rem 2rem;
   border-radius: 5px;
-  border: 1px solid var(--color-gray);
+  background-color: var(--color-light-gray);
   white-space: nowrap;
 }
 
@@ -105,7 +105,7 @@
 }
 
 .cleaners-account-edit-account-info-message {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
 
@@ -146,9 +146,10 @@
   font-size: 0.9rem;
 }
 
-.cleaners-account-edit-trash-icon {
-  cursor: pointer;
-  color: var(--color-danger);
+.cleaners-account-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 /* Media Query 조정 */

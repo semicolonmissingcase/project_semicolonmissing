@@ -263,7 +263,7 @@ export default function CleanersInfoEdit() {
                 <p className="cleaners-info-settlement-desc">※ 정산 계좌 정보가 없습니다.</p>
               </div>
                 <button type="button" className="cleaners-info-btn-add-account"
-                onClick={() => navigate('/cleaners/accountsave')}>
+                onClick={() => navigate('/cleaners/accountedit')}>
                   정산 계좌 추가
                 </button>
               </>

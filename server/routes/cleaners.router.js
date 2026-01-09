@@ -15,17 +15,19 @@ cleanersRouter.get('/mypage/today', authMiddleware, cleanerReservationController
 cleanersRouter.get('/mypage/qna', authMiddleware, cleanerReservationController.getCleanerInquiries );
 cleanersRouter.get('/mypage/reviews', authMiddleware, cleanerReservationController.getCleanerReviews);
 cleanersRouter.get('/mypage/settlement', authMiddleware, cleanerReservationController.getSettlementSummary);
+
+// 기사님 신규 요청 /상세 요청 사항
 cleanersRouter.get('/quotations', authMiddleware, cleanerQuotationsController.index); // 최신 견적요청서 리스트 조회
 cleanersRouter.post('/quotations', authMiddleware, cleanerQuotationsValidator.quotationsStore, validationHandler, cleanerQuotationsController.store); // 견적 요청서 요청 확인 작성
-cleanersRouter.get('/accountinfo', authMiddleware, cleanerAccountController.getCleanerAccounts); // 계좌 조회
 
 // 기사님 정보/프로필 수정 작업라우터
 cleanersRouter.put('/mypage/info', authMiddleware, cleanerProfileController.updateInfo); // 기사 정보 수정
 cleanersRouter.put('/mypage/password', authMiddleware, cleanerProfileController.changePassword); //기사 비밀번호 수정
 
-cleanersRouter.get(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.getAccounts);
-cleanersRouter.post(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.createAccount);
-cleanersRouter.put(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.updateAccount);
-cleanersRouter.delete(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.deleteAccount);
+// 기사님 계좌 조회/생성/수정/삭제
+cleanersRouter.get(`/accounts`, authMiddleware, cleanerAccountController.getAccounts); //계좌 조회
+cleanersRouter.post(`/accounts`, authMiddleware, cleanerAccountController.createAccount); // 계좌 생성
+cleanersRouter.put(`/accounts`, authMiddleware, cleanerAccountController.updateAccount); // 계좌 수정
+cleanersRouter.delete(`/accounts`, authMiddleware, cleanerAccountController.deleteAccount); // 계좌 삭제
 
 export default cleanersRouter;

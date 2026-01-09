@@ -1,12 +1,11 @@
 import cleanerAccountService from '../../services/cleaner/cleaner.account.service.js';
 
-
 /**
  *  계좌 목록 조회
  */
 async function getAccounts(req, res) {
   try {
-    const { cleanerId } = req.params;
+    const { cleanerId } = req.body;
     const result = await cleanerAccountService.getAccounts(cleanerId);
     return res.status(200).json(result);
   } catch (error) {
@@ -19,13 +18,11 @@ async function getAccounts(req, res) {
  */
 async function createAccount(req, res) {
   try {
-    
-    const { cleanerId } = req.params; 
+    const { cleanerId } = req.body; 
     const accountData = {
       ...req.body,
       cleanerId: cleanerId 
     };
-
     const result = await cleanerAccountService.saveAccount(accountData);
     return res.status(201).json({ msg: "계좌가 등록되었습니다.", data: result });
   } catch (error) {
@@ -39,11 +36,9 @@ async function createAccount(req, res) {
  */
   async function updateAccount(req, res) {
   try {
-    const { cleanerId } = req.params; // 라우터의 :cleanerId
+    const { cleanerId } = req.body; 
     const { id, bankCode, accountNumber, depositor, isDefault } = req.body;
 
-    // 서비스 레이어 호출
-    // 첫 번째 인자는 계좌의 PK(id), 두 번째는 수정할 데이터 객체
     await cleanerAccountService.updateAccount(id, {
       cleanerId,      // 누가 수정했는지 확인용
       bankCode,       // 필드명이 모델(CleanerAccount.js)과 반드시 일치해야 함
@@ -64,7 +59,7 @@ async function createAccount(req, res) {
  */
 async function deleteAccount(req, res) {
   try {
-    const { cleanerId } = req.params;
+    const { cleanerId } = req.body;
 
     await cleanerAccountService.deleteAccount(cleanerId);
     return res.status(200).json({ msg: "계좌가 삭제되었습니다." });

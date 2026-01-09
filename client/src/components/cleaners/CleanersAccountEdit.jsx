@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCleaners } from "../../../src/store/slices/cleanersSlice.js";
@@ -11,7 +10,6 @@ import './CleanersAccountEdit.css';
 
 function CleanerAccountEdit() {
   const dispatch = useDispatch();
-  const { id } = useParams();
 
   const [toggleNew, setToggleNew] = useState(true);
   const [toggleInfo, setToggleInfo] = useState(false);
@@ -19,7 +17,7 @@ function CleanerAccountEdit() {
   const [loading, setLoading] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmType, setConfirmType] = useState("");
-  const { accounts } = useSelector((state) => state.cleaners);
+  const { accounts, cleanerId } = useSelector((state) => state.cleaners);
 
   useEffect(() => {
     // 리덕스에 계좌 데이터가 있다면 (보통 1개라고 가정)
@@ -55,22 +53,15 @@ function CleanerAccountEdit() {
     isDefault: false
   });
 
-  const { id: paramId } = useParams();
-
-  useEffect(() => {
+  useEffect((state) => {
     const fetchData = async () => {
-      //  파라미터(paramId)가 유효한지 먼저 확인
-      if (!paramId) {
-        console.warn("paramId가 정의되지 않았습니다.");
+      if (!state.cleanerId) {
+        console.warn("cleanerId가 정의되지 않았습니다.");
         return;
       }
-
       try {
         setLoading(true);
-
-
-        const result = await dispatch(cleanersThunk.fetchAccounts(paramId)).unwrap();
-
+        const result = await dispatch(cleanersThunk.fetchAccounts()).unwrap();
         if (Array.isArray(result) && result.length > 0) {
           const acc = result[0];
           setAccountInfo({
@@ -79,7 +70,6 @@ function CleanerAccountEdit() {
             bankCode: acc.bank_code || '',
             depositor: acc.depositor || '',
             accountNumber: acc.accountNumber || '',
-
             isDefault: Number(acc.is_default) === 1
           });
         } else if (result && !Array.isArray(result)) {
@@ -103,7 +93,8 @@ function CleanerAccountEdit() {
     };
 
     fetchData();
-  }, [dispatch, paramId]);
+
+  }, [dispatch]);
 
   //  핸들러 함수들
   const toggleMenuNew = () => setToggleNew(!toggleNew);
@@ -124,7 +115,7 @@ function CleanerAccountEdit() {
     if (confirmType === "save") {
       try {
         const payload = {
-          cleanerId: id,
+          cleanerId: cleanerId,
           accountData: {
             bankCode: accountInfo.bankCode,
             depositor: accountInfo.depositor,
@@ -176,12 +167,12 @@ function CleanerAccountEdit() {
       }
 
       //  삭제 Thunk 실행
-      await dispatch(cleanersThunk.deleteAccount(id)).unwrap();
+      await dispatch(cleanersThunk.deleteAccount(accountInfo.cleanerId)).unwrap();
 
       alert("삭제가 완료되었습니다.");
 
       //  목록 새로고침
-      dispatch(cleanersThunk.fetchAccounts(id));
+      dispatch(cleanersThunk.fetchAccounts(accountInfo.cleanerId));
 
       //  입력창 닫기
       setIsEditing(false);
@@ -197,9 +188,10 @@ function CleanerAccountEdit() {
     setAccountInfo((prev) => ({ ...prev, [name]: value }));
   };
 
+// -------------------- 이벤트 핸들러 --------------------
   const handleSave = () => {
     const payload = {
-      cleanerId: id, // useParams에서 가져온 cleaner id
+      cleanerId: cleanerId, 
       accountData: {
         bankCode: accountInfo.bankCode,
         accountNumber: accountInfo.accountNumber,
@@ -211,10 +203,11 @@ function CleanerAccountEdit() {
     dispatch(cleanersThunk.createAccount(payload));
   };
 
+// -------------------- 데이터 업데이트 로직 --------------------
   async function onUpdate() {
     try {
       const payload = {
-        cleanerId: id,
+        cleanerId: cleanerId,
         updateData: {
           id: accountInfo.id,         
           bankCode: accountInfo.bankCode,
@@ -231,6 +224,7 @@ function CleanerAccountEdit() {
     }
   }
 
+// -------------------- JSX 렌더링 --------------------
   return (
     <div className="all-container cleaners-account-edit-wrapper">
       {loading && <div className="loading-overlay">데이터를 불러오는 중...</div>}
@@ -257,7 +251,7 @@ function CleanerAccountEdit() {
                     </div>
                     {accountInfo.accountNumber ? (
                       <p className="cleaners-account-edit-account-message">
-                        현재 등록된 계좌: <strong>{accountInfo.bankCode} {accountInfo.accountNumber} {accountInfo.depositor}</strong>
+                        현재 등록된 계좌: <br /> <strong>{accountInfo.bankCode} {accountInfo.accountNumber} {accountInfo.depositor}</strong>
                       </p>
                     ) : (
                       <p className="cleaners-account-edit-account-message">정산에 사용할 계좌를 등록해 주세요.</p>
@@ -281,9 +275,12 @@ function CleanerAccountEdit() {
                         onChange={handleInputChange}
                       >
                         <option value="우리은행">우리은행</option>
-                        <option value="국민은행">국민은행</option>
+                        <option value="KB국민은행">국민은행</option>
                         <option value="신한은행">신한은행</option>
+                        <option value="KEB하나은행">KEB하나은행</option>
+                        <option value="iM뱅크">iM뱅크</option>
                         <option value="NH농협">NH농협</option>
+                        <option value="SH수협은행">SH수협은행</option>
                       </select>
 
                       <label>계좌번호</label>
