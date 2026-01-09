@@ -25,7 +25,7 @@ data : 출력할 데이터 배열
 // ----------------------------------------------
 
 columns: 출력할 데이터의 메타 정보를 가지고 있는 배열 (인덱스 순서대로 화면에 출력)
-  **타입**: Array<{accessorKey: string, columnName: string, valueUnit: string}>
+  **타입**: Array<{accessorKey: string, header: string, size: number, enableSorting: string, cell:function}>
     - accessorKey: `data`의 특정 속성명
       **타입**: {}
       예) `data`가 아래와 같다면, 'id', 'phoneNumber' 등을 셋팅

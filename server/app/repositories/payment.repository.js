@@ -74,7 +74,7 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
 
   // 견적서 상태 업데이트
   await db.Estimate.update({
-    status: EstimateStatus.COMPLETED
+    status: EstimateStatus.PAID
   }, {
     where: { reservationId: reservationId },
     transaction
@@ -94,7 +94,7 @@ async function updatePaymentAfterSuccess(paymentData, reservationId, transaction
   const paymentRecord = paymentResult.get({ plain: true });
   const targetEstimate = paymentRecord.estimate;
 
-  // 정산 데이터 주입
+  // 정산 데이터 생성
   if (db.Adjustment && targetEstimate) {
     const finalCleanerId = targetEstimate.cleanerId || targetEstimate.cleaner_id;
 
@@ -136,30 +136,35 @@ async function updateStatusAfterCancel(cancelData, reservationId, transaction) {
   }
 
   // 예약 테이블 업데이트
-  // 결제가 취소되었으므로 예약 상태 '취소'로 변경
+  // 결제가 취소되었지만, 점주가 다시 결제할 수 있게 변경
   await db.Reservation.update({
-    status: ReservationStatus.CANCELED
+    status: ReservationStatus.REQUEST
   }, {
     where: { id: reservationId },
     transaction
   });
 
   // 견적서 테이블 업데이트
-  // 견적 상태를 '수락'으로 변경
+  // 견적 상태를 '전송'으로 변경
   await db.Estimate.update({
-    status: EstimateStatus.ACCEPTED
+    status: EstimateStatus.SENT
   }, {
     where: { reservationId: reservationId },
     transaction
   });
 
   // 정산 테이블 업데이트
-  // 정산 상태를 '정산 취소'로 변경
+  // 결제 취소 건에 대한 정산은 무효화 처리
+  // 나중에 재결제 성공 시 새로운 정산 레코드 생성
   if (db.Adjustment) {
     await db.Adjustment.update({
       status: AdjustmentStatus.CANCELED, // '정산 취소'
     }, {
-      where: { reservationId: reservationId },
+      where:
+      {
+        reservationId: reservationId,
+        status: AdjustmentStatus.READY
+      },
       transaction
     });
   }

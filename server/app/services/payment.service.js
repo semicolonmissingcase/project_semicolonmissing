@@ -3,7 +3,7 @@ import db from '../models/index.js';
 import paymentRepository from '../repositories/payment.repository.js';
 import myError from '../errors/customs/my.error.js';
 import modelsConstants from '../constants/models.constants.js';
-const { PaymentStatus, ReservationStatus } = modelsConstants;
+const { PaymentStatus, ReservationStatus, IsAssignStatus } = modelsConstants;
 import {
   ALREADY_PROCESSED_ERROR,
   BAD_REQUEST_ERROR,
@@ -17,8 +17,21 @@ import {
  */
 async function readyPayment({ reservationId, userId }) {
   return await db.sequelize.transaction(async (t) => {
+    // 예약 정보 조회 (매장 및 기존 배정 기사 포함)
     const reservation = await db.Reservation.findOne({
       where: { id: reservationId, ownerId: userId },
+      include: [
+        {
+          model: db.Store,
+          as: 'store',
+          attributes: ['name', 'addr1', 'addr2'] // 매장명, 주소는 동까지만 나오게 하기
+        },
+        {
+          model: db.Cleaner,
+          as: 'cleaner',
+          attributes: ['name'] // 기사님 성함
+        }
+      ],
       transaction: t,
     });
 
@@ -30,6 +43,7 @@ async function readyPayment({ reservationId, userId }) {
       throw myError('이미 처리되었거나 진행중인 예약입니다.', ALREADY_PROCESSED_ERROR);
     }
 
+    // 견적서 정보 조회(결제 금액 및 배정할 기사 ID 확인)
     const estimate = await db.Estimate.findOne({
       where: { reservationId: reservation.id },
       transaction: t,
@@ -39,25 +53,44 @@ async function readyPayment({ reservationId, userId }) {
       throw myError('결제에 필요한 견적서 정보를 찾을 수 없습니다.', NOT_FOUND_ERROR);
     }
 
+    let finalCleanerName = null;
+
+    /**
+     * 기사 배정 로직
+    */
+    if (reservation.isAssign?.trim() === IsAssignStatus.NORMAL && !reservation.cleanerId) {
+      await reservation.update({
+        cleanerId: estimate.cleanerId,
+      }, { transaction: t });
+
+      const AssignedCleaner = await db.Cleaner.findByPk(estimate.cleanerId, {
+        attributes: ['name'],
+        transaction: t
+      });
+      finalCleanerName = AssignedCleaner?.name;
+    } else {
+      finalCleanerName = reservation.cleaner?.name;
+    }
+
     const orderId = `reservation_${reservation.id}_${new Date().getTime()}`;
 
+    // 결제 대기 생성
     await paymentRepository.createPendingPayment(
       {
         orderId: orderId,
         amount: estimate.estimatedAmount,
         reservationId: reservation.id,
         estimateId: estimate.id,
-      },
-      t
+      }, t
     );
-
-    // 예약 상태를 '대기'로 변경
-    await reservation.update({ status: ReservationStatus.PENDING }, { transaction: t });
 
     return {
       orderId: orderId,
       amount: estimate.estimatedAmount,
       reservationName: `제빙기 청소 예약 #${reservation.id}`,
+      storeName: reservation.store?.name,
+      storeAddress: `${reservation.store?.addr1} ${reservation.store?.addr2 || ''}`.trim(),
+      cleanerName: finalCleanerName,
     };
   });
 }
@@ -110,7 +143,8 @@ async function confirmPayment({ paymentKey, orderId, amount, userId }) {
 
     const tossResult = response.data;
 
-    // 4. 승인 성공 시 DB 상태 업데이트 
+    // 4. 승인 성공 시 DB 상태 업데이트 (결제, 예약, 견적서)
+    // 결제 정보 업데이트 
     await paymentRepository.updatePaymentAfterSuccess(
       {
         orderId: tossResult.orderId,
