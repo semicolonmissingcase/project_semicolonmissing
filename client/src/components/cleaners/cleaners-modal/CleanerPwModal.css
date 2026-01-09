@@ -70,7 +70,7 @@
 }
 
 .cleaner-pw-modal-input:focus {
-  border-color: #4a5f97;
+  border-color: var(--color-blue);
 }
 
 .cleaner-pw-modal-footer {
@@ -96,10 +96,14 @@
 }
 
 .cleaner-pw-modal-btn-submit {
-  background-color: #4a5f97; /* 기사용 페이지 포인트 컬러 반영 */
+  background-color: var(--color-blue); /* 기사용 페이지 포인트 컬러 반영 */
   color: #ffffff;
 }
 
 .cleaner-pw-modal-btn-submit:hover {
-  background-color: #3b4d7a;
+  background-color: var(--color-blue);
+}
+
+.cleaner-pw-modal-error {
+  color: var(--color-red);
 }

@@ -152,20 +152,45 @@
 
 /* 정산 안내 섹션 */
 .cleaners-info-settlement-info {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cleaners-info-settlement-comments {
+  display: flex;
+  align-items: center;
 }
 
 .cleaners-info-settlement-status {
   color: var(--color-red);
   font-weight: 700;
   font-size: 1.1rem;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.3rem 0;
 }
 
 .cleaners-info-settlement-desc {
   color: #999;
   font-size: 0.85rem;
   margin: 0;
+}
+
+.cleaners-info-btn-add-account { 
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.cleaners-info-btn-add-account:hover {
+  background-color: var(--color-blue-dark);
 }
 
 /* 하단 액션 버튼 */

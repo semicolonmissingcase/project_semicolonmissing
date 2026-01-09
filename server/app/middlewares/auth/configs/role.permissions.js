@@ -31,6 +31,7 @@ const ROLE_PERMISSIONS = {
     {path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
     {path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
     {path: /^\/api\/owners\/quotations$/, roles: [OWNER],}, // 견적 리스트 조회
+    { path: /^\/api\/cleaners\/accountinfo$/, roles: [CLEANER] }, // 기사님 계좌 조회
     // -------------------------
     // 관리자 관련
     // -------------------------
@@ -59,8 +60,9 @@ const ROLE_PERMISSIONS = {
   ],
   PUT: [
     { path: /^\/api\/auth\/me$/, roles: [OWNER] }, // 점주 정보수정용
-    { path: /^\/api\/cleaners\/mypage\/info$/, roles: [CLEANER] }, // 기사님 정보 수정
     { path: /^\/api\/owners\/mypage\/profile$/, roles: [OWNER] }, // 점주 프로필용
+    { path: /^\/api\/cleaners\/mypage\/info$/, roles: [CLEANER] }, // 기사님 정보 수정
+    { path: /^\/api\/cleaners\/mypage\/password$/, roles: [CLEANER] }, // 기사님 비밀번호 수정
   ],
   DELETE: [
     { path: /^\/api\/stores\/\d+$/, roles: [OWNER] }, // 매장 삭제

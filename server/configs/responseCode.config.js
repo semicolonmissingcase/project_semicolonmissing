@@ -184,6 +184,18 @@ const SYSTEM_ERROR = {
 };
 Object.freeze(SYSTEM_ERROR);
 
+/**
+ * 현재 비밀번호 불일치 에러 응답 코드 설정
+ * @type {ResponseCodeConfig}
+ */
+const INVALID_PASSWORD = {
+  code: 'E10',
+  msg: 'AUTH_INVALID_PASSWORD',
+  info: '현재 비밀번호가 일치하지 않습니다.',
+  status: 401
+};
+Object.freeze(INVALID_PASSWORD);
+
 export {
   SUCCESS,
   NOT_REGISTERED_ERROR,
@@ -200,4 +212,5 @@ export {
   ALREADY_PROCESSED_ERROR,
   DB_ERROR,
   SYSTEM_ERROR,
+  INVALID_PASSWORD,
 };

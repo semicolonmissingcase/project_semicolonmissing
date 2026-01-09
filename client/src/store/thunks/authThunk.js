@@ -88,6 +88,20 @@ export const updateCleanerInfoThunk = createAsyncThunk(
   }
 );
 
+// 기사 비밀번호 수정하기
+export const changeCleanerPasswordThunk = createAsyncThunk(
+  'auth/changeCleanerPasswordThunk',
+  async(passwordData, {rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.put('/api/cleaners/mypage/password', passwordData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+
 export const uploadProfileImageThunk = createAsyncThunk(
   'auth/uploadProfileImageThunk',
   async(file, { rejectWithValue }) => {

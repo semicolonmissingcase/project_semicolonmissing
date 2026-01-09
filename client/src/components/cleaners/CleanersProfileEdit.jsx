@@ -78,12 +78,7 @@ function CleanersProfileEdit() {
           
           <div className="cleaner-profile-edit-info">
             <div className="cleaner-profile-edit-name-row">
-              <input 
-                className="cleaner-profile-edit-input-name" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
-              />
-              <label htmlFor="profile-upload" className="cleaner-profile-edit-icon-pencil-small" />
+              <p className="cleaner-profile-edit-input-name">{user?.name || "기사님"}</p>
             </div>
             <p className="cleaner-profile-edit-email">{user?.email || "cleaner@cleaner.com"}</p>
           </div>

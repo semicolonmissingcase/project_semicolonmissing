@@ -6,6 +6,7 @@ import CleanerPwModal from "./cleaners-modal/cleanerPwModal.jsx"; // 비밀번�
 import NameEditModal from "../commons/NameEditModal.jsx"; // 이름 변경 모달
 import { useDispatch, useSelector } from "react-redux";
 import { getMeThunk, updateCleanerInfoThunk } from "../../store/thunks/authThunk.js";
+import { getAccountThunk } from "../../api/axiosCleaner.js";
 import { CiEdit } from "react-icons/ci"; // 이름 변경 아이콘
 
 export default function CleanersInfoEdit() {
@@ -26,6 +27,10 @@ export default function CleanersInfoEdit() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState(null);
   const [pwModalOpen, setPwModalOpen] = useState(false); // 비밀번호 모달
+
+  // 계좌 확인용
+  const [hasSettlementAccount, setHasSettlementAccount] = useState(false);
+  const [isAccountLoading, setIsAccountLoading] = useState(true);
 
   useEffect(() => {
     if (!user && isLoggedIn === false && isLoading === false) {
@@ -52,6 +57,28 @@ export default function CleanersInfoEdit() {
       }
     }
   }, [user]);
+
+  // 계좌 정보 조회
+  useEffect(() => {
+    const fetchAccountInfo = async () => {
+      if(!isLoggedIn) {
+        setIsAccountLoading(false);
+        return;
+      }
+      try {
+        setIsAccountLoading(true);
+        const response = await getAccountThunk();
+        const accounts = response.data?.data?.rows;
+        setHasSettlementAccount(accounts && accounts.length > 0);
+      } catch (error) {
+        console.error('계좌 정보 조회 실패:', error);
+        setHasSettlementAccount(false);
+      } finally {
+        setIsAccountLoading(false);
+      }
+    };
+    fetchAccountInfo();
+  }, [isLoggedIn]);
 
   // 전화번호 입력 핸들러
   const handlePhonePartChange = (setter) => (e) => {
@@ -84,6 +111,12 @@ export default function CleanersInfoEdit() {
     const isPhoneNumberChanged = user?.phoneNumber !== newPhoneNumber;
 
     if (!isNameChanged && !isPhoneNumberChanged) {
+      setModalConfig({
+        title: '알림',
+        message: '변경된 내용이 없습니다.',
+        onClose: () => setIsConfirmModalOpen(false)
+      });
+      setIsConfirmModalOpen(true);
       return;
     }
 
@@ -92,20 +125,44 @@ export default function CleanersInfoEdit() {
       updateData.name = newName;
     }
     if(isPhoneNumberChanged) {
-      updateData.phone = newPhoneNumber;
+      updateData.phoneNumber = newPhoneNumber;
     }
 
     try {
       await dispatch(updateCleanerInfoThunk(updateData)).unwrap();
       dispatch(getMeThunk());
+
+      setModalConfig({
+        title: '수정 완료',
+        message: '정보가 성공적으로 수정되었습니다.',
+        onClose: () => {
+          setIsConfirmModalOpen(false);
+        }
+      });
+
+      setIsConfirmModalOpen(true);
+
     } catch (error) {
-      const errorMessage = error.data && error.data[0] ? error.data[0] : (error.msg || "정보 수정 중 오류가 발생했습니다.");
-      alert(errorMessage);
+      const errorMessage = error.info || "정보 수정 중 오류가 발생했습니다."
+      setModalConfig({
+        title: '오류',
+        message: errorMessage,
+        onClose: () => setIsConfirmModalOpen(false)
+      });
+      setIsConfirmModalOpen(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const profileImageUrl = user?.profile || '/icons/default-profile.png';
+
+  if(isAccountLoading) {
+    return (
+      <div className="cleaners-info-container">
+        <p>계자 정보를 불러오는 중입니다.</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -189,13 +246,31 @@ export default function CleanersInfoEdit() {
               변경하기
             </button>
           </div>
+          
+          {/* 정산 안내 섹션 */}
+          <div className="cleaners-info-settlement-info">
+            {hasSettlementAccount ? (
+              <>
+              <div className="cleaners-info-settlement-comments">
+                <p className="cleaners-info-settlement-status">정산 가능</p>
+                <p className="cleaners-info-settlement-desc">※ 계좌 인증이 완료되어 정산이 가능합니다.</p>
+              </div>
+              </>
+            ) : (
+              <>
+              <div className="cleaners-info-settlement-comments">
+                <p className="cleaners-info-settlement-status">정산 불가능</p>
+                <p className="cleaners-info-settlement-desc">※ 정산 계좌 정보가 없습니다.</p>
+              </div>
+                <button type="button" className="cleaners-info-btn-add-account"
+                onClick={() => navigate('/cleaners/accountsave')}>
+                  정산 계좌 추가
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
-        {/* 정산 안내 섹션 */}
-        <div className="cleaners-info-settlement-info">
-          <p className="cleaners-info-settlement-status">정산 가능</p>
-          <p className="cleaners-info-settlement-desc">※ 계좌 인증이 완료되어 정산이 가능합니다.</p>
-        </div>
 
         {/* 하단 버튼 */}
         <div className="cleaners-info-actions">
