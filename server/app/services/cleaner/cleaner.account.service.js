@@ -1,33 +1,65 @@
-/**
- * @file app/services/cleaner/cleaner.accounts.service.js
- * 260107 yh init
- */
-import db from "../../models/index.js";
-import accountsRepository from "../../repositories/cleaner/cleaner.account.repository.js";
-
-const CleanerAccount = db.CleanerAccount;
+import db from './../../models/index.js'; 
+import cleanerAccountsRepository from './../../repositories/cleaner/cleaner.account.repository.js';
 
 /**
- * 기사 계좌 목록 불러오기
- * @param {number} cleanerId
+ * 특정 클리너의 모든 계좌 조회
  */
 async function getAccounts(cleanerId) {
-  const rows = await accountsRepository.findAllByCleanerId(cleanerId);
-  return { rows };
+  return await cleanerAccountsRepository.findAllByCleanerId(cleanerId);
 }
 
 /**
- * 특정 계좌 상세 정보 불러오기
+ * 새 계좌 등록
  */
-async function getAccountDetail(accountId) {
-  const account = await CleanerAccount.findByPk(accountId);
-  return account;
+async function saveAccount(accountData) {
+  const t = await db.sequelize.transaction();
+
+  try {
+    if (accountData.isDefault) {
+      await cleanerAccountsRepository.resetDefaultStatus(accountData.cleanerId, t);
+    }
+
+    const newAccount = await cleanerAccountsRepository.create(accountData, t);
+
+    await t.commit();
+    return newAccount;
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+
+/**
+ * 계좌 정보 수정
+ */
+async function updateAccount(id, updateData) {
+  const t = await db.sequelize.transaction();
+
+  try {
+    if (updateData.isDefault) {
+      await cleanerAccountsRepository.resetDefaultStatus(updateData.cleanerId, t);
+    }
+
+    await cleanerAccountsRepository.update(id, updateData, t);
+
+    await t.commit();
+    return { success: true };
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+
+/**
+ * 계좌 삭제
+ */
+async function deleteAccount(id) {
+  return await cleanerAccountsRepository.deleteById(id);
 }
 
 export default {
   getAccounts,
-  getAccountDetail
-}
-
-
-
+  saveAccount,
+  updateAccount,
+  deleteAccount
+};

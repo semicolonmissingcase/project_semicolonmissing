@@ -1,370 +1,348 @@
-import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal.jsx";
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import { useParams } from "react-router-dom";
+import { CleanersModalConfirmModal } from "./cleaners-modal/CleanersModalConfirmModal.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCleaners } from "../../../src/store/slices/cleanersSlice.js";
 import cleanersThunk from "../../store/thunks/cleanersThunk.js";
-import { clearCleaners } from "../../store/slices/cleanersSlice.js";
-import './CleanersAccountEdit.css';
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { RiArrowDropDownFill } from "react-icons/ri";
-import { RiArrowDropUpFill } from "react-icons/ri";
+import { RiArrowDropDownFill, RiArrowDropUpFill } from "react-icons/ri";
 import { FaRegTrashCan } from "react-icons/fa6";
+import './CleanersAccountEdit.css';
 
-function CleanerAccountEdit () {
-
-    const [selectAddAccount, setSelectAddAccount] = useState(false); // <--- Line 74였던 이 부분을 위로 올립니다.
-    const [accountData, setAccountData] = useState({
-        bank: '',
-        accountNumber: '',
-        depositor: ''
-    });
-
-  const navigate = useNavigate();
+function CleanerAccountEdit() {
   const dispatch = useDispatch();
-  const params = useParams();
+  const { id } = useParams();
+
+  const [toggleNew, setToggleNew] = useState(true);
+  const [toggleInfo, setToggleInfo] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmType, setConfirmType] = useState("");
+  const { accounts } = useSelector((state) => state.cleaners);
 
   useEffect(() => {
-  async function init() {
-    const result = await dispatch(
-      cleanersThunk.accountInfoThunk(params.id)
-    );
-
-    if (result.type.endsWith("/rejected")) {
-      alert("정보 획득 실패");
-      return;
+    // 리덕스에 계좌 데이터가 있다면 (보통 1개라고 가정)
+    if (accounts && accounts.length > 0) {
+      const latestAccount = accounts[0]; // 가장 최신(혹은 기본) 계좌 추출
+      setAccountInfo({
+        id: latestAccount.id,
+        cleanerId: latestAccount.cleanerId,
+        bankCode: latestAccount.bankCode,
+        depositor: latestAccount.depositor,
+        accountNumber: latestAccount.accountNumber,
+        isDefault: latestAccount.isDefault
+      });
+    } else {
+      // 삭제되어 데이터가 없으면 초기화
+      setAccountInfo({
+        id: '',
+        cleanerId: '',
+        bankCode: '',
+        depositor: '',
+        accountNumber: '',
+        isDefault: false
+      });
     }
+  }, [accounts]);
 
-    const data = result.payload.data;
+  const [accountInfo, setAccountInfo] = useState({
+    id: '',
+    cleanerId: '',
+    bankCode: '',
+    depositor: '',
+    accountNumber: '',
+    isDefault: false
+  });
 
-    setAccountData({
-      bank: data.bank ?? "",
-      accountNumber: data.accountNumber ?? "",
-      depositor: data.depositor ?? "",
-    });
-  }
+  const { id: paramId } = useParams();
 
-  init();
+  useEffect(() => {
+    const fetchData = async () => {
+      //  파라미터(paramId)가 유효한지 먼저 확인
+      if (!paramId) {
+        console.warn("paramId가 정의되지 않았습니다.");
+        return;
+      }
 
-  return () => {
-    dispatch(clearCleaners());
-  };
-  }, [dispatch, params.id, navigate]);
+      try {
+        setLoading(true);
 
 
-  // 입력값 변경 핸들러
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAccountData(prev => ({ ...prev, [name]: value }));
-  };
+        const result = await dispatch(cleanersThunk.fetchAccounts(paramId)).unwrap();
 
-  // 저장 로직 (Modal의 onConfirm 내부에서 호출)
-  const handleSave = async () => {
-    try {
-      await axios.post("/api/adjustments/update", accountData);
-      alert("저장되었습니다.");
-      closeConfirmModal();
-    } catch (err) {
-      alert("저장 실패");
-    }
-  };
+        if (Array.isArray(result) && result.length > 0) {
+          const acc = result[0];
+          setAccountInfo({
+            id: acc.id || '',
+            cleanerId: acc.cleaner_id || '',
+            bankCode: acc.bank_code || '',
+            depositor: acc.depositor || '',
+            accountNumber: acc.accountNumber || '',
 
-  // ✅ Redux Store에서 데이터 및 상태 가져오기
-    const { accountInfo, loading, error } = useSelector(state => state.cleaners);
+            isDefault: Number(acc.is_default) === 1
+          });
+        } else if (result && !Array.isArray(result)) {
 
-    // useEffect 로직 수정
-    useEffect(() => {
-        dispatch(cleanersThunk.accountInfoThunk(params.id));
-
-        // 클린업 함수는 그대로 유지
-        return () => {
-            dispatch(clearCleaners());
-        };
-    }, [dispatch, params.id]); // navigate 의존성은 필요 없을 수 있습니다.
-
-    // ✅ accountInfo가 로드되거나 변경될 때만 accountData 업데이트
-    useEffect(() => {
-        if (accountInfo) {
-            setAccountData({
-                bank: accountInfo.bank ?? "",
-                accountNumber: accountInfo.accountNumber ?? "",
-                depositor: accountInfo.depositor ?? "",
-            });
+          setAccountInfo({
+            id: result.id || '',
+            cleanerId: result.cleaner_id || '',
+            bankCode: result.bank_code || '',
+            depositor: result.depositor || '',
+            accountNumber: result.accountNumber || '',
+            isDefault: Number(result.is_default) === 1
+          });
         }
-    }, [accountInfo]); // accountInfo가 변경될 때만 실행
+      } catch (error) {
+        // 에러 발생 시 처리
+        console.error("데이터 로드 실패:", error);
+      } finally {
+        // 성공/실패 여부와 상관없이 로딩 종료
+        setLoading(false);
+      }
+    };
 
-    // 로딩 및 에러 처리 (인증 오류가 Redux에 rejected로 잡힐 경우)
-    if (loading) {
-        return <div className="loading">계좌 정보를 불러오는 중입니다...</div>;
-    }
+    fetchData();
+  }, [dispatch, paramId]);
 
-    if (error) {
-        // 서버에서 인증 오류를 반환했을 때 (401), Redux Thunk가 rejectWithValue로 잡았을 경우
-        // alert(`정보 획득 실패: ${error}`); 
-        // navigate(-1); 
-        return <div className="error-message">계좌 정보를 불러오는 데 실패했습니다.</div>;
-    }
-
-  const [toggleNew, setToggleNew] = useState(false);
-  const [toggleInfo, setToggleInfo] = useState(false);
-
-  const toggleMenuNew = () => {
-
-    setToggleNew(!toggleNew)
-
-  };
-
-  const toggleMenuInfo = () => {
-
-    setToggleInfo(!toggleInfo)
-
-  };
-
-  const toggleAddAccount = (e) => {
-  e.stopPropagation();           // 바깥 토글로 클릭 전파 방지
-  setSelectAddAccount(prev => !prev);
-  };
-
-  const [selectRemoveAccount, setSelectRemoveAccount] = useState(false);
-
-  const handleRemoveAccount = (e) => {
-  e.stopPropagation();     // 상위 토글 영향 방지
-  setSelectRemoveAccount(true);
-  setSelectAddAccount(false);
-  };
-
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [confirmType, setConfirmType] = useState(null); // "cancel" | "save"
+  //  핸들러 함수들
+  const toggleMenuNew = () => setToggleNew(!toggleNew);
+  const toggleMenuInfo = () => setToggleInfo(!toggleInfo);
 
   const openCancelModal = () => {
-  setConfirmType("cancel");
-  setConfirmOpen(true);
+    setConfirmType("cancel");
+    setConfirmOpen(true);
   };
 
-  const openSaveModal = () => {
-  setConfirmType("save");
-  setConfirmOpen(true);
-};
-
-  const closeConfirmModal = () => {
-  setConfirmOpen(false);
-  setConfirmType(null);
-};
-
-  const onConfirm = () => {
-  if (confirmType === "cancel") {
-    // TODO: 취소 확정 동작 (예: 뒤로가기, 페이지 이동, 상태 초기화 등)
-    // navigate(-1) 여기서 처리
-    closeConfirmModal();
-    return;
-  }
-
-  if (confirmType === "save") {
-    // TODO: 저장 확정 동작 (API 호출, submit 등)
-    // handleSubmit() 여기서 호출
-    closeConfirmModal();
-    return;
-  }
-
-  closeConfirmModal();
+  const openSaveModal = (e) => {
+    e.preventDefault();
+    setConfirmType("save");
+    setConfirmOpen(true);
   };
+
+  const onConfirm = async () => {
+    if (confirmType === "save") {
+      try {
+        const payload = {
+          cleanerId: id,
+          accountData: {
+            bankCode: accountInfo.bankCode,
+            depositor: accountInfo.depositor,
+            accountNumber: accountInfo.accountNumber,
+            isDefault: true
+          }
+        };
+
+        await dispatch(cleanersThunk.createAccount(payload)).unwrap();
+
+        alert("계좌 정보가 성공적으로 저장되었습니다.");
+        setIsEditing(false);
+        dispatch(cleanersThunk.fetchAccounts(id));
+      } catch (error) {
+        alert(error.msg || "저장에 실패했습니다.");
+      }
+    }
+    setConfirmOpen(false);
+  };
+
+  async function handleCancel() {
+    try {
+      //  사용자에게 확인
+      if (!window.confirm("수정을 취소하시겠습니까? 입력한 내용은 저장되지 않습니다.")) {
+        return;
+      }
+
+      //   입력 필드 초기화
+      setAccountInfo({
+        bankCode: '',
+        accountNumber: '',
+        depositor: '',
+        isDefault: false
+      });
+
+      //  편집 모드 종료
+      setIsEditing(false);
+
+    } catch (error) {
+      console.error("취소 처리 중 에러:", error);
+    }
+  }
+
+  async function handleDelete(accountId) {
+    try {
+      //  삭제 확인
+      if (!window.confirm("정말로 이 계좌 정보를 삭제하시겠습니까?")) {
+        return;
+      }
+
+      //  삭제 Thunk 실행
+      await dispatch(cleanersThunk.deleteAccount(id)).unwrap();
+
+      alert("삭제가 완료되었습니다.");
+
+      //  목록 새로고침
+      dispatch(cleanersThunk.fetchAccounts(id));
+
+      //  입력창 닫기
+      setIsEditing(false);
+
+    } catch (error) {
+      console.error("삭제 실패:", error);
+      alert(error || "삭제에 실패했습니다.");
+    }
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAccountInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    const payload = {
+      cleanerId: id, // useParams에서 가져온 cleaner id
+      accountData: {
+        bankCode: accountInfo.bankCode,
+        accountNumber: accountInfo.accountNumber,
+        depositor: accountInfo.depositor,
+        isDefault: true
+      }
+    };
+
+    dispatch(cleanersThunk.createAccount(payload));
+  };
+
+  async function onUpdate() {
+    try {
+      const payload = {
+        cleanerId: id,
+        updateData: {
+          id: accountInfo.id,         
+          bankCode: accountInfo.bankCode,
+          accountNumber: accountInfo.accountNumber,
+          depositor: accountInfo.depositor,
+          isDefault: true
+        }
+      };
+
+      await dispatch(cleanersThunk.updateAccount(payload)).unwrap();
+      alert("수정 성공!");
+    } catch (error) {
+      alert("수정 실패: " + error);
+    }
+  }
 
   return (
-
-    <>
-
     <div className="all-container cleaners-account-edit-wrapper">
+      {loading && <div className="loading-overlay">데이터를 불러오는 중...</div>}
 
-    <div className="cleaners-account-edit-account-management">
-        
+      <div className="cleaners-account-edit-account-management">
         <div className="cleaners-account-edit-add-account-wrapper">
-          
-        <div className="cleaners-account-edit-account-management-title" 
-        onClick={toggleMenuNew}>
-
-          <button
-            type="button"
-          >
-            {toggleNew? (
-              <RiArrowDropUpFill size={30} />
-            ) : (
-              <RiArrowDropDownFill size={30} />
-            )}
-          </button>
-          <p className="cleaners-account-edit-new-account-message">신규 정산 계좌</p>
-
-        </div>
-
-      <div className={
-            toggleNew
-              ? "cleaners-account-edit-toggle-updown-new-contents-toggledown" 
-              : "cleaners-account-edit-toggle-updown-new-contents"
-          }
-        >
-
-      <div className="cleaners-account-edit-form-edit">
-
-      <div className="cleaners-account-edit-new-account-title-wrapper">
-
-          <div className="cleaners-account-edit-add-button"
-            onClick={toggleAddAccount}>
-          <div className={
-            selectAddAccount
-              ? "cleaners-account-edit-toggle-updown-form-contents-toggledown" 
-              : "cleaners-account-edit-toggle-updown-form-contents"
-          }
-          >
-          <div className="cleaners-account-edit-add-button-text">
-          <IoMdAddCircleOutline size={20} />
-          <span className="cleaners-account-edit-new-accounts">신규 정산 계좌 추가</span>
+          <div className="cleaners-account-edit-account-management-title" onClick={toggleMenuNew} style={{ cursor: 'pointer' }}>
+            <button type="button">
+              {toggleNew ? <RiArrowDropDownFill size={30} /> : <RiArrowDropUpFill size={30} />}
+            </button>
+            <p className="cleaners-account-edit-new-account-message">정산 계좌 설정</p>
           </div>
-          <p className="cleaners-account-edit-account-message">정산에 사용할 계좌를 선택해 주세요.</p>
+
+          <div className={toggleNew ? "cleaners-account-edit-toggle-updown-new-contents" : "cleaners-account-edit-toggle-updown-new-contents-closed"}>
+            <div className="cleaners-account-edit-form-edit">
+              {!isEditing ? (
+                <div className="cleaners-account-edit-new-account-title-wrapper" onClick={() => setIsEditing(true)} style={{ cursor: 'pointer' }}>
+                  <div className="cleaners-account-edit-add-button">
+                    <div className="cleaners-account-edit-add-button-text">
+                      <IoMdAddCircleOutline size={20} />
+                      <span className="cleaners-account-edit-new-accounts">
+                        {accountInfo.accountNumber ? "계좌 정보 수정하기" : "신규 정산 계좌 추가"}
+                      </span>
+                    </div>
+                    {accountInfo.accountNumber ? (
+                      <p className="cleaners-account-edit-account-message">
+                        현재 등록된 계좌: <strong>{accountInfo.bankCode} {accountInfo.accountNumber} {accountInfo.depositor}</strong>
+                      </p>
+                    ) : (
+                      <p className="cleaners-account-edit-account-message">정산에 사용할 계좌를 등록해 주세요.</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="cleaners-account-edit-form-wrapper">
+                  <form className="cleaners-account-edit-form" onSubmit={openSaveModal}>
+                    <span className="cleaners-account-edit-remove-layout">
+                      <label className="cleaners-account-edit-account-title">정산 계좌 정보 입력</label>
+                      <FaRegTrashCan size={20} onClick={handleDelete} />
+                    </span>
+
+                    <span className="cleaners-account-edit-layout-inputs">
+                      <label>은행</label>
+                      <select
+                        className="cleaners-account-edit-input-layout"
+                        name="bankCode"
+                        value={accountInfo.bankCode || ""}
+                        onChange={handleInputChange}
+                      >
+                        <option value="우리은행">우리은행</option>
+                        <option value="국민은행">국민은행</option>
+                        <option value="신한은행">신한은행</option>
+                        <option value="NH농협">NH농협</option>
+                      </select>
+
+                      <label>계좌번호</label>
+                      <input
+                        className="cleaners-account-edit-input-layout"
+                        name="accountNumber"
+                        placeholder="'-' 없이 입력"
+                        value={accountInfo.accountNumber || ""}
+                        onChange={handleInputChange}
+                        required
+                      />
+
+                      <label>예금주</label>
+                      <input
+                        className="cleaners-account-edit-input-layout"
+                        name="depositor"
+                        value={accountInfo.depositor || ""}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </span>
+
+                    <div className="cleaners-account-edit-button">
+                      <button className="cleaners-account-edit-cancel-button" type="button" onClick={() => setIsEditing(false)}>취소</button>
+                      <button className="cleaners-account-edit-submit-button" type="submit">저장</button>
+                    </div>
+                  </form>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
+      <div className="cleaners-account-edit-account-info">
+        <div className="cleaners-account-edit-info-account">
+          <div className="cleaners-account-edit-account-info-title" onClick={toggleMenuInfo} style={{ cursor: 'pointer' }}>
+            <button type="button">
+              {toggleInfo ? <RiArrowDropUpFill size={30} /> : <RiArrowDropDownFill size={30} />}
+            </button>
+            <p className="cleaners-account-edit-account-info-message">정산 기준 안내</p>
+          </div>
+          {toggleInfo && (
+            <div className="cleaners-account-edit-account-settlement-criteria-guide">
+              <p>- 매주 월요일에 전주 작업분이 정산됩니다.</p>
+              <p>- 정산일이 공휴일인 경우 전일에 지급됩니다.</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {selectAddAccount && (
-  <div className="cleaners-account-edit-form-wrapper">
-    <form className="cleaners-account-edit-form">
-
-      <span
-        className="cleaners-account-edit-remove-layout"
-        onClick={handleRemoveAccount}
-      >
-        <label className="cleaners-account-edit-account-title">
-          정산 계좌
-        </label>
-        <FaRegTrashCan 
-        onClick={openCancelModal}
-        size={20}/>
-      </span>
-      
-      <span className="cleaners-account-edit-layout-inputs">
-      <label htmlFor="banks">은행</label>
-      <select 
-      className="cleaners-account-edit-input-layout" 
-      name="bank" // name을 모델과 맞춤
-      value={accountData.bank}
-      onChange={handleInputChange}
-      >
-        <option value="Woori Bank">우리은행</option>
-        <option value="iM Bank">iM뱅크</option>
-        <option value="Kookmin Bank">국민은행</option>
-        <option value="Shinhan Bank">신한은행</option>
-        <option value="Hana Bank">하나은행</option>
-        <option value="Citibank Korea Inc.">한국시티은행</option>
-        <option value="Nonghyup Bank Co., Ltd.">NH농협</option>
-        <option value="Suhyup Bank">SH수협</option>
-        <option value="Korean Federation of Community Credit Cooperatives">
-          MG새마을금고
-        </option>
-      </select>
-
-      <label htmlFor="accounts">계좌번호</label>
-      <input 
-      className="cleaners-account-edit-input-layout" 
-      name="accountNumber"
-      value={accountData.accountNumber}
-      onChange={handleInputChange} 
+      <CleanersModalConfirmModal
+        open={confirmOpen}
+        message={confirmType === "cancel" ? "내용을 삭제하고 수정을 취소하시겠습니까?" : "계좌 정보를 저장하시겠습니까?"}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={onConfirm}
       />
-
-      <label htmlFor="account-holder">예금주</label>
-      <input 
-      className="cleaners-account-edit-input-layout" 
-      name="depositor"
-      value={accountData.depositor}
-      onChange={handleInputChange}
-      />
-      </span>
-      
-      <div className="cleaners-account-edit-button">
-        <button className="cleaners-account-edit-cancel-button" type="button" onClick={openCancelModal}>취소</button>
-        <button className="cleaners-account-edit-submit-button" type="submit" onClick={openSaveModal}>저장</button>
-      </div>
-
-    </form>
     </div>
-  )}  
-      </div>
-      </div>
-
-    </div>
-
-
-
-    </div>
-
-
-    <div className="cleaners-account-edit-account-info">
-
-      <div className="cleaners-account-edit-info-account">
-        
-        <div className="cleaners-account-edit-account-info-title" onClick={toggleMenuInfo}>
-
-          <button
-            type="button"
-          >
-            {toggleInfo ? (
-              <RiArrowDropUpFill size={30} />
-            ) : (
-              <RiArrowDropDownFill size={30} />
-            )}
-          </button>
-          <p className="cleaners-account-edit-account-info-message"> 정산 계좌 정보</p>
-
-        </div>
-
-        <div className={
-            toggleInfo 
-              ? "cleaners-account-edit-toggle-updown-info-contents-toggledown" 
-              : "cleaners-account-edit-toggle-updown-info-contents"
-          }
-        >
-        <div className="cleaners-account-edit-account-settlement-criteria-guide">
-
-          <span>
-            정산 기준 안내
-          </span>
-          
-          <p>
-            - 매주 월요일에 전주 작업분이 정산됩니다.
-          </p>
-          <p>
-            - 정산일이 공휴일인 경우 전일에 지급됩니다.
-          </p>
-
-        </div>
-
-      </div>
-      </div>
-
-      </div>
-
-       <CleanersModalConfirmModal
-          open={confirmOpen}
-          message={
-            confirmType === "cancel" ? (
-              <>
-                수정 내용이 삭제됩니다.
-                <br />
-                작성을 취소하시겠습니까?
-              </>
-            ) : ( 
-              <>
-                계좌 정보를 수정하시겠습니까?
-              </>
-            )
-          }
-          onClose={closeConfirmModal}
-          onConfirm={onConfirm}
-        />       
-
-    </div>
-
-    </>
-  )
-
-};
+  );
+}
 
 export default CleanerAccountEdit;

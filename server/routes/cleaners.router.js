@@ -5,6 +5,7 @@ import cleanerQuotationsController from '../app/controllers/cleaner/cleaner.quot
 import cleanerAccountController from '../app/controllers/cleaner/cleaner.account.controller.js';
 import cleanerQuotationsValidator from '../app/middlewares/validations/validatiors/cleaner/cleaner.quotations.validator.js';
 import validationHandler from '../app/middlewares/validations/validationHandler.js';
+import locationsController from '../app/controllers/locations.controller.js';
 
 const cleanersRouter = express.Router();
 
@@ -15,7 +16,9 @@ cleanersRouter.get('/mypage/reviews', authMiddleware, cleanerReservationControll
 cleanersRouter.get('/mypage/settlement', authMiddleware, cleanerReservationController.getSettlementSummary);
 cleanersRouter.get('/quotations', authMiddleware, cleanerQuotationsController.index); // 최신 견적요청서 리스트 조회
 cleanersRouter.post('/quotations', authMiddleware, cleanerQuotationsValidator.quotationsStore, validationHandler, cleanerQuotationsController.store); // 견적 요청서 요청 확인 작성
-cleanersRouter.get('/accountinfo', authMiddleware, cleanerAccountController.getCleanerAccounts,);
-cleanersRouter.post('/accountinfo', authMiddleware, cleanerAccountController.registerOrUpdateAccount);
+cleanersRouter.get(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.getAccounts);
+cleanersRouter.post(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.createAccount);
+cleanersRouter.put(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.updateAccount);
+cleanersRouter.delete(`/accounts/:cleanerId`, authMiddleware, cleanerAccountController.deleteAccount);
 
 export default cleanersRouter;

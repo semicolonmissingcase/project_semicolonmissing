@@ -5,10 +5,18 @@ const initialState = {
   // 회원가입 관련
   locations: [],
   isInitialized: false,
+
+  // 계좌 관련
   accounts: [],
+  id: null,
+  cleanerId: null,
+  bankCode: null,
+  accountNumber: null,
+  depositor: null,
+  isDefault: null,
 
   // Show 관련
-  submissions: null, // null 대신 빈 배열로 초기화하면 map 에러를 방지합니다.
+  submissions: null,
   reservation: null,
 
   // index 관련
@@ -16,9 +24,10 @@ const initialState = {
   page: 0,
   offset: 4,
   isLasted: false,
-  
+
   // 기타
   loading: true,
+  error: null,
 };
 
 const slice = createSlice({
@@ -32,6 +41,12 @@ const slice = createSlice({
       state.isLasted = false;
       state.page = 0;
       state.accounts = [];
+      state.id = null;
+      state.cleanerId = null;
+      state.bankCode = null;
+      state.accountNumber = null;
+      state.depositor = null;
+      state.isDefault = null;
       state.locations = [];
       state.isInitialized = false;
       state.loading = false;
@@ -40,6 +55,7 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // 견적 상세 조회
       .addCase(cleanersThunk.showThunk.fulfilled, (state, action) => {
         const { reservation, submissions, locations } = action.payload.data;
         state.reservation = reservation;
@@ -48,60 +64,66 @@ const slice = createSlice({
         state.loading = false;
         state.error = null;
       })
+      // 견적 목록 조회
       .addCase(cleanersThunk.indexThunk.fulfilled, (state, action) => {
         const { total, currentPage, reservations } = action.payload.data;
-
-        // 예약 정보 리스트
-        if(state.reservations) {
+        if (state.reservations) {
           state.reservations = [...state.reservations, ...reservations];
         } else {
           state.reservations = reservations;
         }
-
-        // 마지막 페이지 플래그
-        if(currentPage === Math.ceil(total / state.offset)) {
+        if (currentPage === Math.ceil(total / state.offset)) {
           state.isLasted = true;
         }
-
-        // 현재 페이지
         state.page = currentPage;
-
         state.loading = false;
-      }).addCase(cleanersThunk.locationThunk.pending, (state) => {
-        state.loading = false;
-        state.isInitialized = false;
+      })
+      // 활동 지역 정보 (Pending)
+      .addCase(cleanersThunk.locationThunk.pending, (state) => {
+        state.loading = true;
         state.error = null;
       })
+      // 활동 지역 정보 (Fulfilled)
       .addCase(cleanersThunk.locationThunk.fulfilled, (state, action) => {
-        console.log('Fulfilled Payload:', action.payload);
         state.loading = false;
         state.isInitialized = true;
         state.locations = action.payload;
         state.error = null;
       })
+      // 활동 지역 정보 (Rejected)
       .addCase(cleanersThunk.locationThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || '활동 지역 정보 로드 실패';
       })
-
-      // 계좌 목록 불러오기
-      .addCase(cleanersThunk.fetchAccounts.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      /* 조회 */
+      .addCase(cleanersThunk.fetchAccounts.pending, (state) => { state.loading = true; })
       .addCase(cleanersThunk.fetchAccounts.fulfilled, (state, action) => {
         state.loading = false;
-        state.accounts = action.payload; // Thunk에서 리턴한 rows 저장
+        state.accounts = action.payload;
       })
-      .addCase(cleanersThunk.fetchAccounts.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-  },  
+      /* 등록/수정 시 */
+      .addCase(cleanersThunk.createAccount.fulfilled, (state, action) => {
+        state.accounts.push(action.payload);
+      })
+      .addCase(cleanersThunk.updateAccount.fulfilled, (state, action) => {
+        const index = state.accounts.findIndex(a => a.id === action.payload.id);
+        if (index !== -1) {
+          state.accounts[index] = action.payload;
+        }
+      })
+      .addCase(cleanersThunk.deleteAccount.fulfilled, (state, action) => {
+        state.accounts = state.accounts.filter(a => a.id !== action.payload);
+      })
+      /* 에러 처리 공통 */
+      .addMatcher(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.loading = false;
+          state.error = action.payload?.msg || "오류가 발생했습니다.";
+        }
+      );
+  },
 });
 
-export const {
-  clearCleaners
-} = slice.actions;
-
+export const { clearCleaners } = slice.actions;
 export default slice.reducer;
