@@ -1,0 +1,108 @@
+/* 기사님 프로필 카드 상세 스타일 */
+.ownerreservationshow-engineer-card {
+  border: 1px solid #ced4da;
+  padding: 1.25rem; /* 20px */
+}
+
+.ownerreservationshow-engineer-info {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.ownerreservationshow-engineer-avatar {
+  width: 5rem; /* 80px */
+  height: 5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #a8dadc;
+}
+
+.ownerreservationshow-engineer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ownerreservationshow-engineer-name {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 700;
+}
+
+.ownerreservationshow-engineer-rating {
+  font-size: 0.9375rem; /* 15px */
+  color: #333;
+  margin: 0.3rem 0;
+}
+
+.ownerreservationshow-engineer-msg {
+  font-size: 0.875rem; /* 14px */
+  color: #666;
+}
+
+/* 견적 금액 섹션 */
+.ownerreservationshow-price-card {
+  border: 1px solid #ced4da;
+}
+
+.ownerreservationshow-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.ownerreservationshow-total-price {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 700;
+  color: #333;
+}
+
+.ownerreservationshow-desc-box {
+  min-height: 8rem; /* 128px */
+  border: 1px solid #dee2e6;
+  border-radius: 0.625rem; /* 10px */
+  padding: 1rem;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* 하단 버튼 영역 */
+.ownerreservationshow-action-btns {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.ownerreservationshow-btn-chat,
+.ownerreservationshow-btn-reserve {
+  flex: 1;
+  max-width: 12.5rem; /* 200px */
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.ownerreservationshow-btn-chat {
+  background-color: #e9ecef;
+  color: #343a40;
+}
+
+.ownerreservationshow-btn-reserve {
+  background-color: #4c669f;
+  color: #fff;
+}
+
+/* 반응형 (430px 이하) */
+@media screen and (max-width: 430px) {
+  .ownerreservationshow-action-btns {
+    width: 100%;
+  }
+  .ownerreservationshow-btn-chat,
+  .ownerreservationshow-btn-reserve {
+    max-width: none;
+  }
+}

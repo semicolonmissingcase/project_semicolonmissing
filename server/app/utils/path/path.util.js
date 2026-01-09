@@ -29,7 +29,7 @@ function getEditorImagePath() {
   return process.env.APP_MODE !== 'dev' ? process.env.FILE_EDITOR_IMAGE_PATH : path.resolve(process.env.FILE_EDITOR_IMAGE_PATH);
 }
 
-function getInquiryImagePat() {
+function getInquiryImagePath() {
   return process.env.APP_MODE !== 'dev' ? process.env.FILE_INQUIRY_IMAGE_PATH : path.resolve(process.env.FILE_INQUIRY_IMAGE_PATH);
 }
 
@@ -39,5 +39,5 @@ function getInquiryImagePat() {
   getProfilesImagePath,
   getChatImagePath,
   getEditorImagePath,
-  getInquiryImagePat,
+  getInquiryImagePath,
  }

@@ -4,6 +4,8 @@
  * 260102 v1.0.0 ck init
  */
 
+import models from '../../constants/models.constants.js';
+const { ReservationStatus, EstimateStatus } = models
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
 const { Estimate, Reservation, Cleaner, Review, Like, Sequelize, Store } = db;
@@ -42,7 +44,7 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
             model: Reservation,
             as: 'reservations',
             attributes: [],
-            where: { status: '완료'},
+            where: { status: ReservationStatus.COMPLETED },
             duplicating: false,
           },
           {
@@ -60,9 +62,9 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
       [
         Sequelize.literal(`
           CASE 
-            WHEN "Estimate"."status" = '요청' THEN 1 
-            WHEN "Estimate"."status" = '승인' THEN 2 
-            WHEN "Estimate"."status" = '완료' THEN 3 
+            WHEN "Estimate"."status" = '${ReservationStatus.REQUEST}' THEN 1 
+            WHEN "Estimate"."status" = '${ReservationStatus.APPROVED}' THEN 2 
+            WHEN "Estimate"."status" = '${ReservationStatus.COMPLETED}' THEN 3 
             ELSE 4 
           END
         `), 
@@ -110,8 +112,9 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
 async function findAcceptedEstimatesByOwnerId(ownerId) {
   const estimates = await Estimate.findAll({
     where: {
-      status: '수락' // 견적서 상태가 '수락'인 것만 필터링
+      status: EstimateStatus.ACCEPTED // 견적서 상태가 '수락'인 것만 필터링
     },
+    attributes: ['id', 'cleanerId', 'reservationId', 'estimatedAmount', 'description', 'status', 'createdAt',],
     include: [
       {
         model: Reservation,
@@ -124,7 +127,7 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
           as: 'store',
           attributes: ['name'], // 매장 이름만
           required: true,
-        }]
+        },]
       },
       {
         model: Cleaner,
@@ -133,37 +136,35 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
           'id', 'name', 'profile',
           [
             Sequelize.literal(`(
-              SELECT COUNT(*)
-              FROM likes
-              WHERE likes.cleaner_id = cleaner.id AND likes.owner_id = ${ownerId}
-            )`),
-            'isFavorited'
-          ],
-          [
-            Sequelize.literal(`(
               SELECT COALESCE(AVG(star), 0)
               FROM reviews
               WHERE reviews.cleaner_id = cleaner.id
             )`),
             'avgReviewScore'
-          ]
+          ],
         ],
         required: true, // 견적에는 반드시 기사님이 있어야 함
+        include: [{
+          model: Like,
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }],
       },
     ],
-    order: [['createdAt', 'DESC']]
+    order: [['createdAt', 'DESC']],
   });
 
   // 후처리하여 isFavorited 속성 추가
   return estimates.map(estimate => {
     const plainEstimate = estimate.get({ plain: true });
-
-    const heartStatus = plainEstimate.cleaner?.isFavorited > 0 || false;
+    const heartStatus = plainEstimate.cleaner?.likes?.length > 0
     const cleanerName = plainEstimate.cleaner?.name || '정보 없음';
     const cleanerProfile = plainEstimate.cleaner?.profile || '/icons/default-profile.png';
     const storeName = plainEstimate.reservation?.store?.name || '정보 없음';
-    const estimatedAmount = plainEstimate.estimated_amount;
-    const price = estimatedAmount ? estimatedAmount.toLocaleString() : '미정';
+    const estimatedAmount = plainEstimate.estimatedAmount;
+    const price = estimatedAmount ? estimatedAmount.toLocaleString() : '정보 없음';
     const avgReviewScore = plainEstimate.cleaner?.avgReviewScore 
       ? Number(plainEstimate.cleaner.avgReviewScore).toFixed(1) 
       : '0.0';

@@ -190,8 +190,8 @@ button {
 /* 하트 관련 */
 .icon-heart-fill {
   background-image: url('/icons/heart-fill.png');
-  width: 30px;
-  height: 30px;
+  width: 1.5rem;
+  height: 1.5rem;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -200,8 +200,8 @@ button {
 
 .icon-heart-empty {
   background-image: url('/icons/heart-empty.png');
-  width: 30px;
-  height: 30px;
+  width: 1.5rem;
+  height: 1.5rem;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

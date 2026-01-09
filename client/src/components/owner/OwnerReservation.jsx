@@ -3,12 +3,11 @@ import DatePicker from "../commons/DatePicker";
 import './OwnerReservation.css';
 import StoreSelectModal from "../commons/StoreSelectModal.jsx";
 import useKakaoPostcode from "../hooks/useKakaoPostcode.js";
-
 // Redux & API 관련 임포트
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { storeGetThunk } from '../../store/thunks/storeGetThunk.js';
-import { createReservation } from '../../api/axiosOwner.js';
+import { createReservation, getQuestions } from '../../api/axiosOwner.js';
 
 export default function OwnerReservation() {
   const dispatch = useDispatch();

@@ -25,7 +25,7 @@ export default function OwnerMyPage() {
     switch (activeTab) {
       case '받은 견적': return <Estimates />;
       case '예약 완료': return <Reservations />;
-      case '내 리뷰': return <MyReviews />;
+      case '리뷰 관리': return <MyReviews />;
       case '찜한 기사님': return <FavoriteCleaner />;
       case '문의 내역': return <InquiryHistory />;
       default: return <div style={{padding: '20px'}}>준비 중인 페이지입니다.</div>;
@@ -182,7 +182,7 @@ export default function OwnerMyPage() {
 
       {/* 2. 탭 메뉴 */}
       <nav className="owner-mypage-tabs">
-        {['받은 견적', '예약 완료', '내 리뷰', '찜한 기사님', '문의 내역'].map(tab => (
+        {['받은 견적', '예약 완료', '리뷰 관리', '찜한 기사님', '문의 내역'].map(tab => (
           <button 
             key={tab}
             className={`owner-mypage-tab-item ${activeTab === tab ? 'owner-mypage-active' : ''}`}

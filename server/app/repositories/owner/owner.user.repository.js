@@ -84,7 +84,7 @@ async function getStatsByOwnerId(ownerId) {
  * @returns 
  */
 async function getReservationsByOwnerId(ownerId) {
-  return await Reservation.findAll({
+  const reservations = await Reservation.findAll({
     where: {
       ownerId
     },
@@ -100,8 +100,31 @@ async function getReservationsByOwnerId(ownerId) {
           'addr3',
         ],
       },
+      {
+        model: Cleaner,
+        as: 'cleaner',
+        attributes: ['id', 'name', 'profile'],
+        required: false,
+        include: [{
+          model: Like,
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }],
+      },
     ],
     order: [['createdAt', 'DESC']]
+  });
+  return reservations.map(reservation => {
+    const plainReservation = reservation.get({ plain: true });
+    const heartStatus = plainReservation.cleaner?.likes?.length > 0;
+
+    return {
+      ...plainReservation,
+      heart: heartStatus,
+      cleanerId: plainReservation.cleaner?.id,
+    };
   });
 }
 

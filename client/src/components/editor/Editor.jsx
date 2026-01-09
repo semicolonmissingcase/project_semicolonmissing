@@ -1,5 +1,6 @@
 import { CKEditor as BaseCKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import React from 'react';
 
 // Base64 업로드 어댑터
 class Base64UploadAdapter {
@@ -36,6 +37,9 @@ function Base64UploadAdapterPlugin(editor) {
 
 export default function Editor({ onContentChange }) {
   
+  const editorUploadUrl = `${import.meta.env.VITE_APP_SERVER_URL}/api/posts/images/editor`;
+  console.log("--- [DEBUG] CKEditor uploadUrl:", editorUploadUrl);
+
   return (
     <div className="smart-editor-wrapper" style={{ width: '100%' }}>
       <BaseCKEditor
@@ -43,12 +47,16 @@ export default function Editor({ onContentChange }) {
         config={{
           licenseKey: 'GPL',
           extraPlugins: [Base64UploadAdapterPlugin],
+          placeholder: "이미지를 드래그하거나 버튼을 눌러 추가해보세요.",
           toolbar: [
             'heading', '|', 
             'bold', 'italic', 'link', 'uploadImage', 'insertTable', '|',
             'bulletedList', 'numberedList', 'blockQuote', '|',
             'undo', 'redo'
           ],
+          ckfinder: {
+            uploadUrl: `${import.meta.env.VITE_APP_SERVER_URL}/api/posts/images/editor`,
+          },
           image: {
             toolbar: [
               'imageStyle:inline',

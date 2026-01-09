@@ -1,11 +1,20 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import './MobileBottomNav.css';
 import { IoHome, IoPersonCircle, IoCaretBackSharp } from "react-icons/io5"
-
+import { useSelector } from 'react-redux';
 
 export default function MobileBottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+
+  // 역할에 따른 마이페이지 경로 지정
+  const getMyPagePath = () => {
+    if (!isLoggedIn) return '/login'; // 로그인 안 했으면 로그인 페이지로
+    if (user?.role === 'OWNER') return '/owners/mypage';
+    if (user?.role === 'CLEANER') return '/cleaners/mypage';
+    return '/';
+  };
 
   const navItems = [
     {
@@ -20,8 +29,8 @@ export default function MobileBottomNav() {
     },
     {
       icon: <IoPersonCircle style={{ fontSize: '2rem', color: '#0C1B41'}} />,
-      action: () => navigate('/mypage'),
-      path: '/mypage'
+      action: () => navigate(getMyPagePath()),
+      path: getMyPagePath()
     }
   ];
 

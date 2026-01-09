@@ -1,18 +1,19 @@
 /**
- * @file app/middlewares/multer/uploaders/reservationImage.uploader.js
+ * @file app/middlewares/multer/uploaders/review.uploader.js
  * @description 요청서 업로더
- * 260105 ck init
+ * 260107 ck init
  */
 
 import multer from 'multer';
 import fs from 'fs';
 import dayjs from 'dayjs';
+import crypto from 'crypto';
+import path from 'path';
 import myError from '../../../errors/customs/my.error.js';
 import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
-import pathUtil from '../../../utils/path/path.util.js';
 
 /**
- * 요청서 이미지 업로더 처리 미들웨어
+ * 리뷰 이미지 업로더 처리 미들웨어
  * @param {import("express").Request} req 
  * @param {import("express").Response} res 
  * @param {import("express").NextFunction} next 
@@ -24,13 +25,13 @@ export default function(req, res, next) {
     storage: multer.diskStorage({
       // 파일 저장 경로 설정
       destination(req, file, callback) {
-        const fullPath = pathUtil.getProfilesImagePath();
+        const uploadDir = 'uploads/reviews/';
 
         // 저장 디렉토리 설정
-        if(!fs.existsSync(fullPath)) {
+        if(!fs.existsSync(uploadDir)) {
           // 해당 디렉토리 없으면 생성 처리
           fs.mkdirSync(
-            fullPath,
+            uploadDir,
             {
               recursive: true, // 중간 디렉토리까지 모두 생성
               mode: 0o755 // 권한 설정 rwxr-xr-x
@@ -38,14 +39,13 @@ export default function(req, res, next) {
           );
         }
 
-        callback(null, fullPath);
+        callback(null, uploadDir);
       },
       // 파일명 설정
       filename(req, file, callback) {
         // 저장할 파일명 생성
         const uniqueFileName = `${dayjs().format('YYYYMMDD')}_${crypto.randomUUID()}`;
-        const fileNameParts = file.originalname.split('.');
-        const ext = fileNameParts[fileNameParts.length - 1].toLowerCase();
+        const ext = path.extname(file.originalname).toLowerCase();
         
         callback(null, `${uniqueFileName}.${ext}`);
       }
@@ -59,9 +59,12 @@ export default function(req, res, next) {
     },
     // limits: 파일 사이즈 제한, 파일 개수 제한
     limits: {
-      fileSize: parseInt(process.env.FILE_USER_PROFILE_SIZE)
+      fileSize: 10 * 1024 * 1024
     }
-  }).single('profile');
+  }).fields([
+    { name: 'reviewPicture1', maxCount: 1 },
+    { name: 'reviewPicture2', maxCount: 1 },
+  ]);
 
   // 예외 처리
   upload(req, res, err => {

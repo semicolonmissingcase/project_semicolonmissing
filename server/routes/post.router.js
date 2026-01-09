@@ -8,6 +8,8 @@ import express from 'express';
 import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 import ownerInquiryController from '../app/controllers/owner/owner.inquiry.controller.js';
 import multerMiddleware from '../app/middlewares/multer/multer.middleware.js';
+import reviewCreateValidator from '../app/middlewares/validations/validatiors/owner/review.create.validator.js';
+import reviewUploader from '../app/middlewares/multer/uploaders/review.uploader.js';
 
 const postsRouter = express.Router();
 
@@ -17,22 +19,27 @@ postsRouter.get('/inquiries', ownerInquiryController.getAllInquiries);
 postsRouter.post('/inquiries', authMiddleware, ownerInquiryController.ownerCreateInquiry);
 // 문의사항 작성(비회원용)
 postsRouter.post('/inquiries/guest', multerMiddleware.inquiryImageUploader, ownerInquiryController.guestCreateInquiry);
-// CKEditor 내부 이미지 업로드용 라우트
-postsRouter.post('/images/editor', authMiddleware, ownerInquiryController.uploadEditorImage)
+
 // 내 문의사항 조회(점주)
 postsRouter.get('/owner/inquiries', authMiddleware, ownerInquiryController.getOwnerInquiries);
 // 내 문의상세 조회(점주)
 postsRouter.get('/owner/inquiries/:inquiryId', authMiddleware, ownerInquiryController.getOwnerInquiriesShow);
 
-// CKEditor 내부 이미지 업로드용
-postsRouter.post('/images/editor', multerMiddleware.editorImageUploader, ownerInquiryController.uploadEditorImage);
-
 // 문의사항 답변(관리자 전용)
 // postsRouter.post('/inquiries/:inquiryId/answers', authAdminMiddleware, ownerInquiryController.createAnswer);
 
-// 리뷰 작성
-// postsRouter.post('/reviews', authUserMiddleware, ownerInquiryController.createReview);
+// ---------------------------
+// 리뷰 관리
+// ---------------------------
 // 리뷰 목록 조회
 postsRouter.get('/owner/reviews', authMiddleware, ownerInquiryController.getOwnerReviews);
+// 리뷰 작성 전 목록 조회
+postsRouter.get('/owner/reservations/completed', authMiddleware, ownerInquiryController.getCompletedReservations);
+// 개별 리뷰 상세 조회
+postsRouter.get('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.getReviewDetails);
+// 리뷰 작성
+postsRouter.post('/owner/reviews', authMiddleware, reviewUploader, reviewCreateValidator, ownerInquiryController.createReview);
+// 리뷰 삭제
+postsRouter.delete('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.deleteReview);
 
 export default postsRouter;

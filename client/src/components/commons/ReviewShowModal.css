@@ -83,10 +83,8 @@
 /* 리뷰 본문 스타일 */
 .review-view-comment-container {
   width: 100%;
-  min-height: 100px;
   background: #fff;
   border: 1px solid #eee;
-  border-radius: 15px;
   padding: 20px;
   text-align: left;
   font-size: 16px;
@@ -97,10 +95,27 @@
 }
 
 /* 이미지 첨부 시 스타일 */
+.review-view-photos-container {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.review-view-photo {
+  width: 50%;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+
+/* 실제 이미지 태그 스타일 추가 */
 .review-view-photo img {
   width: 100%;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
 /* 하단 버튼 */

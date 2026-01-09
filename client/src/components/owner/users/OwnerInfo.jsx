@@ -3,22 +3,30 @@ import "./OwnerInfo.css";
 import { useNavigate } from "react-router-dom";
 import OwnerStoreInfo from "./OwnerStoreInfo";
 import ConfirmModal from "../../result/ConfirmModal.jsx" // 완료 모달
+import OwnerPwModal from "../../owner/users/OwnerPwModal.jsx";
+import NameEditModal from "../../commons/NameEditModal.jsx"; // 이름 변경 모달
 import { useDispatch, useSelector } from "react-redux";
 import { storeGetThunk } from "../../../store/thunks/storeGetThunk.js";
 import { storeCreateThunk } from "../../../store/thunks/storeCreateThunk.js";
 import { storeDeleteThunk } from "../../../store/thunks/storeDeleteThunk.js";
 import { getMeThunk, updateOwnerInfoThunk } from "../../../store/thunks/authThunk.js"
+import { CiEdit } from "react-icons/ci"; // 이름 변경 아이콘
 
 export default function OwnerInfo() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { stores = [], status, error:storeError } = useSelector((state) => state.store);
   const { user, isLoggedIn, isLoading, error:authError } = useSelector((state) => state.auth);
+  const [cleanerName, setCleanerName] = useState("");
   // 전화번호 상태 (수정 가능하게)
   const [phonePrefix, setPhonePrefix] = useState("010");
   const [phoneMiddle, setPhoneMiddle] = useState("");
   const [phoneLast, setPhoneLast] = useState("");
+  // 이름 수정 모달 관련 상태
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
+  const [tempName, setTempName] = useState("");
 
+  const [pwModalOpen, setPwModalOpen] = useState(false); // 비밀번호 모달
   const [isModalOpen, setIsModalOpen] = useState(false); // 매장 추가 모달
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // 삭제 확인 공통 모달
   const [modalConfig, setModalConfig] = useState(null); // 공통 모달 설정값
@@ -55,6 +63,22 @@ export default function OwnerInfo() {
   const handlePhonePartChange = (setter) => (e) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
     setter(numericValue);
+  };
+
+  // 이름 수정 모달 열기
+  const handleOpenNameModal = () => {
+    setTempName(cleanerName);
+    setIsNameModalOpen(true);
+  };
+
+  const handleSaveName = () => {
+    const newName = tempName.trim();
+    if (!newName) {
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    setCleanerName(newName);
+    setIsNameModalOpen(false);
   };
 
   // 수정 완료 버튼
@@ -132,13 +156,33 @@ export default function OwnerInfo() {
   return (
     <>
       <div className="all-container ownerinfo-container">
-        <div className="ownerinfo-profile-container">
+        <div className="ownerinfo-profile-header">
+          {/* 프로필 이미지 */}
           <div 
             className="ownerinfo-profile-img" 
             style={{ backgroundImage: `url('${profileImageUrl}')` }}
           ></div>
-          <h2>{user ? `${user.name} 점주님` : '점주님'}</h2>
-          <p>{user ? user.email : 'admin@admin.com'}</p>
+
+          {/* 이름 + 수정 아이콘 그룹 */}
+          <div className="ownerinfo-name-wrapper">
+            <h2 className="ownerinfo-name">
+              {user ? `${user.name} 점주님` : '점주님'}
+            </h2>
+            <div className="ownerinfo-edit-btn-area">
+              <CiEdit className="ownerinfo-edit-icon" />
+              <button 
+                type="button" 
+                className="ownerinfo-profile-name-btn" 
+                onClick={handleOpenNameModal}
+                title="이름 수정"
+              ></button>
+            </div>
+          </div>
+
+          {/* 이메일 */}
+          <p className="ownerinfo-email">
+            {user ? user.email : 'admin@admin.com'}
+          </p>
         </div>
 
         <div className="ownerinfo-profile-setting-container">
@@ -179,6 +223,15 @@ export default function OwnerInfo() {
               <input className="yep" id="check-apple" type="checkbox" />
               <label htmlFor="check-apple"></label>
             </div>
+          </div>
+
+          {/* 비밀번호 변경 */}
+          <div className="cleaners-info-row">
+            <label>비밀번호 변경</label>
+            <button type="button" className="cleaners-info-btn-change"
+              onClick={() => setPwModalOpen(true)}>
+              변경하기
+            </button>
           </div>
 
           <div className="ownerinfo-store-info-container">
@@ -235,7 +288,22 @@ export default function OwnerInfo() {
       <ConfirmModal
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
-        config={modalConfig}
+        config={modalConfig}        
+      />
+
+      {/* 비밀번호 변경 모달 */}
+      <OwnerPwModal 
+        isOpen={pwModalOpen}
+        onClose={() => setPwModalOpen(false)}
+      /> 
+
+      {/* 이름 수정 모달 호출 */}
+      <NameEditModal 
+        isOpen={isNameModalOpen}
+        tempName={tempName}
+        setTempName={setTempName}
+        onCancel={() => setIsNameModalOpen(false)}
+        onSave={handleSaveName}
       />
     </>
   );

@@ -62,7 +62,7 @@ export default function Reservations() {
               
               <div className="reservations-info-content">
                 <h4 className="reservations-driver-name">
-                  {item.name} <span className="reservations-heart-icon"></span>
+                  {item.name}
                   <FavoriteButton cleanerId={item.cleanerId} initialIsFavorited={item.heart} />
                 </h4>
                 <p className="reservations-detail-text">{item.time}</p>
@@ -80,7 +80,7 @@ export default function Reservations() {
                   <button className="reservations-btn-danger">예약취소</button>
                 </>
               ) : item.status === '완료' ? (
-                <button className="bg-blue">리뷰쓰기</button>
+                <button className="bg-blue">기능고민중</button>
               ) : (
                 <button className="reservations-btn-secondary" disabled>대기중</button>
               )}

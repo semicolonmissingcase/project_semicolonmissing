@@ -8,6 +8,17 @@ export const getOwnerStats = async () => {
   return response.data.data;
 };
 
+// 요청서 질문 조회
+export const getQuestions = async () => {
+  try {
+    const response = await axiosInstance.get(`${OWNER_API_URL}/questionslist`);
+    return response.data.data;
+  } catch (error) {
+    console.error(`질문 목록 조회 실패:`, error);
+    throw error;
+  }
+}
+
 // 견적 요청서 작성
 export const createReservation = async (reservationData) => {
   try {

@@ -25,6 +25,7 @@ import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
 import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
 import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
 import OwnerReservation from "../components/owner/OwnerReservation.jsx";
+import OwnerReservationShow from "../components/owner/OwnerReservationShow.jsx";
 // 관리자 관련
 import AdminLayout from "../components/admin/common/AdminLayout.jsx";
 import AdminMain from "../components/admin/main/AdminMain.jsx";
@@ -99,7 +100,7 @@ const router = createBrowserRouter([
           },
           {
             // 기사 프로필 수정 페이지
-            path: 'profileedit/:id',
+            path: 'profileedit',
             element: <CleanersProfileEdit />,
           },
           { 
@@ -143,6 +144,11 @@ const router = createBrowserRouter([
             path: 'reservation',
             element: <OwnerReservation />,
           },
+          {
+            // 점주가 확인하는 요청서 페이지
+            path: 'reservation/:id',
+            element: <OwnerReservationShow />
+          }
         ]
       },
       {

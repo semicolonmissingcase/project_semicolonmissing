@@ -21,3 +21,7 @@ export const getCleanerReviews = () =>
 // 정산 대기 목록 불러오기
 export const getSettlementSummary = () =>
   axiosInstance.get(`${CLEANER_API_URL}/mypage/settlement`);
+
+// 계좌 목록 불러오기
+export const getAccountThunk = () =>
+  axiosInstance.get(`${CLEANER_API_URL}/accountinfo`);

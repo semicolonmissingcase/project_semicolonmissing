@@ -67,13 +67,40 @@ export const updateOwnerInfoThunk = createAsyncThunk(
   'auth/updateOwnerInfoThunk',
   async(updateData, {rejectWithValue}) => {
     try {
-      const response = await axiosInstance.put('/api/auth/me', updateData);
+      const response = await axiosInstance.put('/api/owners/mypage/profile', updateData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
+
+// 기사 정보 수정하기
+export const updateCleanerInfoThunk = createAsyncThunk(
+  'auth/updateCleanerInfoThunk',
+  async(updateData, {rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.put('/api/cleaners/mypage/info', updateData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// 기사 비밀번호 수정하기
+export const changeCleanerPasswordThunk = createAsyncThunk(
+  'auth/changeCleanerPasswordThunk',
+  async(passwordData, {rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.put('/api/cleaners/mypage/password', passwordData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 
 export const uploadProfileImageThunk = createAsyncThunk(
   'auth/uploadProfileImageThunk',

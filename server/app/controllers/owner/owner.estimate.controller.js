@@ -34,7 +34,7 @@ async function getEstimatesByReservationId(req, res, next) {
  * @param {import("express").NextFunction} next 
  * @returns 
  */
-async function getAcceptedEstimatesByOwnerId(req, res, next) {
+async function getEstimatesByOwnerId(req, res, next) {
   try {
     const ownerId = req.user.id;
 
@@ -48,5 +48,5 @@ async function getAcceptedEstimatesByOwnerId(req, res, next) {
 
 export default {
   getEstimatesByReservationId,
-  getAcceptedEstimatesByOwnerId,
+  getEstimatesByOwnerId,
 }
