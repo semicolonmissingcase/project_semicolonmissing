@@ -26,6 +26,7 @@ import OwnerMyPage from "../components/owner/mypage/OwnerMyPage.jsx";
 import OwnerInfo from "../components/owner/users/OwnerInfo.jsx";
 import OwnerReservation from "../components/owner/OwnerReservation.jsx";
 // 관리자 관련
+import AdminLayout from "../components/admin/common/AdminLayout.jsx";
 import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 import AdminCleanerProfile from "../components/admin/pages/cleaners/AdminCleanerProfile.jsx";
@@ -34,7 +35,6 @@ import AdminQna from "../components/admin/pages/AdminQna.jsx"
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
 // 결제 관련 
-import PaymentModal from "../components/payment/paymentModal.jsx";
 import PaymentSuccess from "../components/payment/paymentSuccess.jsx";
 import PaymentFail from "../components/payment/paymentFail.jsx";
 
@@ -217,28 +217,44 @@ const router = createBrowserRouter([
         children: [
           {
             path: '/hospital',
-            element: <Outlet />,
             children: [
+              // ----------------
+              // AdminLayout 필요 자식들
+              // ----------------
+              {
+                path: '',
+                element: <AdminLayout />,
+                children: [
+                  {
+                    // 통합모니터링
+                    path: '',
+                    element: <AdminMain />
+                  },
+                  {
+                    // 기사 프로필 관리 페이지
+                    path: 'cleanerprofile',
+                    element: <AdminCleanerProfile />
+                  },
+                  {
+                    // 문의 관리 페이지
+                    path: 'qna',
+                    element: <AdminQna />
+                  },
+                  {
+                    // 기사 프로필 관리 페이지
+                    path: 'cleaners/profiles',
+                    element: <AdminCleanerProfile />
+                  },
+                ],
+              },
+              // ----------------
+              //  AdminLayout 불필요 자식들
+              // ----------------
               {
                 // 관리자 로그인
                 path: 'login',
                 element: <AdminLogin />
               },
-              {
-                // 통합모니터링
-                path: '',
-                element: <AdminMain />
-              },
-              {
-                // 기사 프로필 관리 페이지
-                path: 'cleanerprofile',
-                element: <AdminCleanerProfile />
-              },
-              {
-                // 문의 관리 페이지
-                path: 'qna',
-                element: <AdminQna />
-              }
             ]
           }
         ]
