@@ -29,8 +29,8 @@ const IsAssignStatus = {
 // 견적서 관련 상태값
 const EstimateStatus = {
   SENT: '전송',
-  ACCEPTED: '수락',
-  COMPLETED: '결제 완료'
+  PAID: '결제 완료',
+  MATCHING_FAILED: '매칭 실패',
 };
 
 // 정산 관련 상태값
@@ -48,13 +48,13 @@ const InquiryStatus = {
   COMPLETED: '완료'
 }
 
-// 문의 카테고리 관련 상태값
-const InquiryCategoryStatus = {
-  QUOTE_INQUIRY: '견적 문의',
-  SERVICE_INQUIRY: '서비스 문의',
-  TECHNICAL_SUPPORT: '기술 지원',
-  IMPROVEMENT: '불만/개선사항',
-  PAYMENT_INQUIRY: '결제 문의',
+// 문의 카테고리
+const InquiryCategory = {
+  QUOTE: '견적 문의',
+  SERVICE: '서비스 문의',
+  TECH: '기술 지원',
+  COMPLAINT: '불만/개선사항',
+  PAYMENT: '결제 문의',
   ETC: '기타',
 }
 
@@ -64,7 +64,7 @@ Object.freeze(IsAssignStatus);
 Object.freeze(EstimateStatus);
 Object.freeze(AdjustmentStatus);
 Object.freeze(InquiryStatus);
-Object.freeze(InquiryCategoryStatus);
+Object.freeze(InquiryCategory);
 
 export default {
   ReservationStatus,
@@ -73,5 +73,5 @@ export default {
   EstimateStatus,
   AdjustmentStatus,
   InquiryStatus,
-  InquiryCategoryStatus,
+  InquiryCategory,
 }
