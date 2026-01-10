@@ -11,6 +11,8 @@ import { adminController } from '../app/controllers/auth/admin.controller.js';
 import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
 import adminDashboardController from '../app/controllers/admin/admin.dashboard.controller.js';
 import adminCleanersController from '../app/controllers/admin/admin.cleaners.controller.js';
+import adminOwnersController from '../app/controllers/admin/admin.owners.controller.js';
+import adminAdjustmentsController from '../app/controllers/admin/admin.adjustments.controller.js';
  
 const adminRouter = express.Router();
 
@@ -22,5 +24,13 @@ adminRouter.get('/monitoring', authMiddleware, adminDashboardController.getMonit
 // bj 작업
 adminRouter.get('/cleaners/profiles', authMiddleware, adminCleanersController.profileIndex);
 adminRouter.get('/cleaners/profiles/statistics', authMiddleware, adminCleanersController.statisticsIndex);
+
+// 유저 프로필 관리
+adminRouter.get('/owners/profiles', authMiddleware, adminOwnersController.ownerProfileIndex);
+adminRouter.get('/owners/profiles/statistics', authMiddleware, adminOwnersController.ownerStatisticsIndex);
+
+// 정산 관리
+adminRouter.get('/adjustments/view', authMiddleware, adminAdjustmentsController.adjustmentIndex);
+adminRouter.get('/adjustments/view/statistics', authMiddleware, adminAdjustmentsController.adjustmentStatisticsIndex)
 
 export default adminRouter;
