@@ -19,17 +19,35 @@ const attributes = {
     autoIncrement: true,
     comment: '알림 PK',
   },
-  ownerId: {
-    field: 'owner_id',
+  receiverId: {
+    field: 'receiver_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 PK'
+    comment: '수신자 pk'
   },
-  cleanerId: {
-    field: 'cleaner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
+  receiverRole: {
+    field: 'receiver_role',
+    type: DataTypes.ENUM('OWNER', 'CLEANER'),
     allowNull: false,
-    comment: '기사 PK',
+    comment: '수신자 유형 (OWNER, CLEANER)',
+  },
+  senderId: {
+    field: 'sender_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: true,
+    comment: '발신자 PK (관리자, 점주, 기사 ID / 시스템 발송 시 null)',
+  },
+  senderRole: {
+    field: 'sender_role',
+    type: DataTypes.ENUM('OWNER', 'CLEANER', 'ADMIN', 'SYSTEM'),
+    allowNull: false,
+    comment: '발신자 유형 (ADMIN, SYSTEM)',
+  },
+  type: {
+    field: 'type',
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    comment: '알림 유형',
   },
   title: {
     field: 'title',
@@ -43,17 +61,11 @@ const attributes = {
     allowNull: false,
     comment: '내용'
   },
-  isRead: {
-    field: 'is_read',
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    comment: '읽음 여부'
-  },
   createdAt: {
     field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '작성일', 
+    comment: '작성일',
   },
   updatedAt: {
     field: 'updated_at',
@@ -79,12 +91,12 @@ const options = {
 /** @type {import('sequelize-cli').Migration} */
 export default {
   // 마이그레이션 실행 시 호출되는 메소드 (스키마 생성, 수정)
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable(tableName, attributes, options);
   },
 
   // 마이그레이션을 롤백 시 호출되는 메소드 (스키마 제거, 수정)
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable(tableName);
   }
 };

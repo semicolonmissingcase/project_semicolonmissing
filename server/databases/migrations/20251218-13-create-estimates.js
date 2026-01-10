@@ -47,13 +47,13 @@ const attributes = {
     field: 'status',
     type: DataTypes.STRING(20),
     allowNull: true,
-    comment: '상태(전송, 수락)'
+    comment: '상태(전송, 결제 완료, 매칭 실패)'
   },
   createdAt: {
     field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '작성일', 
+    comment: '작성일',
   },
   updatedAt: {
     field: 'updated_at',
@@ -79,12 +79,12 @@ const options = {
 /** @type {import('sequelize-cli').Migration} */
 export default {
   // 마이그레이션 실행 시 호출되는 메소드 (스키마 생성, 수정)
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable(tableName, attributes, options);
   },
 
   // 마이그레이션을 롤백 시 호출되는 메소드 (스키마 제거, 수정)
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable(tableName);
   }
 };
