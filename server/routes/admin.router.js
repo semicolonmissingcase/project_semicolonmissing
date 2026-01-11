@@ -31,6 +31,7 @@ adminRouter.get('/owners/profiles/statistics', authMiddleware, adminOwnersContro
 
 // 정산 관리
 adminRouter.get('/adjustments/view', authMiddleware, adminAdjustmentsController.adjustmentIndex);
-adminRouter.get('/adjustments/view/statistics', authMiddleware, adminAdjustmentsController.adjustmentStatisticsIndex)
+adminRouter.get('/adjustments/view/statistics', authMiddleware, adminAdjustmentsController.adjustmentStatisticsIndex);
+adminRouter.post('/adjustments/:id/status', authMiddleware, adminAdjustmentsController.updateAdjustmentStatus);
 
 export default adminRouter;

@@ -4,29 +4,28 @@
  * 260110 v1.0.0 jae init
  */
 
+
+import { SUCCESS } from "../../../configs/responseCode.config.js";
+import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
+import adminAdjustmentsService from "../../services/admin/admin.adjustments.service.js";
+
 /**
- * 정산 관리 메인 인덱스
+ * 1. 정산 목록 조회 (Pagination)
  */
 async function adjustmentIndex(req, res, next) {
   try {
-    // 1. 페이지네이션 설정
     const page = req.query.page ? Number(req.query.page) : 1;
     const limit = req.query.offset ? Number(req.query.offset) : 10;
     const offset = (page - 1) * limit;
 
-    // 2. 서비스 호출
-    const [adjustmentData, statistics] = await Promise.all([
-      adminAdjustmentsService.getAdjustments({ limit, offset }),
-      adminAdjustmentsService.getStatistics()
-    ]);
+    const { adjustments, total } = await adminAdjustmentsService.getAdjustments({ limit, offset });
 
-    // 3. 성공 응답 반환
+    // 기사 프로필 관리와 동일하게 total, currentPage, 리스트를 담아 보냅니다.
     return res.status(SUCCESS.status).send(
       createBaseResponse(SUCCESS, {
-        statistics,               // 상단 카드용: 전체, 지급대기, 완료, 보류 건수
-        total: adjustmentData.total, // 전체 아이템 수
+        total: total,
         currentPage: page,
-        adjustments: adjustmentData.adjustments // 리스트: 기사명, 금액, 상태, 예정일
+        adjustments: adjustments
       })
     );
   } catch (error) {
@@ -35,31 +34,41 @@ async function adjustmentIndex(req, res, next) {
 }
 
 /**
- * 정산 건수 집계
+ * 2. 정산 통계 조회
  */
-async function adjustmentStatisticsIndex(t = null, paramWhere) {
-  let where = {};
-  
-  // 1. 기간 필터 (정산 예정일 기준)
-  if (paramWhere?.startAt) {
-    where.scheduledAt = { [Op.gte]: paramWhere.startAt };
+async function adjustmentStatisticsIndex(req, res, next) {
+  try {
+    const { statistics } = await adminAdjustmentsService.getStatistics();
+    
+    // 통계 데이터를 반환합니다.
+    return res.status(SUCCESS.status).send(
+      createBaseResponse(SUCCESS, { statistics })
+    );
+  } catch (error) {
+    next(error);
   }
-  if (paramWhere?.endAt) {
-    where.scheduledAt = { [Op.lte]: paramWhere.endAt };
-  }
+}
 
-  // 2. 상태 필터 (정산 대기, 지급 대기, 완료, 보류 등)
-  if (paramWhere?.status) {
-    where.status = paramWhere.status;
-  }
+/**
+ * 3. 정산 상태 업데이트 (POST)
+ */
+async function updateAdjustmentStatus(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { status } = req.body; // '정산 완료'
 
-  return await Adjustment.count({
-    where,
-    transaction: t,
-  });
+    await adminAdjustmentsService.updateAdjustmentStatus(id, status);
+
+    return res.status(SUCCESS.status).send(
+      createBaseResponse(SUCCESS, { message: `정산 상태가 ${status}로 변경되었습니다.` })
+    );
+  } catch (error) {
+    next(error);
+  }
 }
 
 export default {
   adjustmentIndex,
   adjustmentStatisticsIndex,
+  updateAdjustmentStatus,
 };

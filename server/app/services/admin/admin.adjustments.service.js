@@ -4,30 +4,51 @@
  * 260110 v1.0.0 jae init
  */
 
-import adminAdjustmentsRepository from "../../repositories/admin/admin.adjustments.repository.js";
+import adminAdjustmentsRepositorie from "../../repositories/admin/admin.adjustments.repositorie";
 
+/**
+ * 1. 정산 목록 조회 서비스
+ */
 async function getAdjustments({ limit, offset }) {
-  const { rows, count } = await adminAdjustmentsRepository.paginationAdjustments(null, { limit, offset });
-  return { adjustments: rows, total: count };
+  const { rows, count } = await adminAdjustmentsRepositorie.paginationAdjustments(null, { limit, offset });
+  
+  return { 
+    adjustments: rows, 
+    total: count,
+    currentPage: Math.floor(offset / limit) + 1
+  };
 }
 
+/**
+ * 2. 정산 통계 집계 서비스
+ */
 async function getStatistics() {
-  // 1. 전체 정산 건수 (전체 히스토리)
-  const totalCnt = await adminAdjustmentsRepository.findAdjustmentsCount(null);
-  
-  // 2. 지급 대기 건수 (관리자가 지금 처리해야 할 긴급한 건들)
-  const pendingCnt = await adminAdjustmentsRepository.findAdjustmentsCount(null, { status: '지급 대기' });
-  
-  // 3. 정산 완료 건수 (이번 달 혹은 전체 성공 건수)
-  const completedCnt = await adminAdjustmentsRepository.findAdjustmentsCount(null, { status: '정산 완료' });
-  
-  // 4. 보류 건수 (문제가 있어 확인이 필요한 건들)
-  const holdCnt = await adminAdjustmentsRepository.findAdjustmentsCount(null, { status: '보류' });
+  const [totalCnt, pendingCnt, completedCnt, holdCnt] = await Promise.all([
+    adminAdjustmentsRepositorie.findAdjustmentsCount(null, {}),
+    adminAdjustmentsRepositorie.findAdjustmentsCount(null, { status: '정산 대기' }),
+    adminAdjustmentsRepositorie.findAdjustmentsCount(null, { status: '정산 완료' }),
+    adminAdjustmentsRepositorie.findAdjustmentsCount(null, { status: '보류' })
+  ]);
 
-  return { totalCnt, pendingCnt, completedCnt, holdCnt };
+  return {
+    statistics: {
+      totalCnt,     // 전체 정산 건수
+      pendingCnt,   // 정산 대기 건수
+      completedCnt, // 정산 완료 건수
+      holdCnt       // 보류 건수
+    }
+  };
+}
+
+/**
+ * 3. 정산 상태 업데이트 서비스
+ */
+async function updateAdjustmentStatus(id, status) {
+  return await adminAdjustmentsRepositorie.updateAdjustmentStatus(id, status);
 }
 
 export default {
   getAdjustments,
   getStatistics,
-}
+  updateAdjustmentStatus,
+};
