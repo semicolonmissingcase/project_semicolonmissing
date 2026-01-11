@@ -65,11 +65,11 @@ const slice = createSlice({
         action => action.type.endsWith("/rejected"),
         (state, action) => {
           state.error = action.payload;
-          console.log('addMatcher',action, state.error);
+          console.log('addMatcher', action, state.error);
         }
       )
       ;
-  },  
+  },
 });
 
 export const {

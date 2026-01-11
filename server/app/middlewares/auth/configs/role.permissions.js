@@ -26,11 +26,11 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/posts\/owner\/reviews$/, roles: [OWNER] }, // 리뷰 목록 조회
     { path: /^\/api\/posts\/owner\/reservations\/completed$/, roles: [OWNER] }, // 리뷰 작성 전 목록 조회
     { path: /^\/api\/posts\/owner\/reviews\/\d+$/, roles: [OWNER] }, // 개별 리뷰 상세 조회
-    {path: /^\/api\/chat\/rooms$/, roles: [OWNER, CLEANER] }, // 채팅방 목록 조회
-    {path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅 메시지 내역 조회
-    {path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
-    {path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
-    {path: /^\/api\/owners\/quotations$/, roles: [OWNER],}, // 견적 리스트 조회
+    { path: /^\/api\/chat\/rooms$/, roles: [OWNER, CLEANER] }, // 채팅방 목록 조회
+    { path: /^\/api\/chat\/rooms\/\d+\/messages$/, roles: [OWNER, CLEANER] }, // 채팅 메시지 내역 조회
+    { path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
+    { path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
+    { path: /^\/api\/owners\/quotations$/, roles: [OWNER], }, // 견적 리스트 조회
     { path: /^\/api\/cleaners\/accountinfo$/, roles: [CLEANER] }, // 기사님 계좌 조회
     // -------------------------
     // 관리자 관련
@@ -40,8 +40,9 @@ const ROLE_PERMISSIONS = {
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },
     { path: /^\/api\/v1\/auth\/logout$/, roles: [OWNER, CLEANER] }, // 둘 다 허용
-    { path: /^\/api\/payments\/ready$/,  roles: [OWNER, CLEANER] },
+    { path: /^\/api\/payments\/ready$/, roles: [OWNER, CLEANER] },
     { path: /^\/api\/payments\/confirm$/, roles: [OWNER] },
+    { path: /^\/api\/payments\/cancel$/, roles: [OWNER] }, // 결제 취소
     { path: /^\/api\/admin\/logout$/, roles: [ADMIN] },
     { path: /^\/api\/stores$/, roles: [OWNER] }, // 매장 추가
     { path: /^\/api\/owners\/profile$/, roles: [OWNER] }, // 점주 프로필 이미지 업로드

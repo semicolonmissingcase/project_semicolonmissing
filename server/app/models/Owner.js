@@ -14,7 +14,7 @@ const attributes = {
   id: {
     field: 'id',
     type: DataTypes.BIGINT.UNSIGNED,
-    primaryKey: true, 
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
     comment: '점주 PK',
@@ -60,7 +60,7 @@ const attributes = {
   profile: {
     field: 'profile',
     type: DataTypes.STRING(500),
-    allowNull: true, 
+    allowNull: true,
     comment: '점주 프로필',
   },
   refreshToken: {
@@ -75,11 +75,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('createdAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
+    }
   },
   updatedAt: {
     field: 'updated_at',
@@ -87,11 +87,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('updatedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }     
+    }
   },
   deletedAt: {
     field: 'deleted_at',
@@ -99,11 +99,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('deletedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }    
+    }
   }
 };
 
@@ -118,7 +118,7 @@ const Owner = {
     const define = sequelize.define(modelName, attributes, options);
 
     // JSON으로 serialize시, 제외할 컬럼을 지정
-    define.prototype.toJSON = function() {
+    define.prototype.toJSON = function () {
       const attributes = this.get();
       delete attributes.password;
       delete attributes.refreshToken;
@@ -129,13 +129,12 @@ const Owner = {
     return define;
   },
   associate: (db) => {
-    db.Owner.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'ownerId', as: 'chatRooms'});
-    db.Owner.hasMany(db.Store, { sourceKey: 'id', foreignKey: 'ownerId', as: 'stores'});
-    db.Owner.hasMany(db.PushSubscription, { sourceKey: 'id', foreignKey: 'ownerId', as: 'pushSubscriptions'});
-    db.Owner.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'ownerId', as: 'reviews'});
-    db.Owner.hasMany(db.Like, { sourceKey: 'id', foreignKey: 'ownerId', as: 'likes'});
-    db.Owner.hasMany(db.Inquiry, { sourceKey: 'id', foreignKey: 'ownerId', as: 'inquiries'});
-    db.Owner.hasMany(db.Notification, { sourceKey: 'id', foreignKey: 'ownerId', as: 'notifications'});
+    db.Owner.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'ownerId', as: 'chatRooms' });
+    db.Owner.hasMany(db.Store, { sourceKey: 'id', foreignKey: 'ownerId', as: 'stores' });
+    db.Owner.hasMany(db.PushSubscription, { sourceKey: 'id', foreignKey: 'ownerId', as: 'pushSubscriptions' });
+    db.Owner.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'ownerId', as: 'reviews' });
+    db.Owner.hasMany(db.Like, { sourceKey: 'id', foreignKey: 'ownerId', as: 'likes' });
+    db.Owner.hasMany(db.Inquiry, { sourceKey: 'id', foreignKey: 'ownerId', as: 'inquiries' });
   }
 }
 

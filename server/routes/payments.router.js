@@ -16,4 +16,7 @@ paymentsRouter.post('/ready', authMiddleware, paymentController.readyPayment);
 // 결제 승인
 paymentsRouter.post('/confirm', authMiddleware, paymentController.confirmPayment);
 
+// 결제 취소
+paymentsRouter.post('/cancel', authMiddleware, paymentController.cancelPayment);
+
 export default paymentsRouter;

@@ -19,7 +19,7 @@ const adminCleanerProfileThunk = createAsyncThunk(
       };
 
       const url = '/api/admin/cleaners/profiles';
-      const response = await axiosInstance.get(url, { params }); 
+      const response = await axiosInstance.get(url, { params });
 
       return response.data;
     } catch (error) {
@@ -33,7 +33,7 @@ const adminCleanerProfileStatisticsThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const url = '/api/admin/cleaners/profiles/statistics';
-      const response = await axiosInstance.get(url); 
+      const response = await axiosInstance.get(url);
 
       return response.data;
     } catch (error) {

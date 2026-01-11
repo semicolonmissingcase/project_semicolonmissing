@@ -18,7 +18,7 @@ export default {
       {
         cleanerId: 1,
         reservationId: 1,
-        estimatedAmount: 300000,
+        estimatedAmount: 1,
         description: '사장님, 제빙기 내부 상태 확인해봤는데요. 스케일이랑 물때가 꽤 쌓여 있어서 분해 세척이 필요합니다.',
         status: '전송',
       },

@@ -1,0 +1,146 @@
+.payment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+/* 1. 컨테이너 */
+.payment-modal-container {
+  background: var(--color-white);
+  width: 100%; 
+  max-width: 28rem;
+  padding: 3rem 1.5rem 2.5rem;
+  border-radius: 2rem 2rem 0 0;
+  position: relative;
+  box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 2.5rem);
+}
+
+/* 2. 제목 스타일 */
+.payment-modal-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #000;
+}
+
+/* 3. 정보 섹션 */
+.payment-modal-request-info-section {
+  width: 100%;
+  border: 1px solid #999;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.payment-modal-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.payment-modal-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.payment-modal-info-label {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #666;
+}
+
+.payment-modal-info-value {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: #000;
+}
+
+.payment-modal-request-info-section hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 1rem 0;
+}
+
+/* 가격 강조 스타일 */
+.payment-modal-info-value-price {
+  color: var(--color-light-blue);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+/* 4. 안내 문구 */
+.payment-modal-help-text {
+  font-size: 0.875rem;
+  color: #888;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+/* 5. 버튼 그룹 */
+.payment-modal-button-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.payment-modal-button-group button {
+  flex: 1;
+  padding: 1.1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.payment-modal-cancel-action {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.payment-request-action {
+  background-color: var(--color-light-blue);
+  color: var(--color-white);
+}
+
+.payment-request-action:disabled {
+  opacity: 0.5;
+}
+
+@media screen and (min-width: 820px) {
+  .payment-modal-overlay {
+    align-items: center;
+  }
+  .payment-modal-container {
+    border-radius: 1.5rem;
+    width: 90%;
+    max-width: 28rem;
+    padding-bottom: 2.5rem;
+    animation: payment-fade-in 0.2s ease-out;
+  }
+}
+
+@keyframes payment-fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media screen and (max-width: 430px) {
+  .payment-modal-container {
+    padding: 2rem 1rem;
+  }
+  .payment-modal-title {
+    font-size: 1.5rem;
+  }
+}

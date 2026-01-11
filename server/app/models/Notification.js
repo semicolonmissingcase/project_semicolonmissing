@@ -19,17 +19,35 @@ const attributes = {
     autoIncrement: true,
     comment: '알림 PK',
   },
-  ownerId: {
-    field: 'owner_id',
+  receiverId: {
+    field: 'receiver_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    comment: '점주 PK'
+    comment: '수신자 pk'
   },
-  cleanerId: {
-    field: 'cleaner_id',
-    type: DataTypes.BIGINT.UNSIGNED,
+  receiverRole: {
+    field: 'receiver_role',
+    type: DataTypes.ENUM('OWNER', 'CLEANER'),
     allowNull: false,
-    comment: '기사 PK',
+    comment: '수신자 유형 (OWNER, CLEANER)',
+  },
+  senderId: {
+    field: 'sender_id',
+    type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: true,
+    comment: '발신자 PK (관리자, 점주, 기사 ID / 시스템 발송 시 null)',
+  },
+  senderRole: {
+    field: 'sender_role',
+    type: DataTypes.ENUM('OWNER', 'CLEANER', 'ADMIN', 'SYSTEM'),
+    allowNull: false,
+    comment: '발신자 유형 (ADMIN, SYSTEM)',
+  },
+  type: {
+    field: 'type',
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    comment: '알림 유형',
   },
   title: {
     field: 'title',
@@ -43,23 +61,17 @@ const attributes = {
     allowNull: false,
     comment: '내용'
   },
-  isRead: {
-    field: 'is_read',
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    comment: '읽음 여부'
-  },
   createdAt: {
     field: 'created_at',
     type: DataTypes.DATE,
     allowNull: true,
     get() {
       const val = this.getDataValue('createdAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
+    }
   },
   updatedAt: {
     field: 'updated_at',
@@ -67,11 +79,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('updatedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }     
+    }
   },
   deletedAt: {
     field: 'deleted_at',
@@ -79,11 +91,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('deletedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }    
+    }
   }
 };
 
@@ -98,7 +110,7 @@ const Notification = {
     const define = sequelize.define(modelName, attributes, options);
 
     // JSON으로 serialize시, 제외할 컬럼을 지정
-    define.prototype.toJSON = function() {
+    define.prototype.toJSON = function () {
       const attributes = this.get();
 
       return attributes;
@@ -106,10 +118,6 @@ const Notification = {
 
     return define;
   },
-  associate: (db) => {
-    db.Notification.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
-    db.Notification.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
-  }
 }
 
 export default Notification;

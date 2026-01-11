@@ -16,7 +16,7 @@ export default {
     const records = [
       {
         ownerId: 1,
-        reservationId: 3,
+        reservationId: 1,
         cleanerId: 1,
         content: '청소 과정도 상세히 설명해 주시고, 평소 관리 방법까지 친절하게 알려주셔서 큰 도움이 되었습니다. 다음에도 꼭 이 기사님께 부탁드리고 싶어요.',
         star: 5,

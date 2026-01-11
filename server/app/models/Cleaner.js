@@ -14,7 +14,7 @@ const attributes = {
   id: {
     field: 'id',
     type: DataTypes.BIGINT.UNSIGNED,
-    primaryKey: true, 
+    primaryKey: true,
     allowNull: false,
     autoIncrement: true,
     comment: '기사 PK',
@@ -60,14 +60,14 @@ const attributes = {
   profile: {
     field: 'profile',
     type: DataTypes.STRING(100),
-    allowNull: true, 
+    allowNull: true,
     comment: '기사 프로필',
   },
   introduction: {
     field: 'introduction',
     type: DataTypes.STRING(200),
     allowNull: true,
-    comment: '한줄 소개', 
+    comment: '한줄 소개',
   },
   refreshToken: {
     field: 'refresh_token',
@@ -81,11 +81,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('createdAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
+    }
   },
   updatedAt: {
     field: 'updated_at',
@@ -93,11 +93,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('updatedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }     
+    }
   },
   deletedAt: {
     field: 'deleted_at',
@@ -105,11 +105,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('deletedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }    
+    }
   }
 };
 
@@ -124,7 +124,7 @@ const Cleaner = {
     const define = sequelize.define(modelName, attributes, options);
 
     // JSON으로 serialize시, 제외할 컬럼을 지정
-    define.prototype.toJSON = function() {
+    define.prototype.toJSON = function () {
       const attributes = this.get();
       delete attributes.password;
       delete attributes.refreshToken;
@@ -135,17 +135,16 @@ const Cleaner = {
     return define;
   },
   associate: (db) => {
-    db.Cleaner.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'chatRooms'});
-    db.Cleaner.hasMany(db.Estimate, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'estimates'});
+    db.Cleaner.hasMany(db.ChatRoom, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'chatRooms' });
+    db.Cleaner.hasMany(db.Estimate, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'estimates' });
     db.Cleaner.hasMany(db.Reservation, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'reservations' });
     db.Cleaner.hasMany(db.DriverRegion, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'driverRegions' });
-    db.Cleaner.belongsToMany(db.Location, { through: db.DriverRegion, foreignKey: 'cleanerId', otherKey: 'locationId', as: 'locations'});
+    db.Cleaner.belongsToMany(db.Location, { through: db.DriverRegion, foreignKey: 'cleanerId', otherKey: 'locationId', as: 'locations' });
     db.Cleaner.hasMany(db.Certification, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'certification' });
     db.Cleaner.hasMany(db.Inquiry, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'inquiries' });
-    db.Cleaner.hasMany(db.CleanerAccount, { sourceKey:'id', foreignKey: 'cleanerId', as:'cleanerAccounts'});
+    db.Cleaner.hasMany(db.CleanerAccount, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'cleanerAccounts' });
     db.Cleaner.hasMany(db.Like, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'likes' });
     db.Cleaner.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'reviews' });
-    db.Cleaner.hasMany(db.Notification, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'notifications'});
   }
 }
 
