@@ -27,7 +27,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #fbfbfc; /* 배경은 아주 연하게 유지 */
+  background-color: #fbfbfc;
   border-radius: 10px;
   padding: 15px 0;
   margin-bottom: 20px;
@@ -47,13 +47,13 @@
 .SettlementCards-amount-pending {
   font-size: 1.15rem;
   font-weight: bold;
-  color: var(--color-light-blue); /* 브랜드 강조 컬러 (하늘색) */
+  color: var(--color-light-blue);
 }
 
 .SettlementCards-amount-complete {
   font-size: 1.15rem;
   font-weight: bold;
-  color: var(--color-dark-blue); /* 완료는 신뢰감 있는 다크 블루 */
+  color: var(--color-dark-blue);
 }
 
 .SettlementCards-divider {
@@ -68,7 +68,7 @@
   border-radius: 6px;
   padding: 8px 16px;
   font-size: 0.85rem;
-  color: var(--color-blue); /* 버튼 텍스트는 미디엄 블루 */
+  color: var(--color-blue);
   cursor: pointer;
   transition: all 0.2s;
 }

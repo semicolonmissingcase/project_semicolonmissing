@@ -2,7 +2,6 @@ import React from 'react';
 import './SettlementCards.css';
 
 const SettlementCards = ({ data }) => {
-  // 백엔드 summary 객체 구조 (pending, completed)에 맞춤
   const { pending = 0, completed = 0 } = data || {};
 
   return (

@@ -25,7 +25,6 @@
   text-align: center;
 }
 
-/* --- Top Summary Box --- */
 .cleaners-settlement-status-top-summary {
   margin-bottom: 24px;
   text-align: center;
@@ -60,15 +59,13 @@
 }
 
 
-/* --- Monthly Summary --- */
 .cleaners-settlement-status-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr; /* Give calendar more space */
+  grid-template-columns: 1.2fr 1fr;
   gap: 24px;
   align-items: flex-start;
 }
 
-/* --- Calendar (Left) --- */
 .cleaners-settlement-status-caption {
   width: 100%;
   display: flex;
@@ -82,7 +79,6 @@
 .cleaners-settlement-status-caption-year { font-size: 1rem;  }
 .cleaners-settlement-status-caption-month { font-size: 1.1rem; }
 
-/* --- DayPicker 기본 구조 정리 --- */
 .rdp {
   width: 100%;
 }
@@ -100,7 +96,6 @@ tr.rdp-weekdays {
 tbody.rdp-weeks {
   margin: 0 auto;
 }
-/* 1. 날짜 컨테이너(td) 스타일 초기화 */
 .rdp-day {
   width: auto;
   height: auto;
@@ -113,7 +108,6 @@ tbody.rdp-weeks {
   align-items: center;
 }
 
-/* 2. 실제 버튼(원) 스타일 통합 */
 .rdp-day_button {
   width: 40px;
   height: 40px;
@@ -132,13 +126,11 @@ tbody.rdp-weeks {
   z-index: 1;
 }
 
-/* 3. 레벨별 색상 (단일 원에만 적용) */
 .rdp-day_button.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); color: #000; }
 .rdp-day_button.cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #fff; }
 .rdp-day_button.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #fff; }
 
-/* 4. 클릭(선택) 시 스타일 - 원이 겹치지 않도록 border/shadow만 활용 */
-/* 배경색은 기존 레벨 색상을 유지하고 싶다면 background-color를 건드리지 않습니다. */
+
 .rdp-day_button[aria-selected="true"] {
   border: 2px solid #000 !important; /* 선택되었을 때 검정 테두리로 명확히 표시 */
   box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(0,0,0,0.2); /* 흰색 간격 후 그림자 */
@@ -180,17 +172,14 @@ tr.rdp-week {
   font-weight: 700;
 }
 
-/* Level colors */
 .cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); }
 .cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #fff; }
 .cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #fff; }
 
-/* Modifier-based day styling for job counts */
 .rdp-day.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); color: #000; }
 .rdp-day.cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #000; }
 .rdp-day.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #ffffff; }
 
-/* Ensure selected state overrides level colors for border/shadow, but keeps background */
 .rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv1 {
   color: #000;
   background-color: var(--color-light-gray);
@@ -230,13 +219,11 @@ tr.rdp-week {
   border: solid 1px var(--color-dark-blue);
  }
 
-/* 부모 section에서 배지가 잘리지 않도록 설정 */
 .cleaners-settlement-status-left {
   overflow: visible !important;
   position: relative;
 }
 
-/* DayPicker가 부모 너비를 절대 넘지 못하도록 설정 */
 .rdp {
   margin: 0;
   width: 100% !important;
@@ -261,12 +248,10 @@ tr.rdp-week {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-/* rdp-week 자체에 배지를 그려버림 (DOM 깨짐 없음) */
 tr.rdp-week {
   position: relative;
 }
 
-/* --- Legend --- */
 .cleaners-settlement-status-legend {
   margin-top: 20px;
   display: flex;
@@ -304,7 +289,6 @@ tr.rdp-week {
   color: #000;
 }
 
-/* 레벨 색칠 (button 기준) */
 .rdp-day_button.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); color: #000; }
 .rdp-day_button.cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #fff; }
 .rdp-day_button.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #fff; }
@@ -315,7 +299,6 @@ tr.rdp-week {
   border-color: #0ea5e9;
 }
 
-/* --- Details (Right) --- */
 .cleaners-settlement-status-right-top {
   display: flex;
   justify-content: space-between;
@@ -339,7 +322,6 @@ tr.rdp-week {
   color: #64748b;
 }
 
-/* Job Item */
 .cleaners-settlement-status-item {
   border: 1px solid #e2e8f0;
   border-radius: 12px;
@@ -409,13 +391,12 @@ tr.rdp-week {
   border-radius: 20px !important;
 }
 
-/* 배지가 들어갈 td: 배지가 없어도 공간을 차지하게 하여 달력 흔들림 방지 */
 .rdp-week-badge-cell {
-  width: 32px; /* 배지 크기에 맞춘 고정 너비 */
+  width: 32px; 
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px; /* rdp-day 높이와 맞춤 */
+  min-height: 40px; 
 }
 
 /* 배지 디자인 */
@@ -432,8 +413,6 @@ tr.rdp-week {
   font-weight: 700;
 }
 
-/* --- Responsive (920px ~ 571px) --- */
-/* 920px 이하 공통 적용 */
 @media (max-width: 920px) {
   .cleaners-settlement-status-grid {
     grid-template-columns: 1fr;
@@ -449,7 +428,7 @@ tr.rdp-week {
 
   /* 오른쪽 리스트 영역 */
   .cleaners-settlement-status-right {
-    width: 100% !important; /* 고정 px 대신 100% 사용 */
+    width: 100% !important;
     box-sizing: border-box;
   }
 

@@ -39,7 +39,6 @@
   align-items: center;
 }
 
-/* 펼쳐졌을 때의 상세 박스 */
 .cleaners-settlement-item-detail-box {
   padding: 16px 20px;
   background-color: #f8faff; /* 기본 연한 배경 */
@@ -68,20 +67,20 @@
   color: #343a40;
 }
 
-/* 강조된 금액 텍스트 (상단 카드 포인트 컬러 사용) */
+
 .cleaners-settlement-item-amount-detail {
   font-weight: 800;
   font-size: 1rem;
   color: var(--status-lv3, #1e3a8a); /* 가장 짙은 포인트 컬러 적용 */
 }
 
-/* 시간 표시 (달력 선택 날짜 컬러 활용) */
+
 .cleaners-settlement-item-time-detail {
   color: var(--rdp-accent-color, #3b82f6); /* 달력 강조색과 통일 */
   font-weight: 600;
 }
 
-/* 상태 배지 스타일 (기존 변수 조합) */
+
 .cleaners-settlement-item-status-badge {
   padding: 4px 10px;
   border-radius: 6px;
@@ -89,19 +88,17 @@
   font-weight: 700;
 }
 
-/* 지급 대기: 하늘색 계열 변수 활용 */
 .cleaners-settlement-item-status-badge.is-pending {
   background-color: var(--status-lv1-bg, #e0f2fe);
   color: var(--status-lv1-text, #0369a1);
 }
 
-/* 정산 완료: 회색 계열 */
 .cleaners-settlement-item-status-badge.is-completed {
   background-color: #f1f3f5;
   color: #495057;
 }
 
-/* 취소된 항목 */
+
 .cleaners-settlement-item-container.is-canceled {
   opacity: 0.5;
   filter: grayscale(0.5);

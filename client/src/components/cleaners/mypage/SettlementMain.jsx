@@ -59,9 +59,7 @@ export default function SettlementMain() {
         return {
           ...item,
           id: item.id,
-          // [중요] item.reservation.store.name 구조 확인 및 방어 코드
           storeName: item.reservation?.store?.name || "상호명 미지정",
-          // [중요] 금액 필드명이 settlement_amount가 맞는지 콘솔에서 재확인 필요
           amount: item.settlement_amount ?? item.amount ?? 0, 
           settlementStatus: item.status || "상태 미정",
           created_at: rawDate,
@@ -97,7 +95,6 @@ export default function SettlementMain() {
     
     if (selectedDay) {
       const targetDateStr = ymd(selectedDay); 
-      // [수정] .trim()을 추가하여 문자열 공백으로 인한 비교 실패 방지
       return base.filter((j) => j.date.trim() === targetDateStr.trim());
     }
     

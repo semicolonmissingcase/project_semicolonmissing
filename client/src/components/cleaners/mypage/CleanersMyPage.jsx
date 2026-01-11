@@ -35,10 +35,8 @@ function CleanersMyPage() {
           const todayJobs = Array.isArray(todayRes.data.data) ? todayRes.data.data : [];
           const pendingJobs = Array.isArray(pendingRes.data.data) ? pendingRes.data.data : [];
           
-          // 1. 오늘의 의뢰 건수
           setTodayCount(todayJobs.length);
 
-          // 2. 오늘의 예약 건수 (오늘 생성된 모든 작업 기준)
           const allJobs = [...todayJobs, ...pendingJobs];
           const todayStr = format(new Date(), 'yyyy-MM-dd');
           const newReservations = allJobs.filter(job => 
@@ -46,10 +44,9 @@ function CleanersMyPage() {
           );
           setReservationCount(newReservations.length);
 
-          // 3. 총 정산금액 (로그 파악 결과: data.data.summary.completed에 300,000원이 있음)
           const sData = settlementRes.data.data;
           if (sData && sData.summary && sData.summary.completed !== undefined) {
-            setTotalSettlement(sData.summary.completed); // 서버에서 준 합계 금액 바로 사용
+            setTotalSettlement(sData.summary.completed);
           } else {
             setTotalSettlement(0);
           }

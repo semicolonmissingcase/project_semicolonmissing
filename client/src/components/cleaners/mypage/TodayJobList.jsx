@@ -22,11 +22,8 @@ export default function TodayJobList() {
     const fetchTodayJobs = async () => {
       try {
         setLoading(true);
-        // 백엔드 API 호출
         const response = await getTodayJobs();
         if (response.data.success) {
-          // 서버에서 이미 오늘 날짜 데이터를 필터링해서 주지만, 
-          // 혹시 모르니 클라이언트에서도 한 번 더 필터링하거나 그대로 사용합니다.
           setTodayJobs(response.data.data);
         }
       } catch (error) {
