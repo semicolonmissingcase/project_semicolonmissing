@@ -73,31 +73,18 @@ const slice = createSlice({
         state.loading = false;
         state.error = null;
       })
-      // 견적 목록 조회 성공
+      // 견적 목록 조회
       .addCase(cleanersThunk.indexThunk.fulfilled, (state, action) => {
-        // 1. 서버 응답 구조에서 데이터 추출 
-        // (서버 응답이 action.payload.data 안에 total, currentPage, reservations가 있다고 가정)
         const { total, currentPage, reservations } = action.payload.data;
-
-        // 2. 데이터 합치기 로직
-        if (state.page === 0 || !state.reservations) {
-          // 첫 페이지이거나 기존 데이터가 없으면 새로 할당
-          state.reservations = reservations;
-        } else {
-          // 다음 페이지라면 기존 데이터 뒤에 추가
+        if (state.reservations) {
           state.reservations = [...state.reservations, ...reservations];
-        }
-
-        // 3. 페이징 상태 업데이트
-        state.page = currentPage;
-
-        // 전체 개수(total)를 offset으로 나눠서 마지막 페이지인지 확인
-        if (currentPage >= Math.ceil(total / state.offset)) {
-          state.isLasted = true;
         } else {
-          state.isLasted = false;
+          state.reservations = reservations;
         }
-
+        if (currentPage === Math.ceil(total / state.offset)) {
+          state.isLasted = true;
+        }
+        state.page = currentPage;
         state.loading = false;
       })
       // 활동 지역 정보 (Pending)

@@ -32,6 +32,10 @@
   align-items: center;
 }
 
+.cleaners-account-edit-new-accounts {
+  padding-top: 0.5rem;
+}
+
 .cleaners-account-edit-remove-layout {
   display: flex;
   justify-content: space-between;
@@ -39,6 +43,7 @@
 
 .cleaners-account-edit-account-title {
   padding-right: 1rem;
+  padding-top: 0.5rem;
 }
 
 .cleaners-account-edit-add-account-wrapper {
@@ -139,6 +144,7 @@
   flex-direction: column;
   gap: 1rem;
   padding: 0 1rem 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .cleaners-account-edit-account-message {

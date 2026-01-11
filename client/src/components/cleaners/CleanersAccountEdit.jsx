@@ -270,6 +270,7 @@ function CleanerAccountEdit() {
                         <option value="우리은행">우리은행</option>
                         <option value="KB국민은행">국민은행</option>
                         <option value="신한은행">신한은행</option>
+                        <option value="카카오뱅크">카카오뱅크</option>
                         <option value="KEB하나은행">KEB하나은행</option>
                         <option value="iM뱅크">iM뱅크</option>
                         <option value="NH농협">NH농협</option>
