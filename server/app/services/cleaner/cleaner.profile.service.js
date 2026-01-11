@@ -8,50 +8,47 @@ import { INVALID_PASSWORD, NOT_FOUND_ERROR } from '../../../configs/responseCode
 import { createBaseResponse } from '../../utils/createBaseResponse.util.js';
 import cleanerProfileRepository from '../../repositories/cleaner/cleaner.profile.repository.js';
 import bcrypt from "bcrypt";
-import fs from 'fs/promises';
 import db from '../../models/index.js';
 
 /**
- * 기사 정보 수정 
+ * 기사 정보, 프로필 수정
  */
-/**
- * 기사 정보 수정 (확장)
- */
-async function updateCleaner(id, role, updateData, files) {
+async function updateCleaner(id, role, updateData) {
   const t = await db.sequelize.transaction(); // 트랜잭션 시작
 
   try {
     const cleanerUpdateData = {};
 
-    if (updateData.tagline) {
+    if (updateData.tagline !== undefined) {
       cleanerUpdateData.introduction = updateData.tagline;
     }
     
     // 프로필 이미지 처리
-    if (files && files.profileImage) {
-      const newProfileUrl = `${process.env.APP_URL}/${process.env.FILE_USER_PROFILE_PATH}/${profileFile.filename}`;   
-      cleanerUpdateData.profile = newProfileUrl;
+    if (updateData.profile !== undefined) {
+      cleanerUpdateData.profile = updateData.profile;
     }
 
-    // 기본 정보 업데이트 
-    await cleanerProfileRepository.updateCleaner(id, cleanerUpdateData, t);
+    // 업데이트할 내용이 있을 때만 DB에 요청
+    if (Object.keys(cleanerUpdateData).length > 0) {
+      await cleanerProfileRepository.updateCleaner(id, cleanerUpdateData, t);
+    }
 
     // 자격증 처리
-    if (files && files.certificateFiles) {
-      const certificatePath = process.env.FILE_CERTIFICATE_PATH || process.env.FILE_USER_PROFILE_PATH;
-      const newCertificates = files.certificateFiles.map(file => ({
+    if (updateData.certifications !== undefined) {
+      const newCertificates = updateData.certifications.map(certInfo => ({
         cleanerId: id,
-        path: `${process.env.APP_URL}/${certificatePath}/${file.filename}`,
+        name: certInfo.name,
+        image: certInfo.url,
       }));
 
       // 기존 자격증 DB에서 삭제 후 새로 추가
       await cleanerProfileRepository.deleteCertificationsByCleanerId(id, t);
       await cleanerProfileRepository.createCertifications(newCertificates, t);
-    }
+    }    
 
     // 작업 지역 처리
-    if (updateData.regions) {
-      const regionIds = JSON.parse(updateData.regions); // 프론트에서 '[1,2,3]' 형태의 JSON 문자열로 보냈다고 가정
+    if (updateData.regions !== undefined) {
+      const regionIds = updateData.regions;
       const newDriverRegions = regionIds.map(locationId => ({
         cleanerId: id,
         locationId: locationId,
@@ -72,19 +69,6 @@ async function updateCleaner(id, role, updateData, files) {
   } catch (error) {
     // 에러 발생 시 트랜잭션 롤백
     await t.rollback();
-
-    // 롤백 후 업로드된 파일이 있다면 삭제
-    if (files) {
-      if (files.profileImage) {
-        await fs.unlink(files.profileImage[0].path).catch(err => console.error("임시 프로필 파일 삭제 실패:", err));
-      }
-      if (files.certificateFiles) {
-        for (const file of files.certificateFiles) {
-          await fs.unlink(file.path).catch(err => console.error("임시 자격증 파일 삭제 실패:", err));
-        }
-      }
-    }
-
     // 에러를 상위로 전파
     throw error;
   }

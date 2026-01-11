@@ -32,6 +32,13 @@ async function updateCleaner(id, updateData, t = null) {
     allowedUpdates.password = updateData.password;
   }
 
+  if (updateData.introduction !== undefined) {
+    allowedUpdates.introduction = updateData.introduction;
+  }
+
+  if (updateData.profile !== undefined) {
+    allowedUpdates.profile = updateData.profile;
+  }
   // 업데이트할 내용이 없으면 null을 반환합니다.
   if (Object.keys(allowedUpdates).length === 0) {
     return null;

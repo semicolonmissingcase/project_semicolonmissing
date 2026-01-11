@@ -11,8 +11,6 @@ import { SUCCESS, UNAUTHORIZED_ERROR } from "../../../configs/responseCode.confi
  */
 async function updateInfo(req, res, next) {
   try {
-    console.log(req.user);
-
     const { id, role } = req.user;
     const updateData = req.body;
     const files = req.files;

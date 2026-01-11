@@ -130,12 +130,16 @@ export const uploadProfileImageThunk = createAsyncThunk(
 // 파일 업로드
 export const uploadFileThunk = createAsyncThunk(
   'files/upload',
-  async({ file, fieldName }, { rejectWithValue }) => {
+  async(file, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      formData.append(fieldName, file);
+      formData.append('profile', file);
 
-      const response = await axiosInstance.post('/api/files/profile', formData);
+      const response = await axiosInstance.post('/api/files/profile', formData, {
+         headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
       return response.data.data.path;
     } catch (error) {
       console.error("파일 업로드 실패:", error.response?.data || error.message);

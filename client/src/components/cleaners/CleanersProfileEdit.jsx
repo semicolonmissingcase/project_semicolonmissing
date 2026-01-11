@@ -118,28 +118,34 @@ function CleanersProfileEdit() {
 
     try {
       let profilePath = originalProfile;
-      let certPaths = originalCerts;
+      let finalCertsData = certificateFiles
+        .filter(cert => !cert.file)
+        .map(cert => ({ name: cert.name, url: cert.url }));
 
       const isProfileImageChanged = !!selectedProfileFile;
       const newCertificateFiles = certificateFiles.filter(cert => !!cert.file);
 
       if (isProfileImageChanged) {
-        profilePath = await dispatch(uploadFileThunk({ file: selectedProfileFile, fieldName: 'profileImage' })).unwrap();
+        profilePath = await dispatch(uploadFileThunk(selectedProfileFile)).unwrap();
       }
+      // 새 자격증 파일 처리
       if (newCertificateFiles.length > 0) {
         const uploadPromises = newCertificateFiles.map(cert => 
-          dispatch(uploadFileThunk({ file: cert.file, fieldName: 'certificateFiles' })).unwrap()
+          dispatch(uploadFileThunk(cert.file)).unwrap()
         );
         const newCertUrls = await Promise.all(uploadPromises);
-        const existingCertUrls = certificateFiles
-          .filter(cert => !cert.file)
-          .map(cert => cert.url);
-        certPaths = [...existingCertUrls, ...newCertUrls];
+        const newCertsData = newCertificateFiles.map((cert, index) => ({
+          name: cert.file.name.split('.').slice(0, -1).join('.') || cert.file.name,
+          url: newCertUrls[index]
+        }));
+        finalCertsData = [...finalCertsData, ...newCertsData];
       }
 
       const isTaglineChanged = originalTagline !== tagline;
       const areRegionsChanged = JSON.stringify(originalRegions) !== JSON.stringify([...selectedRegions].sort());
-      const areCertsChanged = JSON.stringify(originalCerts.sort()) !== JSON.stringify(certPaths.sort());
+      const originalCertUrls = originalCerts.sort();
+      const finalCertUrls = finalCertsData.map(c => c.url).sort();
+      const areCertsChanged = JSON.stringify(originalCertUrls) !== JSON.stringify(finalCertUrls);
 
       if(!isProfileImageChanged && !isTaglineChanged && !areRegionsChanged && !areCertsChanged) {
         setModalConfig({
@@ -154,7 +160,7 @@ function CleanersProfileEdit() {
       const updateData = {
         profile: profilePath,
         tagline: tagline,
-        certifications: certPaths,
+        certifications: finalCertsData,
         regions: selectedRegions,
       };
     
