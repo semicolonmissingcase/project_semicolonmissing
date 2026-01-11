@@ -6,6 +6,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import adminCleanersThunk from "../thunks/adminCleanersThunk.js";
+import adminOwnersThunk from "../thunks/adminOwnersThunk.js";
 
 const initialState = {
   // index 관련
@@ -28,6 +29,14 @@ const slice = createSlice({
       state.offset = action.payload;
     },
     clearAdminCleaners(state) {
+      state.data = [];
+      state.statistics = null;
+      state.page = 0;
+      state.offset = 10;
+      state.totalCount = 0;
+      state.error = null;
+    },
+    clearAdminOwners(state) {
       state.data = [];
       state.statistics = null;
       state.page = 0;
@@ -59,6 +68,22 @@ const slice = createSlice({
       // ------------------------
 
       // ------------------------
+      // 점주 프로필 관리
+      // ------------------------
+      .addCase(adminOwnersThunk.adminOwnerProfileThunk.fulfilled, (state, action) => {
+        const { total, currentPage, profiles } = action.payload.data;
+
+        state.data = profiles;
+        state.totalCount = total;
+        state.page = currentPage;
+      })
+      .addCase(adminOwnersThunk.adminOwnerProfileStatisticsThunk.fulfilled, (state, action) => {
+        const { statistics } = action.payload.data;
+
+        state.statistics = statistics;
+      })
+
+      // ------------------------
       // 에러 처리
       // ------------------------
       .addMatcher(
@@ -76,6 +101,7 @@ export const {
   setPage,
   setOffset,
   clearAdminCleaners,
+  clearAdminOwners,
 } = slice.actions;
 
 export default slice.reducer;

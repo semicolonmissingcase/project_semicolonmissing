@@ -32,6 +32,7 @@ import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 import AdminCleanerProfile from "../components/admin/pages/cleaners/AdminCleanerProfile.jsx";
 import AdminQna from "../components/admin/pages/AdminQna.jsx"
+import AdminOwnerProfile from "../components/admin/pages/cleaners/AdminOwnerProfile.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -250,6 +251,11 @@ const router = createBrowserRouter([
                     // 기사 프로필 관리 페이지
                     path: 'cleaners/profiles',
                     element: <AdminCleanerProfile />
+                  },
+                  {
+                    // 점주 프로필 관리 페이지
+                    path: 'owners/profiles',
+                    element: <AdminOwnerProfile />
                   },
                 ],
               },
