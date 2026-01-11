@@ -15,7 +15,6 @@ export default function ReservationCompletedList() {
         setLoading(true);
         const response = await getPendingJobs(); 
         if (response.data.success) {
-          console.log("받아온 전체 데이터:", response.data.data);
           setJobs(response.data.data);
         }
       } catch (error) {

@@ -17,12 +17,7 @@ export default function ReviewShowModal({ isOpen, onClose, reviewId }) {
         try {
           const response = await getReviewsDetails(reviewId);
 
-          console.log("서버로부터 받은 전체 응답(response):", response);
-
           if (response && response.code === "00") {
-
-            console.log("응답 성공, review 상태로 설정할 데이터(response.data):", response.data);
-
             setReview(response.data);
           } else {
             setError(response ? response.msg : "리뷰 상세 정보를 불러오는데 실패했습니다.");

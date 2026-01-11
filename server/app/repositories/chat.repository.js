@@ -35,32 +35,36 @@ const chatRepository = {
   /**
    * 사용자별 채팅방 목록 조회
    */
-  findByUser: async (transaction, userId, userRole) => {
-    const roleStr = String(userRole || '').toUpperCase();
-    const isOwner = roleStr.includes('OWNER');
-    
-    return await db.ChatRoom.findAll({
-      where: {
-        [isOwner ? 'ownerId' : 'cleanerId']: userId,
+findByUser: async (transaction, userId, userRole) => {
+  const roleStr = String(userRole || '').toUpperCase();
+  const isOwner = roleStr.includes('OWNER');
+  
+  // 본인의 역할에 맞는 LeavedAt 컬럼이 null인 경우만 조회함
+  const leavedAtField = isOwner ? 'ownerLeavedAt' : 'cleanerLeavedAt';
+
+  return await db.ChatRoom.findAll({
+    where: {
+      [isOwner ? 'ownerId' : 'cleanerId']: userId,
+      [leavedAtField]: null //
+    },
+    include: [
+      { model: db.Estimate, as: 'estimate', required: false },
+      { 
+        model: isOwner ? db.Cleaner : db.Owner, 
+        as: isOwner ? 'cleaner' : 'owner',
+        required: false 
       },
-      include: [
-        { model: db.Estimate, as: 'estimate', required: false },
-        { 
-          model: isOwner ? db.Cleaner : db.Owner, 
-          as: isOwner ? 'cleaner' : 'owner',
-          required: false 
-        },
-        {
-          model: db.ChatMessage,
-          as: 'chatMessages',
-          limit: 1,
-          order: [['createdAt', 'DESC']]
-        }
-      ],
-      order: [['updatedAt', 'DESC']], 
-      transaction
-    });
-  },
+      {
+        model: db.ChatMessage,
+        as: 'chatMessages',
+        limit: 1,
+        order: [['createdAt', 'DESC']]
+      }
+    ],
+    order: [['updatedAt', 'DESC']], 
+    transaction
+  });
+},
 
   /**
    * 메시지 저장 및 방 부활 (LeavedAt 초기화)

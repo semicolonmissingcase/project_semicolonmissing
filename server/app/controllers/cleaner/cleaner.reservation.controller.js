@@ -91,6 +91,9 @@ async function updateReservationStatus(req, res, next) {
 /**
  * 정산 요약 정보 조회 (추가됨 ✨)
  */
+/**
+ * 정산 요약 및 상세 리스트 조회 (수정됨 ✨)
+ */
 async function getSettlementSummary(req, res, next) {
   try {
     if (!req.user) {
@@ -101,15 +104,26 @@ async function getSettlementSummary(req, res, next) {
     const { yearMonth } = req.query; 
     const targetDate = yearMonth || new Date().toISOString().slice(0, 7);
 
+    // 1. 요약 정보 가져오기 (기존)
     const summary = await cleanerMypageRepository.settlementFindSummaryByCleanerId(null, {
       cleanerId: id,
       yearMonth: targetDate
     });
 
+    // 2. [추가] 상세 리스트 가져오기 (가게명 조인 포함)
+    const list = await cleanerMypageRepository.settlementFindListWithStoreByCleanerId(null, {
+      cleanerId: id,
+      yearMonth: targetDate
+    });
+
+    // 3. 응답 데이터 구조 결합 (summary와 list를 함께 보냄)
     return res.status(200).json({
       success: true,
-      message: `${targetDate} 정산 요약 조회 성공`,
-      data: summary
+      message: `${targetDate} 정산 정보 조회 성공`,
+      data: {
+        summary: summary, // { pending: 300000, completed: 0 }
+        list: list        // [ { settlement_amount: 300000, reservation: { store: { name: '...' } }, ... } ]
+      }
     });
   } catch (error) {
     console.error("❌ getSettlementSummary Error:", error);

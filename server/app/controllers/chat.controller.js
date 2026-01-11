@@ -11,12 +11,10 @@ import chatService from '../services/chat.service.js'
 const createRoom = async (req, res, next) => {
   try {
     const { id, role } = req.user; 
-    // body에서 필요한 정보 추출 (owner_id가 들어올 수도 있음을 고려)
     const { estimate_id, cleaner_id, owner_id } = req.body;
 
     const roomData = {
       estimate_id,
-      // 현재 로그인한 유저의 역할에 따라 ID를 강제 할당하여 보안 강화
       cleaner_id: role === 'CLEANER' ? id : cleaner_id,
       owner_id: role === 'OWNER' ? id : (owner_id || null) 
     };
@@ -31,7 +29,6 @@ const createRoom = async (req, res, next) => {
 
 /**
  * 사이드바 기본 정보 조회
- * GET /api/chat/rooms/:roomId/sidebar
  */
 const getSidebarInfo = async (req, res, next) => {
   try {
@@ -47,7 +44,6 @@ const getSidebarInfo = async (req, res, next) => {
 
 /**
  * 사이드바 리뷰 목록 조회
- * GET /api/chat/rooms/:roomId/reviews
  */
 const getSidebarReviews = async (req, res, next) => {
   try {

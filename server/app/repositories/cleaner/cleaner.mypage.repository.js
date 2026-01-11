@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import constants from '../../constants/models.constants.js'
 
 const { ReservationStatus, AdjustmentStatus } = constants;
-const { sequelize,Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry, Adjustment } = db;
+const { sequelize, Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry, Adjustment } = db;
 
 /**
  * 기사님용 대기 작업 조회
@@ -143,6 +143,7 @@ async function reservationFindSettlementPending(t = null, cleanerId) {
       { 
         model: Estimate, 
         as: 'estimate', 
+        required: true,
         attributes: ['estimated_amount']
       }
     ],
@@ -162,7 +163,6 @@ async function reviewFindByCleanerId(t = null, cleanerId) {
         as: 'reservationData', 
         attributes: [
           'id', 
-          // DB의 실제 컬럼명은 'date'이므로 아래와 같이 명시해줍니다.
           ['date', 'date'] 
         ],
         include: [
@@ -237,6 +237,40 @@ async function settlementFindSummaryByCleanerId(t = null, { cleanerId, yearMonth
   return summary;
 }
 
+/**
+ * 기사님 정산 상세 리스트 조회 (가게명 조인 포함)
+ */
+async function settlementFindListWithStoreByCleanerId(t = null, { cleanerId, yearMonth }) {
+  const startOfMonth = dayjs(yearMonth).startOf('month').format('YYYY-MM-01');
+  const endOfMonth = dayjs(yearMonth).endOf('month').format('YYYY-MM-DD');
+
+  return await Adjustment.findAll({
+    where: {
+      cleaner_id: cleanerId,
+      [Op.and]: [
+        sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '>=', startOfMonth),
+        sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '<=', endOfMonth)
+      ]
+    },
+    include: [
+      {
+        model: Reservation,
+        as: 'reservation', 
+        attributes: ['id'],
+        include: [
+          {
+            model: Store,
+            as: 'store', 
+            attributes: ['name']
+          }
+        ]
+      }
+    ],
+    order: [['created_at', 'DESC']],
+    transaction: t
+  });
+}
+
 export default {
   reservationFindPendingByCleanerIdAndRole,
   reservationFindById,
@@ -247,4 +281,5 @@ export default {
   reviewFindByCleanerId,
   inquiryFindByCleanerId,
   settlementFindSummaryByCleanerId,
+  settlementFindListWithStoreByCleanerId,
 };

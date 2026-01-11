@@ -13,12 +13,10 @@ const ChatSidebarProfile = ({ data, reviews, onClose }) => {
     );
   }
 
-  // --- [수정 구간] 프론트엔드에서 리뷰 배열로 평균 별점 직접 계산 ---
   const reviewCount = reviews?.length || 0;
   const averageRating = reviewCount > 0 
     ? reviews.reduce((acc, cur) => acc + (Number(cur.star) || 0), 0) / reviewCount 
     : 0;
-  // -----------------------------------------------------------
 
   const maskName = (name) => {
     if (!name || name === '익명') return '고객';
