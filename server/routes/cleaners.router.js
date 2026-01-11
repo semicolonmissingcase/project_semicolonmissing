@@ -25,9 +25,8 @@ cleanersRouter.put('/mypage/info', authMiddleware, cleanerProfileController.upda
 cleanersRouter.put('/mypage/password', authMiddleware, cleanerProfileController.changePassword); //기사 비밀번호 수정
 
 // 기사님 계좌 조회/생성/수정/삭제
-cleanersRouter.get(`/accounts`, authMiddleware, cleanerAccountController.getAccounts); //계좌 조회
-cleanersRouter.post(`/accounts`, authMiddleware, cleanerAccountController.createAccount); // 계좌 생성
-cleanersRouter.put(`/accounts`, authMiddleware, cleanerAccountController.updateAccount); // 계좌 수정
-cleanersRouter.delete(`/accounts`, authMiddleware, cleanerAccountController.deleteAccount); // 계좌 삭제
+cleanersRouter.get(`/accountedit`, authMiddleware, cleanerAccountController.getAccounts); //계좌 조회
+cleanersRouter.post(`/accountedit`, authMiddleware, cleanerAccountController.createAccount); // 계좌 생성, 수정
+cleanersRouter.delete(`/accountedit`, authMiddleware, cleanerAccountController.deleteAccount); // 계좌 삭제
 
 export default cleanersRouter;

@@ -95,33 +95,58 @@ const slice = createSlice({
         state.loading = false;
         state.error = action.payload || '활동 지역 정보 로드 실패';
       })
-      /* 조회 */
-      .addCase(cleanersThunk.fetchAccounts.pending, (state) => { state.loading = true; })
+      /* 계좌 조회 */
+      .addCase(cleanersThunk.fetchAccounts.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(cleanersThunk.fetchAccounts.fulfilled, (state, action) => {
         state.loading = false;
-        state.accounts = action.payload;
-      })
-      /* 등록/수정 시 */
-      .addCase(cleanersThunk.createAccount.fulfilled, (state, action) => {
-        state.accounts.push(action.payload);
-      })
-      .addCase(cleanersThunk.updateAccount.fulfilled, (state, action) => {
-        const index = state.accounts.findIndex(a => a.id === action.payload.id);
-        if (index !== -1) {
-          state.accounts[index] = action.payload;
+
+        const responseData = action.payload?.data || action.payload;
+        const account = Array.isArray(responseData) ? responseData[0] : responseData;
+
+        if (account && account.id) {
+          state.accounts = [account];
+          state.id = account.id;
+          state.cleanerId = account.cleanerId || account.cleaner_id;
+          state.bankCode = account.bankCode || account.bank_code;
+          state.accountNumber = account.accountNumber || account.account_number;
+          state.depositor = account.depositor;
+          state.isDefault = account.isDefault || account.is_default;
+        } else {
+          state.accounts = [];
+          state.id = null;
         }
       })
-      .addCase(cleanersThunk.deleteAccount.fulfilled, (state, action) => {
-        state.accounts = state.accounts.filter(a => a.id !== action.payload);
-      })
-      /* 에러 처리 공통 */
-      .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
-        (state, action) => {
-          state.loading = false;
-          state.error = action.payload?.msg || "오류가 발생했습니다.";
+
+      /* 계좌 등록/수정 시 */
+      .addCase(cleanersThunk.saveAccount.fulfilled, (state, action) => {
+        state.loading = false;
+
+        const responseData = action.payload?.data || action.payload;
+        const newAccount = Array.isArray(responseData) ? responseData[0] : responseData;
+
+        if (newAccount && newAccount.id) {
+          // 1인 1계좌이므로 최신 데이터로 덮어쓰기
+          state.accounts = [newAccount];
+          state.id = newAccount.id;
+          state.cleanerId = newAccount.cleanerId || newAccount.cleaner_id;
+          state.bankCode = newAccount.bankCode || newAccount.bank_code;
+          state.accountNumber = newAccount.accountNumber || newAccount.account_number;
+          state.depositor = newAccount.depositor;
+          state.isDefault = newAccount.isDefault || newAccount.is_default;
         }
-      );
+      })
+
+      /* 계좌 삭제 시 */
+      .addCase(cleanersThunk.deleteAccount.fulfilled, (state) => {
+        state.loading = false;
+        state.accounts = [];
+        state.id = null;
+        state.bankCode = "";
+        state.accountNumber = "";
+        state.depositor = "";
+      })
   },
 });
 

@@ -2,8 +2,20 @@
 import db from '../../models/index.js';
 
 //  조회 
-async function findAllByCleanerId(cleanerId, t = null) {
+async function findAllByCleanerId(cleanerId) {
+  
   return await db.CleanerAccount.findAll({
+    where: { 
+      cleanerId: cleanerId,
+      deletedAt: null // 삭제된 데이터 제외
+    },
+    raw: true // 순수 JSON 데이터로 받기
+  });
+}
+
+// findOneByCleanerId
+async function findOneByCleanerId(cleanerId, t = null) {
+  return await db.CleanerAccount.findOne({
     where: { cleanerId },
     order: [
       ['isDefault', 'DESC'],
@@ -23,7 +35,7 @@ async function create(accountData, t = null) {
 //  수정 
 async function update(id, updateData, t = null) {
   return await db.CleanerAccount.update(updateData, {
-    where: { id }, 
+    where: { id },
     transaction: t
   });
 }
@@ -31,7 +43,7 @@ async function update(id, updateData, t = null) {
 //  삭제 
 async function deleteById(cleanerId, t = null) {
   return await db.CleanerAccount.destroy({
-    where: { cleanerId }, 
+    where: { cleanerId },
     transaction: t
   });
 }
@@ -48,6 +60,7 @@ async function resetDefaultStatus(cleanerId, t = null) {
 
 export default {
   findAllByCleanerId,
+  findOneByCleanerId,
   create,
   update,
   deleteById,

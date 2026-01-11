@@ -53,59 +53,50 @@ const showThunk = createAsyncThunk(
   }
 );
 
-//   계좌 목록 조회
+// 계좌 목록 조회
 const fetchAccounts = createAsyncThunk(
   'cleaners/fetchAccounts',
-  async function (_, thunkAPI) {
+  async function (_, { rejectWithValue }) {
     try {
-      const response = await axiosInstance.get(`/api/cleaners/accounts`);
+      const url = `/api/cleaners/accountedit`;
+      const response = await axiosInstance.get(url);
+
       return response.data;
     } catch (error) {
-      const message = error.response?.data?.msg || "계좌 정보를 불러오지 못했습니다.";
-      return thunkAPI.rejectWithValue(message);
+
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
-//   계좌 등록
-const createAccount = createAsyncThunk(
-  'cleaners/createAccount',
-  async function ( accountData, thunkAPI) {
+// 계좌 등록 및 수정
+export const saveAccount = createAsyncThunk(
+  'cleaners/saveAccount',
+  async function (accountData, { rejectWithValue }) {
     try {
-      
-      const response = await axiosInstance.post(`/api/cleaners/accounts`, accountData);
+      const url = `/api/cleaners/accountedit`;
+
+      const response = await axiosInstance.post(url, accountData);
       return response.data;
     } catch (error) {
-      const message = error.response?.data?.msg || "계좌 등록에 실패했습니다.";
-      return thunkAPI.rejectWithValue(message);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
-//   계좌 수정
-const updateAccount = createAsyncThunk(
-  'cleaners/updateAccount',
-  async function (updateData, thunkAPI) {
-    try {
-      const response = await axiosInstance.put(`/api/cleaners/accounts`, updateData);
-      return response.data;
-    } catch (error) {
-      const message = error.response?.data?.msg || "계좌 수정에 실패했습니다.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
-//   계좌 삭제
+// 계좌 삭제
 const deleteAccount = createAsyncThunk(
   'cleaners/deleteAccount',
-  async function (cleanerId, thunkAPI) {
+  async function (_, { rejectWithValue }) {
     try {
-      await axiosInstance.delete(`/api/cleaners/accounts`);
-      return cleanerId;
+      const url = `/api/cleaners/accountedit`;
+      const response = await axiosInstance.delete(url);
+
+      return response.data;
     } catch (error) {
-      const message = error.response?.data?.msg || "삭제 중 오류가 발생했습니다.";
-      return thunkAPI.rejectWithValue(message);
+
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -126,9 +117,8 @@ export default {
   indexThunk,
   showThunk,
   locationThunk,
+  saveAccount,
   fetchAccounts,
-  createAccount,
-  updateAccount,
   deleteAccount,
   quotationStore,
 };

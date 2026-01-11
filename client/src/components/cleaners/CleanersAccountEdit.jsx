@@ -19,31 +19,6 @@ function CleanerAccountEdit() {
   const [confirmType, setConfirmType] = useState("");
   const { accounts, cleanerId } = useSelector((state) => state.cleaners);
 
-  useEffect(() => {
-    // 리덕스에 계좌 데이터가 있다면 (보통 1개라고 가정)
-    if (accounts && accounts.length > 0) {
-      const latestAccount = accounts[0]; // 가장 최신(혹은 기본) 계좌 추출
-      setAccountInfo({
-        id: latestAccount.id,
-        cleanerId: latestAccount.cleanerId,
-        bankCode: latestAccount.bankCode,
-        depositor: latestAccount.depositor,
-        accountNumber: latestAccount.accountNumber,
-        isDefault: latestAccount.isDefault
-      });
-    } else {
-      // 삭제되어 데이터가 없으면 초기화
-      setAccountInfo({
-        id: '',
-        cleanerId: '',
-        bankCode: '',
-        depositor: '',
-        accountNumber: '',
-        isDefault: false
-      });
-    }
-  }, [accounts]);
-
   const [accountInfo, setAccountInfo] = useState({
     id: '',
     cleanerId: '',
@@ -53,56 +28,70 @@ function CleanerAccountEdit() {
     isDefault: false
   });
 
-  useEffect((state) => {
-    const fetchData = async () => {
-      if (!state.cleanerId) {
-        console.warn("cleanerId가 정의되지 않았습니다.");
-        return;
-      }
-      try {
-        setLoading(true);
-        const result = await dispatch(cleanersThunk.fetchAccounts()).unwrap();
-        if (Array.isArray(result) && result.length > 0) {
-          const acc = result[0];
-          setAccountInfo({
-            id: acc.id || '',
-            cleanerId: acc.cleaner_id || '',
-            bankCode: acc.bank_code || '',
-            depositor: acc.depositor || '',
-            accountNumber: acc.accountNumber || '',
-            isDefault: Number(acc.is_default) === 1
-          });
-        } else if (result && !Array.isArray(result)) {
-
-          setAccountInfo({
-            id: result.id || '',
-            cleanerId: result.cleaner_id || '',
-            bankCode: result.bank_code || '',
-            depositor: result.depositor || '',
-            accountNumber: result.accountNumber || '',
-            isDefault: Number(result.is_default) === 1
-          });
-        }
-      } catch (error) {
-        // 에러 발생 시 처리
-        console.error("데이터 로드 실패:", error);
-      } finally {
-        // 성공/실패 여부와 상관없이 로딩 종료
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-
+  // 1. 초기 로드: 컴포넌트가 켜질 때 계좌 정보 조회
+  useEffect(() => {
+    dispatch(cleanersThunk.fetchAccounts());
+    return () => dispatch(clearCleaners());
   }, [dispatch]);
 
-  //  핸들러 함수들
-  const toggleMenuNew = () => setToggleNew(!toggleNew);
-  const toggleMenuInfo = () => setToggleInfo(!toggleInfo);
+  // 2. Redux에 데이터가 들어오면 로컬 state 업데이트
+  useEffect(() => {
+    if (Array.isArray(accounts) && accounts.length > 0) {
+      const acc = accounts[0];
+      setAccountInfo({
+        id: acc.id || '',
+        bankCode: acc.bankCode || acc.bank_code || '',
+        accountNumber: acc.accountNumber || acc.account_number || '',
+        depositor: acc.depositor || '',
+        isDefault: acc.isDefault || acc.is_default || true
+      });
+    } else {
+      // 데이터가 없는 경우 초기화
+      setAccountInfo({ id: '', bankCode: '', depositor: '', accountNumber: '', isDefault: true });
+    }
+  }, [accounts]);
 
-  const openCancelModal = () => {
-    setConfirmType("cancel");
-    setConfirmOpen(true);
+  // 3. 공통 확인 모달 처리 로직
+  const onConfirm = async () => {
+    if (confirmType === "save") {
+      try {
+        const payload = {
+          bankCode: accountInfo.bankCode,
+          depositor: accountInfo.depositor,
+          accountNumber: accountInfo.accountNumber,
+          isDefault: true
+        };
+
+        // 기존 ID 여부에 따라 처리 (saveAccount Thunk 하나로 통합된 경우)
+        if (accountInfo.id) {
+          await dispatch(cleanersThunk.saveAccount({ ...payload, id: accountInfo.id })).unwrap();
+        } else {
+          await dispatch(cleanersThunk.saveAccount(payload)).unwrap();
+        }
+
+        alert("저장되었습니다.");
+        setIsEditing(false);
+        dispatch(cleanersThunk.fetchAccounts()); // 최신 데이터 다시 불러오기
+      } catch (error) {
+        alert(error || "저장에 실패했습니다.");
+      }
+    } else if (confirmType === "delete") {
+      try {
+        await dispatch(cleanersThunk.deleteAccount()).unwrap();
+        alert("삭제되었습니다.");
+        setIsEditing(false);
+        dispatch(cleanersThunk.fetchAccounts());
+      } catch (error) {
+        alert(error || "삭제에 실패했습니다.");
+      }
+    }
+    setConfirmOpen(false);
+  };
+
+  // 4. 이벤트 핸들러들
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAccountInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const openSaveModal = (e) => {
@@ -111,29 +100,20 @@ function CleanerAccountEdit() {
     setConfirmOpen(true);
   };
 
-  const onConfirm = async () => {
-    if (confirmType === "save") {
-      try {
-        const payload = {
-          cleanerId: cleanerId,
-          accountData: {
-            bankCode: accountInfo.bankCode,
-            depositor: accountInfo.depositor,
-            accountNumber: accountInfo.accountNumber,
-            isDefault: true
-          }
-        };
+  const openDeleteModal = (e) => {
+    e.stopPropagation(); // 부모 클릭 이벤트 전파 방지
+    setConfirmType("delete");
+    setConfirmOpen(true);
+  };
 
-        await dispatch(cleanersThunk.createAccount(payload)).unwrap();
 
-        alert("계좌 정보가 성공적으로 저장되었습니다.");
-        setIsEditing(false);
-        dispatch(cleanersThunk.fetchAccounts(id));
-      } catch (error) {
-        alert(error.msg || "저장에 실패했습니다.");
-      }
-    }
-    setConfirmOpen(false);
+  //  핸들러 함수들
+  const toggleMenuNew = () => setToggleNew(!toggleNew);
+  const toggleMenuInfo = () => setToggleInfo(!toggleInfo);
+
+  const openCancelModal = () => {
+    setConfirmType("cancel");
+    setConfirmOpen(true);
   };
 
   async function handleCancel() {
@@ -183,15 +163,27 @@ function CleanerAccountEdit() {
     }
   }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAccountInfo((prev) => ({ ...prev, [name]: value }));
+  // 계좌 번호 하이픈 붙이기
+
+  const formatAccountNumber = (bankCode, accountNumber) => {
+    if (!accountNumber) return "";
+    const pureNumber = accountNumber.replace(/[^0-9]/g, "");
+
+    switch (bankCode) {
+      case "신한은행": return pureNumber.replace(/(\d{3})(\d{3})(\d{6,})/, "$1-$2-$3");
+      case "KB국민은행": return pureNumber.replace(/(\d{6})(\d{2})(\d{6,})/, "$1-$2-$3");
+      case "우리은행": return pureNumber.replace(/(\d{4})(\d{3})(\d{6,})/, "$1-$2-$3");
+      case "카카오뱅크": return pureNumber.replace(/(\d{4})(\d{2})(\d{7,})/, "$1-$2-$3");
+      case "KEB하나은행": return pureNumber.replace(/(\d{3})(\d{6})(\d{5,})/, "$1-$2-$3");
+      case "NH농협": return pureNumber.replace(/(\d{3})(\d{4})(\d{4})(\d{2,})/, "$1-$2-$3-$4");
+      default: return pureNumber.replace(/(\d{3})(\d{4})(\d{4,})/, "$1-$2-$3");
+    }
   };
 
-// -------------------- 이벤트 핸들러 --------------------
+  // -------------------- 이벤트 핸들러 --------------------
   const handleSave = () => {
     const payload = {
-      cleanerId: cleanerId, 
+      cleanerId: cleanerId,
       accountData: {
         bankCode: accountInfo.bankCode,
         accountNumber: accountInfo.accountNumber,
@@ -203,13 +195,13 @@ function CleanerAccountEdit() {
     dispatch(cleanersThunk.createAccount(payload));
   };
 
-// -------------------- 데이터 업데이트 로직 --------------------
+  // -------------------- 데이터 업데이트 로직 --------------------
   async function onUpdate() {
     try {
       const payload = {
         cleanerId: cleanerId,
         updateData: {
-          id: accountInfo.id,         
+          id: accountInfo.id,
           bankCode: accountInfo.bankCode,
           accountNumber: accountInfo.accountNumber,
           depositor: accountInfo.depositor,
@@ -217,14 +209,14 @@ function CleanerAccountEdit() {
         }
       };
 
-      await dispatch(cleanersThunk.updateAccount(payload)).unwrap();
+      await dispatch(cleanersThunk.saveAccount(payload)).unwrap();
       alert("수정 성공!");
     } catch (error) {
       alert("수정 실패: " + error);
     }
   }
 
-// -------------------- JSX 렌더링 --------------------
+  // -------------------- JSX 렌더링 --------------------
   return (
     <div className="all-container cleaners-account-edit-wrapper">
       {loading && <div className="loading-overlay">데이터를 불러오는 중...</div>}
@@ -251,7 +243,7 @@ function CleanerAccountEdit() {
                     </div>
                     {accountInfo.accountNumber ? (
                       <p className="cleaners-account-edit-account-message">
-                        현재 등록된 계좌: <br /> <strong>{accountInfo.bankCode} {accountInfo.accountNumber} {accountInfo.depositor}</strong>
+                        현재 등록된 계좌: <br /> <strong>{accountInfo.bankCode} {formatAccountNumber(accountInfo.bankCode, accountInfo.accountNumber)} {accountInfo.depositor}</strong>
                       </p>
                     ) : (
                       <p className="cleaners-account-edit-account-message">정산에 사용할 계좌를 등록해 주세요.</p>
@@ -273,7 +265,8 @@ function CleanerAccountEdit() {
                         name="bankCode"
                         value={accountInfo.bankCode || ""}
                         onChange={handleInputChange}
-                      >
+                        required>
+                        <option value="options" defaultValue disabled hidden>계좌를 선택해 주세요.</option>
                         <option value="우리은행">우리은행</option>
                         <option value="KB국민은행">국민은행</option>
                         <option value="신한은행">신한은행</option>
@@ -290,7 +283,7 @@ function CleanerAccountEdit() {
                         placeholder="'-' 없이 입력"
                         value={accountInfo.accountNumber || ""}
                         onChange={handleInputChange}
-                        required
+                        maxLength={20}
                       />
 
                       <label>예금주</label>
@@ -299,7 +292,7 @@ function CleanerAccountEdit() {
                         name="depositor"
                         value={accountInfo.depositor || ""}
                         onChange={handleInputChange}
-                        required
+                        maxLength={20}
                       />
                     </span>
 
@@ -332,9 +325,14 @@ function CleanerAccountEdit() {
         </div>
       </div>
 
+      {/* 공통 확인 모달 */}
       <CleanersModalConfirmModal
         open={confirmOpen}
-        message={confirmType === "cancel" ? "내용을 삭제하고 수정을 취소하시겠습니까?" : "계좌 정보를 저장하시겠습니까?"}
+        message={
+          confirmType === "delete"
+            ? "정말로 계좌 정보를 삭제하시겠습니까?"
+            : "계좌 정보를 저장하시겠습니까?"
+        }
         onClose={() => setConfirmOpen(false)}
         onConfirm={onConfirm}
       />

@@ -1,79 +1,100 @@
-import cleanerAccountService from '../../services/cleaner/cleaner.account.service.js';
+/**
+ * @file app/controllers/cleaner/cleaner.account.controller.js
+ * @description 클리너 계좌 관리 컨트롤러
+ */
+
+import { BAD_REQUEST_ERROR, SUCCESS } from "../../../configs/responseCode.config.js";
+import cleanerAccountService from "../../services/cleaner/cleaner.account.service.js";
+import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
 
 /**
- *  계좌 목록 조회
- */
-async function getAccounts(req, res) {
+ * 계좌 정보 상세 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */// cleaner.account.controller.js
+
+async function getAccounts(req, res, next) {
   try {
-    const { cleanerId } = req.body;
+
+    const cleanerId = req.user?.id;
+
+    if (!cleanerId) {
+
+      return res.status(BAD_REQUEST_ERROR.status)
+        .send(createBaseResponse(BAD_REQUEST_ERROR, '인증 정보가 없습니다.'));
+    }
+
     const result = await cleanerAccountService.getAccounts(cleanerId);
-    return res.status(200).json(result);
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
   } catch (error) {
-    return res.status(500).json({ msg: "계좌 조회 중 서버 오류 발생", debug: error.message });
+    next(error);
   }
 }
 
 /**
- *  새 계좌 등록
+ * 계좌 등록 및 수정 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
  */
-async function createAccount(req, res) {
+async function createAccount(req, res, next) {
   try {
-    const { cleanerId } = req.body; 
-    const accountData = {
-      ...req.body,
-      cleanerId: cleanerId 
-    };
-    const result = await cleanerAccountService.saveAccount(accountData);
-    return res.status(201).json({ msg: "계좌가 등록되었습니다.", data: result });
-  } catch (error) {
-    console.error("등록 에러:", error);
-    return res.status(500).json({ msg: "계좌 등록 중 서버 오류 발생", debug: error.message });
-  }
-}
+    const cleanerId = req.user?.id;
+    const body = req.body || {};
+    const { bankCode, accountNumber, depositor } = body;
 
-/**
- *  계좌 정보 수정
- */
-  async function updateAccount(req, res) {
-  try {
-    const { cleanerId } = req.body; 
-    const { id, bankCode, accountNumber, depositor, isDefault } = req.body;
+    if (!cleanerId) {
+      return res.status(UNAUTHORIZED_ERROR.status)
+        .send(createBaseResponse(UNAUTHORIZED_ERROR, '인증 정보가 없습니다.'));
+    }
 
-    await cleanerAccountService.updateAccount(id, {
-      cleanerId,      // 누가 수정했는지 확인용
-      bankCode,       // 필드명이 모델(CleanerAccount.js)과 반드시 일치해야 함
-      accountNumber,  // accountNumber (O), account_number (X)
-      depositor,
-      isDefault
+    if (!bankCode || !accountNumber || !depositor) {
+      // 데이터가 없으면 400 에러를 반환하게 해서 500 에러(서버 다운)를 방지합니다.
+      return res.status(400).json({ msg: "필수 입력 정보가 누락되었습니다." });
+    }
+
+    const result = await cleanerAccountService.saveAccount({
+      cleanerId,
+      bankCode,
+      accountNumber,
+      depositor
     });
 
-    return res.status(200).json({ msg: "계좌 정보가 수정되었습니다." });
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
   } catch (error) {
-    console.error("수정 에러:", error);
-    return res.status(500).json({ msg: "수정 중 오류 발생", debug: error.message });
+    console.error('Create Account Error:', error); // 에러 로그 기록
+    next(error);
   }
 }
 
 /**
- *  계좌 삭제
+ * 계좌 삭제
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
  */
-async function deleteAccount(req, res) {
+async function deleteAccount(req, res, next) {
   try {
-    const { cleanerId } = req.body;
+    const cleanerId = req.user?.id;
+
+    if (!cleanerId) {
+      return res.status(BAD_REQUEST_ERROR.status)
+        .send(createBaseResponse(BAD_REQUEST_ERROR, '클리너 식별 정보를 찾을 수 없습니다.'));
+    }
+
 
     await cleanerAccountService.deleteAccount(cleanerId);
-    return res.status(200).json({ msg: "계좌가 삭제되었습니다." });
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, '계좌 정보가 성공적으로 삭제되었습니다.'));
   } catch (error) {
-    console.error("삭제 에러:", error);
-    return res.status(500).json({ msg: "계좌 삭제 중 서버 오류 발생", debug: error.message });
+    console.error('Delete Account Error:', error);
+    next(error);
   }
 }
-
-
 
 export default {
   getAccounts,
   createAccount,
-  updateAccount,
-  deleteAccount
+  deleteAccount,
 };
