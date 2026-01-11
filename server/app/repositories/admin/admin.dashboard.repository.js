@@ -8,56 +8,74 @@ import { Sequelize, Op } from "sequelize";
 import db from '../../models/index.js';
 const { Reservation, Payment, Store, Owner } = db;
 
-
-async function findDailyStats(date) {
+/**
+ * 1. 대시보드 통합 데이터 조회
+ */
+async function findDashboardData(date) {
   const stats = await Reservation.findAll({
     attributes: [
       'status',
       [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
     ],
-    where: { date },
-    group: ['status'], // 상태별로 그룹을 묶음
+    where: { 
+      createdAt: { [Op.startsWith]: date } 
+    },
+    group: ['status'],
     raw: true
   });
-  
-  // 결과 데이터 가공 (배열 -> 객체)
-  // [{status: '승인', count: 5}, {status: '요청', count: 3}] 형태를 변환
-  return stats.reduce((acc, cur) => {
-    acc[cur.status] = cur.count;
-    return acc;
-  }, {});
-}
 
-async function findDailyRevenue(date) {
-  const totalAmount = await Payment.sum('total_amount', {
+  const revenue = await Payment.findOne({
+    attributes: [
+      [Sequelize.fn('SUM', Sequelize.col('total_amount')), 'totalAmount'],
+      [Sequelize.fn('COUNT', Sequelize.col('id')), 'payCount']
+    ],
     where: {
       createdAt: { [Op.startsWith]: date }
-    }
+    },
+    raw: true
   });
 
-  const payCount = await Payment.count({
-    where: {
-      createdAt: { [Op.startsWith]: date }
-    }
-  });
+  const recentReservations = await findRecentReservations(6);
 
-  return { totalAmount, payCount };
+  return {
+    statistics: {
+      requestCnt: stats.find(s => s.status === '요청')?.count || 0,
+      approveCnt: stats.find(s => s.status === '승인')?.count || 0,
+      cancelCnt: stats.find(s => s.status === '취소')?.count || 0,
+      totalRevenue: Number(revenue?.totalAmount || 0),
+      totalPayCount: revenue?.payCount || 0
+    },
+    reservations: recentReservations
+  };
 }
 
 /**
- * 실시간 예약 현황 (최신순 리스트) 조회
- * 점주와 매장 정보를 JOIN 하여 가져옴
- * @param {number} limit 조회 개수
- * @returns {Promise<Array>}
+ * 2. 월별 예약 통계 조회
+ */
+async function findMonthlyStats() {
+  return await Reservation.findAll({
+    attributes: [
+      // 'createdAt' 대신 'created_at' (스네이크 케이스)으로 수정하세요!
+      [Sequelize.fn('DATE_FORMAT', Sequelize.col('created_at'), '%Y-%m'), 'month'],
+      [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
+    ],
+    group: ['month'],
+    order: [[Sequelize.literal('month'), 'ASC']],
+    raw: true
+  });
+}
+
+/**
+ * 3. 실시간 예약 현황 조회
  */
 async function findRecentReservations(limit = 6) {
-  const reservations = await Reservation.findAll({
+  return await Reservation.findAll({
     limit: limit,
     order: [['createdAt', 'DESC']],
     include: [
       {
         model: Store,
-        as: 'store', // 모델 정의 시 설정한 alias 확인 필요
+        as: 'store',
         attributes: ['name'],
         include: [
           {
@@ -69,12 +87,10 @@ async function findRecentReservations(limit = 6) {
       }
     ]
   });
-
-  return reservations;
 }
 
 export default {
-  findDailyStats,
-  findDailyRevenue,
-  findRecentReservations,
+  findDashboardData,
+  findMonthlyStats,
+  findRecentReservations
 };

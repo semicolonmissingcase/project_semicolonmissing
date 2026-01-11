@@ -13,15 +13,15 @@ import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
  */
 async function getMonitoringData(req, res, next) {
   try {
-    // 1. 쿼리 스트링에서 날짜를 받아올 수 있도록 설정 (예: ?date=2025-12-15)
+    // 1. 날짜 파라미터 추출
     const { date } = req.query;
 
-    // 2. 서비스 호출
+    // 2. 서비스 호출 
     const dashboardData = await adminDashboardService.getDashboardData(date);
 
-    // 3. 성공 응답 전송
+    // 3. (SUCCESS)을 사용하여 데이터 전송
     return res.status(SUCCESS.status).send(
-      createBaseResponse(SUCCESS, dashboardData)
+      createBaseResponse(SUCCESS, dashboardData.data) 
     );
     
   } catch (error) {

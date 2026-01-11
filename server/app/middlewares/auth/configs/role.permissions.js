@@ -36,6 +36,7 @@ const ROLE_PERMISSIONS = {
     // -------------------------
     // 관리자 관련
     // -------------------------
+    { path: /^\/api\/admin\/monitoring$/, roles: [ADMIN] }, // 통합 모니터링 
     { path: /^\/api\/admin\/cleaners\/profiles$/, roles: [ADMIN] }, // 관리자 기사 관리 조회
     { path: /^\/api\/admin\/owners\/profiles$/, roles: [ADMIN] }, // 관리자 유저 관리 조회
     { path: /^\/api\/admin\/adjustments\/view$/, roles: [ADMIN] }, // 관리자 정산 관리 조회
