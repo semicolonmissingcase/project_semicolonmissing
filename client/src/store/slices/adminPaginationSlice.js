@@ -7,11 +7,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import adminCleanersThunk from "../thunks/adminCleanersThunk.js";
 import adminOwnersThunk from "../thunks/adminOwnersThunk.js";
+import adminDashboardThunk from "../thunks/adminDashboardThunk.js";
 
 const initialState = {
   // index 관련
   data: null,       // 테이블에 출력할 데이터
   statistics: null, // 통계에 출력할 데이터
+  chartData: [],    // 차트 데이터
   page: 1,          // 현재 페이지
   offset: 10,       // 출력할 갯수
   totalCount: 0,    // 총 데이터 갯수
@@ -44,9 +46,32 @@ const slice = createSlice({
       state.totalCount = 0;
       state.error = null;
     },
+    clearAdminDashboards(state) {
+      state.data = [];
+      state.statistics = null;
+      state.chartData = [];
+      state.page = 0;
+      state.totalCount = 0;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+      // -----------------------
+      // 통합 모니터링
+      // -----------------------
+      .addCase(adminDashboardThunk.getDashboardData.fulfilled, (state, action) => {
+      const { statistics, profiles, chartData } = action.payload.data; 
+
+      state.data = profiles;
+      state.statistics = statistics;
+      state.chartData = chartData;
+  
+      state.totalCount = profiles?.length || 0;
+      state.page = 1;
+      })
+
+
       // ------------------------
       // 기사 프로필 관리
       // ------------------------
@@ -102,6 +127,7 @@ export const {
   setOffset,
   clearAdminCleaners,
   clearAdminOwners,
+  cleaerAdminDashboard,
 } = slice.actions;
 
 export default slice.reducer;
