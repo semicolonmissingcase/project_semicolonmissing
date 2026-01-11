@@ -6,12 +6,38 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 280px);
+  position: relative; /* 하단 푸터 배치를 위해 추가 */
+}
+
+/* 상단 헤더 영역 (제목과 편집 버튼 정렬) */
+.chatlist-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .chatlist-title {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 0; /* flex 적용으로 마진 제거 */
+}
+
+/* 편집 모드 토글 버튼 */
+.chatlist-edit-toggle {
+  background: none;
+  border: none;
+  color: var(--color-gray);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.chatlist-edit-toggle.active {
+  color: var(--color-dark-blue);
+  font-weight: bold;
 }
 
 /* 검색창 */
@@ -84,11 +110,32 @@
   border-radius: 12px;
   margin-bottom: 15px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease-in-out;
+  background-color: var(--color-white);
 }
 
 .chatlist-item:hover {
   background-color: var(--color-light-gray);
+}
+
+/* 선택되었을 때의 스타일 */
+.chatlist-item.chatlist-item-selected {
+  background-color: #f0f7ff;
+  border-color: var(--color-dark-blue);
+}
+
+/* 편집 모드 체크박스 영역 */
+.chatlist-edit-checkbox {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.chatlist-edit-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-dark-blue); /* 체크박스 색상 통일 */
+  cursor: pointer;
 }
 
 .chatlist-avatar {
@@ -101,6 +148,7 @@
   justify-content: center;
   margin-right: 15px;
   overflow: hidden;
+  flex-shrink: 0; /* 체크박스 생겨도 크기 고정 */
 }
 
 .chatlist-profile-img {
@@ -111,6 +159,7 @@
 
 .chatlist-info {
   flex: 1;
+  min-width: 0; /* 텍스트 생략(...) 작동을 위해 필수 */
 }
 
 .chatlist-info-top {
@@ -125,11 +174,6 @@
 }
 
 .chatlist-cleaner-name.chatlist-deleted {
-  color: var(--color-gray);
-}
-
-.chatlist-cleaner-location {
-  font-size: 0.85rem;
   color: var(--color-gray);
 }
 
@@ -176,4 +220,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.chatlist-no-data {
+  text-align: center;
+  color: var(--color-gray);
+  margin-top: 50px;
+}
+
+/* 편집 모드 하단 푸터 (나가기 버튼) */
+.chatlist-edit-footer {
+  position: sticky; /* 컨테이너 내부에 붙어있도록 */
+  bottom: 0;
+  background-color: var(--color-white);
+  padding: 20px 0;
+  border-top: 1px solid var(--color-light-gray);
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.chatlist-leave-submit-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.chatlist-leave-submit-btn:disabled {
+  background-color: #ffa39e;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 편집 모드일 때 리스트에 하단 여백 추가 */
+.chatlist-items-wrapper.is-editing {
+  padding-bottom: 20px;
 }

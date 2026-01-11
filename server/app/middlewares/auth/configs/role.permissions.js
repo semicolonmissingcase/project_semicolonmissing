@@ -19,10 +19,11 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/owners\/mypage\/favorite-cleaners$/, roles: [OWNER] }, // 찜한 기사님 목록 조회
     { path: /^\/api\/posts\/owner\/inquiries$/, roles: [OWNER, CLEANER] }, // 내 문의 목록 조회
     { path: /^\/api\/posts\/owner\/inquiries\/\d+$/, roles: [OWNER, CLEANER] }, // 내 문의 상세 조회
-    { path: /^\/api\/cleaners\/mypage\/pending$/, roles: [CLEANER] }, // 대기 작업 조회
-    { path: /^\/api\/cleaners\/mypage\/today$/, roles: [CLEANER] },   // 오늘 일정 조회
-    { path: /^\/api\/cleaners\/mypage\/qna$/, roles: [CLEANER] }, // 기사님 문의
-    { path: /^\/api\/cleaners\/mypage\/reviews$/, roles: [CLEANER] }, // 기사님 본인 리뷰 조회
+    { path: /^\/api\/cleaners\/mypage\/pending$/, roles: [CLEANER] }, // 기사님 마이페이지 대기 작업 조회
+    { path: /^\/api\/cleaners\/mypage\/today$/, roles: [CLEANER] },   // 기사님 마이페이지 오늘 일정 조회
+    { path: /^\/api\/cleaners\/mypage\/qna$/, roles: [CLEANER] }, // 기사님 마이페이지 본인 문의
+    { path: /^\/api\/cleaners\/mypage\/reviews$/, roles: [CLEANER] }, // 기사님 마이페이지 본인 리뷰 조회
+    { path: /^\/api\/cleaners\/mypage\/settlement$/, roles: [CLEANER] }, // 기사님 마이페이지 정산 대기
     { path: /^\/api\/posts\/owner\/reviews$/, roles: [OWNER] }, // 리뷰 목록 조회
     { path: /^\/api\/posts\/owner\/reservations\/completed$/, roles: [OWNER] }, // 리뷰 작성 전 목록 조회
     { path: /^\/api\/posts\/owner\/reviews\/\d+$/, roles: [OWNER] }, // 개별 리뷰 상세 조회
