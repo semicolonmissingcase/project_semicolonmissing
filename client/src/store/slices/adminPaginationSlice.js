@@ -8,6 +8,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import adminCleanersThunk from "../thunks/adminCleanersThunk.js";
 import adminOwnersThunk from "../thunks/adminOwnersThunk.js";
 import adminDashboardThunk from "../thunks/adminDashboardThunk.js";
+import adminAdjustmentsThunk from "../thunks/adminAdjustmentsThunk.js";
 
 const initialState = {
   // index 관련
@@ -51,6 +52,14 @@ const slice = createSlice({
       state.statistics = null;
       state.chartData = [];
       state.page = 0;
+      state.totalCount = 0;
+      state.error = null;
+    },
+    clearAdminAdjustments(state) {
+      state.data = [];
+      state.statistics = null;
+      state.page = 1;
+      state.offset = 10;
       state.totalCount = 0;
       state.error = null;
     },
@@ -109,6 +118,33 @@ const slice = createSlice({
       })
 
       // ------------------------
+      // 정산 관리 내역 조회
+      // ------------------------
+      .addCase(adminAdjustmentsThunk.adminAdjustmentThunk.fulfilled, (state, action) => {
+        const { total, currentPage, adjustments } = action.payload.data;
+
+        state.data = adjustments;
+        state.totalCount = total;
+        state.page = currentPage;
+        state.error = null;
+      })
+
+      // ------------------------
+      // 정산 통계 조회
+      // ------------------------
+      .addCase(adminAdjustmentsThunk.adminAdjustmentStatisticsThunk.fulfilled, (state, action) => {
+        const { statistics } = action.payload.data;
+        state.statistics = statistics;
+      })
+      
+      // ------------------------
+      // 정산 상태 업데이트
+      // ------------------------
+      .addCase(adminAdjustmentsThunk.adminUpdateAdjustmentStatusThunk.fulfilled, (state, action) => {
+        console.log("정산 상태 업데이트 성공");
+      })
+
+      // ------------------------
       // 에러 처리
       // ------------------------
       .addMatcher(
@@ -127,7 +163,8 @@ export const {
   setOffset,
   clearAdminCleaners,
   clearAdminOwners,
-  cleaerAdminDashboard,
+  clearAdminDashboards,
+  clearAdminAdjustments,
 } = slice.actions;
 
 export default slice.reducer;
