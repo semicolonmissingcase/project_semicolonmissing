@@ -113,7 +113,7 @@ export default function OwnerMyPage() {
 
   return (
     <div className="owner-mypage-container">
-      {/* 1. 상단 프로필 (이전 코드와 동일) */}
+      {/* 1. 상단 프로필 */}
       <header className="owner-mypage-profile-header">
         <button className="owner-mypage-edit-info-btn" onClick={userInfo}>회원정보 수정</button>
         <div className="owner-mypage-profile-main">

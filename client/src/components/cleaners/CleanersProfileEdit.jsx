@@ -1,8 +1,9 @@
-import { useRef, useState, useEffect } from "react";
-import { CleanersRegionDropdown, ConfirmModal } from "./cleaners-region-dropdown/CleanersRegionDropdown";
+import { useState, useEffect } from "react";
+import { CleanersRegionDropdown } from "./cleaners-region-dropdown/CleanersRegionDropdown.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getMeThunk, updateCleanerInfoThunk } from "../../store/thunks/authThunk.js";
+import { getMeThunk, updateCleanerInfoThunk, uploadFileThunk } from "../../store/thunks/authThunk.js";
+import ConfirmModal from "../result/ConfirmModal.jsx";
 import "./CleanersProfileEdit.css";
 
 function CleanersProfileEdit() {
@@ -10,134 +11,175 @@ function CleanersProfileEdit() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
-  // --- 상태 변수 수정 ---
-  const [name, setName] = useState("");
+  // 프로필 정보 상태
   const [tagline, setTagline] = useState("");
-
+  
   // 프로필 이미지 관련 상태
   const [profileImageUrl, setProfileImageUrl] = useState("/icons/default-profile.png");
-  const [selectedProfileFile, setSelectedProfileFile] = useState(null); // 실제 업로드할 파일 객체
+  const [selectedProfileFile, setSelectedProfileFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isImgModalOpen, setIsImgModalOpen] = useState(false);
 
   // 자격증 관련 상태
-  const [certificateFiles, setCertificateFiles] = useState([]); // { file, name, url } 형태의 객체 배열
+  const [certificateFiles, setCertificateFiles] = useState([]);
 
   // 작업 지역 관련 상태
-  const [selectedRegions, setSelectedRegions] = useState([]); // 초기값을 빈 배열로 수정
+  const [selectedRegions, setSelectedRegions] = useState([]);
 
   // 모달 관련 상태
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [confirmType, setConfirmType] = useState(null);
-   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false); // 성공 모달 상태
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState(null);
 
-  // --- useEffect 수정 ---
+  // 사용자 정보 로드
   useEffect(() => {
     if (user) {
-      setName(user.name || "");
       setProfileImageUrl(user.profile || "/icons/default-profile.png");
       setTagline(user.tagline || "");
 
       // 기존 자격증 정보 로드
       if (user.certifications) {
         setCertificateFiles(user.certifications.map(cert => {
-          const fileName = cert.path.split(/[\\/]/).pop(); // 경로에서 파일명 추출
+          const fileName = cert.path.split(/[\\/]/).pop();
           return {
-            file: null, // 기존 파일은 파일 객체가 없음
+            file: null,
             name: fileName,
-            url: cert.path // 백엔드에서 제공하는 정적 파일 경로
+            url: cert.path
           };
         }));
       }
 
-      // 기존 작업 지역 정보 로드 (오류 수정)
+      // 기존 작업 지역 정보 로드
       if (user.driverRegions) {
         setSelectedRegions(user.driverRegions.map(region => region.locationId));
       }
-
     } else {
       dispatch(getMeThunk());
     }
   }, [user, dispatch]);
 
-  // --- 핸들러 함수 ---
+  // 프로필 이미지 선택
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedProfileFile(file); // 업로드할 파일 객체 저장
+      setSelectedProfileFile(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
       setIsImgModalOpen(true);
     }
   };
 
+  // 프로필 이미지 저장
   const handleSaveImage = () => {
     setProfileImageUrl(previewUrl);
     setIsImgModalOpen(false);
   };
 
+  // 자격증 파일 추가
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
     setCertificateFiles(prev => [
       ...prev,
       ...newFiles.map(file => ({
-        file: file, // 실제 파일 객체 저장
+        file: file,
         name: file.name,
         url: URL.createObjectURL(file)
       }))
     ]);
   };
 
+  // 자격증 삭제
   const removeCertificate = (indexToRemove) => {
-    // 메모리 누수 방지를 위해 createObjectURL로 생성된 URL 해제
     const fileToRemove = certificateFiles[indexToRemove];
-    if (fileToRemove.file) { // 새로 추가된 파일만 URL 해제 대상
+    if (fileToRemove.file) {
       URL.revokeObjectURL(fileToRemove.url);
     }
     setCertificateFiles(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const onConfirm = async () => {
-    if (confirmType === "save") {
-      try {
-        const formData = new FormData();
-
-        // 텍스트 데이터 추가
-        formData.append('tagline', tagline);
-        formData.append('regions', JSON.stringify(selectedRegions));
-
-        // 프로필 이미지 파일 추가 (새로 선택된 경우에만)
-        if (selectedProfileFile) {
-          formData.append('profileImage', selectedProfileFile);
-        }
-
-        // 자격증 파일 추가 (새로 추가된 파일만)
-        certificateFiles.forEach(cert => {
-          if (cert.file) { // cert.file이 있는 경우만 새로 추가된 파일
-            formData.append('certificateFiles', cert.file);
-          }
-        });
-
-        const resultAction = await dispatch(updateCleanerInfoThunk(formData));
-
-        if (updateCleanerInfoThunk.fulfilled.match(resultAction)) {
-          setConfirmOpen(false);
-          setIsSuccessModalOpen(true); // 성공 모달 열기
-        } else {
-          const errorMessage = resultAction.payload || "프로필 수정에 실패했습니다."
-          throw new Error(errorMessage);
-        }
-      } catch (error) {
-        console.error("프로필 수정 실패:", error);
-        alert(`프로필 수정 중 오류가 발생했습니다: ${error.message || error}`);
-        setConfirmOpen(false);
-      }
-    } else if (confirmType === "cancel") {
-      setConfirmOpen(false);
-      navigate("/cleaners/mypage");
-    }
+  // 수정 취소 처리
+  const handleCancel = () => {
+    setModalConfig({
+      title: '수정 취소',
+      message: '수정된 내용이 저장되지 않습니다. 정말로 취소하시겠습니까?',
+      onConfirm: () => navigate("/cleaners/mypage"),
+      onClose: () => setIsConfirmModalOpen(false),
+      showConfirmButton: true,
+    });
+    setIsConfirmModalOpen(true);
   };
 
+  // 수정 완료 처리
+  const handleUpdateProfile = async () => {
+    // 변경된 내용이 있는지 확인
+    const originalProfile = user.profile;
+    const originalTagline = user.tagline || "";
+    const originalCerts = user.certifications?.map(c => c.path) || [];
+    const originalRegions = user.driverRegions?.map(r => r.locationId).sort() || [];
+
+    try {
+      let profilePath = originalProfile;
+      let certPaths = originalCerts;
+
+      const isProfileImageChanged = !!selectedProfileFile;
+      const newCertificateFiles = certificateFiles.filter(cert => !!cert.file);
+
+      if (isProfileImageChanged) {
+        profilePath = await dispatch(uploadFileThunk({ file: selectedProfileFile, fieldName: 'profileImage' })).unwrap();
+      }
+      if (newCertificateFiles.length > 0) {
+        const uploadPromises = newCertificateFiles.map(cert => 
+          dispatch(uploadFileThunk({ file: cert.file, fieldName: 'certificateFiles' })).unwrap()
+        );
+        const newCertUrls = await Promise.all(uploadPromises);
+        const existingCertUrls = certificateFiles
+          .filter(cert => !cert.file)
+          .map(cert => cert.url);
+        certPaths = [...existingCertUrls, ...newCertUrls];
+      }
+
+      const isTaglineChanged = originalTagline !== tagline;
+      const areRegionsChanged = JSON.stringify(originalRegions) !== JSON.stringify([...selectedRegions].sort());
+      const areCertsChanged = JSON.stringify(originalCerts.sort()) !== JSON.stringify(certPaths.sort());
+
+      if(!isProfileImageChanged && !isTaglineChanged && !areRegionsChanged && !areCertsChanged) {
+        setModalConfig({
+          title: '알림',
+          message: '변경된 내용이 없습니다.',
+          onClose: () => setIsConfirmModalOpen(false)
+        });
+        setIsConfirmModalOpen(true);
+        return;
+      }
+
+      const updateData = {
+        profile: profilePath,
+        tagline: tagline,
+        certifications: certPaths,
+        regions: selectedRegions,
+      };
+    
+      await dispatch(updateCleanerInfoThunk(updateData)).unwrap();
+
+      setModalConfig({
+        title: '수정 완료',
+        message: '프로필이 성공적으로 수정되었습니다.',
+        onClose: () => {
+          setIsConfirmModalOpen(false);
+          dispatch(getMeThunk());
+        }
+      });
+      setIsConfirmModalOpen(true);
+
+    } catch (error) {
+      setModalConfig({
+        title: '오류',
+        message: error.info || "프로필 수정 중 오류가 발생했습니다.",
+        onClose: () => setIsConfirmModalOpen(false)
+      });
+      setIsConfirmModalOpen(true);
+    }
+  };
+  
   return (
     <div className="cleaner-profile-edit-container">
       <div className="cleaner-profile-edit-card">
@@ -149,7 +191,13 @@ function CleanersProfileEdit() {
               style={{ backgroundImage: `url('${profileImageUrl}')` }}
             />
             <label htmlFor="profile-upload" className="cleaner-profile-edit-badge" />
-            <input id="profile-upload" type="file" style={{ display: "none" }} accept="image/*" onChange={handleImageSelect} />
+            <input 
+              id="profile-upload" 
+              type="file" 
+              style={{ display: "none" }} 
+              accept="image/*" 
+              onChange={handleImageSelect} 
+            />
           </div>
 
           <div className="cleaner-profile-edit-info">
@@ -171,7 +219,6 @@ function CleanersProfileEdit() {
             />
           </div>
 
-          {/* --- 자격증 표시 --- */}
           <div className="cleaner-profile-edit-field">
             <label>자격증</label>
             {certificateFiles.map((cert, index) => (
@@ -184,12 +231,19 @@ function CleanersProfileEdit() {
             ))}
             <div className="cleaner-profile-edit-file-row">
               <label htmlFor="cert-upload" className="cleaner-profile-edit-btn-upload">파일 추가</label>
-              <input id="cert-upload" type="file" multiple style={{ display: 'none' }} onChange={handleFileChange} />
+              <input 
+                id="cert-upload" 
+                type="file" 
+                multiple 
+                style={{ display: 'none' }} 
+                onChange={handleFileChange} 
+              />
             </div>
           </div>
 
           <div className="cleaner-profile-edit-field">
-            <CleanersRegionDropdown label="작업 지역"
+            <CleanersRegionDropdown 
+              label="작업 지역"
               initialRegions={selectedRegions}
               onRegionChange={setSelectedRegions}
             />
@@ -197,44 +251,44 @@ function CleanersProfileEdit() {
         </div>
 
         <div className="cleaner-profile-edit-footer">
-          <button className="cleaner-profile-edit-btn-cancel" onClick={() => { setConfirmType("cancel"); setConfirmOpen(true); }}>수정 취소</button>
-          <button className="cleaner-profile-edit-btn-submit" onClick={() => { setConfirmType("save"); setConfirmOpen(true); }}>수정 완료</button>
+          <button className="cleaner-profile-edit-btn-cancel" onClick={handleCancel}>
+            수정 취소
+          </button>
+          <button className="cleaner-profile-edit-btn-submit" onClick={handleUpdateProfile}>
+            수정 완료
+          </button>
         </div>
       </div>
 
+      {/* 프로필 이미지 미리보기 모달 */}
       {isImgModalOpen && (
         <div className="cleaner-profile-edit-modal-overlay">
           <div className="cleaner-profile-edit-modal-content">
             <h3>프로필 이미지 미리보기</h3>
             <img src={previewUrl} alt="미리보기" className="cleaner-profile-edit-modal-preview-img"/>
             <div className="cleaner-profile-edit-modal-btns">
-              <button onClick={() => setIsImgModalOpen(false)} className="cleaner-profile-edit-modal-btn-cancel">취소</button>
-              <button onClick={handleSaveImage} className="cleaner-profile-edit-modal-btn-save">저장하기</button>
+              <button onClick={() => setIsImgModalOpen(false)} className="cleaner-profile-edit-modal-btn-cancel">
+                취소
+              </button>
+              <button onClick={handleSaveImage} className="cleaner-profile-edit-modal-btn-save">
+                저장하기
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      <ConfirmModal
-        open={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-        message={confirmType === "cancel" ? "수정 내용이 삭제됩니다. 취소하시겠습니까?" : "정보를 수정하시겠습니까?"}
-        onConfirm={onConfirm}
-      />
-
-      {/* 프로필 수정 성공 모달 */}
-      <ConfirmModal 
-        open={isSuccessModalOpen}
-        onClose={async() => {
-          setIsSuccessModalOpen(false);
-          await dispatch(getMeThunk());
-        }}
-        message='프로필이 변경되었습니다.'
-        onClick={async () => {
-          setIsSuccessModalOpen(false);
-          await dispatch(getMeThunk());
-        }}
-      />
+      {/* 확인 모달 */}
+      {isConfirmModalOpen && modalConfig && (
+        <ConfirmModal
+          open={isConfirmModalOpen}
+          onClose={modalConfig.onClose}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          onConfirm={modalConfig.onConfirm}
+          showConfirmButton={modalConfig.showConfirmButton}
+        />
+      )}
     </div>
   );
 }

@@ -20,7 +20,7 @@ cleanersRouter.post('/quotations', authMiddleware, cleanerQuotationsValidator.qu
 cleanersRouter.get('/accountinfo', authMiddleware, cleanerAccountController.getCleanerAccounts); // 계좌 조회
 
 // 기사님 정보/프로필 수정 작업라우터
-cleanersRouter.put('/mypage/info', authMiddleware, multerMiddleware.cleanerProfileUploader , cleanerProfileController.updateInfo); // 기사 정보 수정
+cleanersRouter.put('/mypage/info', authMiddleware, cleanerProfileController.updateInfo); // 기사 정보/프로필 수정
 cleanersRouter.put('/mypage/password', authMiddleware, cleanerProfileController.changePassword); //기사 비밀번호 수정
 
 

@@ -8,6 +8,8 @@ import { INVALID_PASSWORD, NOT_FOUND_ERROR } from '../../../configs/responseCode
 import { createBaseResponse } from '../../utils/createBaseResponse.util.js';
 import cleanerProfileRepository from '../../repositories/cleaner/cleaner.profile.repository.js';
 import bcrypt from "bcrypt";
+import fs from 'fs/promises';
+import db from '../../models/index.js';
 
 /**
  * 기사 정보 수정 
@@ -19,12 +21,16 @@ async function updateCleaner(id, role, updateData, files) {
   const t = await db.sequelize.transaction(); // 트랜잭션 시작
 
   try {
-    const cleanerUpdateData = { ...updateData };
+    const cleanerUpdateData = {};
 
+    if (updateData.tagline) {
+      cleanerUpdateData.introduction = updateData.tagline;
+    }
+    
     // 프로필 이미지 처리
     if (files && files.profileImage) {
-      const newPath = files.profileImage[0].path;      
-      cleanerUpdateData.profile = newPath;
+      const newProfileUrl = `${process.env.APP_URL}/${process.env.FILE_USER_PROFILE_PATH}/${profileFile.filename}`;   
+      cleanerUpdateData.profile = newProfileUrl;
     }
 
     // 기본 정보 업데이트 
@@ -32,9 +38,10 @@ async function updateCleaner(id, role, updateData, files) {
 
     // 자격증 처리
     if (files && files.certificateFiles) {
+      const certificatePath = process.env.FILE_CERTIFICATE_PATH || process.env.FILE_USER_PROFILE_PATH;
       const newCertificates = files.certificateFiles.map(file => ({
         cleanerId: id,
-        path: file.path,
+        path: `${process.env.APP_URL}/${certificatePath}/${file.filename}`,
       }));
 
       // 기존 자격증 DB에서 삭제 후 새로 추가
