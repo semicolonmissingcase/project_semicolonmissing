@@ -1,0 +1,112 @@
+/* 전체 배경 (웹 전체 화면) */
+.reservation-detail-outer-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f1f5f9; /* 웹 배경색 */
+  display: flex;
+  justify-content: center;
+}
+
+/* 컨텐츠 컨테이너 (중앙 카드 영역) */
+.reservation-detail-container {
+  width: 100%;
+  max-width: 500px; /* PC 제한 너비 */
+  background-color: #f5f7fa; /* 내부 배경색 */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.reservation-detail-nav {
+  background: #fff;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid #eee;
+}
+
+.reservation-detail-header-title { font-size: 1.1rem; font-weight: 700; color: #333; }
+.reservation-detail-back-btn { background: none; border: none; font-size: 1.2rem; color: #333; cursor: pointer; display: flex; align-items: center; }
+
+.reservation-detail-scroll-area { 
+  padding: 20px; 
+  padding-bottom: 120px; /* 푸터 높이 고려 여백 */
+  flex: 1; 
+  overflow-y: auto;
+}
+
+/* 카드 스타일링 */
+.reservation-detail-main-card, 
+.reservation-detail-info-item-card, 
+.reservation-detail-desc-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.reservation-detail-store-name { font-size: 1.3rem; font-weight: 800; color: #111; margin: 0; }
+.reservation-detail-address-text { margin: 0; line-height: 1.4; word-break: keep-all; }
+
+.reservation-detail-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+.reservation-detail-info-value { font-size: 0.95rem; font-weight: 700; color: #333; margin: 0; }
+.reservation-detail-phone-text { font-size: 0.85rem; color: #3B82F6; font-weight: 600; margin-top: 4px; }
+
+/* QA 및 하단 섹션 */
+.reservation-detail-qa-row { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px dashed #eee; }
+.reservation-detail-qa-q { font-size: 0.85rem; color: #888; margin-bottom: 4px; }
+.reservation-detail-qa-a { font-size: 0.95rem; color: #333; font-weight: 600; }
+
+.reservation-detail-price-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #f0f7ff;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.reservation-detail-final-price { font-size: 1.2rem; font-weight: 800; color: #3B82F6; }
+
+/* 푸터 고정 방식 수정 (컨테이너 내부 하단 고정) */
+.reservation-detail-footer {
+  position: absolute; /* 고정이 아닌 컨테이너 하단 부착 */
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  padding: 15px 20px 30px;
+  box-shadow: 0 -10px 20px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+}
+
+.reservation-detail-primary-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background: #3B82F6;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.reservation-detail-primary-btn:active { opacity: 0.8; }
+
+/* 로딩/에러 상태 중앙 정렬 */
+.reservation-detail-loading-state,
+.reservation-detail-error-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #666;
+}

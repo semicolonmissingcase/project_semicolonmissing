@@ -1,0 +1,215 @@
+/* 1. 기본 박스 및 레이아웃 컨테이너 */
+.cleaners-settlement-status-container {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.cleaners-settlement-status-box {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cleaners-settlement-status-box-title {
+  font-size: 1.1rem;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.cleaners-settlement-status-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* 2. 캘린더 상단 내비게이션 */
+.cleaners-settlement-status-caption {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 10px;
+}
+
+.cleaners-settlement-status-caption-center { text-align: center; }
+.cleaners-settlement-status-caption-year { font-size: 1rem; }
+.cleaners-settlement-status-caption-month { font-size: 1.1rem; }
+
+/* 3. DayPicker 테이블 기본 구조 */
+.rdp { width: 100%; }
+.rdp-root { display: flex; justify-content: center; }
+.rdp-table { width: 100%; max-width: 100%; table-layout: fixed; }
+tbody.rdp-weeks { margin: 0 auto; }
+
+tr.rdp-weekdays {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1.8rem;
+  padding-right: 2rem;
+}
+
+/* 4. 날짜 버튼 및 작업 레벨 스타일 */
+.rdp-day {
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rdp-day_button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  border: 2px solid transparent;
+  background-color: var(--color-light-gray);
+  color: #000;
+  transition: all 0.15s ease-out;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+/* 레벨별 배경색 공통 정의 */
+.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue) !important; color: #000; }
+.cleaners-settlement-status-lv2 { background-color: var(--color-blue) !important; color: #fff; }
+.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue) !important; color: #fff; }
+
+/* 5. 선택(Selected) 상태 스타일 */
+.rdp-day_button[aria-selected="true"] {
+  z-index: 2;
+  border: 2px solid #0ea5e9; /* 작업 없는 날 선택 시 기본 테두리 */
+  box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(0,0,0,0.2);
+}
+
+/* 작업 있는 날 선택 시: 배경은 유지하되 테두리 강조 */
+.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv1 { border-color: var(--color-light-blue); background-color: var(--color-light-gray) !important; color: #000; }
+.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv2 { border-color: var(--color-blue); background-color: var(--color-light-gray) !important; color: #000; }
+.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv3 { border-color: var(--color-dark-blue); background-color: var(--color-light-gray) !important; color: #000; }
+
+/* 6. 주간(Week) 및 배지 스타일 */
+tr.rdp-week {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.cleaners-settlement-status-week-selected,
+tr.rdp-week:hover {
+  background-color: rgba(74, 163, 255, 0.1);
+}
+
+.rdp-week-badge-cell {
+  width: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.cleaners-settlement-status-week-total-badge {
+  background-color: #111;
+  color: #fff;
+  font-size: 11px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* 7. 우측 리스트 및 기타 UI */
+.cleaners-settlement-status-right-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.cleaners-settlement-status-right-title { font-size: 0.9rem; }
+
+.cleaners-settlement-status-filter select {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.cleaners-settlement-status-list { display: flex; flex-direction: column; gap: 12px; }
+
+.cleaners-settlement-status-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cleaners-settlement-status-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.cleaners-settlement-status-item-body {
+  padding: 16px;
+  background-color: #f8fafc;
+  font-size: 14px;
+}
+
+.cleaners-settlement-status-item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+/* 8. 미디어 쿼리 (반응형 레이아웃) */
+@media (max-width: 920px) {
+  .cleaners-settlement-status-grid { grid-template-columns: 1fr; width: 100%; }
+  tr.rdp-week { width: 100%; justify-content: space-between; padding: 4px 0; }
+}
+
+@media (max-width: 920px) and (min-width: 525px) {
+  .cleaners-settlement-status-left { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .rdp-weekdays, tr.rdp-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) 40px;
+    width: 100%;
+    justify-items: center;
+  }
+  .rdp-day_button { width: 45px; height: 45px; }
+}
+
+@media (min-width: 460px) and (max-width: 524px) {
+  thead, .cleaners-settlement-status-legend, .cleaners-settlement-status-right { width: 290px; }
+  tr.rdp-weekdays { gap: 1.6rem; }
+  .rdp-day_button { width: 36px; height: 36px; font-size: 12px; }
+}
+
+@media (min-width: 359px) and (max-width: 459px) {
+  thead, .cleaners-settlement-status-legend, .cleaners-settlement-status-right { width: 220px; }
+  tr.rdp-weekdays { gap: 1.05rem; padding-right: 1.9rem; }
+  .rdp-day_button { width: 27px; height: 27px; font-size: 12px; }
+}

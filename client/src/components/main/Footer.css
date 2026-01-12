@@ -1,0 +1,27 @@
+.footer-container {
+  height: 200px;
+  background-color: var(--color-dark-blue);
+  padding: 1rem;
+}
+
+.footer-conents {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.footer-logo {
+  width: 17rem;
+  aspect-ratio: 60 / 22;
+}
+
+.footer-comments {
+  color: var(--color-white);
+  font-weight: 300;
+}
+
+@media (max-width: 820px) {
+  .footer-container {
+    display: none;
+  }
+}

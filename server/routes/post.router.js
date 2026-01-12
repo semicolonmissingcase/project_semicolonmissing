@@ -1,0 +1,49 @@
+/**
+ * @file routes/post.router.js
+ * @description 글쓰기 관련 라우터
+ * 260102 v1.0.0 ck init
+ */
+
+import express from 'express';
+import authMiddleware from '../app/middlewares/auth/auth.middleware.js';
+import ownerInquiryController from '../app/controllers/owner/owner.inquiry.controller.js';
+import multerMiddleware from '../app/middlewares/multer/multer.middleware.js';
+import reviewCreateValidator from '../app/middlewares/validations/validatiors/owner/review.create.validator.js';
+import reviewUploader from '../app/middlewares/multer/uploaders/review.uploader.js';
+import postUploader from '../app/middlewares/multer/uploaders/post.uploader.js';
+
+const postsRouter = express.Router();
+
+// editor용
+postsRouter.post('/images/editor', postUploader, ownerInquiryController.uploadEditorImage);
+// 문의사항 페이지 테이블 조회(비회원도 가능)
+postsRouter.get('/inquiries', ownerInquiryController.getAllInquiries);
+// 문의사항 작성(회원용)
+postsRouter.post('/inquiries', authMiddleware, ownerInquiryController.ownerCreateInquiry);
+// 문의사항 작성(비회원용)
+postsRouter.post('/inquiries/guest', multerMiddleware.inquiryImageUploader, ownerInquiryController.guestCreateInquiry);
+// 문의사항 상세 조회(전체)
+postsRouter.get('/inquiries/show/:inquiryId', authMiddleware, ownerInquiryController.getInquiryShow);
+// 내 문의사항 조회(점주)
+postsRouter.get('/owner/inquiries', authMiddleware, ownerInquiryController.getOwnerInquiries);
+// 내 문의상세 조회(점주)
+postsRouter.get('/owner/inquiries/:inquiryId', authMiddleware, ownerInquiryController.getOwnerInquiriesShow);
+
+// 문의사항 답변(관리자 전용)
+// postsRouter.post('/inquiries/:inquiryId/answers', authAdminMiddleware, ownerInquiryController.createAnswer);
+
+// ---------------------------
+// 리뷰 관리
+// ---------------------------
+// 리뷰 목록 조회
+postsRouter.get('/owner/reviews', authMiddleware, ownerInquiryController.getOwnerReviews);
+// 리뷰 작성 전 목록 조회
+postsRouter.get('/owner/reservations/completed', authMiddleware, ownerInquiryController.getCompletedReservations);
+// 개별 리뷰 상세 조회
+postsRouter.get('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.getReviewDetails);
+// 리뷰 작성
+postsRouter.post('/owner/reviews', authMiddleware, reviewUploader, reviewCreateValidator, ownerInquiryController.createReview);
+// 리뷰 삭제
+postsRouter.delete('/owner/reviews/:reviewId', authMiddleware, ownerInquiryController.deleteReview);
+
+export default postsRouter;

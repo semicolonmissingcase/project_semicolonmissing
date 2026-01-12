@@ -1,68 +1,220 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+* {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* variables */
+  --color-black: #080809;
+  --color-dark-blue: #0C1B41;
+  --color-blue: #405792;
+  --color-light-blue: #43BBEE;
+  --color-white: #FFFFFF;
+  --color-red: #C01E20;
+  --color-light-gray: #E1E5EF;
+  --color-gray: #7C7F88;
+  --color-yellow: #FFC300;
+}
+
+#root {
+  width: 100%;
+  margin: auto;  
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.all-container {
+  max-width: 1200px;
+  min-height: 100%;
+  margin: auto;
 }
 
+/* 버튼 관련 */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  background: none;
+  border: none;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.btn-full-width {
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+}
+
+.btn-big {
+  width: 15rem;
+  height: 50px;
+  font-size: 25px;
+  border-radius: 10px;
+}
+
+.btn-medium {
+  width: 12rem;
+  height: 3rem;
+  font-size: 1.3rem;
+  border-radius: 10px;
+}
+
+.btn-small {
+  width: 7.5rem;
+  height: 2rem;
+  font-size: 1rem;
+  border-radius: 10px;
+}
+
+/* 배경 관련 */
+.bg-darkblue {
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
+}
+
+.bg-gray {
+  background-color: var(--color-gray);
+  color: var(--color-white);
+}
+
+.bg-red {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.bg-light {
+  background-color: var(--color-light-gray);
+  color: var(--color-black);
+}
+
+.bg-blue {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+.bg-white {
+  background-color: var(--color-white);
+  color: var(--color-dark-blue);
+}
+
+.bg-img-kakao {
+  width: 20rem;
+  aspect-ratio: 300 / 45;
+  border-radius: 12px;
+  background-image: url("/icons/kakao_login.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+/* 그림자 관련 */
+.card-shadow {
+  box-shadow: 9px 9px 20px rgba(64, 87, 146, 0.4),
+             -9px -9px 23px var(--color-white);
+}
+
+/* 절취선 */
+.bottom-line {
+  border-bottom: var(--color-dark-blue);
+}
+
+/* 텍스트 있는 절취선 */
+.text-on-line {
+  min-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--primary-color-gray);
+  font-size: 30px;
+}
+
+/* input 관련 */
+.input-big-border {
+  background-color: var(--input-box);
+  color: var(--text-gray);
+  border: none;
+  padding: 0 10px;
+  width: 300px;
+  height: 45px;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.input-medium {
+  padding: 0 10px;
+  width: 300px;
+  height: 40px;
+  border: 1px solid var(--color-dark-blue);
+  border-radius: 10px;
+}
+
+.input-remove-arrows::-webkit-outer-spin-button,
+.input-remove-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 캐릭터 관련 */
+.ice-doctor-character {
+  background-image: url('/icons/ice-doctor-character.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* 캐릭터+로고 */
+.ice-doctor-logo-character {
+  background-image: url('/icons/ice_doctor_logo_and_ character.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* 로고관련 */
+.ice-doctor-logo1 {
+  background-image: url('/icons/ice_doctor_logo_1.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.ice-doctor-logo2 {
+  background-image: url('/icons/ice_doctor_logo_2.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* 하트 관련 */
+.icon-heart-fill {
+  background-image: url('/icons/heart-fill.png');
+  width: 1.5rem;
+  height: 1.5rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.icon-heart-empty {
+  background-image: url('/icons/heart-empty.png');
+  width: 1.5rem;
+  height: 1.5rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* 삭제 아이콘 */
+.icon-delete {
+  background-image: url('/icons/btn-delete.png');
+  width: 25px;
+  height: 30px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }

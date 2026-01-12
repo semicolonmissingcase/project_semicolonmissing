@@ -1,0 +1,115 @@
+.ownerstoreinfo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.ownerstoreinfo-modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.ownerstoreinfo-modal-content h2 {
+  text-align: center;
+  margin: 0 0 2rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ownerstoreinfo-store-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ownerstoreinfo-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ownerstoreinfo-form-field label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.ownerstoreinfo-form-field input {
+  width: 100%;
+  padding: 0.9rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.ownerstoreinfo-form-field input:focus {
+  outline: none;
+  border-color: #4A5F7F;
+}
+
+.ownerstoreinfo-phone-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ownerstoreinfo-phone-inputs select,
+.ownerstoreinfo-phone-inputs input {
+  padding: 0.9rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.ownerstoreinfo-phone-inputs select {
+  width: 100px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23333' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+  background-color: white;
+}
+
+.ownerstoreinfo-phone-inputs input {
+  flex: 1;
+}
+
+.ownerstoreinfo-phone-inputs > span {
+  color: #999;
+}
+
+.ownerstoreinfo-address-field {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.ownerstoreinfo-address-field input {
+  flex: 1;
+}
+
+.ownerstoreinfo-address-field button {
+  white-space: nowrap;
+}
+
+.ownerstoreinfo-modal-btn-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.ownerstoreinfo-modal-btn-container button {
+  flex: 1;
+}

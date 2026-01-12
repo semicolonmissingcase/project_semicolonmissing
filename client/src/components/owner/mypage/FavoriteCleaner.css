@@ -1,0 +1,140 @@
+.favoritecleaner-tab-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.favoritecleaner-driver-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.3rem;
+  justify-items: center;
+}
+
+.favoritecleaner-fav-card {
+  background: var(--color-white);
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+  transition: transform 0.2s ease;
+  width: 100%;
+  max-width: 320px; 
+}
+
+/* 원형 프로필 영역 */
+.favoritecleaner-fav-avatar-circle {
+  width: 9rem;
+  height: 9rem;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.favoritecleaner-fav-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.favoritecleaner-fav-info h4 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.favoritecleaner-heart-red {
+  color: var(--color-red);
+}
+
+.favoritecleaner-rating-star {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: 20px;
+}
+
+.favoritecleaner-star-icon {
+  color: var(--color-yellow);
+  margin-right: 4px;
+}
+
+/* 버튼 그룹 */
+/* 버튼 그룹: 버튼 두 개를 나란히 배치 */
+.favoritecleaner-fav-btn-group {
+  display: flex;
+  gap: 10px; /* 버튼 사이 간격 */
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* 공통 버튼 스타일 (기존 스타일 활용) */
+.favoritecleaner-btn-profile,
+.favoritecleaner-btn-request {
+  flex: 1; /* 동일한 너비 공유 */
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap; /* 글자 줄바꿈 방지 */
+}
+
+/* 요청서 보내기 버튼 색상 (예: 녹색 또는 테두리 스타일) */
+.favoritecleaner-btn-request {
+  background-color: var(--color-light-gray);
+  color: var(--color-black);
+  transition: all 0.2s ease;
+}
+
+.favoritecleaner-btn-request:hover {
+  background-color: #f0f7ff;
+}
+
+/* 프로필 버튼 색상 (기존 유지) */
+.favoritecleaner-btn-profile {
+  background-color: var(--color-blue); 
+  color: var(--color-white);
+}
+
+/* --- 반응형 미디어 쿼리 --- */
+
+/* 820px 이하 */
+@media (max-width: 820px) {
+  .favoritecleaner-driver-grid {
+    grid-template-columns: 1fr; /* 한 줄에 하나씩 */
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+/* 430px 이하 */
+@media (max-width: 430px) {
+  .favoritecleaner-fav-card {
+    padding: 20px 15px;
+  }
+  
+  .favoritecleaner-fav-avatar-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .favoritecleaner-fav-info h4 {
+    font-size: 18px;
+  }
+
+  .favoritecleaner-fav-btn-group {
+    flex-direction: column; 
+    gap: 8px;
+  }
+
+  .favoritecleaner-btn-profile,
+  .favoritecleaner-btn-request {
+    width: 100%;
+  }
+}

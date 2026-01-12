@@ -1,0 +1,137 @@
+.cleaners-inquiries-tab-container {
+  max-width: 56.25rem;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+/* 상단 버튼 */
+.cleaners-inquiries-top-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.cleaners-inquiries-write-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--color-blue);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cleaners-inquiries-btn-icon {
+  font-size: 0.7rem;
+  margin-left: 0.5rem;
+}
+
+/* 리스트 및 아이템 */
+.cleaners-inquiries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.cleaners-inquiries-item {
+  background-color: #fff;
+  border: 0.0625rem solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.05);
+}
+
+.cleaners-inquiries-header {
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.cleaners-inquiries-q-prefix {
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-right: 0.6rem;
+  color: #3b82f6;
+}
+
+.cleaners-inquiries-title-text {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  color: #333;
+}
+
+/* 상태 배지 */
+.cleaners-inquiries-status {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 1rem;
+  margin-right: 1rem;
+}
+
+.cleaners-inquiries-status.is-pending { color: var(--color-white); background-color: var(--color-red); }
+.cleaners-inquiries-status.is-completed { color: var(--color-white); background-color: var(--color-blue); }
+
+/* 아코디언 바디 */
+.cleaners-inquiries-body {
+  padding: 0 1.5rem 1.5rem;
+  animation: cleanersSlideDown 0.3s ease-out;
+}
+
+.cleaners-inquiries-question-content {
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.cleaners-inquiries-date {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.5rem;
+}
+
+.cleaners-inquiries-divider {
+  height: 0.0625rem;
+  background-color: #f1f1f1;
+  margin: 1.2rem 0;
+}
+
+.cleaners-inquiries-a-prefix {
+  font-weight: 800;
+  margin-right: 0.5rem;
+  color: #10b981;
+}
+
+.cleaners-inquiries-answer-content {
+  font-size: 0.95rem;
+}
+
+@keyframes cleanersSlideDown {
+  from { opacity: 0; transform: translateY(-0.5rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cleaners-inquiries-empty {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+}
+
+/* 모바일 대응 */
+@media (max-width: 500px) {
+  .cleaners-inquiries-write-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .cleaners-inquiries-header {
+    padding: 1rem;
+  }
+  .cleaners-inquiries-status {
+    margin-right: 0.5rem;
+  }
+}

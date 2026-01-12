@@ -1,0 +1,238 @@
+.cleaners-quotations-preparation-save-container {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cleaners-quotations-preparation-save-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.cleaners-quotations-preparation-save-title {
+  font-size: 1.5rem;
+}
+
+/* sort */
+.cleaners-quotations-preparation-save-row {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 0 14px;
+}
+.cleaners-quotations-preparation-save-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.cleaners-quotations-preparation-save-sort select {
+  border: none;
+  background: transparent;
+  padding: 10px;
+  font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+}
+
+
+/* template card */
+.cleaners-quotations-preparation-save-card {
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin: 1rem 0;
+  cursor: pointer;
+}
+
+.cleaners-quotations-preparation-save-card-grid {
+  display: grid;
+  grid-template-columns: 160px 1fr 220px;
+  gap: 1rem;
+  align-items: start;
+}
+
+/* labels */
+.cleaners-quotations-preparation-save-label-col {
+  display: grid;
+  gap: 1rem;
+  padding-top: 10px;
+}
+.cleaners-quotations-preparation-save-label {
+  font-size: 1.2rem;
+}
+
+/* values */
+.cleaners-quotations-preparation-save-value-col { padding-top: 4px; }
+.cleaners-quotations-preparation-save-price {
+  font-size: 1.2rem;
+  letter-spacing: -0.5px;
+  margin: 4px 0 10px;
+}
+.cleaners-quotations-preparation-save-won { font-size: 1.2rem; font-weight: 500; margin-left: 6px; }
+
+.cleaners-quotations-preparation-save-desc {
+  font-size: 1.2rem;
+  word-break: keep-all;
+}
+.cleaners-quotations-preparation-save-desc.is-collapsed{
+  display: -webkit-box;
+  overflow: hidden;
+}
+
+.cleaners-quotations-preparation-save-saved-badge{
+  margin-top: 10px;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: var(--color-blue);
+}
+
+/* actions */{result.settledComplete.toLocaleString()}
+.cleaners-quotations-preparation-save-action-col {
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.cleaners-quotations-preparation-save-link-btn{
+  border: none;
+  background: transparent;
+  color: #7b7b7b;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.cleaners-quotations-preparation-save-link-btn:hover{ text-decoration: underline; }
+
+.cleaners-quotations-preparation-save-apply-btn{
+  border: none;
+  background: var(--color-light-gray);
+  color: #000;
+  font-size: 1rem;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.cleaners-quotations-preparation-save-apply-btn:hover{ filter: brightness(0.98); }
+
+.cleaners-quotations-preparation-save-icon-btn{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 3px solid #8a8a8a;
+  background: transparent;
+  font-size: 26px;
+  color: #6a6a6a;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.cleaners-quotations-preparation-save-del-btn{
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* add card */
+.cleaners-quotations-preparation-save-add-card{
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+.cleaners-quotations-preparation-save-add-card:hover{ background: var(--color-light-gray); }
+
+.cleaners-quotations-preparation-save-add-text{
+  text-align: center;
+}
+.cleaners-quotations-preparation-save-add-title{
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.cleaners-quotations-preparation-save-add-sub{
+  font-size: 20px;
+}
+
+/* scroll-to-top button */
+.cleaners-quotations-preparation-save-fab{
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 1000;
+  box-shadow: 0 2px 10px rgba(15,23,42,0.10);
+}
+
+/* 수정 모드일 때 카드 테두리 강조 */
+.cleaners-quotations-preparation-save-card.is-editing {
+  border: 1px solid var(--color-blue);
+  cursor: default;
+}
+
+/* 입력 필드 스타일 */
+.edit-input-price, .edit-textarea-desc {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: inherit;
+}
+
+.edit-textarea-desc {
+  min-height: 80px;
+  resize: vertical;
+  margin-top: 8px;
+}
+
+.edit-done-btn {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background-color: var(--color-blue);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* responsive */
+@media (max-width: 980px){
+  .cleaners-quotations-preparation-save-card-grid{
+    grid-template-columns: 140px 1fr 200px;
+  }
+  .cleaners-quotations-preparation-save-label{ font-size: 20px; }
+  .cleaners-quotations-preparation-save-desc{ font-size: 20px; }
+}
+
+@media (max-width: 760px){
+  .cleaners-quotations-preparation-save-nav{ display: none; }
+  .cleaners-quotations-preparation-save-card-grid{
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .cleaners-quotations-preparation-save-action-col{
+    grid-auto-flow: column;
+    justify-content: start;
+    justify-items: start;
+    gap: 12px;
+  }
+}

@@ -1,0 +1,105 @@
+/* 리스트 아이템 전체 컨테이너 */
+.cleaners-settlement-item-container {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+/* 상단 헤더 영역 */
+.cleaners-settlement-item-header {
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.cleaners-settlement-item-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  justify-content: space-between; /* 상호명 왼쪽, 아이콘 오른쪽 */
+}
+
+.cleaners-settlement-item-store-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #212529;
+}
+
+.cleaners-settlement-item-icon {
+  color: #adb5bd;
+  display: flex;
+  align-items: center;
+}
+
+.cleaners-settlement-item-detail-box {
+  padding: 16px 20px;
+  background-color: #f8faff; /* 기본 연한 배경 */
+  border-top: 1px solid #f1f3f5;
+}
+
+.cleaners-settlement-item-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cleaners-settlement-item-detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.cleaners-settlement-item-label {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.cleaners-settlement-item-value {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #343a40;
+}
+
+
+.cleaners-settlement-item-amount-detail {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--status-lv3, #1e3a8a); /* 가장 짙은 포인트 컬러 적용 */
+}
+
+
+.cleaners-settlement-item-time-detail {
+  color: var(--rdp-accent-color, #3b82f6); /* 달력 강조색과 통일 */
+  font-weight: 600;
+}
+
+
+.cleaners-settlement-item-status-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.cleaners-settlement-item-status-badge.is-pending {
+  background-color: var(--status-lv1-bg, #e0f2fe);
+  color: var(--status-lv1-text, #0369a1);
+}
+
+.cleaners-settlement-item-status-badge.is-completed {
+  background-color: #f1f3f5;
+  color: #495057;
+}
+
+
+.cleaners-settlement-item-container.is-canceled {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+}

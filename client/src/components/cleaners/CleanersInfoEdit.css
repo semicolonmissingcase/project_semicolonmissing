@@ -1,0 +1,325 @@
+/* 기본 컨테이너 - OwnerInfo의 레이아웃 계승 */
+.cleaners-info-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+/* 프로필 섹션 */
+.cleaners-info-profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem; /* 간격을 살짝 줄임 */
+}
+
+.cleaners-info-profile-img {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-bottom: 0.5rem;
+}
+
+/* 이름과 아이콘을 가로로 정렬 */
+.cleaners-info-name-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  position: relative;
+}
+
+.cleaners-info-name {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #000;
+}
+
+/* 아이콘과 투명 버튼을 겹치게 만드는 컨테이너 */
+.cleaners-info-edit-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.cleaners-info-edit-icon {
+  font-size: 1.2rem; 
+  color: #333;
+}
+
+/* 실제 클릭되는 버튼을 투명하게 만들어 아이콘 위에 덮음 */
+.cleaners-info-edit-name-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1;
+}
+
+.cleaners-info-email {
+  color: #777; /* 색상을 조금 더 진하게 */
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* 설정 리스트 영역 */
+.cleaners-info-settings-list {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cleaners-info-row {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.cleaners-info-row label {
+  font-weight: 500;
+  min-width: 80px;
+}
+
+/* 전화번호 입력 필드 그룹 */
+.cleaners-info-phone-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.cleaners-info-select,
+.cleaners-info-input {
+  padding: 0.7rem;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.cleaners-info-select {
+  width: 100px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23333' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  padding-right: 2rem;
+  cursor: pointer;
+}
+
+.cleaners-info-input {
+  width: 100px;
+}
+
+.cleaners-info-dash {
+  color: #999;
+}
+
+/* 비밀번호 변경 버튼 */
+.cleaners-info-btn-change {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cleaners-info-btn-change:hover {
+  background-color: var(--color-dark-blue);
+}
+
+/* 정산 안내 섹션 */
+.cleaners-info-settlement-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cleaners-info-settlement-comments {
+  display: flex;
+  align-items: center;
+}
+
+.cleaners-info-settlement-status {
+  color: var(--color-red);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 0.3rem 0;
+}
+
+.cleaners-info-settlement-desc {
+  color: #999;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.cleaners-info-btn-add-account { 
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.cleaners-info-btn-add-account:hover {
+  background-color: var(--color-dark-blue);
+}
+
+/* 하단 액션 버튼 */
+.cleaners-info-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.cleaners-info-btn-cancel,
+.cleaners-info-btn-submit {
+  flex: 1;
+  height: 3.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cleaners-info-btn-cancel {
+  background-color: #e9ecf3;
+  color: #333;
+}
+
+.cleaners-info-btn-submit {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+/* --- 반응형 미디어 쿼리 --- */
+
+/* 태블릿 (820px 이하) */
+@media screen and (max-width: 820px) {
+  .cleaners-info-container {
+    padding: 1.5rem;
+  }
+  .cleaners-info-profile-img {
+    width: 10rem;
+    height: 10rem;
+  }
+  .cleaners-info-settings-list {
+    max-width: 100%;
+  }
+}
+
+/* 모바일 (430px 이하) */
+@media screen and (max-width: 430px) {
+  .cleaners-info-container {
+    padding: 1rem;
+    gap: 2rem;
+  }
+
+  .cleaners-info-profile-img {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .cleaners-info-phone-inputs select,
+  .cleaners-info-phone-inputs input {
+    width: 70px;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    text-align: left;
+  }
+
+  .cleaners-info-actions {
+    gap: 0.5rem;
+  }
+  
+  .cleaners-info-btn-cancel,
+  .cleaners-info-btn-submit {
+    height: 3rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* --- 알림 설정 토글 --- */
+.checkbox-apple {
+  position: relative;
+  width: 80px;   /* 배경 너비 살짝 확장 */
+  height: 28px;  /* 배경 높이 살짝 확장 */
+  margin: 0;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.checkbox-apple .yep {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  margin: 0;
+}
+
+.checkbox-apple label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px; /* 완전한 라운드 */
+  background: #ccc;    /* OFF 상태 배경색 */
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.checkbox-apple label:after {
+  content: '';
+  position: absolute;
+  top: 3px;   
+  left: 3px;  
+  width: 22px; 
+  height: 22px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+/* 체크 시 배경색 (시안의 하늘색) */
+.checkbox-apple .yep:checked + label {
+  background: #62c3f5; 
+}
+
+/* 체크 시 이동: 전체(54) - 동그라미(22) - 왼쪽(3) - 오른쪽(3) = 26px 이동 */
+.checkbox-apple .yep:checked + label:after {
+  transform: translateX(52px);
+}

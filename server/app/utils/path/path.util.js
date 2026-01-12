@@ -1,0 +1,48 @@
+/**
+ * @file /app/utils/path/path.util.js
+ * @description path 유틸리티
+ * 251219 v1.0.0 jae init
+ */
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+function getViewDirPath() {
+  const __dirname = process.env.APP_MODE !== 'dev' ? process.env.APP_DIST_PATH : path.resolve(process.env.APP_DIST_PATH);
+
+  return path.join(__dirname, 'index.html');
+ }
+
+ function getPostsImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_POST_IMAGE_PATH : path.resolve(process.env.FILE_POST_IMAGE_PATH);
+}
+
+function getProfilesImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_USER_PROFILE_PATH : path.resolve(process.env.FILE_USER_PROFILE_PATH);
+}
+
+function getChatImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_CHAT_IMAGE_PATH : path.resolve(process.env.FILE_CHAT_IMAGE_PATH);
+}
+
+function getEditorImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_EDITOR_IMAGE_PATH : path.resolve(process.env.FILE_EDITOR_IMAGE_PATH);
+}
+
+function getInquiryImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_INQUIRY_IMAGE_PATH : path.resolve(process.env.FILE_INQUIRY_IMAGE_PATH);
+}
+
+function getReservationImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_RESERVATION_IMAGE_PATH : path.resolve(process.env.FILE_RESERVATION_IMAGE_PATH);
+}
+
+ export default {
+  getViewDirPath,
+  getPostsImagePath,
+  getProfilesImagePath,
+  getChatImagePath,
+  getEditorImagePath,
+  getInquiryImagePath,
+  getReservationImagePath,
+ }

@@ -1,0 +1,597 @@
+.owner-reservation-container {
+  width: 1000px;
+  padding: 3.125rem 1.25rem;
+}
+
+.owner-reservation-main-title {
+  text-align: center;
+  font-size: 1.75rem;
+  color: #2c3e50;
+  margin-bottom: 2.5rem;
+  font-weight: 800;
+}
+
+.owner-reservation-card {
+  border: 1px solid #ced4da;
+  border-radius: 0.75rem;
+  padding: 1.875rem;
+  margin-bottom: 1.875rem;
+  background: #fff;
+}
+
+.owner-reservation-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5625rem;
+  color: #333;
+}
+
+.required-star { 
+  color: #e74c3c; 
+  margin-left: 0.3125rem; 
+}
+
+.sub-guide { 
+  font-size: 0.8125rem; 
+  font-weight: 400; 
+  color: #7f8c8d; 
+  margin-left: 0.625rem; 
+}
+
+.owner-reservation-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.owner-reservation-avatar-circle {
+  border-radius: 50%;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.owner-reservation-profile {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.owner-reservation-user-details strong { 
+  display: block; 
+  font-size: 1.125rem; 
+  margin-bottom: 0.3125rem; 
+}
+
+.owner-reservation-user-details span { 
+  color: #666; 
+}
+
+.owner-reservation-date-row {
+  margin-bottom: 1.5625rem;
+}
+
+.owner-reservation-date-row label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.owner-reservation-date-input-set {
+  display: flex;
+  gap: 0.625rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* 체크박스의 버튼화 (날짜 협의 가능) */
+.owner-reservation-negotiable-check input[type="checkbox"] {
+  display: none;
+}
+
+.owner-reservation-negotiable-check label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px; /* DatePicker 인풋 높이와 동일하게 */
+  padding: 0 1.25rem;
+  border: 1px solid #1e3a8a;
+  color: #1e3a8a;
+  background: #fff;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.owner-reservation-negotiable-check input[type="checkbox"]:checked + label {
+  background: #1e3a8a;
+  color: #fff;
+}
+
+.owner-reservation-time-row {
+  margin-bottom: 1.5625rem;
+}
+
+.owner-reservation-time-row label {
+  display: block;
+  margin-bottom: 0.625rem;
+  font-weight: 600;
+}
+
+.owner-reservation-time-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.625rem;
+}
+
+.owner-reservation-time-btn {
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  background: #f8f9fa;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.owner-reservation-time-btn:hover {
+  background: #e9ecef;
+}
+
+.owner-reservation-time-btn.active {
+  background: #1e3a8a;
+  color: #fff;
+  border-color: #1e3a8a;
+}
+
+.owner-reservation-file-section {
+  margin-top: 1.5625rem;
+}
+
+.owner-reservation-file-row {
+  display: flex;
+}
+
+.owner-reservation-btn-file-select {
+  background: #4a5568;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  border-radius: 0.375rem;
+}
+
+.owner-reservation-file-list {
+  margin-top: 0.625rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.owner-reservation-file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.625rem 0.75rem;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+}
+
+.owner-reservation-file-item span {
+  color: #495057;
+  font-size: 0.875rem;
+}
+
+.owner-reservation-file-remove {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.owner-reservation-file-remove:hover {
+  color: #c0392b;
+}
+
+.owner-reservation-title-with-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5625rem;
+}
+
+.owner-reservation-title-with-btn .owner-reservation-card-title {
+  margin-bottom: 0;
+}
+
+.owner-reservation-input-group { 
+  margin-bottom: 1.25rem; 
+}
+
+.owner-reservation-input-group label { 
+  display: block; 
+  margin-bottom: 0.5rem; 
+  font-weight: 600; 
+}
+
+.owner-reservation-input-group input { 
+  width: 100%; 
+  padding: 0.75rem; 
+  border: 1px solid #ced4da; 
+  border-radius: 0.375rem; 
+  box-sizing: border-box;
+}
+
+.owner-reservation-grid-cols { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 1.25rem; 
+}
+
+.owner-reservation-address-search-row { 
+  display: flex; 
+  gap: 0.625rem; 
+}
+
+.owner-reservation-address-search-row input {
+  flex: 1;
+}
+
+.owner-reservation-phone-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.owner-reservation-phone-inputs select {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.owner-reservation-phone-inputs input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  text-align: center;
+}
+
+.owner-reservation-phone-inputs span {
+  color: #666;
+}
+
+.owner-reservation-question-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.owner-reservation-question-item { 
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 1.25rem;
+  align-items: baseline;
+}
+
+.owner-reservation-textarea-item {
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.owner-reservation-textarea-item .owner-reservation-question-text {
+  padding-top: 0;
+}
+
+.owner-reservation-question-text { 
+  font-weight: 600; 
+  margin: 0;
+  padding-top: 0.5rem;
+}
+
+.owner-reservation-answer-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.owner-reservation-q-radio-group { 
+  display: flex; 
+  gap: 1.875rem; 
+  justify-content: space-around;
+}
+
+.owner-reservation-q-radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.owner-reservation-q-radio-group input[type="radio"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  cursor: pointer;
+  margin: 0;
+}
+
+.owner-reservation-q-radio-group span {
+  font-size: 0.9375rem;
+}
+
+.owner-reservation-dropdown-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.owner-reservation-dropdown-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  font-size: 0.9375rem;
+}
+
+.owner-reservation-dropdown-btn:hover {
+  border-color: #adb5bd;
+}
+
+.owner-reservation-dropdown-arrow {
+  color: #666;
+  font-size: 0.75rem;
+}
+
+.owner-reservation-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.25rem;
+  background: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 12.5rem;
+  overflow-y: auto;
+}
+
+.owner-reservation-dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  transition: background 0.2s;
+}
+
+.owner-reservation-dropdown-item:hover {
+  background: #f8f9fa;
+}
+
+.owner-reservation-dropdown-item:not(:last-child) {
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.owner-reservation-q-textarea { 
+  width: 100%; 
+  height: 7.5rem; 
+  border: 1px solid #dee2e6; 
+  border-radius: 0.375rem; 
+  padding: 0.9375rem; 
+  resize: vertical; 
+  box-sizing: border-box;
+}
+
+.owner-reservation-btn-blue { 
+  background: #1e3a8a; 
+  color: #fff; 
+  border: none; 
+  padding: 0.5rem 1.125rem; 
+  border-radius: 0.375rem; 
+  cursor: pointer; 
+  white-space: nowrap;
+}
+
+.owner-reservation-btn-blue:hover {
+  background: #152d6a;
+}
+
+.owner-reservation-btn-blue-outline { 
+  border: 1px solid #1e3a8a; 
+  color: #1e3a8a; 
+  background: #fff; 
+  padding: 0.375rem 0.9375rem; 
+  border-radius: 0.375rem; 
+  font-weight: 600; 
+  cursor: pointer; 
+}
+
+.owner-reservation-btn-blue-outline:hover {
+  background: #f0f4ff;
+}
+
+.owner-reservation-terms-box { 
+  padding: 1.25rem; 
+  background: #f8f9fa; 
+  border: 1px solid #dee2e6; 
+  color: #666; 
+  line-height: 1.6; 
+  border-radius: 0.375rem;
+}
+
+.owner-reservation-final-check { 
+  text-align: center; 
+  margin-top: 2.5rem; 
+}
+
+.owner-reservation-final-check label { 
+  display: block; 
+  margin-bottom: 1.5625rem; 
+  font-weight: 600; 
+}
+
+.owner-reservation-final-check input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.owner-reservation-btn-submit-final {
+  padding: 0.9375rem 5rem;
+  background: #1e3a8a;
+  color: #fff;
+  border-radius: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.owner-reservation-btn-submit-final:hover { 
+  background: #152d6a; 
+}
+
+@media (max-width: 820px) {
+  .owner-reservation-container {
+    width: 100%;
+    padding: 2rem 1rem;
+  }
+
+  .owner-reservation-main-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .owner-reservation-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .owner-reservation-time-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .owner-reservation-grid-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .owner-reservation-date-input-set {
+    flex-wrap: wrap;
+  }
+  
+  .owner-reservation-datepicker {
+    min-width: 150px;
+  }
+
+  .owner-reservation-btn-submit-final {
+    padding: 0.875rem 3rem;
+    font-size: 1rem;
+  }
+
+  .owner-reservation-question-item {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .owner-reservation-question-text {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .owner-reservation-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .owner-reservation-main-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .owner-reservation-card {
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .owner-reservation-card-title {
+    font-size: 1.125rem;
+  }
+
+  .owner-reservation-time-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .owner-reservation-time-btn {
+    padding: 0.625rem;
+    font-size: 0.8125rem;
+  }
+
+  .owner-reservation-address-search-row {
+    flex-direction: column;
+  }
+
+  .owner-reservation-q-radio-group {
+    gap: 1rem;
+  }
+
+  .owner-reservation-btn-submit-final {
+    padding: 0.75rem 2rem;
+    font-size: 0.9375rem;
+  }
+
+  .owner-reservation-title-with-btn {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .owner-reservation-question-item {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .owner-reservation-question-text {
+    padding-top: 0;
+  }
+
+  .owner-reservation-datepicker {
+    min-width: 120px;
+  }
+
+  .owner-reservation-btn-blue {
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  .owner-reservation-dropdown-btn {
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .owner-reservation-dropdown-item {
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+  }
+}

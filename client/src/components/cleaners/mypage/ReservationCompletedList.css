@@ -1,0 +1,117 @@
+/* 전체 컨테이너 */
+.reservation-completedlist-container {
+  width: 100%;
+}
+
+/* 카드 목록 영역 */
+.reservation-completedlist-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* PC: 3개씩 나란히 */
+  gap: 1rem; /* 카드 사이 간격 */
+}
+
+/* 개별 카드 */
+.reservation-completedlist-card {
+  height: 7.5rem; /* 120px로 축소 */
+  padding: 0.875rem;
+  background-color: #ffffff; /* 흰색 배경 */
+  border: 1px solid #e5e7eb; /* 연한 회색 테두리 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 2px 4px rgba(64, 87, 146, 0.4); /* 은은한 그림자 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 내용 균등 배치 */
+  transition: box-shadow 0.2s ease; /* 호버 시 부드러운 전환 */
+}
+
+/* 카드 호버 효과 */
+.reservation-completedlist-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
+}
+
+/* 카드 내 각 행 */
+.reservation-completedlist-card-row {
+  display: flex;
+  justify-content: space-between; /* 좌우 정렬 */
+  align-items: center;
+  font-size: 0.875rem; /* 14px */
+}
+
+/* 라벨 (매장명, 시간, 위치, 점주) */
+.reservation-completedlist-card-label {
+  font-weight: 600; /* 약간 굵게 */
+  color: #6b7280; /* 회색 */
+  min-width: 3rem; /* 최소 너비로 정렬 맞추기 */
+}
+
+/* 카카오맵 URL 스킴 위치 변경 */
+.completedjoblist-card-place {
+  display: flex;
+  align-items: center;
+}
+
+/* 값 (실제 데이터) */
+.reservation-completedlist-card-value {
+  color: #1f2937; /* 진한 회색 */
+  text-align: right; /* 오른쪽 정렬 */
+  flex: 1; /* 남은 공간 차지 */
+}
+
+/* 작업이 없을 때 메시지 */
+.reservatoin-no-data {
+  display: flex;
+  justify-content: center;  /* 가로 중앙 */
+  align-items: center;      /* 세로 중앙 */
+  width: 100%;             /* 전체 너비를 차지해야 정중앙 정렬이 가능합니다 */
+  min-height: 300px;        /* 200px보다 조금 더 높게 잡으면 화면 중앙에 더 가깝게 느껴집니다 */
+  
+  margin: 0 auto;           /* 컨테이너 자체를 중앙으로 */
+  text-align: center;
+  color: #888888;
+  font-size: 1rem;
+}
+
+/* 태블릿 크기 (820px ~ 501px) */
+@media (max-width: 820px) {
+  .reservation-completedlist-cards {
+    grid-template-columns: repeat(2, 1fr); /* 태블릿: 2개씩 */
+  }
+
+  .reservation-completedlist-card {
+    height: 7rem; /* 112px */
+    padding: 0.75rem;
+  }
+
+  .reservation-completedlist-date {
+    font-size: 1.125rem; /* 18px */
+  }
+}
+
+/* 모바일 크기 (500px 이하) */
+@media (max-width: 500px) {
+  .reservation-completedlist-container {
+    padding: 0.75rem;
+  }
+
+  .reservation-completedlist-cards {
+    grid-template-columns: 1fr; /* 모바일: 1개씩 세로로 */
+  }
+
+  .reservation-completedlist-date {
+    font-size: 1rem; /* 16px */
+    margin-bottom: 0.75rem;
+  }
+
+  .reservation-completedlist-card {
+    height: 7rem; /* 112px */
+    padding: 0.75rem;
+  }
+
+  .reservation-completedlist-card-row {
+    font-size: 0.8125rem; /* 13px */
+  }
+
+  .reservation-completedlist-card-label {
+    min-width: 2.5rem; /* 모바일에서 라벨 너비 축소 */
+  }
+}
