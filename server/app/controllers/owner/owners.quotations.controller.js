@@ -66,7 +66,25 @@ async function createReservation(req, res, next) {
   }
 }
 
+/**
+ * 견적 요청서 질문 목록 조회
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function getQuestions(req, res, next) {
+  try {
+    const questions = await ownersQuotationsService.getQuestions();
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { questions }));
+  } catch (error) {
+    next(error);
+  }
+}
+
 export default {
   show,
   createReservation,
+  getQuestions,
 };

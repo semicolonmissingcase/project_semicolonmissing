@@ -10,16 +10,20 @@ import ownerInquiryController from '../app/controllers/owner/owner.inquiry.contr
 import multerMiddleware from '../app/middlewares/multer/multer.middleware.js';
 import reviewCreateValidator from '../app/middlewares/validations/validatiors/owner/review.create.validator.js';
 import reviewUploader from '../app/middlewares/multer/uploaders/review.uploader.js';
+import postUploader from '../app/middlewares/multer/uploaders/post.uploader.js';
 
 const postsRouter = express.Router();
 
+// editor용
+postsRouter.post('/images/editor', postUploader, ownerInquiryController.uploadEditorImage);
 // 문의사항 페이지 테이블 조회(비회원도 가능)
 postsRouter.get('/inquiries', ownerInquiryController.getAllInquiries);
 // 문의사항 작성(회원용)
 postsRouter.post('/inquiries', authMiddleware, ownerInquiryController.ownerCreateInquiry);
 // 문의사항 작성(비회원용)
 postsRouter.post('/inquiries/guest', multerMiddleware.inquiryImageUploader, ownerInquiryController.guestCreateInquiry);
-
+// 문의사항 상세 조회(전체)
+postsRouter.get('/inquiries/show/:inquiryId', authMiddleware, ownerInquiryController.getInquiryShow);
 // 내 문의사항 조회(점주)
 postsRouter.get('/owner/inquiries', authMiddleware, ownerInquiryController.getOwnerInquiries);
 // 내 문의상세 조회(점주)

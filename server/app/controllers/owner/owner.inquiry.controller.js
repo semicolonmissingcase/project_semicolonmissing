@@ -154,6 +154,32 @@ async function uploadEditorImage(req, res, next) {
 }
 
 /**
+ * 문의 상세 조회 (모든 사용자 접근 가능, 본인 글만 조회)
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+async function getInquiryShow(req, res, next) {
+  try {
+    const { inquiryId } = req.params;
+    const userId = req.user?.id || null;
+    const userRole = req.user?.role || null;
+    const password = req.query.password || null;
+
+    if(!inquiryId) {
+      throw myError('유효한 문의글 ID가 없습니다.', BAD_REQUEST);
+    }
+
+    const inquiry = await ownerInquiryService.getInquiryShow(inquiryId, userId, userRole, password);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { inquiry }));
+  } catch (error) {
+    console.error("getInquiryShow 컨트롤러 에러 발생:", error);
+    next(error);
+  }
+}
+
+/**
  * 새로운 문의 생성(비회원)
  * @param {import("express").Request} req 
  * @param {import("express").Response} res 
@@ -317,6 +343,7 @@ export default {
   getOwnerInquiries,
   getOwnerInquiriesShow,
   getAllInquiries,
+  getInquiryShow,
   uploadEditorImage,
   guestCreateInquiry,
   getOwnerReviews,

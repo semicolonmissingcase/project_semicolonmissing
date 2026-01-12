@@ -7,6 +7,7 @@
 import multer from 'multer';
 import fs from 'fs';
 import dayjs from 'dayjs';
+import crypto from 'crypto';
 import myError from '../../../errors/customs/my.error.js';
 import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
 import pathUtil from '../../../utils/path/path.util.js';
@@ -24,7 +25,7 @@ export default function(req, res, next) {
     storage: multer.diskStorage({
       // 파일 저장 경로 설정
       destination(req, file, callback) {
-        const fullPath = pathUtil.getProfilesImagePath();
+        const fullPath = pathUtil.getReservationImagePath();
 
         // 저장 디렉토리 설정
         if(!fs.existsSync(fullPath)) {
@@ -59,9 +60,9 @@ export default function(req, res, next) {
     },
     // limits: 파일 사이즈 제한, 파일 개수 제한
     limits: {
-      fileSize: parseInt(process.env.FILE_USER_PROFILE_SIZE)
+      fileSize: parseInt(process.env.FILE_POST_IMAGE_SIZE)
     }
-  }).single('profile');
+  }).array('files', 4);
 
   // 예외 처리
   upload(req, res, err => {

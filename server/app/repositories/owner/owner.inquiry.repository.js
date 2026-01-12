@@ -102,6 +102,32 @@ async function findAllInquiries(limit, offset) {
   return { count, rows };
 }
 
+/**
+ * 문의글 ID로 상세 정보 조회 (답변 포함)
+ * @param {number} inquiryId 
+ */
+async function findById(inquiryId) {
+  return await Inquiry.findByPk(inquiryId, {
+    include: [
+      {
+        model: Answer,
+        as: 'answer',
+        attributes: ['content', 'createdAt']
+      },
+      {
+        model: Owner,
+        as: 'owner',
+        attributes: ['name'],
+      },
+      {
+        model: Cleaner,
+        as: 'cleaner',
+        attributes: ['name'],
+      }
+    ]
+  });
+}
+
 // -----------------------리뷰관련----------------------- 
 /**
  * 점주 ID로 리뷰 목록 조회
@@ -179,17 +205,11 @@ async function findCompletedReservations(ownerId) {
     where: {
       ownerId: ownerId,
       status: ReservationStatus.COMPLETED,
-      [db.Sequelize.Op.and]: db.Sequelize.literal(`(
+      [Sequelize.Op.and]: Sequelize.literal(`(
         SELECT COUNT(*) FROM reviews WHERE reviews.reservation_id = Reservation.id
         ) = 0`),
     },
     include: [
-      {
-        model: Review,
-        as: 'reviews',
-        required: false,
-        attributes: ['id'],
-      },
       {
         model: Cleaner,
         as: 'cleaner',
@@ -209,12 +229,11 @@ async function findCompletedReservations(ownerId) {
         required: false,
       },
     ],
-    having: Sequelize.literal('COUNT(reviews.id) = 0'),
-    group: ['reservation.id', 'store.id', 'cleaner.id'],
+    
   });
 
   // 리뷰 작성 전 필터
-  return reservations.filter(reservation => !(reservation.reviews && reservation.reviews.length > 0));
+  return reservations;
 }
 
 /**
@@ -331,6 +350,7 @@ export default {
   findInquiriesByOwnerId,
   findInquiryByIdAndOwnerId,
   findAllInquiries,
+  findById,
   findReviewsByOwnerId,
   findCompletedReservations,
   findReviewByIdAndOwnerId,

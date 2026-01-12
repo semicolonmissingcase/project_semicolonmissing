@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { CleanersRegionDropdown } from "./cleaners-region-dropdown/CleanersRegionDropdown.jsx";
+import CleanersRegion from "./cleaners-region-dropdown/CleanersRegion.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getMeThunk, updateCleanerInfoThunk, uploadFileThunk } from "../../store/thunks/authThunk.js";
+import { getMeThunk, updateCleanerInfoThunk, uploadFileThunk, getCleanerProfileThunk } from "../../store/thunks/authThunk.js";
 import ConfirmModal from "../result/ConfirmModal.jsx";
 import "./CleanersProfileEdit.css";
 
@@ -32,30 +32,38 @@ function CleanersProfileEdit() {
 
   // 사용자 정보 로드
   useEffect(() => {
-    if (user) {
-      setProfileImageUrl(user.profile || "/icons/default-profile.png");
-      setTagline(user.tagline || "");
-
-      // 기존 자격증 정보 로드
-      if (user.certifications) {
-        setCertificateFiles(user.certifications.map(cert => {
-          const fileName = cert.path.split(/[\\/]/).pop();
-          return {
+    // Redux store에 상세 프로필 정보가 없으면 API 호출
+    if (!user || (!user.certifications && !user.driverRegions)) {
+      console.log('--- getCleanerProfileThunk 호출 ---');
+      dispatch(getCleanerProfileThunk())
+        .unwrap()
+        .then(profileData => {
+          const cleaner = profileData;
+          setProfileImageUrl(cleaner.profile || "/icons/default-profile.png");
+          setTagline(cleaner.introduction || "");
+          setCertificateFiles(cleaner.certification.map(cert => ({
             file: null,
-            name: fileName,
-            url: cert.path
-          };
-        }));
-      }
-
-      // 기존 작업 지역 정보 로드
-      if (user.driverRegions) {
-        setSelectedRegions(user.driverRegions.map(region => region.locationId));
-      }
+            name: cert.name,
+            url: cert.image
+          })));
+          setSelectedRegions(cleaner.driverRegions.map(region => region.locationId));
+        })
+        .catch(error => {
+          console.error("기사 프로필 정보 불러오기 실패:", error);
+          navigate('/login');
+        });
     } else {
-      dispatch(getMeThunk());
+      // Redux store에 이미 상세 프로필 정보가 있으면 사용
+      setProfileImageUrl(user.profile || "/icons/default-profile.png");
+      setTagline(user.introduction || "");
+      setCertificateFiles(user.certification.map(cert => ({
+        file: null,
+        name: cert.name,
+        url: cert.image
+      })));
+      setSelectedRegions(user.driverRegions.map(region => region.locationId));
     }
-  }, [user, dispatch]);
+  }, [user, dispatch, navigate]);
 
   // 프로필 이미지 선택
   const handleImageSelect = (e) => {
@@ -99,7 +107,7 @@ function CleanersProfileEdit() {
   // 수정 취소 처리
   const handleCancel = () => {
     setModalConfig({
-      title: '수정 취소',
+      title: '',
       message: '수정된 내용이 저장되지 않습니다. 정말로 취소하시겠습니까?',
       onConfirm: () => navigate("/cleaners/mypage"),
       onClose: () => setIsConfirmModalOpen(false),
@@ -185,6 +193,16 @@ function CleanersProfileEdit() {
       setIsConfirmModalOpen(true);
     }
   };
+
+  const handleRegionLimit = () => {
+    setModalConfig({
+      title: '알림',
+      message: '작업 지역은 최대 5개까지 선택할 수 있습니다.',
+      confirmText: '확인',
+      onConfirm: () => setIsConfirmModalOpen(false),
+    });
+    setIsConfirmModalOpen(true);
+  }
   
   return (
     <div className="cleaner-profile-edit-container">
@@ -248,10 +266,11 @@ function CleanersProfileEdit() {
           </div>
 
           <div className="cleaner-profile-edit-field">
-            <CleanersRegionDropdown 
+            <CleanersRegion 
               label="작업 지역"
               initialRegions={selectedRegions}
               onRegionChange={setSelectedRegions}
+              onLimitReached={handleRegionLimit}
             />
           </div>
         </div>
@@ -285,14 +304,11 @@ function CleanersProfileEdit() {
       )}
 
       {/* 확인 모달 */}
-      {isConfirmModalOpen && modalConfig && (
+      {isConfirmModalOpen && (
         <ConfirmModal
-          open={isConfirmModalOpen}
-          onClose={modalConfig.onClose}
-          title={modalConfig.title}
-          message={modalConfig.message}
-          onConfirm={modalConfig.onConfirm}
-          showConfirmButton={modalConfig.showConfirmButton}
+          isOpen={isConfirmModalOpen}
+          onClose={() => setIsConfirmModalOpen(false)}
+          config={modalConfig}
         />
       )}
     </div>

@@ -4,11 +4,12 @@
  * 260102 v1.0.0 ck init
  */
 
-import models from '../../constants/models.constants.js';
-const { ReservationStatus, EstimateStatus } = models
+import modelsConstants from '../../constants/models.constants.js';
+const { ReservationStatus, EstimateStatus } = modelsConstants;
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
-const { Estimate, Reservation, Cleaner, Review, Like, Sequelize, Store } = db;
+const { Estimate, Reservation, Cleaner, Review, Like, Store } = db;
+import { Sequelize } from 'sequelize';
 
 /**
  * 특정 예약 ID에 대한 예약서 목록 조회
@@ -44,7 +45,7 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
             model: Reservation,
             as: 'reservations',
             attributes: [],
-            where: { status: ReservationStatus.COMPLETED },
+            where: { status: ReservationStatus.APPROVED },
             duplicating: false,
           },
           {
@@ -112,7 +113,7 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
 async function findAcceptedEstimatesByOwnerId(ownerId) {
   const estimates = await Estimate.findAll({
     where: {
-      status: EstimateStatus.ACCEPTED // 견적서 상태가 '수락'인 것만 필터링
+      status: EstimateStatus.PAID // 견적서 상태가 '수락'인 것만 필터링
     },
     attributes: ['id', 'cleanerId', 'reservationId', 'estimatedAmount', 'description', 'status', 'createdAt',],
     include: [

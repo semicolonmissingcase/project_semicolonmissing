@@ -25,3 +25,7 @@ export const getSettlementSummary = (config = {}) =>
 // 계좌 목록 불러오기
 export const getAccountThunk = (config = {}) =>
   axiosInstance.get(`${CLEANER_API_URL}/accountinfo`, config);
+
+// 지역 목록 불러오기
+export const getLocationsThunk = (config = {}) =>
+  axiosInstance.get(`${CLEANER_API_URL}/locations`, config);

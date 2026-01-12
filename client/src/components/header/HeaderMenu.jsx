@@ -39,7 +39,7 @@ export default function HeaderMenu({ isOpen, onClose }) {
           <div className="mobile-menu-profile">
             <div
               className="mobile-menu-profile-img"
-              style={{ backgroundImage: `url(${user?.profileImg || '/icons/default-profile.png'})` }}
+              style={{ backgroundImage: `url(${user?.profile || '/icons/default-profile.png'})` }}
             ></div>
             <p className="mobile-menu-profile-name">{user?.name}님</p>
           </div>

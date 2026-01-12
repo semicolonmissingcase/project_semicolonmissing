@@ -9,7 +9,20 @@ const { Cleaner, Certification, DriverRegion } = db;
 
 // id로 기사 정보 찾기
 async function findById(id) {
-  return await Cleaner.findByPk(id);
+  return await Cleaner.findByPk(id, {
+    include: [
+      {
+        model: Certification,
+        as: 'certification',
+        attributes: ['id', 'name', 'image'],
+      },
+      {
+        model: DriverRegion,
+        as: 'driverRegions',
+        attributes: ['locationId'],
+      }
+    ]
+  });
 }
 
 /**

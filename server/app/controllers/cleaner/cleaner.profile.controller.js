@@ -54,7 +54,28 @@ async function changePassword(req, res, next) {
   }
 }
 
+/**
+ * 기사님 여러 정보 한번에 불러오기
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function getCleanerProfile(req, res, next) {
+  try {
+    const { id } = req.user;
+
+    const cleanerProfile = await cleanerProfileService.getCleanerProfile(id);
+
+    // 성공
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { cleaner: cleanerProfile }));
+  } catch (error) {
+    next(error);
+  }
+}
+
 export default { 
   updateInfo,
   changePassword,
+  getCleanerProfile,
 };

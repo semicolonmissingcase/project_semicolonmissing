@@ -14,6 +14,8 @@ import db from '../../models/index.js';
  * 기사 정보, 프로필 수정
  */
 async function updateCleaner(id, role, updateData) {
+  console.log('--- updateCleaner 서비스 시작 ---');
+  console.log('전달받은 전체 데이터 (updateData):', JSON.stringify(updateData, null, 2));
   const t = await db.sequelize.transaction(); // 트랜잭션 시작
 
   try {
@@ -48,25 +50,28 @@ async function updateCleaner(id, role, updateData) {
 
     // 작업 지역 처리
     if (updateData.regions !== undefined) {
+      console.log('>> 작업 지역 처리 시작. 전달된 regions:', updateData.regions);
       const regionIds = updateData.regions;
       const newDriverRegions = regionIds.map(locationId => ({
         cleanerId: id,
         locationId: locationId,
       }));
+      console.log('driver_regions 테이블에 생성될 데이터:', newDriverRegions);
 
       // 기존 작업 지역 DB에서 삭제 후 새로 추가
       await cleanerProfileRepository.deleteDriverRegionsByCleanerId(id, t);
       await cleanerProfileRepository.createDriverRegions(newDriverRegions, t);
+      console.log('>> 작업 지역 처리 완료.');
     }
 
     // 모든 작업이 성공
     await t.commit();
-
+console.log('--- 트랜잭션 커밋 성공 ---');
     // 최종적으로 업데이트된 기사 정보를 다시 조회하여 반환
     const updatedCleaner = await cleanerProfileRepository.findById(id);
     return updatedCleaner;
-
   } catch (error) {
+    console.error('!!! 업데이트 중 오류 발생, 롤백 실행 !!!', error);
     // 에러 발생 시 트랜잭션 롤백
     await t.rollback();
     // 에러를 상위로 전파
@@ -105,7 +110,25 @@ async function changePassword(id, currentPassword, newPassword) {
   await cleanerProfileRepository.updateCleaner(id, { password: hashedPassword });
 }
 
+/**
+ * 기사 상세 프로필 조회
+ * @param {number} id 
+ * @param {string} currentPassword 
+ * @param {string} newPassword 
+ */
+async function getCleanerProfile(id) {
+  const cleaner = await cleanerProfileRepository.findById(id);
+
+  if(!cleaner) {
+    throw myError('기사 정보를 찾을 수 없습니다.', NOT_FOUND_ERROR);
+  }
+
+  const cleanerResponse = cleaner.toJSON();
+  return cleanerResponse;
+}
+
 export default {
   updateCleaner,
   changePassword,
+  getCleanerProfile,
 }
