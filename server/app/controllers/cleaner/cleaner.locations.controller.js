@@ -9,7 +9,6 @@ import { createBaseResponse } from "../../../app/utils/createBaseResponse.util.j
 import locationsService from "../../services/cleaner/cleaner.locations.service.js";
  
 
-
   async function registerCleanerLocations(req, res, next) {
   try {
  

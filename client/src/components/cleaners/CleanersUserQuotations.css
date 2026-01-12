@@ -44,12 +44,14 @@
   font-size: 1.5rem;
   display: flex;
   justify-content: center;
+  word-break: keep-all;
 }
 
 .cleaners-user-quotations-item-contents {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  word-break: keep-all;
 }
 
 .cleaners-user-quotations-icon-box {
@@ -68,7 +70,7 @@
   flex-direction: column;
 }
 
-.cleaners-user-quotations-item-content-flex > p {
+.cleaners-user-quotations-item-content-flex>p {
   text-align: center;
 }
 
@@ -80,13 +82,13 @@
   align-items: center;
 }
 
-@media (max-width: 580px ) {
+@media (max-width: 580px) {
   .cleaners-user-quotations-item-content-flex {
     flex-direction: row;
   }
 }
 
-@media (max-width: 400px ) {
+@media (max-width: 400px) {
   .cleaners-user-quotations-item-content-flex {
     flex-direction: column;
   }

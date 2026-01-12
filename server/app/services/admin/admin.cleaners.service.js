@@ -1,7 +1,7 @@
 /**
  * @file app/services/admin/admin.cleaners.service.js
  * @description 관리자 cleaners service
- * 260107 v1.0.0 yh init
+ * 260107 v1.0.0 pbj init
  */
 
 import adminCleanersRepositorie from "../../repositories/admin/admin.cleaners.repositorie.js"

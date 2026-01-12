@@ -1,5 +1,6 @@
+/* 1. 기본 박스 및 레이아웃 컨테이너 */
 .cleaners-settlement-status-container {
-  margin: 0 auto; 
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -8,15 +9,14 @@
 .cleaners-settlement-status-box {
   background-color: var(--color-white);
   border: 1px solid var(--color-light-gray);
-  border-radius: 12px; 
-  padding: 24px; 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
-  
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .cleaners-settlement-status-box-title {
@@ -25,40 +25,6 @@
   text-align: center;
 }
 
-.cleaners-settlement-status-top-summary {
-  margin-bottom: 24px;
-  text-align: center;
-}
-.cleaners-settlement-status-top-summary-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #4a5568;
-  margin: 0;
-}
-.cleaners-settlement-status-top-summary-date {
-  font-size: 24px;
-  font-weight: 700;
-  margin: 8px 0 16px 0;
-}
-.cleaners-settlement-status-top-summary-amounts {
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-  font-size: 18px;
-}
-.cleaners-settlement-status-top-summary-amount-item {
-  display: flex;
-  gap: 8px;
-}
-.cleaners-settlement-status-top-summary-amount-item dt {
-  color: #718096;
-  font-weight: 500;
-}
-.cleaners-settlement-status-top-summary-amount-item dd {
-  font-weight: 600;
-}
-
-
 .cleaners-settlement-status-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
@@ -66,6 +32,7 @@
   align-items: flex-start;
 }
 
+/* 2. 캘린더 상단 내비게이션 */
 .cleaners-settlement-status-caption {
   width: 100%;
   display: flex;
@@ -76,16 +43,15 @@
 }
 
 .cleaners-settlement-status-caption-center { text-align: center; }
-.cleaners-settlement-status-caption-year { font-size: 1rem;  }
+.cleaners-settlement-status-caption-year { font-size: 1rem; }
 .cleaners-settlement-status-caption-month { font-size: 1.1rem; }
 
-.rdp {
-  width: 100%;
-}
-.rdp-root {
-  display: flex;
-  justify-content: center;
-}
+/* 3. DayPicker 테이블 기본 구조 */
+.rdp { width: 100%; }
+.rdp-root { display: flex; justify-content: center; }
+.rdp-table { width: 100%; max-width: 100%; table-layout: fixed; }
+tbody.rdp-weeks { margin: 0 auto; }
+
 tr.rdp-weekdays {
   width: 100%;
   display: flex;
@@ -93,14 +59,11 @@ tr.rdp-weekdays {
   gap: 1.8rem;
   padding-right: 2rem;
 }
-tbody.rdp-weeks {
-  margin: 0 auto;
-}
+
+/* 4. 날짜 버튼 및 작업 레벨 스타일 */
 .rdp-day {
   width: auto;
   height: auto;
-  background-color: transparent !important; /* 컨테이너 배경 제거 */
-  border: none !important;
   margin: 0;
   padding: 0;
   display: flex;
@@ -126,33 +89,39 @@ tbody.rdp-weeks {
   z-index: 1;
 }
 
-.rdp-day_button.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); color: #000; }
-.rdp-day_button.cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #fff; }
-.rdp-day_button.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #fff; }
+/* 레벨별 배경색 공통 정의 */
+.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue) !important; color: #000; }
+.cleaners-settlement-status-lv2 { background-color: var(--color-blue) !important; color: #fff; }
+.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue) !important; color: #fff; }
 
-
+/* 5. 선택(Selected) 상태 스타일 */
 .rdp-day_button[aria-selected="true"] {
-  border: 2px solid #000 !important; /* 선택되었을 때 검정 테두리로 명확히 표시 */
-  box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(0,0,0,0.2); /* 흰색 간격 후 그림자 */
   z-index: 2;
+  border: 2px solid #0ea5e9; /* 작업 없는 날 선택 시 기본 테두리 */
+  box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(0,0,0,0.2);
 }
 
-/* 선택된 상태에서 레벨별 배경 유지 보장 */
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv1 { background-color: var(--color-light-blue) !important; }
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv2 { background-color: var(--color-blue) !important; }
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue) !important; }
+/* 작업 있는 날 선택 시: 배경은 유지하되 테두리 강조 */
+.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv1 { border-color: var(--color-light-blue); background-color: var(--color-light-gray) !important; color: #000; }
+.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv2 { border-color: var(--color-blue); background-color: var(--color-light-gray) !important; color: #000; }
+.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv3 { border-color: var(--color-dark-blue); background-color: var(--color-light-gray) !important; color: #000; }
 
-/* --- 레이아웃 및 주간 선택 스타일 --- */
+/* 6. 주간(Week) 및 배지 스타일 */
 tr.rdp-week {
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  border-radius: 20px !important;
+  border-radius: 20px;
   transition: background-color 0.2s;
+  cursor: pointer;
 }
 
-/* 주간 배지 셀 */
+.cleaners-settlement-status-week-selected,
+tr.rdp-week:hover {
+  background-color: rgba(74, 163, 255, 0.1);
+}
+
 .rdp-week-badge-cell {
   width: 40px;
   display: flex;
@@ -172,161 +141,30 @@ tr.rdp-week {
   font-weight: 700;
 }
 
-.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); }
-.cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #fff; }
-.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #fff; }
-
-.rdp-day.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); color: #000; }
-.rdp-day.cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #000; }
-.rdp-day.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #ffffff; }
-
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv1 {
-  color: #000;
-  background-color: var(--color-light-gray);
-  border: solid 1px var(--color-light-blue);
-}
-
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv2 {
-  color: #000;
-  background-color: var(--color-light-gray);
-  border: solid 1px var(--color-blue);
-}
-
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv3 {
-  color: #fff;
-  background-color: var(--color-light-gray);
-  border: solid 1px var(--color-dark-blue);
-}
-
-.rdp-day[aria-selected="true"] .rdp-day_button.cleaners-settlement-status-lv1,
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv1 { 
-  color: #000;
-  background-color: var(--color-light-gray);
-  border: solid 1px var(--color-light-blue);
- }
-
-.rdp-day[aria-selected="true"] .rdp-day_button.cleaners-settlement-status-lv2,
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv2 { 
-  color: #000;
-  background-color: var(--color-light-gray);
-  border: solid 1px var(--color-blue);
- }
-
-.rdp-day[aria-selected="true"] .rdp-day_button.cleaners-settlement-status-lv3,
-.rdp-day_button[aria-selected="true"].cleaners-settlement-status-lv3 { 
-  color: #000;
-  background-color: var(--color-light-gray);
-  border: solid 1px var(--color-dark-blue);
- }
-
-.cleaners-settlement-status-left {
-  overflow: visible !important;
-  position: relative;
-}
-
-.rdp {
-  margin: 0;
-  width: 100% !important;
-  max-width: 100%;
-  overflow-x: hidden; /* 튀어나가는 부분 숨김 */
-}
-
-.rdp-table {
-  width: 100% !important;
-  max-width: 100% !important;
-  table-layout: fixed; /* 테이블 셀 너비를 균등하게 강제 고정 */
-}
-
-/* 행 전체 스타일 */
-.rdp-week {
-  position: relative !important;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.rdp-week:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-tr.rdp-week {
-  position: relative;
-}
-
-.cleaners-settlement-status-legend {
-  margin-top: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #475569;
-}
-.cleaners-settlement-status-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.cleaners-settlement-status-legend-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-}
-.cleaners-settlement-status-legend-item .cleaners-settlement-status-lv1-legend { background-color: var(--color-light-blue); }
-.cleaners-settlement-status-legend-item .cleaners-settlement-status-lv2-legend { background-color: var(--color-blue); }
-.cleaners-settlement-status-legend-item .cleaners-settlement-status-lv3-legend { background-color: var(--color-dark-blue); }
-
-
-/* day 버튼 기본 */
-.rdp-day_button {
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  border: 2px solid transparent;
-  background: var(--color-light-gray);
-  color: #000;
-}
-
-.rdp-day_button.cleaners-settlement-status-lv1 { background-color: var(--color-light-blue); color: #000; }
-.rdp-day_button.cleaners-settlement-status-lv2 { background-color: var(--color-blue); color: #fff; }
-.rdp-day_button.cleaners-settlement-status-lv3 { background-color: var(--color-dark-blue); color: #fff; }
-
-
-.rdp-day_button[aria-selected="true"] {
-  box-shadow: 0 0 0 2px #0ea5e9;
-  border-color: #0ea5e9;
-}
-
+/* 7. 우측 리스트 및 기타 UI */
 .cleaners-settlement-status-right-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
-.cleaners-settlement-status-right-title {
-  font-size: 0.9rem;
-}
+
+.cleaners-settlement-status-right-title { font-size: 0.9rem; }
+
 .cleaners-settlement-status-filter select {
   border: 1px solid #d1d5db;
   border-radius: 8px;
   padding: 6px 10px;
 }
+
 .cleaners-settlement-status-list { display: flex; flex-direction: column; gap: 12px; }
-.cleaners-settlement-status-empty {
-  padding: 40px 20px;
-  text-align: center;
-  background-color: #f8fafc;
-  border-radius: 12px;
-  color: #64748b;
-}
 
 .cleaners-settlement-status-item {
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   overflow: hidden;
 }
+
 .cleaners-settlement-status-item-head {
   display: flex;
   justify-content: space-between;
@@ -334,237 +172,44 @@ tr.rdp-week {
   padding: 12px 16px;
   cursor: pointer;
 }
-.cleaners-settlement-status-item-toggle {
-  width: 20px;
-  height: 20px;
-  border: none;
-  transition: transform 0.2s;
-}
 
 .cleaners-settlement-status-item-body {
   padding: 16px;
   background-color: #f8fafc;
   font-size: 14px;
 }
+
 .cleaners-settlement-status-item-row {
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
 }
-.cleaners-settlement-status-item-label {
-  color: #475569;
-}
-.cleaners-settlement-status-item-value {
-  font-weight: 600;
-}
 
-.ws-dot {
-  position: absolute;
-  right: -6px;
-  bottom: -6px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  border-radius: 999px;
-  font-size: 11px;
-  line-height: 18px;
-  font-weight: 700;
-  background: #111;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ws-lv1 { background: var(--color-light-blue); color: #000; }
-.ws-lv2 { background: var(--color-blue); color: #fff; }
-.ws-lv3 { background: var(--color-dark-blue); color: #fff; }
-
-/* 선택된 주 강조 스타일 */
-.cleaners-settlement-status-week-selected:hover {
-  background-color: rgba(74, 163, 255, 0.1) !important;
-  border-radius: 20px !important;
-}
-
-.cleaners-settlement-status-week-selected {
-  background-color: rgba(74, 163, 255, 0.1) !important;
-  border-radius: 20px !important;
-}
-
-.rdp-week-badge-cell {
-  width: 32px; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40px; 
-}
-
-/* 배지 디자인 */
-.cleaners-settlement-status-week-total-badge {
-  background-color: #111;
-  color: #fff;
-  font-size: 11px;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-}
-
+/* 8. 미디어 쿼리 (반응형 레이아웃) */
 @media (max-width: 920px) {
-  .cleaners-settlement-status-grid {
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-
-  /* 왼쪽 캘린더 영역 */
-  .cleaners-settlement-status-left {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0; 
-  }
-
-  /* 오른쪽 리스트 영역 */
-  .cleaners-settlement-status-right {
-    width: 100% !important;
-    box-sizing: border-box;
-  }
-
-  /* 주간 행 설정 */
-  tr.rdp-week {
-    width: 100% !important;
-    display: flex;
-    justify-content: space-between; /* 양 끝 정렬로 변경하여 꽉 차게 함 */
-    gap: 0 !important; /* 고정 간격 제거 */
-    padding: 4px 0 !important;
-
-    
-  }
+  .cleaners-settlement-status-grid { grid-template-columns: 1fr; width: 100%; }
+  tr.rdp-week { width: 100%; justify-content: space-between; padding: 4px 0; }
 }
 
 @media (max-width: 920px) and (min-width: 525px) {
-  .cleaners-settlement-status-grid {
-    grid-template-columns: 1fr; /* 그리드를 한 줄로 변경 */
-  }
-
-  /* 캘린더를 감싸는 section (좌측 영역) 확장 */
-  .cleaners-settlement-status-left {
+  .cleaners-settlement-status-left { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .rdp-weekdays, tr.rdp-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) 40px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* DayPicker 라이브러리 내부 너비 강제 확장 */
-  .rdp {
-    width: 100% !important;
-    margin: 0 !important;
-    display: flex;
-    justify-content: center;
-  }
-
-  .rdp-months, 
-  .rdp-month {
-    width: 100% !important;
-    max-width: 100% !important; /* 라이브러리 기본 제약 해제 */
-  }
-
-  /* 실제 날짜가 그려지는 테이블 확장 */
-  .rdp-month_grid,
-  .rdp-table {
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  /* 요일(월화수목금토일) 행 확장 */
-  .rdp-weekdays {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) 40px; /* 7일 + 배지칸 비율 맞춤 */
-    gap: 0 !important;
-    padding-right: 0 !important;
     justify-items: center;
   }
-
-  /* 각 주(행) 확장 */
-  tr.rdp-week {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) 40px; /* 요일 행과 동일한 비율 */
-    gap: 0 !important;
-    padding: 8px 0 !important; /* 좌우 패딩 제거 후 그리드로 간격 조정 */
-    justify-items: center;
-  }
-
-  /* 버튼 크기 조정 (너비가 넓어질 때 너무 작아 보이지 않게) */
-  .rdp-day_button {
-    width: 45px;
-    height: 45px;
-  }
+  .rdp-day_button { width: 45px; height: 45px; }
 }
-
 
 @media (min-width: 460px) and (max-width: 524px) {
-  .cleaners-settlement-status-grid {
-    grid-template-columns: 1fr; /* 그리드를 한 줄로 변경 */
-  }
-  thead{
-  width: 290px;
-}
-tr.rdp-weekdays {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 1.6rem;
-  padding-right: 1,2rem;
-}
-tbody.rdp-weeks {
-  margin: 0 auto;
-}
-.rdp-day_button {
-    width: 36px;
-    height: 36px;
-    font-size: 12px;
-  }
-.cleaners-settlement-status-legend{
-  width: 290px;
-}
-
-.cleaners-settlement-status-right{
-  width: 290px;
-}
+  thead, .cleaners-settlement-status-legend, .cleaners-settlement-status-right { width: 290px; }
+  tr.rdp-weekdays { gap: 1.6rem; }
+  .rdp-day_button { width: 36px; height: 36px; font-size: 12px; }
 }
 
 @media (min-width: 359px) and (max-width: 459px) {
-.cleaners-settlement-status-grid {
-    grid-template-columns: 1fr; /* 그리드를 한 줄로 변경 */
-  }
-  thead{
-  width: 220px;
-}
-tr.rdp-weekdays {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 1.05rem;
-  padding-right: 1.9rem;
-}
-tbody.rdp-weeks {
-  margin: 0 auto;
-}
-.rdp-day_button {
-    width: 27px;
-    height: 27px;
-    font-size: 12px;
-  }
-
-.cleaners-settlement-status-legend{
-  width: 220px;
-}
-
-.cleaners-settlement-status-right{
-  width: 220px;
-}
+  thead, .cleaners-settlement-status-legend, .cleaners-settlement-status-right { width: 220px; }
+  tr.rdp-weekdays { gap: 1.05rem; padding-right: 1.9rem; }
+  .rdp-day_button { width: 27px; height: 27px; font-size: 12px; }
 }

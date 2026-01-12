@@ -1,21 +1,30 @@
-/**
- * @file app/repositories/cleaner/cleaner.accounts.repository.js
- * @description cleaner accounts Repository
- * 260107 yh init
- */
 
-import db from "../../models/index.js";
-const { CleanerAccount } = db;
+import db from '../../models/index.js';
+const { sequelize, BankCode } = db;
 
-/**
- * 기사 ID로 등록된 모든 계좌 목록 조회
- * @param {number} cleanerId 
- * @param {import("sequelize").Transaction} t 
- */
-async function findAllByCleanerId(cleanerId, t = null) {
-  return await CleanerAccount.findAll({
+//  조회 
+async function findAllByCleanerId(cleanerId) {
+  
+  return await db.CleanerAccount.findAll({
+    where: { 
+      cleanerId: cleanerId,
+      deletedAt: null // 삭제된 데이터 제외
+    },
+    include: [
+      {
+        model: BankCode,
+        as: 'bank',
+        required: true,
+        attributes: ['name'],
+      }
+    ],
+  });
+}
+
+// findOneByCleanerId
+async function findOneByCleanerId(cleanerId, t = null) {
+  return await db.CleanerAccount.findOne({
     where: { cleanerId },
-    
     order: [
       ['isDefault', 'DESC'],
       ['createdAt', 'DESC']
@@ -24,42 +33,44 @@ async function findAllByCleanerId(cleanerId, t = null) {
   });
 }
 
-/**
- * 계좌 PK(id)로 단일 계좌 검색
- * @param {number} id 
- * @param {import("sequelize").Transaction} t 
- */
-async function findById(id, t = null) {
-  return await CleanerAccount.findOne({
+//  저장 
+async function create(accountData, t = null) {
+  return await db.CleanerAccount.create(accountData, {
+    transaction: t
+  });
+}
+
+//  수정 
+async function update(id, updateData, t = null) {
+  return await db.CleanerAccount.update(updateData, {
     where: { id },
     transaction: t
   });
 }
 
-/**
- * 새로운 계좌 등록
- * @param {object} data 
- * @param {import("sequelize").Transaction} t 
- */
-async function create(data, t = null) {
-  return await CleanerAccount.create(data, { transaction: t });
-}
-
-/**
- * 특정 계좌 삭제 (Paranoid 설정으로 인해 soft delete 수행)
- * @param {number} id 
- * @param {import("sequelize").Transaction} t 
- */
-async function deleteById(id, t = null) {
-  return await CleanerAccount.destroy({
-    where: { id },
+//  삭제 
+async function deleteById(cleanerId, t = null) {
+  return await db.CleanerAccount.destroy({
+    where: { cleanerId },
     transaction: t
   });
+}
+
+async function resetDefaultStatus(cleanerId, t = null) {
+  return await db.CleanerAccount.update(
+    { isDefault: false },
+    {
+      where: { cleanerId, isDefault: true },
+      transaction: t
+    }
+  );
 }
 
 export default {
   findAllByCleanerId,
-  findById,
+  findOneByCleanerId,
   create,
-  deleteById
+  update,
+  deleteById,
+  resetDefaultStatus
 };

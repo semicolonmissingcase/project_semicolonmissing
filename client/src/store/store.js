@@ -4,6 +4,7 @@ import cleanersReducer from './slices/cleanersSlice.js';
 import storeReducer from './slices/storeSlice.js';
 import adminAuthReducer from './slices/adminAuthSlice.js';
 import adminPaginationReducer from './slices/adminPaginationSlice.js';
+import banksReducer from './slices/banksSlice.js';
 
 export default configureStore({
   reducer: {
@@ -13,5 +14,6 @@ export default configureStore({
     cleaners: cleanersReducer,
     cleanersLocation: cleanersReducer,
     store: storeReducer,
+    banks: banksReducer,
   }
 });

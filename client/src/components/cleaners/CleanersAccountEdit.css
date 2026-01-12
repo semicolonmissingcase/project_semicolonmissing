@@ -22,7 +22,7 @@
 
 .cleaners-account-edit-new-account-message {
   display: inline-block;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
 
@@ -32,70 +32,65 @@
   align-items: center;
 }
 
+.cleaners-account-edit-new-accounts {
+  padding-top: 0.5rem;
+}
+
 .cleaners-account-edit-remove-layout {
   display: flex;
+  justify-content: space-between;
 }
 
 .cleaners-account-edit-account-title {
   padding-right: 1rem;
+  padding-top: 0.5rem;
 }
 
-.cleaners-account-edit-delete-img {
+.cleaners-account-edit-add-account-wrapper {
   display: flex;
   flex-direction: column;
-  width: 14px;
 }
 
 .cleaners-account-edit-add-button {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .cleaners-account-edit-add-button-text {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .cleaners-account-edit-toggle-updown-new-contents {
   display: block;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
 }
 
-.cleaners-account-edit-toggle-updown-new-contents-toggledown {
-  display: none;
-}
-
-.cleaners-account-edit-toggle-updown-form-accounts-toggledown {
-  display: none;
-}
-
-.cleaners-account-edit-toggle-updown-form-accounts {
-  display: block;
-}
-
-
-.cleaners-account-edit-toggle-updown-form-contents {
-  display: block;
-}
-
-.cleaners-account-edit-toggle-updown-form-contents-toggledown {
+.cleaners-account-edit-toggle-updown-new-contents-closed {
   display: none;
 }
 
 .cleaners-account-edit-button {
-  padding: 15px;
   display: flex;
-  justify-content: end;
-  gap: 60px;
-  margin: 0 30px 30px 0;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-top: 10px;
 }
 
 .cleaners-account-edit-cancel-button,
 .cleaners-account-edit-submit-button {
-  width: 110px;
-  padding: 10px;
+  padding: 0.7rem 2rem;
   border-radius: 5px;
   background-color: var(--color-light-gray);
   white-space: nowrap;
+}
+
+.cleaners-account-edit-submit-button {
+  background-color: var(--color-light-gray);
+  color: #000;
 }
 
 .cleaners-account-edit-account-info {
@@ -111,25 +106,12 @@
 .cleaners-account-edit-account-info-title {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .cleaners-account-edit-account-info-message {
-  display: inline-block;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 0.5rem;
-
-}
-
-.cleaners-account-edit-toggle-updown-info-contents {
-  display: block;
-}
-
-.cleaners-account-edit-toggle-updown-info-contents-toggledown {
-  display: none;
-}
-
-.cleaners-account-edit-account-modal-page {
-  display: none;
 }
 
 .cleaners-account-edit-toggle-layout {
@@ -141,7 +123,13 @@
   width: 100%;
   height: 43px;
   border-radius: 5px;
-  border: 1px solid var(--color-gray)
+  border: solid 1px var(--color-gray);
+  padding: 0 10px;
+  /* 패딩 추가 */
+}
+
+.cleaners-account-edit-input-layout:focus {
+  outline: none;
 }
 
 .cleaners-account-edit-layout-inputs {
@@ -155,10 +143,23 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 0 1rem 0.5rem;
+  margin-top: 0.5rem;
 }
 
-@media (max-width: 367px) {
-  .cleaners-account-edit-input-layout,
+.cleaners-account-edit-account-message {
+  color: var(--color-dark-gray);
+  font-size: 0.9rem;
+}
+
+.cleaners-account-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Media Query 조정 */
+@media (max-width: 380px) {
   .cleaners-account-edit-input-layout {
     width: 100%;
   }

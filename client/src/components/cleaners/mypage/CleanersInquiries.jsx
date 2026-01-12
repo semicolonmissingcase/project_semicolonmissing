@@ -13,6 +13,7 @@ export default function InquiryList() {
         setLoading(true);
         const response = await getCleanerInquiries();
         
+        // 데이터 추출 로직 강화
         const data = response.data?.data || response.data || [];
         setInquiries(data);
       } catch (error) {
@@ -45,9 +46,11 @@ export default function InquiryList() {
           const isPending = item.status === "대기중";
           const isActive = activeIndex === index;
 
+          const actualAnswer = item.answer?.content || item.answerContent;
+
           return (
             <div key={item.id} className={`cleaners-inquiries-item ${isActive ? 'active' : ''}`}>
-              {/* 헤더 부분 (클릭 시 열림) */}
+              {/* 헤더 부분 */}
               <div className="cleaners-inquiries-header" onClick={() => toggleAccordion(index)}>
                 <span className="cleaners-inquiries-q-prefix">Q.</span>
                 <span className="cleaners-inquiries-title-text">{item.title}</span>
@@ -59,18 +62,33 @@ export default function InquiryList() {
                 </span>
               </div>
 
-              {/* 바디 부분 (활성화 시 보임) */}
+              {/* 바디 부분 */}
               {isActive && (
                 <div className="cleaners-inquiries-body">
-                  <div className="cleaners-inquiries-question-content"
-                    dangerouslySetInnerHTML={{ __html: item.content }}> {/* p태그 달고 출력되는 거 수정 */}
-                    {/* <div className="cleaners-inquiries-date">작성일: {item.createdAt}</div> */}
-                  </div>
+                  <div 
+                    className="cleaners-inquiries-question-content"
+                    dangerouslySetInnerHTML={{ __html: item.content }} 
+                  />
+
                   <div className="cleaners-inquiries-divider"></div>
+
                   <div className="cleaners-inquiries-answer-content">
                     <span className="cleaners-inquiries-a-prefix">A.</span>
-                    <p dangerouslySetInnerHTML={{ __html: item.answerContent || "아직 답변이 등록되지 않았습니다." }}></p>
+                    <div className="cleaners-inquiries-answer-text">
+                      {actualAnswer ? (
+                        <div dangerouslySetInnerHTML={{ __html: actualAnswer }} />
+                      ) : (
+                        <p className="cleaners-inquiries-no-answer">아직 답변이 등록되지 않았습니다.</p>
+                      )}
+                    </div>
                   </div>
+
+                  {/* 답변 작성일 표시 */}
+                  {(item.answer?.createdAt || item.answerDate) && (
+                    <div className="cleaners-inquiries-date">
+                      답변일: {item.answer?.createdAt || item.answerDate}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

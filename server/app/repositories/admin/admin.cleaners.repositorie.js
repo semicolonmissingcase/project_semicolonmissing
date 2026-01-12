@@ -1,7 +1,7 @@
 /**
  * @file app/repositories/admin/admin.cleaners.repositorie.js
  * @description 관리자 cleaners repositorie
- * 260107 v1.0.0 yh init
+ * 260107 v1.0.0 pbj init
  */
 import { Op } from 'sequelize';
 import db from '../../models/index.js';

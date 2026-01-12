@@ -52,21 +52,19 @@ export default function SettlementMain() {
       if (response.data && response.data.success) {
         const { summary, list } = response.data.data;
         
-      const mappedList = (list || []).map(item => {
-        const rawDate = item.createdAt || item.created_at || "";
-        const fixedDate = rawDate ? rawDate.substring(0, 10) : "";
+    const mappedList = (list || []).map(item => {
+      const calendarDate = item.reservation?.date || (item.createdAt ? item.createdAt.substring(0, 10) : "");
 
-        return {
-          ...item,
-          id: item.id,
-          storeName: item.reservation?.store?.name || "상호명 미지정",
-          amount: item.settlement_amount ?? item.amount ?? 0, 
-          settlementStatus: item.status || "상태 미정",
-          created_at: rawDate,
-          date: fixedDate,
-          canceled: item.canceled ?? false 
-        };
-      });
+      return {
+        ...item,
+        id: item.id,
+        storeName: item.reservation?.store?.name || "상호명 미지정",
+        amount: item.settlement_amount ?? 0, 
+        settlementStatus: item.status || "지급 대기",
+        date: calendarDate,
+        canceled: item.canceled ?? false 
+      };
+    });
         setSummaryData(summary || { pending: 0, completed: 0 });
         setJobs(mappedList);
       }

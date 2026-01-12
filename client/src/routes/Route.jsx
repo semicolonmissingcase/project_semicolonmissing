@@ -12,7 +12,6 @@ import SocialLoginInfo from "../components/auth/SocialLoginInfo.jsx"; // 카카�
 // 기사님 관련
 import CleanersRegistration from "../components/cleaners/CleanersRegistration.jsx";
 import CleanersAccountEdit from "../components/cleaners/CleanersAccountEdit.jsx";
-import CleanersAccountSave from "../components/cleaners/CleanersAccountSave.jsx";
 import CleanersInfoEdit from "../components/cleaners/CleanersInfoEdit.jsx";
 import CleanersProfileEdit from "../components/cleaners/CleanersProfileEdit.jsx";
 import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
@@ -33,6 +32,7 @@ import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 import AdminCleanerProfile from "../components/admin/pages/cleaners/AdminCleanerProfile.jsx";
 import AdminQna from "../components/admin/pages/AdminQna.jsx"
+import AdminInquiryReply from "../components/admin/pages/AdminInquiryReply.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -86,13 +86,8 @@ const router = createBrowserRouter([
         children: [
            {
             // 기사 계좌 수정 페이지
-            path: 'accountedit/:id',
+            path: 'accountedit',
             element: <CleanersAccountEdit />
-          },
-          {
-            // 기사 계좌 저장 페이지
-            path: 'accountsave',
-            element: <CleanersAccountSave />,
           },
           {
             // 기사 정보 수정 페이지
@@ -265,6 +260,11 @@ const router = createBrowserRouter([
                 // 관리자 로그인
                 path: 'login',
                 element: <AdminLogin />
+              },
+              {
+                // 문의 상세 답변 팝업
+                path: 'qna/:inquiryId/reply',
+                element: <AdminInquiryReply />
               },
             ]
           }

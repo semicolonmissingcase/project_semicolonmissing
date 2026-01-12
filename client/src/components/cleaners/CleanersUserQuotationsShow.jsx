@@ -18,7 +18,7 @@ function CleanersUserQuotationsShow () {
   const navigate = useNavigate();
   const params = useParams();
   const { reservation, submissions } = useSelector(state => state.cleaners);
-
+  const { user } = useSelector(state => state.auth);
   const [toggleDetails, setToggleDetails] = useState(false);
 
   const toggleMenuDetailsMenu = () => {
@@ -97,7 +97,7 @@ function CleanersUserQuotationsShow () {
   return (
     <>
       <div className="all-container cleaners-user-quotations-container">
-        <p className="cleaners-user-quotations-title">안녕하세요, 김기사 기사님! 요청 의뢰서입니다.</p>
+        <p className="cleaners-user-quotations-title">{`안녕하세요, ${user?.name || "기사"} 님! 요청 의뢰서입니다.`}</p>
 
         {
           reservation && (
@@ -253,7 +253,7 @@ function CleanersUserQuotationsShow () {
             </div>
           </div>
 
-          <button type="submit" className="btn-medium bg-light">요청 수락하기</button>
+          <button type="submit" className="btn-medium bg-light">견적서 보내기</button>
         </form>
       </div>
     </>

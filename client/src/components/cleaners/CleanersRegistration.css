@@ -218,7 +218,7 @@
   transition: all 0.2s;
 }
 
-.vzcleaners-registration-district-selection-button[aria-pressed="true"] {
+.cleaners-registration-district-selection-button[aria-pressed="true"] {
   background-color: #fff;
   border-color: solid 1px #ddd;
 }
@@ -244,12 +244,14 @@
 
 .cleaners-registration-selected-badge-wrapper {
   background-color: var(--color-light-gray);
-  padding: 0.2rem;
+  padding: 0.4rem;
   border-radius: 1rem;
   text-align: center;
+  font-size: 0.9rem;  
+  margin-bottom: 0.5rem;
 }
 
-.cleaners-registration-selected-location-badge {
+.cleaners-registration-selected-locations-badge {
   margin-left: 6px;
   cursor: pointer;
   color: var(--color-light-blue);
@@ -303,7 +305,7 @@
   border: 2px solid var(--color-light-gray);
   border-radius: 15px;
   padding: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 30px;  
   height: 300px;
 }
 
