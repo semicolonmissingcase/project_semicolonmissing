@@ -111,6 +111,7 @@
 
 /* 하단 로그아웃 버튼 */
 .header-menu-mobile-menu-bottom-logout {
+  border: none;
   position: absolute;
   bottom: 0;
   left: 0;
