@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginThunk, reissueThunk, getMeThunk, logoutThunk, updateOwnerInfoThunk, uploadProfileImageThunk } from "../thunks/authThunk.js";
+import { loginThunk, reissueThunk, getMeThunk, logoutThunk, updateOwnerInfoThunk, uploadProfileImageThunk, getCleanerProfileThunk } from "../thunks/authThunk.js";
 
 const initialState = {
  user: null,
@@ -66,6 +66,12 @@ const slice = createSlice({
       .addCase(uploadProfileImageThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+      // 기사 상세 프로필용
+      .addCase(getCleanerProfileThunk.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoggedIn = true;
+        state.isLoading = false;
       })
       // 토큰 재발급 성공 시
       .addCase(reissueThunk.fulfilled, (state, action) => {

@@ -33,6 +33,10 @@ function getInquiryImagePath() {
   return process.env.APP_MODE !== 'dev' ? process.env.FILE_INQUIRY_IMAGE_PATH : path.resolve(process.env.FILE_INQUIRY_IMAGE_PATH);
 }
 
+function getReservationImagePath() {
+  return process.env.APP_MODE !== 'dev' ? process.env.FILE_RESERVATION_IMAGE_PATH : path.resolve(process.env.FILE_RESERVATION_IMAGE_PATH);
+}
+
  export default {
   getViewDirPath,
   getPostsImagePath,
@@ -40,4 +44,5 @@ function getInquiryImagePath() {
   getChatImagePath,
   getEditorImagePath,
   getInquiryImagePath,
+  getReservationImagePath,
  }

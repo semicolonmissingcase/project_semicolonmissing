@@ -22,7 +22,11 @@ export const getQuestions = async () => {
 // 견적 요청서 작성
 export const createReservation = async (reservationData) => {
   try {
-    const response = await axiosInstance.post(`${OWNER_API_URL}/quotations`, reservationData);
+    const response = await axiosInstance.post(`${OWNER_API_URL}/quotations`, reservationData, {
+       headers: {
+        'Content-Type': 'multipart/form-data',
+       }
+    });
     return response.data.data;  
   } catch (error) {
     console.error('견적 요청서 생성 실패:', error);

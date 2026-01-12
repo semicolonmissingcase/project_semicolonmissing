@@ -82,7 +82,7 @@ export default function QnaPost () {
       enableSorting: true,
       cell: ({ row }) => (
         <a 
-          href={`/qnaposts/${row.original.id}`}
+          href={`/qnaposts/show/${row.original.id}`}
           className="post-title-link"
         >
           {row.original.title}

@@ -1,19 +1,18 @@
 /**
- * @file app/middlewares/multer/uploaders/reservationImage.uploader.js
- * @description 요청서 업로더
- * 260105 ck init
+ * @file app/middlewares/multer/uploaders/cleanerprofile.uploader.js
+ * @description 기사 자격증, 프로필 이미지 업로더
+ * 260109 ck init
  */
 
 import multer from 'multer';
 import fs from 'fs';
 import dayjs from 'dayjs';
-import crypto from 'crypto';
 import myError from '../../../errors/customs/my.error.js';
 import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
 import pathUtil from '../../../utils/path/path.util.js';
 
 /**
- * 요청서 이미지 업로더 처리 미들웨어
+ * 클리너 프로필 이미지 및 자격증 업로더 처리 미들웨어
  * @param {import("express").Request} req 
  * @param {import("express").Response} res 
  * @param {import("express").NextFunction} next 
@@ -25,7 +24,13 @@ export default function(req, res, next) {
     storage: multer.diskStorage({
       // 파일 저장 경로 설정
       destination(req, file, callback) {
-        const fullPath = pathUtil.getReservationImagePath();
+        let fullPath;
+        
+        if (file.fieldname === 'profileImage') {
+          fullPath = pathUtil.getCleanerProfileImagePath();
+        } else if (file.fieldname === 'certificateFiles') {
+          fullPath = pathUtil.getCleanerCertificatesPath();
+        }
 
         // 저장 디렉토리 설정
         if(!fs.existsSync(fullPath)) {
@@ -54,15 +59,18 @@ export default function(req, res, next) {
     // fileFilter: 파일 필터링 처리를 제어하는 프로퍼티
     fileFilter(req, file, callback) {
       if(!file.mimetype.startsWith('image/')) {
-        return callback(myError('이미지 파일 아님', BAD_FILE_ERROR));
+        return callback(myError('이미지 파일만 업로드 가능합니다.', BAD_FILE_ERROR));
       }
       callback(null, true);
     },
     // limits: 파일 사이즈 제한, 파일 개수 제한
     limits: {
-      fileSize: parseInt(process.env.FILE_POST_IMAGE_SIZE)
+      fileSize: 10 * 1024 * 1024 // 10MB
     }
-  }).array('files', 4);
+  }).fields([
+    { name: 'profileImage', maxCount: 1 },
+    { name: 'certificateFiles', maxCount: 10 }
+  ]);
 
   // 예외 처리
   upload(req, res, err => {

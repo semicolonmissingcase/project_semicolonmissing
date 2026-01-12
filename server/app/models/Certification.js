@@ -106,7 +106,7 @@ const attributes = {
 };
 
 const options = {
-  tableName: 'certification',  // 실제 DB 테이블명
+  tableName: 'certifications',  // 실제 DB 테이블명
   timestamps: true,             // createdAt, updatedAt를 자동 관리
   paranoid: true,              // soft delete 설정 (deletedAt 자동 관리)
 }

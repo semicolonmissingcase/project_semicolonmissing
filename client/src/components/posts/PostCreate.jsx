@@ -30,7 +30,8 @@ export default function PostCreate() {
     '견적 문의',
     '서비스 문의',
     '기술 지원',
-    '불만/개선사항',
+    '불만/개선사항',    
+    '기타',
   ];
 
   function handleChange(e) {
@@ -125,6 +126,10 @@ export default function PostCreate() {
       resultPageState.button2Text = '문의사항';
       resultPageState.button2Path = '/qnaposts';
       resultPageState.showButton2 = true;
+      formData.append('guestName', postData.email);
+      if (isPasswordProtectedGuestPost){
+        formData.append('guestPassword', postData.password);
+      }
     }
 
     // API호출

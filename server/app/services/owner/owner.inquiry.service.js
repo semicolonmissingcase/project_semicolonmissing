@@ -4,10 +4,11 @@
  * 260102 CK init
  */
 
-import { BAD_REQUEST_ERROR } from "../../../configs/responseCode.config.js";
+import { BAD_REQUEST_ERROR, NOT_FOUND_ERROR, UNAUTHORIZED_ERROR } from "../../../configs/responseCode.config.js";
 import myError from "../../errors/customs/my.error.js";
 import ownerInquiryRepository from "../../repositories/owner/owner.inquiry.repository.js";
 import dayjs from "dayjs";
+import bcrypt from 'bcrypt';
 
 /**
  * 문의 생성
@@ -19,7 +20,6 @@ import dayjs from "dayjs";
 async function createInquiry(inquiryData) {
   const finalInquiryData = { ...inquiryData, status: '대기중' };
 
-  console.log("--- [DEBUG] 서비스에서 레포지토리로 전달될 finalInquiryData:", finalInquiryData);
   const newInquiry = await ownerInquiryRepository.createInquiry(finalInquiryData);
   return newInquiry;
 }
@@ -85,6 +85,54 @@ async function getAllInquiries(page = 1, pageSize = 10) {
   const { count, rows } = await ownerInquiryRepository.findAllInquiries(limit, offset);
   
   return { count, rows };
+}
+
+/**
+ * 문의 상세 조회
+ */
+async function getInquiryShow(inquiryId, userId, userRole, password = null) {
+  const inquiry = await ownerInquiryRepository.findById(inquiryId);
+  
+  if(!inquiry) {
+    throw myError('문의글을 찾을 수 없습니다.', NOT_FOUND_ERROR);
+  }
+
+  // 관리자는 전부 가능
+  if (userRole === 'ADMIN') {
+    return inquiry;
+  }
+
+  const numericUserId = Number(userId);
+  const numericOwnerId = Number(inquiry.ownerId);
+  const numericCleanerId = Number(inquiry.cleanerId);
+
+  // 로그인한 회원(점주/기사)이 본인 글을 조회하는 경우  
+  const isAuthor = 
+    (userRole === 'OWNER' && numericOwnerId === numericUserId) ||
+    (userRole === 'CLEANER' && numericCleanerId === numericUserId);
+  if(!isAuthor) { //  임시로 모두가 볼 수 있게 했습니다. 
+    return inquiry;
+  }
+
+  //비회원 문의글이면서, 비밀번호가 필요한 경우
+  if(!inquiry.ownerId && !inquiry.cleanerId) {
+    if(inquiry.guestPassword) {
+      if(!password) {
+        const error = myError('비회원 문의글은 비밀번호를 입력해야 조회할 수 있습니다.', UNAUTHORIZED_ERROR);
+        error.code = 'PASSWORD_REQUIRED';
+        throw error;
+      }
+      // 비밀번호 비교
+      const isPasswordCorrect = await bcrypt.compare(password, inquiry.guestPassword);
+      if (!isPasswordCorrect) {
+        throw myError('비밀번호가 일치하지 않습니다.', UNAUTHORIZED_ERROR);
+      }
+      return inquiry;
+    } else {
+      throw myError('해당 문의글은 조회할 수 없습니다. (비밀번호 없음)', UNAUTHORIZED_ERROR);
+    }
+  }
+  throw myError('본인만 문의글을 조회할 수 있습니다.', UNAUTHORIZED_ERROR);
 }
 
 // -----------------------리뷰관련----------------------- 
@@ -183,6 +231,7 @@ export default {
   getInquiriesByOwner,
   getInquiryDetailsForOwner,
   getAllInquiries,
+  getInquiryShow,
   getOwnerReviews,
   getCompletedReservationsForReview,
   getReviewDetails,

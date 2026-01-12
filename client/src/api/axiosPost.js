@@ -44,6 +44,13 @@ export const getAllInquiries = async (page = 1, pageSize = 10) => {
   }
 };
 
+// 특정 문의 상세 조회 (본인, 관리자, 비회원 비밀번호 확인)
+export const getInquiryShow = async (inquiryId, password = null) => {
+  const config = password ? { params: { password } } : {};
+  const response = await axiosInstance.get(`${POST_API_URL}/inquiries/show/${inquiryId}`, config);
+  return response.data.data;
+};
+
 // ---------------------------
 // 리뷰 관련
 // ---------------------------
