@@ -79,10 +79,12 @@ export default function ReservationCompletedList() {
                   {job.owner?.name || '익명'}
                 </span>
               </div>
-              
+      
               <button 
-                className="job-detail-btn"
-                onClick={() => navigate(`/cleaner/reservation/${job.id}`)}
+                className="reservation-completed-list-detail-btn" // 파일명 접두사 규칙 적용 시
+                onClick={() => {
+                  navigate(`/cleaners/mypage/job/${job.id}`);
+                }}
               >
                 상세 보기
               </button>

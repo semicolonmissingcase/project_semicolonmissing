@@ -19,6 +19,7 @@ import CleanersMyPage from "../components/cleaners/mypage/CleanersMyPage.jsx";
 import CleanersQuotationsPreparationSave from "../components/cleaners/CleanersQuotationsPreparationSave.jsx";
 import CleanersUserQuotationsShow from "../components/cleaners/CleanersUserQuotationsShow.jsx";
 import CleanersUserQuotations from "../components/cleaners/CleanersUserQuotations.jsx";
+import ReservationDetail from "../components/cleaners/mypage/ReservationDetail.jsx";
 
 // 점주님 관련
 import OwnerRegistration from "../components/owner/users/OwnerRegistration.jsx";
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
             // 기사 마이 페이지
             path: 'mypage',
             element: <CleanersMyPage />,
+          },
+          {
+            path: 'mypage/job/:id', 
+            element: <ReservationDetail />,
           },
           {
             // 기사 견적 작성 임시저장 페이지
