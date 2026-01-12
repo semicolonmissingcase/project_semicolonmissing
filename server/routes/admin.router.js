@@ -14,6 +14,8 @@ import adminCleanersController from '../app/controllers/admin/admin.cleaners.con
 import adminInquiryController from '../app/controllers/admin/admin.inquiry.controller.js';
 import adminOwnersController from '../app/controllers/admin/admin.owners.controller.js';
 import adminAdjustmentsController from '../app/controllers/admin/admin.adjustments.controller.js';
+import adminReservationsController from '../app/controllers/admin/admin.reservations.controller.js';
+import adminOwnerDetailsController from '../app/controllers/admin/admin.ownerDetails.controller.js';
 
 const adminRouter = express.Router();
 
@@ -38,5 +40,13 @@ adminRouter.get('/owners/profiles/statistics', authMiddleware, adminOwnersContro
 adminRouter.get('/adjustments/view', authMiddleware, adminAdjustmentsController.adjustmentIndex);
 adminRouter.get('/adjustments/view/statistics', authMiddleware, adminAdjustmentsController.adjustmentStatisticsIndex);
 adminRouter.post('/adjustments/:id/status', authMiddleware, adminAdjustmentsController.updateAdjustmentStatus);
+
+// 예약 관리
+adminRouter.get('/reservations', authMiddleware, adminReservationsController.reservationIndex);
+adminRouter.get('/reservations/statistics', authMiddleware, adminReservationsController.statisticsIndex);
+
+// 점주 상세 프로필
+adminRouter.get('/owners/profiles/:ownerId', authMiddleware, adminOwnerDetailsController.ownerDetailIndex);
+adminRouter.get('/owners/profiles/:ownerId/reservations', authMiddleware, adminOwnerDetailsController.ownerReservationHistoryIndex);
 
 export default adminRouter;
