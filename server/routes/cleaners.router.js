@@ -15,6 +15,9 @@ cleanersRouter.get('/mypage/today', authMiddleware, cleanerReservationController
 cleanersRouter.get('/mypage/qna', authMiddleware, cleanerReservationController.getCleanerInquiries );
 cleanersRouter.get('/mypage/reviews', authMiddleware, cleanerReservationController.getCleanerReviews);
 cleanersRouter.get('/mypage/settlement', authMiddleware, cleanerReservationController.getSettlementSummary);
+cleanersRouter.get('/mypage/job/:id', authMiddleware, cleanerReservationController.getJobDetail);
+cleanersRouter.patch('/mypage/job/:id/status', authMiddleware, cleanerReservationController.updateReservationStatus);
+cleanersRouter.patch('/mypage/job/:id/complete', authMiddleware, cleanerReservationController.completeJob);
 
 // 기사님 신규 요청 /상세 요청 사항
 cleanersRouter.get('/quotations', authMiddleware, cleanerQuotationsController.index); // 최신 견적요청서 리스트 조회

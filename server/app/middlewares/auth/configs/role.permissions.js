@@ -23,6 +23,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/cleaners\/mypage\/today$/, roles: [CLEANER] },   // 기사님 마이페이지 오늘 일정 조회
     { path: /^\/api\/cleaners\/mypage\/qna$/, roles: [CLEANER] }, // 기사님 마이페이지 본인 문의
     { path: /^\/api\/cleaners\/mypage\/reviews$/, roles: [CLEANER] }, // 기사님 마이페이지 본인 리뷰 조회
+    { path: /^\/api\/cleaners\/mypage\/job\/\d+$/, roles: [CLEANER] }, // 기사님 마이페이지 상세보기
     { path: /^\/api\/cleaners\/mypage\/settlement$/, roles: [CLEANER] }, // 기사님 마이페이지 정산 대기
     { path: /^\/api\/posts\/owner\/reviews$/, roles: [OWNER] }, // 리뷰 목록 조회
     { path: /^\/api\/posts\/owner\/reservations\/completed$/, roles: [OWNER] }, // 리뷰 작성 전 목록 조회
@@ -60,6 +61,8 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms\/\d+\/read$/, roles: [OWNER, CLEANER] }, // 메세지 읽음 처리
     { path: /^\/api\/chat\/rooms\/\d+\/leave$/, roles: [OWNER, CLEANER] }, // 채팅방 나가기
     { path: /^\/api\/chat\/rooms\/\d+\/close$/, roles: [OWNER, CLEANER] }, // 채팅 상담 종료
+    { path: /^\/api\/cleaners\/mypage\/job\/\d+\/complete$/, roles: [CLEANER] },  // 기사님 작업완료
+    { path: /^\/api\/cleaners\/mypage\/job\/\d+\/status$/, roles: [CLEANER] }, // 기사님 정산 대기
   ],
   PUT: [
     { path: /^\/api\/auth\/me$/, roles: [OWNER] }, // 점주 정보수정용

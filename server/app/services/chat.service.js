@@ -15,7 +15,6 @@ import db from '../models/index.js';
  */
 async function createOrGetRoom({ owner_id, cleaner_id, estimate_id }) {
   return await db.sequelize.transaction(async (t) => {
-    // 필드명 모델 정의(estimateId)에 맞춰 수정
     let room = await db.ChatRoom.findOne({
       where: {
         estimateId: estimate_id,
@@ -85,7 +84,6 @@ async function getMessages(room_id, page = 1, limit = 50) {
  * 메시지 저장
  */
 async function saveMessage(data) {
-  // 인자 구조 통일 (sender_role 우선 사용)
   const role = data.sender_role || data.role;
   
   return await db.sequelize.transaction(async t => {
@@ -178,7 +176,6 @@ async function getChatRoomWithSidebar(roomId, userRole) {
     const cleaner = roomPlain.cleaner;
     const store = reservationDetail?.store;
     
-    // 데이터 가공 안전성 확보
     const hireCount = cleaner?.reservations?.filter((r) => r.status === '완료').length || 0;
     const primaryLoc = cleaner?.locations?.[0];
     const regionText = primaryLoc ? `${primaryLoc.city} ${primaryLoc.district}` : '지역 정보 없음';
@@ -227,18 +224,16 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
     low_rating: [['star', 'ASC']]
   };
 
-  // 1. 해당 채팅방의 기사 ID 확인
   const room = await db.ChatRoom.findByPk(roomId);
   if (!room) throw myError('방 정보를 찾을 수 없습니다.', BAD_REQUEST_ERROR);
   const targetCleanerId = room.cleanerId;
 
-  // 2. 리뷰 조회 (Reservation을 거치지 않고 Owner와 직접 조인 권장)
   const { count, rows } = await db.Review.findAndCountAll({
     where: { cleanerId: targetCleanerId }, // 이 기사에 대한 리뷰만
     include: [
       {
         model: db.Owner,
-        as: 'owner', // Review 모델 정의 시 belongsTo(db.Owner, { as: 'owner', foreignKey: 'owner_id' }) 확인 필요
+        as: 'owner',
         attributes: ['id', 'name'] 
       }
     ],
@@ -247,7 +242,6 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
     offset
   });
 
-  // 3. 데이터 가공
   const formattedReviews = rows.map(review => {
     const plainReview = review.get({ plain: true });
     return {
@@ -255,7 +249,6 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
       star: plainReview.star,
       content: plainReview.content,
       createdAt: plainReview.createdAt,
-      // Review 테이블과 직접 조인된 owner 객체에서 이름을 가져옴
       authorName: plainReview.owner?.name || '익명'
     };
   });
