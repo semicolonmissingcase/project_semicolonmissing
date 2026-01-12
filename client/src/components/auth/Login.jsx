@@ -32,21 +32,6 @@ export default function Login () {
     setShowPassword(!showPassword);
   };
 
-  async function handleLogin(e) {
-    // 기존 이벤트 취소
-    e.preventDefault();
-
-    try {
-      // 로그인 요청
-      await dispatch(loginThunk({email, password})).unwrap();
-      return navigate('/', { replace: true });
-    } catch(error) {
-      console.error("Login Error", error);
-      const errorMessage = error.message || "로그인에 실패했습니다.";
-      const errorCode = error.code ? `(${error.code})` : "";
-      alert(`${errorMessage} ${errorCode}`);
-    }
-  }
 
   function handleSocial(provider) {
     window.location.replace(`/api/auth/social/${provider}`);

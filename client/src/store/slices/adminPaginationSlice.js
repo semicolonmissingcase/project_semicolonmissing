@@ -152,7 +152,7 @@ const slice = createSlice({
       // ------------------------
       // 정산 상태 업데이트
       // ------------------------
-      .addCase(adminAdjustmentsThunk.adminUpdateAdjustmentStatusThunk.fulfilled, (state, action) => {
+      .addCase(adminAdjustmentsThunk.adminUpdateAdjustmentStatusThunk.fulfilled, () => {
         console.log("정산 상태 업데이트 성공");
       })
 

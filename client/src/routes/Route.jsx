@@ -58,7 +58,7 @@ const router = createBrowserRouter([
         element: <Login />
       },
       {
-        path: '/socialinfo',
+        path: '/callback/socialinfo',
         element: <SocialLoginInfo />
       },
       {
