@@ -25,3 +25,9 @@ export const markMessageAsRead = (roomId) =>
 
 export const getQuotationDetail = (quotationId) => 
   axiosInstance.get(`/api/owners/quotations/${cleanId(quotationId)}`);
+
+export const createChatRoom = (data) => 
+  axiosInstance.post(`${CHAT_API_URL}/rooms/`, {
+    estimate_id: data.estimate_id, // 견적ID
+    cleaner_id: data.cleaner_id, // 기사ID
+  });

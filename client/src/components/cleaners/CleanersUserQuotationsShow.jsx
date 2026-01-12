@@ -13,7 +13,7 @@ import CleanersQuotationsPreparationSave from "./CleanersQuotationsPreparationSa
 import "./CleanersUserQuotationsShow.css";
 import styles from "./CleanersUserQuotations.module.css";
 
-function CleanersUserQuotationsShow () {
+function CleanersUserQuotationsShow() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -33,7 +33,7 @@ function CleanersUserQuotationsShow () {
 
   // ---  견적서 입력 변경시 스테이트 수정 ---
   function changeQuoteData(key, val) {
-    setQuoteData({...quoteData, [key]: val});
+    setQuoteData({ ...quoteData, [key]: val });
   }
 
   // form submit handler
@@ -48,7 +48,7 @@ function CleanersUserQuotationsShow () {
       }
       const result = await dispatch(cleanersThunk.quotationStore(data));
 
-      if(result.type.endsWith("/rejected")) {
+      if (result.type.endsWith("/rejected")) {
         throw result;
       }
 
@@ -118,12 +118,12 @@ function CleanersUserQuotationsShow () {
                   <div className="cleaners-user-quotations-date">{`${reservation?.date} ${reservation?.time}`}</div>
                 </div>
               </div>
-          
+
               {/* 첨부파일 미리보기 */}
               <div className="cleaners-user-quotations-items-box-column">
                 <span className="cleaners-user-quotations-items-box-title">첨부파일</span>
                 <div className="cleaners-user-quotations-items-box-images">
-                  <div className="cleaners-user-quotations-items-box-image" style={{backgroundImage: `url('../../../public/icons/임시1.jpg')`}}></div>
+                  <div className="cleaners-user-quotations-items-box-image" style={{ backgroundImage: `url('../../../public/icons/임시1.jpg')` }}></div>
                 </div>
               </div>
 
@@ -155,7 +155,7 @@ function CleanersUserQuotationsShow () {
 
         {/* 추가 정보 */}
         <div className="cleaners-user-quotations-items-box-column">
-          <span className="cleaners-user-quotations-items-box-title cleaners-user-quotations-toggle-question" onClick={toggleMenuDetailsMenu}>추가 정보{ toggleDetails ? <RiArrowDropUpFill size={20} /> : <RiArrowDropDownFill size={20} /> }</span>
+          <span className="cleaners-user-quotations-items-box-title cleaners-user-quotations-toggle-question" onClick={toggleMenuDetailsMenu}>추가 정보{toggleDetails ? <RiArrowDropUpFill size={20} /> : <RiArrowDropDownFill size={20} />}</span>
           {
             submissions && submissions.map(submission => {
               return (
@@ -165,20 +165,27 @@ function CleanersUserQuotationsShow () {
                       <>
                         <span className="cleaners-user-quotations-items-box-question-title" htmlFor={submission.question.code}>{`${submission.question.code}. ${submission.question.content}`}</span>
                         <div className="cleaners-user-quotations-items-box-question-answers">
+
                           {
                             submission.question.questionOptions.map(questionOption => {
+                              console.log('Submission Data:', submission);
                               return (
                                 <div className="cleaners-user-quotations-items-box-question-answer" key={`${submission.id}-${questionOption.id}`}>
-                                  <input 
-                                    type="radio" 
-                                    name={submission.question.code} 
-                                    id={`${submission.question.code}-${questionOption.id}`} 
-                                    checked={submission.questionOptionId === questionOption.id} 
-                                    value={questionOption.id} 
-                                    readOnly 
+                                  <input
+                                    type="radio"
+                                    name={submission.question.code}
+                                    id={`${submission.question.code}-${questionOption.id}`}
+                                    checked={
+                                      // Case 1: ID가 정상적으로 저장된 경우
+                                      (submission.questionOptionId === questionOption.id) ||
+                                      // Case 2: ID가 null이고 answerText가 옵션 텍스트와 일치하는 경우 (현재 문제 상황)
+                                      (submission.questionOptionId === null && submission.answerText === questionOption.correct)
+                                    }
+                                    value={questionOption.id}
+                                    readOnly
                                     className={styles.radioInput} // 클래스 추가
                                   />
-                                  <label 
+                                  <label
                                     htmlFor={`${submission.question.code}-${questionOption.id}`}
                                     className={styles.radioLabel} // 클래스 추가
                                   >
@@ -204,7 +211,7 @@ function CleanersUserQuotationsShow () {
               )
             })
           }
-        </div> 
+        </div>
 
         <form onSubmit={handleSubmit}>
           {/* 기사님 견적서 작성 카드 */}
@@ -230,9 +237,9 @@ function CleanersUserQuotationsShow () {
             {/* 견적 금액 입력 필드 */}
             <div className="cleaners-user-quotations-input-box cleaners-user-quotations-grid-1">
               <label htmlFor="estimatedAmount">견적 금액</label>
-              <input 
-                type="number" 
-                className="cleaners-user-quotations-input-layout input-remove-arrows" 
+              <input
+                type="number"
+                className="cleaners-user-quotations-input-layout input-remove-arrows"
                 id="estimatedAmount"
                 value={quoteData.estimatedAmount}
                 onChange={(e) => changeQuoteData('estimatedAmount', e.target.value)}
@@ -243,8 +250,8 @@ function CleanersUserQuotationsShow () {
             {/* 견적 설명 입력 필드 */}
             <div className="cleaners-user-quotations-textarea-box">
               <label htmlFor="description">견적 설명</label>
-              <textarea 
-                id="description" 
+              <textarea
+                id="description"
                 className="cleaners-user-quotations-textarea"
                 value={quoteData.description}
                 onChange={(e) => changeQuoteData('description', e.target.value)}
