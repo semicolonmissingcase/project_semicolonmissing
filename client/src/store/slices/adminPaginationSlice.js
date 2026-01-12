@@ -6,6 +6,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import adminCleanersThunk from "../thunks/adminCleanersThunk.js";
+import adminInquiryThunk from "../thunks/adminInquiryThunk.js";
 
 const initialState = {
   // index 관련
@@ -51,6 +52,17 @@ const slice = createSlice({
       .addCase(adminCleanersThunk.adminCleanerProfileStatisticsThunk.fulfilled, (state, action) => {
         const { statistics } = action.payload.data;
 
+        state.statistics = statistics;
+      })
+      // ------------------------
+      // 문의 관리 (Q&A)
+      // ------------------------
+      .addCase(adminInquiryThunk.getInquiryListThunk.fulfilled, (state, action) => {
+        const { total, currentPage, inquiries, statistics } = action.payload.data;
+
+        state.data = inquiries;
+        state.totalCount = total;
+        state.page = currentPage;
         state.statistics = statistics;
       })
       // ------------------------

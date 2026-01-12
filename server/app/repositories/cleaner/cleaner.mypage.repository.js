@@ -165,12 +165,20 @@ async function reviewFindByCleanerId(t = null, cleanerId) {
 }
 
 /**
- * 문의 내역 조회
+ * 문의 내역 조회 
  */
 async function inquiryFindByCleanerId(t = null, cleanerId) {
   return await Inquiry.findAll({
     where: { cleanerId: cleanerId },
     attributes: ['id', 'title', 'category', 'content', 'status', 'ownerId', 'createdAt'],
+    include: [
+      {
+        model: db.Answer,
+        as: 'answer',
+        attributes: ['content', 'createdAt'],
+        required: false
+      }
+    ],
     order: [['createdAt', 'DESC']],
     transaction: t
   });
@@ -200,15 +208,29 @@ async function settlementFindSummaryByCleanerId(t = null, { cleanerId, yearMonth
  * 정산 상세 리스트 조회
  */
 async function settlementFindListWithStoreByCleanerId(t = null, { cleanerId, yearMonth }) {
-  const startOfMonth = dayjs(yearMonth).startOf('month').format('YYYY-MM-01');
-  const endOfMonth = dayjs(yearMonth).endOf('month').format('YYYY-MM-DD');
+  const startOfMonth = dayjs(yearMonth).startOf('month').format('YYYY-MM-01 00:00:00');
+  const endOfMonth = dayjs(yearMonth).endOf('month').format('YYYY-MM-DD 23:59:59');
+
   return await Adjustment.findAll({
-    where: { cleanerId: cleanerId, [Op.and]: [
-      sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '>=', startOfMonth),
-      sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '<=', endOfMonth)
-    ]},
-    include: [{ model: Reservation, as: 'reservation', attributes: ['id'], include: [{ model: Store, as: 'store', attributes: ['name'] }] }],
-    order: [['createdAt', 'DESC']], transaction: t
+    where: { 
+      cleanerId: cleanerId,
+      createdAt: { [Op.between]: [startOfMonth, endOfMonth] } 
+    },
+    attributes: [
+      'id', 
+      'settlement_amount',
+      'status', 
+      'createdAt'
+    ],
+    include: [{ 
+      model: Reservation, 
+      as: 'reservation', 
+      required: true,
+      attributes: ['id', 'date'],
+      include: [{ model: Store, as: 'store', attributes: ['name'] }] 
+    }],
+    order: [['createdAt', 'DESC']], 
+    transaction: t
   });
 }
 
