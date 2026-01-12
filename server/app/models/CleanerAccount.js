@@ -107,6 +107,7 @@ const CleanerAccount = {
   },
   associate: (db) => {
     db.CleanerAccount.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
+    db.CleanerAccount.belongsTo(db.BankCode, { targetKey: 'code', foreignKey: 'bankCode', as: 'bank' });
   }
 }
 

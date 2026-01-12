@@ -1,7 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance.js";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 
 const locationThunk = createAsyncThunk(
   'cleaners/locationThunk',

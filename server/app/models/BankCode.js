@@ -4,6 +4,7 @@
  * 260112 v1.0.0 yh init
  */
 
+import dayjs from 'dayjs';
 import { DataTypes } from "sequelize";
 
 // 테이블명 

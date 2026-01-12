@@ -30,8 +30,10 @@ cleanersRouter.put('/mypage/password', authMiddleware, cleanerProfileController.
 
 // 기사님 계좌 조회/생성/수정/삭제
 cleanersRouter.get(`/accountedit`, authMiddleware, cleanerAccountController.getAccounts); //계좌 조회
-cleanersRouter.post(`/accountedit`, authMiddleware, cleanerAccountController.createAccount); // 계좌 생성, 수정
+cleanersRouter.post(`/accountedit`, authMiddleware, cleanerAccountController.createAccount); // 계좌 생성
+// cleanersRouter.patch(`/accountedit/:id`, authMiddleware, cleanerAccountController.createAccount); // 계좌 수정
 cleanersRouter.delete(`/accountedit`, authMiddleware, cleanerAccountController.deleteAccount); // 계좌 삭제
+// cleanersRouter.delete(`/accountedit/:id`, authMiddleware, cleanerAccountController.deleteAccount); // 계좌 삭제
 
 // 지역 리스트 가져오기
 cleanersRouter.get('/locations', authMiddleware, cleanerLocationsController.registerCleanerLocations);

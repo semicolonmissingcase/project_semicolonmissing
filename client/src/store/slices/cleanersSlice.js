@@ -7,13 +7,7 @@ const initialState = {
   isInitialized: false,
 
   // 계좌 관련
-  accounts: [],
-  id: null,
-  cleanerId: null,
-  bankCode: null,
-  accountNumber: null,
-  depositor: null,
-  isDefault: null,
+  account: null,
 
   // Show 관련
   submissions: null,
@@ -41,13 +35,7 @@ const slice = createSlice({
       state.reservations = null;
       state.isLasted = false;
       state.page = 0;
-      state.accounts = [];
-      state.id = null;
-      state.cleanerId = null;
-      state.bankCode = null;
-      state.accountNumber = null;
-      state.depositor = null;
-      state.isDefault = null;
+      state.account = null
       state.locations = [];
       state.isInitialized = false;
       state.loading = false;
@@ -60,7 +48,7 @@ const slice = createSlice({
         state.loading = true;
       })
       // 견적 목록 가져오기 실패 
-      .addCase(cleanersThunk.indexThunk.rejected, (state, action) => {
+      .addCase(cleanersThunk.indexThunk.rejected, (state) => {
         state.loading = false;
       })
 
@@ -128,16 +116,9 @@ const slice = createSlice({
         const account = Array.isArray(responseData) ? responseData[0] : responseData;
 
         if (account && account.id) {
-          state.accounts = [account];
-          state.id = account.id;
-          state.cleanerId = account.cleanerId || account.cleaner_id;
-          state.bankCode = account.bankCode || account.bank_code;
-          state.accountNumber = account.accountNumber || account.account_number;
-          state.depositor = account.depositor;
-          state.isDefault = account.isDefault || account.is_default;
+          state.account = account;
         } else {
-          state.accounts = [];
-          state.id = null;
+          state.account = null;
         }
       })
 
@@ -150,24 +131,14 @@ const slice = createSlice({
 
         if (newAccount && newAccount.id) {
           // 1인 1계좌이므로 최신 데이터로 덮어쓰기
-          state.accounts = [newAccount];
-          state.id = newAccount.id;
-          state.cleanerId = newAccount.cleanerId || newAccount.cleaner_id;
-          state.bankCode = newAccount.bankCode || newAccount.bank_code;
-          state.accountNumber = newAccount.accountNumber || newAccount.account_number;
-          state.depositor = newAccount.depositor;
-          state.isDefault = newAccount.isDefault || newAccount.is_default;
+          state.account = [newAccount];
         }
       })
 
       /* 계좌 삭제 시 */
       .addCase(cleanersThunk.deleteAccount.fulfilled, (state) => {
         state.loading = false;
-        state.accounts = [];
-        state.id = null;
-        state.bankCode = "";
-        state.accountNumber = "";
-        state.depositor = "";
+        state.account = null;
       })
   },
 });

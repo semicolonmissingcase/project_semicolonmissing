@@ -1,5 +1,6 @@
 
 import db from '../../models/index.js';
+const { sequelize, BankCode } = db;
 
 //  조회 
 async function findAllByCleanerId(cleanerId) {
@@ -9,7 +10,14 @@ async function findAllByCleanerId(cleanerId) {
       cleanerId: cleanerId,
       deletedAt: null // 삭제된 데이터 제외
     },
-    raw: true // 순수 JSON 데이터로 받기
+    include: [
+      {
+        model: BankCode,
+        as: 'bank',
+        required: true,
+        attributes: ['name'],
+      }
+    ],
   });
 }
 

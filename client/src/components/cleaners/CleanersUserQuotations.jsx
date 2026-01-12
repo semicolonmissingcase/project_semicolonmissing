@@ -1,7 +1,7 @@
 import { useEffect, } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { IoMdAddCircleOutline } from "react-icons/io"; 
 import cleanersThunk from "../../store/thunks/cleanersThunk.js";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { clearCleaners } from "../../store/slices/cleanersSlice.js";
@@ -13,7 +13,7 @@ import './CleanersUserQuotations.css';
 function CleanersUserQuotations() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, reservations, isLasted, locations, stores } = useSelector((state) => state.cleaners);
+  const { loading, reservations, isLasted } = useSelector((state) => state.cleaners);
   const { user } = useSelector(state => state.auth);
 
   function getNextPage() {
@@ -21,60 +21,29 @@ function CleanersUserQuotations() {
   }
 
   function notInfoText(str) {
-    if (!str || str.length <= 0) {
+    if(!str || str.length <= 0) {
       return '정보 없음';
     }
     return str;
   }
 
   useEffect(() => {
-
     dispatch(cleanersThunk.indexThunk());
-    dispatch(cleanersThunk.locationThunk());
-
     return () => dispatch(clearCleaners());
   }, [dispatch]);
-
-  const filteredReservations = (reservations && locations?.rows) ? reservations.filter(res => {
-    const store = stores?.find(s => s.id === res.storeId) || res.store;
-    if (!store) return false;
-
-    // 시간 조건 (3일 이내)
-    const createdAt = new Date(res.createdAt).getTime();
-    const now = new Date().getTime();
-    const diffTime = now - createdAt;
-    const diffDays = diffTime / (1000 * 60 * 60 * 24); // 경과 일수 계산
-
-    // 3일(72시간) 이내인지 확인하는 변수
-    const isWithin3Days = diffTime < (3 * 24 * 60 * 60 * 1000);
-
-    // 지역 조건
-    const isLocationMatch = locations.rows.some(loc => {
-      // 상점의 addr1과 addr2를 합친 전체 주소 문자열
-      const fullAddr = `${store.addr1} ${store.addr2}`;
-
-      const cityMatch = loc.city && fullAddr.includes(loc.city);
-      const districtMatch = loc.district && fullAddr.includes(loc.district);
-
-      return cityMatch && districtMatch;
-    });
-
-    return isWithin3Days && isLocationMatch;
-  }) : [];
 
   if (loading) return <div className="loading">로딩 중...</div>;
 
   return (
-    <div className="all-container cleaners-user-quotations-container">
+    <div className="all-container cleaners-user-quotations-container"> 
       <span className="cleaners-user-quotations-title">{`안녕하세요, ${user?.name || "기사"} 님! 요청 의뢰서입니다.`}</span>
 
       <div className="cleaners-user-quotations-main">
         {
-          filteredReservations.map((reservation) => {
-            const store = stores?.find(s => s.id === reservation.storeId) || reservation.store;
+          reservations && reservations.map(reservation => {
             return (
-              <div
-                key={`cuq-${reservation.id}`}
+              <div 
+                key={`cuq-${reservation.id}`} 
                 className={`cleaners-user-quotations-item`}
                 onClick={() => navigate(`/cleaners/quotations/${reservation.id}`)}
               >
@@ -83,8 +52,8 @@ function CleanersUserQuotations() {
                 <div className={`cleaners-user-quotations-icon-box cleaners-user-quotations-item-addr`}>
                   <FaMapMarkerAlt size={25} className="cleaners-user-quotations-icon-flex" />
                   <div className="cleaners-user-quotations-item-content-flex">
-                    <p className="">{notInfoText(store?.addr1)}</p>
-                    <p className="">{notInfoText(store?.addr2)}</p>
+                    <p className="">{notInfoText(reservation.store?.addr1)}</p>
+                    <p className="">{notInfoText(reservation.store?.addr2)}</p>
                   </div>
                 </div>
 
@@ -116,18 +85,20 @@ function CleanersUserQuotations() {
                   </div>
                 </div>
               </div>
-            );
-          })}
+            )
+          })
+        }
       </div>
-
-      {!isLasted && filteredReservations.length >= 5 && (
+      {
+      !isLasted && (
         <div className="cleaners-user-quotations-button-wrapper" onClick={getNextPage}>
           <IoMdAddCircleOutline size={45} color="var(--color-blue)" />
           <p style={{ marginTop: '5px', color: 'var(--color-blue)' }}>더 보기</p>
         </div>
-      )}
+      )
+      }
     </div>
-  )
+  );
 }
 
 export default CleanersUserQuotations;
