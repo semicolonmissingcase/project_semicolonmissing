@@ -10,22 +10,72 @@ import dayjs from 'dayjs';
 import constants from '../../constants/models.constants.js'
 
 const { ReservationStatus, AdjustmentStatus } = constants;
-const { sequelize, Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry, Adjustment } = db;
+const { sequelize, Reservation, Estimate, Owner, Store, Review, Submission, Question, QuestionOption, Inquiry, Adjustment, Payment } = db;
 
 /**
- * 기사님용 대기 작업 조회
+ * 특정 예약 상세 조회
+ */
+async function reservationFindById(t = null, id) {
+  return await Reservation.findOne({
+    where: { id: id },
+    attributes: ['id', 'cleanerId'], 
+    include: [
+      { 
+        model: Estimate, 
+        as: 'estimate',
+        attributes: ['id', 'estimated_amount', 'description']
+      },
+      { model: Owner, as: 'owner', attributes: ['id', 'name'] },
+      { 
+        model: Store, 
+        as: 'store', 
+        attributes: ['id', 'name', 'addr1', 'addr2', 'addr3'] 
+      }
+    ],
+    transaction: t
+  });
+}
+
+/**
+ * 정산 데이터 Upsert (생성 또는 업데이트)
+ */
+async function adjustmentUpsert(t = null, { reservationId, cleanerId, estimateId, paymentId, settlementAmount, status }) {
+  const existingAdjustment = await Adjustment.findOne({
+    where: { reservationId: reservationId },
+    transaction: t
+  });
+
+  if (existingAdjustment) {
+    return await existingAdjustment.update({
+      cleanerId: cleanerId,
+      estimateId: estimateId,
+      paymentId: paymentId,
+      settlementAmount: settlementAmount,
+      status: status,
+      updatedAt: new Date()
+    }, { transaction: t });
+  } else {
+    return await Adjustment.create({
+      reservationId: reservationId,
+      cleanerId: cleanerId,
+      estimateId: estimateId,
+      paymentId: paymentId,
+      settlementAmount: settlementAmount,
+      status: status,
+      createdAt: new Date()
+    }, { transaction: t });
+  }
+}
+
+/**
+ * 대기 작업 목록 조회
  */
 async function reservationFindPendingByCleanerIdAndRole(t = null, { cleanerId, userRole }) {
   if (!userRole) return [];
-
-  const todayString = dayjs().format('YYYY-MM-DD');
-
   return await Reservation.findAll({
     where: {
       cleanerId: cleanerId,
       status: ReservationStatus.APPROVED,
-      date: {
-        [Op.gte]: todayString }
     },
     attributes: ['id', 'date', 'time', 'status', 'createdAt'],
     include: [
@@ -47,26 +97,7 @@ async function reservationFindPendingByCleanerIdAndRole(t = null, { cleanerId, u
 }
 
 /**
- * 특정 예약 상세 조회
- */
-async function reservationFindById(t = null, id) {
-  return await Reservation.findOne({
-    where: { id: id },
-    include: [
-      { 
-        model: Estimate, 
-        as: 'estimate',
-        attributes: ['id', 'estimated_amount', 'description']
-      },
-      { model: Owner, as: 'owner', attributes: ['id', 'name', 'phone'] },
-      { model: Store, as: 'store', attributes: ['id', 'name', 'addr1'] }
-    ],
-    transaction: t
-  });
-}
-
-/**
- * 특정 예약의 질문 답변 조회
+ * 상세 QA 조회
  */
 async function submissionFindByReservationId(t = null, id) {
   return await Submission.findAll({
@@ -77,32 +108,19 @@ async function submissionFindByReservationId(t = null, id) {
         as: 'question',
         attributes: ['id', 'code', 'content'],
         required: false,
-        include: [
-          {
-            model: QuestionOption,
-            as: 'questionOptions',
-            attributes: ['id', 'correct'],
-            required: false
-          },
-        ],
+        include: [{ model: QuestionOption, as: 'questionOptions', attributes: ['id', 'correct'], required: false }],
       },
     ],
-    order: [
-      [sequelize.literal('`question`.`code` IS NULL'), 'ASC'],
-      [{ model: Question, as: 'question' }, 'code', 'ASC']
-    ],
+    order: [[sequelize.literal('`question`.`code` IS NULL'), 'ASC'], [{ model: Question, as: 'question' }, 'code', 'ASC']],
     transaction: t
   });
 }
 
 /**
- * 예약 상태 변경
+ * 예약 상태 업데이트
  */
 async function reservationUpdateStatus(t = null, { id, status }) {
-  return await Reservation.update(
-    { status: status },
-    { where: { id: id }, transaction: t }
-  );
+  return await Reservation.update({ status: status }, { where: { id: id }, transaction: t });
 }
 
 /**
@@ -110,23 +128,12 @@ async function reservationUpdateStatus(t = null, { id, status }) {
  */
 async function reservationFindTodayByCleanerId(t = null, { cleanerId, userRole }) {
   if (!userRole) return [];
-
-  const today = new Date();
-  const todayString = today.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식
-
+  const todayString = dayjs().format('YYYY-MM-DD'); 
   return await Reservation.findAll({
-    where: {
-      cleanerId: cleanerId,
-      status: ReservationStatus.APPROVED,
-      date: todayString
-    },
+    where: { cleanerId: cleanerId, status: ReservationStatus.APPROVED, date: todayString },
     include: [
-      { 
-        model: Estimate, 
-        as: 'estimate',
-        attributes: ['id', 'estimated_amount', 'description']
-      }, 
-      { model: Owner, as: 'owner' },
+      { model: Estimate, as: 'estimate', attributes: ['id', 'estimated_amount', 'description'] }, 
+      { model: Owner, as: 'owner', attributes: ['id', 'name'] },
       { model: Store, as: 'store', attributes: ['id', 'name', 'addr1'] }
     ],
     transaction: t
@@ -134,140 +141,74 @@ async function reservationFindTodayByCleanerId(t = null, { cleanerId, userRole }
 }
 
 /**
- * 정산 대기 목록 조회
+ * 정산 대기 예약 조회
  */
 async function reservationFindSettlementPending(t = null, cleanerId) {
   return await Reservation.findAll({
     where: { cleanerId: cleanerId, status: ReservationStatus.COMPLETED },
-    include: [
-      { 
-        model: Estimate, 
-        as: 'estimate', 
-        required: true,
-        attributes: ['estimated_amount']
-      }
-    ],
+    include: [{ model: Estimate, as: 'estimate', required: true, attributes: ['estimated_amount'] }],
     transaction: t
   });
 }
 
 /**
- * 기사님 리뷰 조회
+ * 리뷰 목록 조회
  */
 async function reviewFindByCleanerId(t = null, cleanerId) {
   return await Review.findAll({
     where: { cleanerId },
-    include: [
-      {
-        model: db.Reservation,
-        as: 'reservationData', 
-        attributes: [
-          'id', 
-          ['date', 'date'] 
-        ],
-        include: [
-          {
-            model: db.Store,
-            as: 'store', 
-            attributes: ['name']
-          }
-        ]
-      }
-    ],
+    include: [{ model: Reservation, as: 'reservationData', attributes: ['id', ['date', 'date']], 
+    include: [{ model: Store, as: 'store', attributes: ['name'] }] }],
     order: [['createdAt', 'DESC']],
     transaction: t
   });
 }
 
 /**
- * 기사님이 작성한 문의 조회
+ * 문의 내역 조회
  */
 async function inquiryFindByCleanerId(t = null, cleanerId) {
   return await Inquiry.findAll({
-    where: { 
-      cleanerId: cleanerId 
-    },
-    attributes: [
-      'id', 
-      'title', 
-      'category', 
-      'content', 
-      'status', 
-      'ownerId',
-      'createdAt',
-    ],
+    where: { cleanerId: cleanerId },
+    attributes: ['id', 'title', 'category', 'content', 'status', 'ownerId', 'createdAt'],
     order: [['createdAt', 'DESC']],
     transaction: t
   });
 }
 
 /**
- * 기사님 정산 요약 정보 조회 (당월 합계)
+ * 정산 요약 정보 조회
  */
 async function settlementFindSummaryByCleanerId(t = null, { cleanerId, yearMonth }) {
   const startOfMonth = dayjs(yearMonth).startOf('month').format('YYYY-MM-DD HH:mm:ss');
   const endOfMonth = dayjs(yearMonth).endOf('month').format('YYYY-MM-DD HH:mm:ss');
-
   const results = await Adjustment.findAll({
-    where: {
-      cleaner_id: cleanerId,
-      created_at: { [Op.between]: [startOfMonth, endOfMonth] }
-    },
-    attributes: [
-      'status',
-      [sequelize.fn('SUM', sequelize.col('settlement_amount')), 'totalSum']
-    ],
-    group: ['status'],
-    raw: true,
-    transaction: t
+    where: { cleanerId: cleanerId, createdAt: { [Op.between]: [startOfMonth, endOfMonth] } },
+    attributes: ['status', [sequelize.fn('SUM', sequelize.col('settlement_amount')), 'totalSum']],
+    group: ['status'], raw: true, transaction: t
   });
-
   const summary = { pending: 0, completed: 0 };
-
   results.forEach(row => {
     const amount = parseInt(row.totalSum || 0, 10);
-    
-    if (row.status === AdjustmentStatus.PENDING) { // '지급 대기'
-      summary.pending = amount;
-    } else if (row.status === AdjustmentStatus.COMPLETED) { // '정산 완료'
-      summary.completed = amount;
-    }
+    if (row.status === AdjustmentStatus.PENDING) summary.pending = amount;
+    else if (row.status === AdjustmentStatus.COMPLETED) summary.completed = amount;
   });
-
   return summary;
 }
 
 /**
- * 기사님 정산 상세 리스트 조회 (가게명 조인 포함)
+ * 정산 상세 리스트 조회
  */
 async function settlementFindListWithStoreByCleanerId(t = null, { cleanerId, yearMonth }) {
   const startOfMonth = dayjs(yearMonth).startOf('month').format('YYYY-MM-01');
   const endOfMonth = dayjs(yearMonth).endOf('month').format('YYYY-MM-DD');
-
   return await Adjustment.findAll({
-    where: {
-      cleaner_id: cleanerId,
-      [Op.and]: [
-        sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '>=', startOfMonth),
-        sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '<=', endOfMonth)
-      ]
-    },
-    include: [
-      {
-        model: Reservation,
-        as: 'reservation', 
-        attributes: ['id'],
-        include: [
-          {
-            model: Store,
-            as: 'store', 
-            attributes: ['name']
-          }
-        ]
-      }
-    ],
-    order: [['created_at', 'DESC']],
-    transaction: t
+    where: { cleanerId: cleanerId, [Op.and]: [
+      sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '>=', startOfMonth),
+      sequelize.where(sequelize.fn('DATE', sequelize.col('Adjustment.created_at')), '<=', endOfMonth)
+    ]},
+    include: [{ model: Reservation, as: 'reservation', attributes: ['id'], include: [{ model: Store, as: 'store', attributes: ['name'] }] }],
+    order: [['createdAt', 'DESC']], transaction: t
   });
 }
 
@@ -282,4 +223,5 @@ export default {
   inquiryFindByCleanerId,
   settlementFindSummaryByCleanerId,
   settlementFindListWithStoreByCleanerId,
+  adjustmentUpsert 
 };

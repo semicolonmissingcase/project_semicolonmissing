@@ -1,124 +1,172 @@
 /* 전체 컨테이너 */
 .todayJobList-container {
   width: 100%;
+  padding-bottom: 2rem;
 }
 
 /* 오늘 날짜 제목 */
 .todayJobList-date {
   font-size: 1.25rem; 
   font-weight: bold;
-  color: var(--color-blue);
-  margin-bottom: 1rem;
+  color: #3b82f6; /* var(--color-blue) 대용 */
+  margin-bottom: 1.5rem;
   text-align: left;
 }
 
-/* 카드 목록 영역 */
+/* 카드 목록 영역 (PC: 3열) */
 .todayJobList-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* PC: 3개씩 나란히 */
-  gap: 1rem; /* 카드 사이 간격 */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 1.25rem; 
 }
 
-/* 개별 카드 */
+/* 개별 카드: 버튼 추가로 인해 높이를 auto로 변경하여 유연하게 대응 */
 .todayJobList-card {
-  height: 7.5rem; /* 120px로 축소 */
-  padding: 0.875rem;
-  background-color: #ffffff; /* 흰색 배경 */
-  border: 1px solid #e5e7eb; /* 연한 회색 테두리 */
-  border-radius: 8px; /* 모서리 둥글게 */
-  box-shadow: 0 2px 4px rgba(64, 87, 146, 0.4); /* 은은한 그림자 */
+  min-height: 12rem; /* 최소 높이 확보 */
+  padding: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* 내용 균등 배치 */
-  transition: box-shadow 0.2s ease; /* 호버 시 부드러운 전환 */
+  transition: all 0.2s ease;
 }
 
-/* 카드 호버 효과 */
 .todayJobList-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 /* 카드 내 각 행 */
 .todayJobList-card-row {
   display: flex;
-  justify-content: space-between; /* 좌우 정렬 */
+  justify-content: space-between;
   align-items: center;
-  font-size: 0.875rem; /* 14px */
+  margin-bottom: 0.75rem;
 }
 
-/* 라벨 (매장명, 시간, 위치, 점주) */
-.todayJobList-card-label {
-  font-weight: 600; /* 약간 굵게 */
-  color: #6b7280; /* 회색 */
-  min-width: 3rem; /* 최소 너비로 정렬 맞추기 */
+.header-row {
+  margin-bottom: 1rem;
 }
 
-/* 카카오맵 URL 스킴 위치 변경 */
-.completedjoblist-card-place {
+/* 매장명 스타일 */
+.todayJobList-store-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #111827;
+}
+
+/* 상태 배지 */
+.todayJobList-status {
   display: flex;
   align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.status-APPROVED { background-color: #ebf5ff; color: #3b82f6; }
+
+/* 구분선 */
+.todayJobList-divider {
+  border: 0;
+  border-top: 1px solid #f3f4f6;
+  margin-bottom: 1rem;
 }
 
-/* 값 (실제 데이터) */
-.todayJobList-card-value {
-  color: #1f2937; /* 진한 회색 */
-  text-align: right; /* 오른쪽 정렬 */
-  flex: 1; /* 남은 공간 차지 */
+/* 정보 섹션 */
+.todayJobList-info-section {
+  flex: 1; /* 버튼을 아래로 밀어내기 위해 공간 차지 */
 }
 
-/* 작업이 없을 때 메시지 */
-.todayJobList-empty {
-  display: flex;             /* 중앙 정렬을 위해 추가 */
-  justify-content: center;    /* 가로 중앙 */
-  align-items: center;        /* 세로 중앙 */
-  min-height: 200px;         /* 화면 중앙에 오도록 높이값 부여 */
-  
+.todayJobList-info-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.todayJobList-label {
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.todayJobList-value {
+  font-weight: 600;
+  color: #374151;
+}
+
+.todayJobList-value.highlight {
+  color: #3b82f6;
+}
+
+/* 버튼 그룹: 가로 2열 배치 */
+.todayJobList-btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 1.25rem;
+}
+
+.todayJobList-secondary-btn, 
+.todayJobList-primary-btn {
+  padding: 0.75rem 0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
   text-align: center;
-  color: #888888;            /* 리뷰 내역과 동일한 회색 */
-  font-size: 1rem;           /* 14px보다 조금 더 키워 가독성 확보 */
 }
 
-/* 태블릿 크기 (820px ~ 501px) */
-@media (max-width: 820px) {
+.todayJobList-secondary-btn {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.todayJobList-primary-btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* 작업 없을 때 */
+.todayJobList-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  color: #9ca3af;
+  font-size: 1.1rem;
+}
+
+/* ------------------------------------------------------
+   반응형 미디어 쿼리
+--------------------------------------------------------- */
+
+/* 태블릿 (1024px ~ 769px) */
+@media (max-width: 1024px) {
   .todayJobList-cards {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿: 2개씩 */
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 모바일 (768px 이하) */
+@media (max-width: 768px) {
+  .todayJobList-cards {
+    grid-template-columns: 1fr; /* 세로 1줄 */
   }
 
   .todayJobList-card {
-    height: 7rem; /* 112px */
-    padding: 0.75rem;
+    padding: 1rem;
   }
 
-  .todayJobList-date {
-    font-size: 1.125rem; /* 18px */
-  }
-}
-
-/* 모바일 크기 (500px 이하) */
-@media (max-width: 500px) {
-  .todayJobList-container {
-    padding: 0.75rem;
-  }
-
-  .todayJobList-cards {
-    grid-template-columns: 1fr; /* 모바일: 1개씩 세로로 */
-  }
-
-  .todayJobList-date {
-    font-size: 1rem; /* 16px */
-    margin-bottom: 0.75rem;
-  }
-
-  .todayJobList-card {
-    height: 7rem; /* 104px */
-    padding: 0.75rem;
-  }
-
-  .todayJobList-card-row {
-    font-size: 0.8125rem; /* 13px */
-  }
-
-  .todayJobList-card-label {
-    min-width: 2.5rem; /* 모바일에서 라벨 너비 축소 */
+  /* 모바일에서는 버튼을 더 크게 */
+  .todayJobList-secondary-btn, 
+  .todayJobList-primary-btn {
+    padding: 1rem 0;
   }
 }

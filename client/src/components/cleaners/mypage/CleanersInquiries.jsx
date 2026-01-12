@@ -5,7 +5,7 @@ import "./CleanersInquiries.css";
 export default function InquiryList() {
   const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(null); // 아코디언 제어
+  const [activeIndex, setActiveIndex] = useState(null);
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -13,7 +13,6 @@ export default function InquiryList() {
         setLoading(true);
         const response = await getCleanerInquiries();
         
-        // 서버 응답 데이터를 점주용 구조와 동일하게 매핑
         const data = response.data?.data || response.data || [];
         setInquiries(data);
       } catch (error) {
