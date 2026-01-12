@@ -35,6 +35,8 @@ import AdminQna from "../components/admin/pages/AdminQna.jsx"
 import AdminInquiryReply from "../components/admin/pages/AdminInquiryReply.jsx";
 import AdminOwnerProfile from "../components/admin/pages/cleaners/AdminOwnerProfile.jsx";
 import AdminAdjustment from "../components/admin/pages/AdminAdjustment.jsx";
+import AdminReservation from "../components/admin/pages/AdminReservation.jsx";
+import AdminOwnerDetail from "../components/admin/pages/AdminOwnerDetail.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/chatList.jsx";
@@ -239,6 +241,11 @@ const router = createBrowserRouter([
                     element: <AdminMain />
                   },
                   {
+                    // 예약 관리 페이지
+                    path: 'reservation',
+                    element: <AdminReservation />
+                  },
+                  {
                     // 기사 프로필 관리 페이지
                     path: 'cleanerprofile',
                     element: <AdminCleanerProfile />
@@ -257,6 +264,11 @@ const router = createBrowserRouter([
                     // 점주 프로필 관리 페이지
                     path: 'owners/profiles',
                     element: <AdminOwnerProfile />
+                  },
+                  {
+                    // 점주 상세 정보 관리 페이지
+                    path: 'owners/profiles/:ownerId',
+                    element: <AdminOwnerDetail />
                   },
                   {
                     // 정산 관리 페이지 추가

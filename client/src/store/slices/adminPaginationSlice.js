@@ -10,6 +10,8 @@ import adminInquiryThunk from "../thunks/adminInquiryThunk.js";
 import adminOwnersThunk from "../thunks/adminOwnersThunk.js";
 import adminDashboardThunk from "../thunks/adminDashboardThunk.js";
 import adminAdjustmentsThunk from "../thunks/adminAdjustmentsThunk.js";
+import adminReservationsThunk from "../thunks/adminReservationsThunk.js";
+import adminOwnerDetailsThunk from "../thunks/adminOwnerDetailsThunk.js";
 
 const initialState = {
   // index 관련
@@ -64,6 +66,22 @@ const slice = createSlice({
       state.totalCount = 0;
       state.error = null;
     },
+    clearAdminReservations(state) {
+      state.data = [];
+      state.statistics = null;
+      state.page = 1;
+      state.offset = 10;
+      state.totalCount = 0;
+      state.error = null;
+    },
+    clearAdminOwnerDetails(state) {
+      state.data = [];
+      state.ownerInfo = null;
+      state.statistics = null;
+      state.page = 1;
+      state.totalCount = 0;
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -130,6 +148,50 @@ const slice = createSlice({
       })
 
       // ------------------------
+      // 점주 상세 정보
+      // ------------------------
+      .addCase(adminOwnerDetailsThunk.getAdminOwnerDetailThunk.fulfilled, (state, action) => {
+        const { statistics, ownerInfo } = action.payload.data;
+
+        state.statistics = statistics;
+        state.ownerInfo = ownerInfo;
+        state.error = null;
+      })
+
+      // ------------------------
+      // 점주별 예약 이력 조회
+      // ------------------------
+      .addCase(adminOwnerDetailsThunk.getAdminOwnerReservationHistoryThunk.fulfilled, (state, action) => {
+        const { total, currentPage, reservations } = action.payload.data;
+
+        state.data = reservations;
+        state.totalCount = total;
+        state.page = currentPage;
+        state.error = null;
+      })
+      
+      // ------------------------
+      // 예약 관리 내역 조회
+      // ------------------------
+      .addCase(adminReservationsThunk.adminReservationThunk.fulfilled, (state, action) => {
+        // 컨트롤러에서 보낸 { total, currentPage, reservations } 구조에 맞춤
+        const { total, currentPage, reservations } = action.payload.data;
+
+        state.data = reservations;
+        state.totalCount = total;
+        state.page = currentPage;
+        state.error = null;
+      })
+
+      // ------------------------
+      // 예약 통계 조회
+      // ------------------------
+      .addCase(adminReservationsThunk.adminReservationStatisticsThunk.fulfilled, (state, action) => {
+        const { statistics } = action.payload.data;
+        state.statistics = statistics;
+      })
+
+      // ------------------------
       // 정산 관리 내역 조회
       // ------------------------
       .addCase(adminAdjustmentsThunk.adminAdjustmentThunk.fulfilled, (state, action) => {
@@ -177,6 +239,8 @@ export const {
   clearAdminOwners,
   clearAdminDashboards,
   clearAdminAdjustments,
+  clearAdminReservaions,
+  clearAdminOwnerDetails,
 } = slice.actions;
 
 export default slice.reducer;
