@@ -63,13 +63,19 @@ export default function InquiryList() {
               {isActive && (
                 <div className="cleaners-inquiries-body">
                   <div className="cleaners-inquiries-question-content"
-                    dangerouslySetInnerHTML={{ __html: item.content }}> {/* p태그 달고 출력되는 거 수정 */}
-                    {/* <div className="cleaners-inquiries-date">작성일: {item.createdAt}</div> */}
+                  dangerouslySetInnerHTML={{ __html: item.content }}> 
                   </div>
+                    {/* <div className="cleaners-inquiries-date">작성일: {item.createdAt}</div> */}
                   <div className="cleaners-inquiries-divider"></div>
                   <div className="cleaners-inquiries-answer-content">
                     <span className="cleaners-inquiries-a-prefix">A.</span>
-                    <p dangerouslySetInnerHTML={{ __html: item.answerContent || "아직 답변이 등록되지 않았습니다." }}></p>
+                    <div>
+                      {item.answerContent ? (
+                        <div dangerouslySetInnerHTML={{ __html: item.answerContent }} />
+                      ) : (
+                        <p>아직 답변이 등록되지 않았습니다.</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
