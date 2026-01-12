@@ -3,6 +3,7 @@ import './Estimates.css';
 import { useNavigate } from 'react-router-dom';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
 import { getOwnerReservations, getEstimatesByReservationId } from '../../../api/axiosOwner.js';
+import { createChatRoom } from '../../../api/axiosChat.js';
 
 // 받은 견적
 export default function Estimates() {
@@ -50,9 +51,32 @@ export default function Estimates() {
     }
   };
 
-  function chatroom() {
-    navigate('/chatroom/:id');
-  }
+  const handleChatRoom = async (estimateId, cleanerId) => {
+    if(!cleanerId) {
+      alert("기사님 정보가 유효하지 않아 채팅을 시작할 수 없습니다.");
+      return 
+    }
+
+    try {
+      const response = await createChatRoom({
+        estimate_id: estimateId,
+        cleaner_id: cleanerId,
+      });
+
+      console.log('API로부터 받은 응답 전체 (response):', response);
+
+      const chatRoomId = response.data.data.id;
+
+      if(chatRoomId) {
+        navigate(`/chatroom/${chatRoomId}`);
+      } else {
+        alert("채팅방을 찾을 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("채팅방 생성/조회 실패:", error);
+      alert("채팅방 연결에 실패했습니다.");
+    }
+  };
 
   function reservationShow() {
     navigate('/owners/reservation/:id');
@@ -142,7 +166,10 @@ export default function Estimates() {
   
                     <div className="estimates-card-action-row">
                       <button className="estimates-btn-light" onClick={reservationShow}>견적서 보기</button>
-                      <button className="estimates-btn-primary" onClick={chatroom}>채팅하기</button>
+                      <button className="estimates-btn-primary" 
+                        onClick={() => handleChatRoom(estimate.id, estimate.cleaner?.id)}>
+                          채팅하기
+                        </button>
                     </div>
                   </div>
                 ))

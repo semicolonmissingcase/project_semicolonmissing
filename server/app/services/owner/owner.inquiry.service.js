@@ -41,8 +41,9 @@ async function getInquiriesByOwner(ownerId) {
     ownerId: inquiry.ownerId,
     title: inquiry.title,
     content: inquiry.content,
-    status: inquiry.status,
+    status: inquiry.answer ? '답변 완료' : '대기중',
     createdAt: inquiry.createdAt,
+    answers: inquiry.answer ? [inquiry.answer] : []
   }));
 }
 
@@ -69,9 +70,9 @@ async function getInquiryDetailsForOwner(inquiryId, ownerId) {
     ownerId: target.ownerId,
     title: target.title,
     content: target.content, // 내용 추가 필요
-    status: target.status,
+    status: inquiry.answer ? '답변 완료' : '대기중',
     createdAt: target.createdAt,
-    answers: target.answers || []
+    answers: inquiry.answer ? [inquiry.answer] : [],
   };
 }
 

@@ -73,6 +73,13 @@
   white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
 
+.status-completed{
+  background-color: var(--color-blue);
+}
+.status-pending{
+  background-color: var(--color-red);
+}
+
 /* 1. 상단 컨트롤 (검색 우측 / 페이지선택 좌측) */
 .qnapost-table-section > div:first-of-type,
 .qnapost-table-section .table-header-controls {
