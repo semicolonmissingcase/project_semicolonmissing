@@ -46,6 +46,7 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
             as: 'reservations',
             attributes: [],
             where: { status: ReservationStatus.APPROVED },
+            required: false,
             duplicating: false,
           },
           {
@@ -82,15 +83,15 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
 
   // 승인을 상태를 가장 위로 정렬
   estimates.sort((a, b) => {
-    if(a.status === '승인' && b.status !== '승인') return -1;
-    if (a.status !== '승인' && b.status === '승인') return 1;
+    if(a.status === EstimateStatus.PAID && b.status !== EstimateStatus.PAID) return -1;
+    if (a.status !== EstimateStatus.PAID && b.status === EstimateStatus.PAID) return 1;
     return new Date(a.createdAt) - new Date(b.createdAt);
   });
 
   // 후처리하여 isFavorited 속성 추가
   const processedEstimates = estimates.map(estimate => {
     const plainEstimate = estimate.get({ plain: true });
-    const isFavorited = plainEstimate.cleaner.likes && plainEstimate.cleaner.likes.length > 0;
+    const isFavorited = plainEstimate.cleaner?.likes && plainEstimate.cleaner.likes.length > 0;
 
     delete plainEstimate.cleaner.likes;
     return {

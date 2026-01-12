@@ -27,7 +27,6 @@ async function createInquiry(inquiryData) {
     status: inquiryData.status || '대기중',
   };
 
-  console.log("--- [DEBUG] Inquiry.create에 최종 전달될 dataForInquiryCreate:", dataForInquiryCreate);
   const newInquiry = await Inquiry.create(dataForInquiryCreate);
   return newInquiry;
 }
@@ -39,6 +38,12 @@ async function createInquiry(inquiryData) {
 async function findInquiriesByOwnerId(ownerId) {
   const inquiries = await Inquiry.findAll({
     where: { ownerId: ownerId },
+    include: [
+      {
+        model: Answer,
+        as: 'answer',
+      }
+    ],
     order: [['createdAt', 'DESC']], // 최신 문의
   });
   return inquiries;  
@@ -57,7 +62,8 @@ async function findInquiryByIdAndOwnerId({ inquiryId, ownerId }) {
     },
     include: [
       {
-        model: Answer, as: 'answers'
+        model: Answer,
+        as: 'answers',
       },
     ],
   });

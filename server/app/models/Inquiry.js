@@ -139,7 +139,7 @@ const Inquiry = {
   associate: (db) => {
     db.Inquiry.belongsTo(db.Owner, { targetKey: 'id', foreignKey: 'ownerId', as: 'owner' });
     db.Inquiry.belongsTo(db.Cleaner, { targetKey: 'id', foreignKey: 'cleanerId', as: 'cleaner' });
-    db.Inquiry.hasOne(db.Answer, { foreignKey: 'inquiryId', as: 'answer' });
+    db.Inquiry.hasOne(db.Answer, { sourceKey: 'id', foreignKey: 'inquiryId', as: 'answer'});
   }
 }
 

@@ -44,8 +44,8 @@ const AdjustmentStatus = {
 
 // 문의 관련 상태값
 const InquiryStatus = {
-  READY: '대기',
-  COMPLETED: '완료'
+  READY: '대기중',
+  COMPLETED: '답변 완료'
 }
 
 // 문의 카테고리

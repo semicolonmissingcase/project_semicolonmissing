@@ -32,6 +32,7 @@ import AdminMain from "../components/admin/main/AdminMain.jsx";
 import AdminLogin from "../components/admin/auth/AdminLogin.jsx";
 import AdminCleanerProfile from "../components/admin/pages/cleaners/AdminCleanerProfile.jsx";
 import AdminQna from "../components/admin/pages/AdminQna.jsx"
+import AdminInquiryReply from "../components/admin/pages/AdminInquiryReply.jsx";
 import AdminOwnerProfile from "../components/admin/pages/cleaners/AdminOwnerProfile.jsx";
 import AdminAdjustment from "../components/admin/pages/AdminAdjustment.jsx";
 // 채팅 관련 import
@@ -271,6 +272,11 @@ const router = createBrowserRouter([
                 // 관리자 로그인
                 path: 'login',
                 element: <AdminLogin />
+              },
+              {
+                // 문의 상세 답변 팝업
+                path: 'qna/:inquiryId/reply',
+                element: <AdminInquiryReply />
               },
             ]
           }

@@ -6,6 +6,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import adminCleanersThunk from "../thunks/adminCleanersThunk.js";
+import adminInquiryThunk from "../thunks/adminInquiryThunk.js";
 import adminOwnersThunk from "../thunks/adminOwnersThunk.js";
 import adminDashboardThunk from "../thunks/adminDashboardThunk.js";
 import adminAdjustmentsThunk from "../thunks/adminAdjustmentsThunk.js";
@@ -70,14 +71,14 @@ const slice = createSlice({
       // 통합 모니터링
       // -----------------------
       .addCase(adminDashboardThunk.getDashboardData.fulfilled, (state, action) => {
-      const { statistics, profiles, chartData } = action.payload.data; 
+        const { statistics, profiles, chartData } = action.payload.data;
 
-      state.data = profiles;
-      state.statistics = statistics;
-      state.chartData = chartData;
-  
-      state.totalCount = profiles?.length || 0;
-      state.page = 1;
+        state.data = profiles;
+        state.statistics = statistics;
+        state.chartData = chartData;
+
+        state.totalCount = profiles?.length || 0;
+        state.page = 1;
       })
 
 
@@ -94,6 +95,17 @@ const slice = createSlice({
       .addCase(adminCleanersThunk.adminCleanerProfileStatisticsThunk.fulfilled, (state, action) => {
         const { statistics } = action.payload.data;
 
+        state.statistics = statistics;
+      })
+      // ------------------------
+      // 문의 관리 (Q&A)
+      // ------------------------
+      .addCase(adminInquiryThunk.getInquiryListThunk.fulfilled, (state, action) => {
+        const { total, currentPage, inquiries, statistics } = action.payload.data;
+
+        state.data = inquiries;
+        state.totalCount = total;
+        state.page = currentPage;
         state.statistics = statistics;
       })
       // ------------------------
@@ -136,7 +148,7 @@ const slice = createSlice({
         const { statistics } = action.payload.data;
         state.statistics = statistics;
       })
-      
+
       // ------------------------
       // 정산 상태 업데이트
       // ------------------------

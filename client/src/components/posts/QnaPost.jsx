@@ -63,8 +63,8 @@ export default function QnaPost () {
       cell: ({ getValue }) => {
         const status = getValue();
         return (
-          <span className={`status-badge ${status === '답변완료' ? 'status-completed' : 'status-pending'}`}>
-            {status === 'completed' ? '완료' : '미완료'}
+          <span className={`status-badge ${status === '답변 완료' ? 'status-completed' : 'status-pending'}`}>
+            {status === '답변 완료' ? '답변 완료' : '대기중'}
           </span>
         );
       },

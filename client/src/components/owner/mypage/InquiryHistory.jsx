@@ -15,7 +15,7 @@ export default function InquiryHistory() {
       try {
         setLoading(true);
         const responseData = await getMyInquiry();
-
+console.log('서버로부터 받은 실제 데이터:', responseData);
         const transformedData = responseData.map(item => ({
           id: item.id,
           title: item.title,
@@ -77,8 +77,8 @@ export default function InquiryHistory() {
               <div className="inquiryhistory-header" onClick={() => toggleAccordion(index)}>
                 <span className="inquiryhistory-q-prefix">Q.</span>
                 <span className="inquiryhistory-title-text">{item.title}</span>
-                <span className={`inquiryhistory-status ${item.status === 'PENDING' ? 'status-pending' : 'status-completed'}`}>
-                  {item.status === 'PENDING' ? '답변 완료' : '답변 대기중'}
+                <span className={`inquiryhistory-status ${item.status === '답변 완료' ? 'status-completed' : 'status-pending'}`}>
+                  {item.status === '답변 완료' ? '답변 완료' : '대기중'}
                 </span>
                 <span className="inquiryhistory-arrow-icon">
                   {activeIndex === index ? '▲' : '▼'}

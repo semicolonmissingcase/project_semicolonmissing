@@ -17,10 +17,6 @@ export default function QnaPostShow() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState(null);
 
-  console.log('--- QnaPostShow 컴포넌트 렌더링 ---');
-  console.log('useParams() 결과 (params):', params);
-  console.log('추출된 inquiryId:', inquiryId);
-
   const fetchPost = async (password = null) => {
     try {
       setLoading(true);
@@ -144,10 +140,10 @@ export default function QnaPostShow() {
                 <div className="qnapostshow-cell">
                   <span className="qnapostshow-label">답변여부</span>
                   <div className="qnapostshow-status-tags">
-                    {post.status === '답변완료' ? (
-                      <span className="qnapostshow-status-tag qnapostshow-status-delete">답변완료</span>
+                    {post.status === '답변 완료' ? (
+                      <span className="qnapostshow-status-tag qnapostshow-status-delete">답변 완료</span>
                     ) : (
-                      <span className="qnapostshow-status-tag qnapostshow-status-complete">대기 중</span>
+                      <span className="qnapostshow-status-tag qnapostshow-status-complete">대기중</span>
                     )}
                   </div>
                 </div>

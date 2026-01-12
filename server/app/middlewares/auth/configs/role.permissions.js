@@ -42,6 +42,8 @@ const ROLE_PERMISSIONS = {
     // -------------------------
     { path: /^\/api\/admin\/monitoring$/, roles: [ADMIN] }, // 통합 모니터링 
     { path: /^\/api\/admin\/cleaners\/profiles$/, roles: [ADMIN] }, // 관리자 기사 관리 조회
+    { path: /^\/api\/admin\/inquiries$/, roles: [ADMIN] }, // 관리자 문의 조회
+    { path: /^\/api\/admin\/inquiries\/\d+$/, roles: [ADMIN] }, // 관리자 문의 상세
     { path: /^\/api\/admin\/owners\/profiles$/, roles: [ADMIN] }, // 관리자 유저 관리 조회
     { path: /^\/api\/admin\/adjustments\/view$/, roles: [ADMIN] }, // 관리자 정산 관리 조회
   ],
@@ -61,6 +63,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms\/\d+\/upload$/, roles: [OWNER, CLEANER] }, // 채팅 이미지 업로드
     { path: /^\/api\/cleaners\/quotations$/, roles: [CLEANER] }, // 견적 요청서 수락
     { path: /^\/api\/posts\/owner\/reviews$/, roles: [OWNER] }, // 리뷰 작성
+    { path: /^\/api\/admin\/inquiries\/\d+\/reply$/, roles: [ADMIN] }, // 관리자 문의 답변 작성
     { path: /^\/api\/cleaners\/accountedit$/, roles: [CLEANER] }, // 기사님 계좌 생성, 수정
   ],
   PATCH: [
