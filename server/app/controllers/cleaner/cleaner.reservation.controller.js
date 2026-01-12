@@ -24,14 +24,12 @@ async function completeJob(req, res, next) {
   try {
     transaction = await db.sequelize.transaction();
 
-    // 1. 예약 및 견적 정보 조회
     const reservation = await cleanerMypageRepository.reservationFindById(transaction, reservationId);
     if (!reservation) {
       if (transaction) await transaction.rollback();
       return res.status(404).json({ success: false, message: "의뢰 정보를 찾을 수 없습니다." });
     }
 
-    // 2. 결제 정보 별도 조회 (관계 설정 오류 우회)
     const payment = await db.Payment.findOne({
       where: { reservation_id: reservationId },
       transaction

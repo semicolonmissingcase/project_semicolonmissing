@@ -41,7 +41,7 @@ export default function TodayJobList() {
       const response = await completeJob(jobId);
       if (response.data.success) {
         alert("작업 완료 처리가 되었습니다.");
-        fetchTodayJobs(); // 목록 새로고침
+        fetchTodayJobs();
       }
     } catch (error) {
       console.error("완료 처리 실패:", error);
