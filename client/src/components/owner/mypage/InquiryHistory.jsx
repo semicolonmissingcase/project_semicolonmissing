@@ -87,11 +87,12 @@ export default function InquiryHistory() {
 
               {activeIndex === index && (
                 <div className="inquiryhistory-body">
-                  <div className="inquiryhistory-question-content">{item.question}</div>
+                  <div className="inquiryhistory-question-content"
+                   dangerouslySetInnerHTML={{ __html: item.question }} />
                   <div className="inquiryhistory-divider"></div>
                   <div className="inquiryhistory-answer-content">
                     <span className="inquiryhistory-a-prefix">A.</span>
-                    {item.answer}
+                    <div dangerouslySetInnerHTML={{ __html: item.answer || "아직 답변이 등록되지 않았습니다." }}></div>
                   </div>
                 </div>
               )}

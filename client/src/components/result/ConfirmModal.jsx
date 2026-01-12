@@ -5,6 +5,16 @@ export default function ConfirmModal({ isOpen, onClose, config }) {
   if (!isOpen || !config) return null;
 
   const { title, message, confirmText, cancelText, onConfirm, isDelete } = config;
+  // useEffect(() => {
+  //   if(!isOpen) return;
+
+  //   const onKeyDown = (e) => {
+  //     if(e.key === "Escape") onClose();
+  //   };
+
+  //   window.addEventListener("keydown", onKeyDown);
+  //   return () => window.removeEventListener("keydown", onKeyDown);
+  // }, [isOpen, onClose]);
 
   return (
     <div className="custom-modal-overlay" onClick={onClose}>

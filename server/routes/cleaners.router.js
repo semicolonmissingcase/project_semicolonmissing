@@ -6,7 +6,7 @@ import cleanerAccountController from '../app/controllers/cleaner/cleaner.account
 import cleanerQuotationsValidator from '../app/middlewares/validations/validatiors/cleaner/cleaner.quotations.validator.js';
 import validationHandler from '../app/middlewares/validations/validationHandler.js';
 import cleanerProfileController from '../app/controllers/cleaner/cleaner.profile.controller.js';
-import locationsController from '../app/controllers/locations.controller.js';
+import cleanerLocationsController from '../app/controllers/cleaner/cleaner.locations.controller.js';
 
 const cleanersRouter = express.Router();
 
@@ -24,12 +24,16 @@ cleanersRouter.get('/quotations', authMiddleware, cleanerQuotationsController.in
 cleanersRouter.post('/quotations', authMiddleware, cleanerQuotationsValidator.quotationsStore, validationHandler, cleanerQuotationsController.store); // 견적 요청서 요청 확인 작성
 
 // 기사님 정보/프로필 수정 작업라우터
-cleanersRouter.put('/mypage/info', authMiddleware, cleanerProfileController.updateInfo); // 기사 정보 수정
+cleanersRouter.get('/profile', authMiddleware, cleanerProfileController.getCleanerProfile); // 지역, 자격증 등 정보 불러오기
+cleanersRouter.put('/mypage/info', authMiddleware, cleanerProfileController.updateInfo); // 기사 정보/프로필 수정
 cleanersRouter.put('/mypage/password', authMiddleware, cleanerProfileController.changePassword); //기사 비밀번호 수정
 
 // 기사님 계좌 조회/생성/수정/삭제
 cleanersRouter.get(`/accountedit`, authMiddleware, cleanerAccountController.getAccounts); //계좌 조회
 cleanersRouter.post(`/accountedit`, authMiddleware, cleanerAccountController.createAccount); // 계좌 생성, 수정
 cleanersRouter.delete(`/accountedit`, authMiddleware, cleanerAccountController.deleteAccount); // 계좌 삭제
+
+// 지역 리스트 가져오기
+cleanersRouter.get('/locations', authMiddleware, cleanerLocationsController.registerCleanerLocations);
 
 export default cleanersRouter;

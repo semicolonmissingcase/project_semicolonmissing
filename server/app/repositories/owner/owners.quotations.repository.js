@@ -106,6 +106,32 @@ async function createReservationImage(t = null, imageData) {
   return await ReservationImage.create(imageData, { transaction: t });
 }
 
+// 답변 텍스트로 옵션 조회
+async function findQuestionOptionByText(t = null, { questionId, answerText }) {
+  return await QuestionOption.findOne({
+    where: {
+      questionId: questionId,
+      correct: answerText
+    },
+  }
+,  { transaction: t });
+}
+
+// 추가 질문, 옵션 목록 조회
+async function findAllQuestions() {
+  return await Question.findAll({
+    include: [
+      {
+        model: QuestionOption,
+        as: 'questionOptions',
+        attributes: ['id', 'correct'],
+      },
+    ],
+    attributes: ['id', 'code', 'content', 'meta'],
+    order: [['id', 'ASC']],
+  })
+}
+
 export default {
   reservationFindByIdAndStatusIsRequest,
   submissionFindByReservationId,
@@ -114,4 +140,6 @@ export default {
   findQuestionByCode,
   createSubmission,
   createReservationImage,
+  findAllQuestions,
+  findQuestionOptionByText,
 }

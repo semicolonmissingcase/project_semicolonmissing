@@ -33,3 +33,7 @@ export const getCleanerJobDetail = (id, config = {}) =>
 // 작업 완료 처리 (상태 변경 및 정산 데이터 생성)
 export const completeJob = (id, config = {}) => 
   axiosInstance.patch(`${CLEANER_API_URL}/mypage/job/${id}/complete`, {}, config);
+
+// 지역 목록 불러오기
+export const getLocationsThunk = (config = {}) =>
+  axiosInstance.get(`${CLEANER_API_URL}/locations`, config);

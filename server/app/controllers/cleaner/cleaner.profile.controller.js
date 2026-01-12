@@ -11,16 +11,15 @@ import { SUCCESS, UNAUTHORIZED_ERROR } from "../../../configs/responseCode.confi
  */
 async function updateInfo(req, res, next) {
   try {
-    console.log(req.user);
-
     const { id, role } = req.user;
     const updateData = req.body;
+    const files = req.files;
 
     if (!id || !role) {
       return res.status(UNAUTHORIZED_ERROR.status).send(createBaseResponse(UNAUTHORIZED_ERROR));
     }
     
-    const updatedCleaner = await cleanerProfileService.updateCleaner(id, role, updateData);
+    const updatedCleaner = await cleanerProfileService.updateCleaner(id, role, updateData, files);
 
     return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { user: updatedCleaner }));
   } catch (err) {
@@ -55,7 +54,28 @@ async function changePassword(req, res, next) {
   }
 }
 
+/**
+ * 기사님 여러 정보 한번에 불러오기
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function getCleanerProfile(req, res, next) {
+  try {
+    const { id } = req.user;
+
+    const cleanerProfile = await cleanerProfileService.getCleanerProfile(id);
+
+    // 성공
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, { cleaner: cleanerProfile }));
+  } catch (error) {
+    next(error);
+  }
+}
+
 export default { 
   updateInfo,
   changePassword,
+  getCleanerProfile,
 };

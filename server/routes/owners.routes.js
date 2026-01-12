@@ -13,11 +13,10 @@ import ownerUserController from '../app/controllers/owner/owner.user.controller.
 import ownerLikeController from '../app/controllers/owner/owner.like.controller.js';
 import { userController } from '../app/controllers/auth/user.controller.js';
 import reservationImageUploader from '../app/middlewares/multer/uploaders/reservationImage.uploader.js';
-import ownerInquiryController from '../app/controllers/owner/owner.inquiry.controller.js';
 
 const ownersRouter = express.Router();
 
-// ownersRouter.get('/questionslist', authUserMiddleware, ownerInquiryController.getQuestions); // 요청서 질문 조회
+ownersRouter.get('/questionslist', authMiddleware, ownersController.getQuestions); // 요청서 질문 조회
 // TODO: 추후 authMiddleware 추가 필요 (Permission도 같이)
 ownersRouter.get('/quotations/:id', ownerQuotationsShow, validationHandler , ownersController.show); // 견적요청서 상세 조회
 ownersRouter.post('/quotations', authMiddleware, reservationImageUploader, ownersController.createReservation); // 견적요청서 작성

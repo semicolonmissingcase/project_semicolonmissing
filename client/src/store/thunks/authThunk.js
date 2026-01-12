@@ -101,7 +101,6 @@ export const changeCleanerPasswordThunk = createAsyncThunk(
   }
 );
 
-
 export const uploadProfileImageThunk = createAsyncThunk(
   'auth/uploadProfileImageThunk',
   async(file, { rejectWithValue }) => {
@@ -126,3 +125,38 @@ export const uploadProfileImageThunk = createAsyncThunk(
     }
   }
 )
+
+// 파일 업로드
+export const uploadFileThunk = createAsyncThunk(
+  'files/upload',
+  async(file, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('profile', file);
+
+      const response = await axiosInstance.post('/api/files/profile', formData, {
+         headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      return response.data.data.path;
+    } catch (error) {
+      console.error("파일 업로드 실패:", error.response?.data || error.message);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+)
+
+// 기사 상세 프로필
+export const getCleanerProfileThunk = createAsyncThunk(
+  'cleaner/getProfile',
+  async(_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/api/cleaners/profile');
+      return response.data.data.cleaner;
+    } catch (error) {
+      console.error("기사 프로필 정보 불러오기 실패:", error.response?.data || error.message);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);

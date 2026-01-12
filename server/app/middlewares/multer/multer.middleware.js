@@ -9,6 +9,8 @@ import profileUploader from "./uploaders/profile.uploader.js";
 import chatUpload from "./uploaders/chat.upload.js";
 import editorImageUploader from "./uploaders/editorImage.uploader.js";
 import inquiryImageUploader from "./uploaders/inquiryImage.uploader.js"
+import cleanerProfileUploader from "./uploaders/cleanerprofile.uploader.js";
+import reservationImageUploader from "./uploaders/reservationImage.uploader.js";
 
 export default {
   postUploader,
@@ -16,4 +18,6 @@ export default {
   chatUpload,
   editorImageUploader,
   inquiryImageUploader,
+  cleanerProfileUploader,
+  reservationImageUploader,
 }
