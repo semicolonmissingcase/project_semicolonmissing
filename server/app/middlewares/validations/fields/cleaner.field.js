@@ -34,7 +34,7 @@ const password = body('password')
   .notEmpty()
   .withMessage('비밀번호는 필수 항목입니다.')
   .bail()
-  .matches(/^[a-zA-Z0-9!@#$]{8.72}$/) // 비밀번호 해싱하는지도 물어보기.. 해싱하면 72자 정도가 기술적인 이유로 좋은 선택이라고 함
+  .matches(/^[a-zA-Z0-9!@#$]{8,20}$/)
   .isLength({ min: 8 })
   .withMessage('비밀번호는 최소 8자 이상이어야 합니다.');
 

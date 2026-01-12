@@ -33,7 +33,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms\/\d+\/sidebar$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 정보 조회
     { path: /^\/api\/chat\/rooms\/\d+\/reviews$/, roles: [OWNER, CLEANER] }, // 채팅 사이드바 리뷰 조회
     { path: /^\/api\/owners\/quotations$/, roles: [OWNER], }, // 견적 리스트 조회
-    { path: /^\/api\/cleaners\/accountinfo$/, roles: [CLEANER] }, // 기사님 계좌 조회
+    { path: /^\/api\/cleaners\/accountedit$/, roles: [CLEANER] }, // 기사님 계좌 조회
     { path: /^\/api\/cleaners\/locations$/, roles: [CLEANER] }, // 지역 전체 불러오기
     { path: /^\/api\/cleaners\/profile$/, roles: [CLEANER] }, // 기사님 지역, 자격증 등 정보 조회
     { path: /^\/api\/owner\/questionslist$/, roles: [OWNER] }, // 질문 리스트
@@ -61,6 +61,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms\/\d+\/upload$/, roles: [OWNER, CLEANER] }, // 채팅 이미지 업로드
     { path: /^\/api\/cleaners\/quotations$/, roles: [CLEANER] }, // 견적 요청서 수락
     { path: /^\/api\/posts\/owner\/reviews$/, roles: [OWNER] }, // 리뷰 작성
+    { path: /^\/api\/cleaners\/accountedit$/, roles: [CLEANER] }, // 기사님 계좌 생성, 수정
   ],
   PATCH: [
     { path: /^\/api\/chat\/rooms\/\d+\/read$/, roles: [OWNER, CLEANER] }, // 메세지 읽음 처리
@@ -78,6 +79,7 @@ const ROLE_PERMISSIONS = {
   DELETE: [
     { path: /^\/api\/stores\/\d+$/, roles: [OWNER] }, // 매장 삭제
     { path: /^\/api\/posts\/owner\/reviews\/\d+$/, roles: [OWNER] }, // 리뷰 삭제
+    { path: /^\/api\/cleaners\/accountedit$/, roles: [CLEANER] }, // 기사님 계좌 삭제
   ]
 }
 Object.freeze(ROLE_PERMISSIONS);

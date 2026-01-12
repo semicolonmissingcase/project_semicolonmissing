@@ -5,15 +5,16 @@
  */
 
 import { SUCCESS } from "../../../configs/responseCode.config.js";
-import { createBaseResponse } from "../../../app/utils/createBaseResponse.util.js";
-import locationsService from "../../services/cleaner/cleaner.locations.service.js";
+import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
+import locationsService from "../../services/locations/locations.service.js";
  
+
 
   async function registerCleanerLocations(req, res, next) {
   try {
  
     const result = await locationsService.getLocations();
-    return res.status(200).json(result);
+    return res.status(SUCCESS.status).json(createBaseResponse(SUCCESS, result));
   } catch (err) {
     next(err);
   }

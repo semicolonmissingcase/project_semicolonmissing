@@ -8,7 +8,7 @@ import express from 'express';
 import ownerUserController from "../app/controllers/owner/owner.user.controller.js";
 import validationHandler from "../app/middlewares/validations/validationHandler.js";
 import ownerUserValidators from '../app/middlewares/validations/validatiors/owner/owner.user.validators.js';
-import cleanersLocationsController from "../app/controllers/cleaner/cleaner.locations.controller.js";
+import locationsController from '../app/controllers/locations.controller.js';
 import cleanerUserValidators from '../app/middlewares/validations/validatiors/cleaner/cleaner.user.validators.js';
 import cleanerUserController from '../app/controllers/cleaner/cleaner.user.controller.js';
 
@@ -18,7 +18,7 @@ const usersRouter = express.Router();
 usersRouter.post('/owner', ownerUserValidators, validationHandler, ownerUserController.registerOwner);
 
 // 기사 회원가입(지역 불러오기)
-usersRouter.get('/cleaner', cleanersLocationsController.registerCleanerLocations);
+usersRouter.get('/locations', locationsController.getCleanerRegions);
+// 기사 회원가입 제출
 usersRouter.post('/cleaner', cleanerUserValidators, validationHandler, cleanerUserController.registerCleaner);
-
 export default usersRouter;

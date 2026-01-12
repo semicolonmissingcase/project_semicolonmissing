@@ -29,6 +29,7 @@ import estimateRouter from './routes/estimate.router.js';
 // 결제 관련 import
 import paymentsRouter from './routes/payments.router.js';
 import notFoundRouter from './routes/notFoundRouter.js';
+import bankAccountRouter from './routes/banks.routes.js';
 
 const app = express();
 app.use(cors({
@@ -57,6 +58,7 @@ app.use('/api/admin', adminRouter);
 app.use('/api/stores', storesRouter); // 매장관리 관련
 app.use('/api/reservations', estimateRouter); // 견적서 관련 
 app.use('/api/posts', postsRouter); // 글쓰기 관련
+app.use('/api/banks', bankAccountRouter); // 은행 관련
 
 // API notFound 처리
 app.use(notFoundRouter);

@@ -1,33 +1,41 @@
-/**
- * @file app/services/cleaner/cleaner.accounts.service.js
- * 260107 yh init
- */
-import db from "../../models/index.js";
-import accountsRepository from "../../repositories/cleaner/cleaner.account.repository.js";
+import db from '../../models/index.js';
+import cleanerAccountRepository from '../../repositories/cleaner/cleaner.account.repository.js';
 
-const CleanerAccount = db.CleanerAccount;
+const getAccounts = async (cleanerId) => {
+  return await cleanerAccountRepository.findAllByCleanerId(cleanerId);
+};
 
-/**
- * 기사 계좌 목록 불러오기
- * @param {number} cleanerId
- */
-async function getAccounts(cleanerId) {
-  const rows = await accountsRepository.findAllByCleanerId(cleanerId);
-  return { rows };
+async function saveAccount({ cleanerId, bankCode, accountNumber, depositor }) {
+
+  const existingAccount = await db.CleanerAccount.findOne({
+    where: { cleanerId }
+  });
+
+  const accountData = {
+    cleanerId,
+    bankCode,
+    accountNumber,
+    depositor,
+    deletedAt: null
+  };
+
+  if (existingAccount) {
+
+    return await db.CleanerAccount.update(accountData, {
+      where: { cleanerId }
+    });
+  } else {
+
+    return await db.CleanerAccount.create(accountData);
+  }
 }
 
-/**
- * 특정 계좌 상세 정보 불러오기
- */
-async function getAccountDetail(accountId) {
-  const account = await CleanerAccount.findByPk(accountId);
-  return account;
-}
+const deleteAccount = async (cleanerId) => {
+  return await cleanerAccountRepository.deleteById(cleanerId);
+};
 
 export default {
   getAccounts,
-  getAccountDetail
-}
-
-
-
+  saveAccount,
+  deleteAccount
+};
