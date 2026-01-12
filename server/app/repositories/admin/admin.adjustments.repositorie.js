@@ -9,7 +9,6 @@ const { sequelize, Adjustment } = db;
 
 /**
  * 1. 기사 정산 리스트 조회 (Pagination)
- * '정산 대기' 상태가 우선적으로 보이도록 정렬 기준을 설정했습니다.
  */
 async function paginationAdjustments(t = null, { limit, offset }) {
   return await Adjustment.findAndCountAll({
@@ -20,15 +19,14 @@ async function paginationAdjustments(t = null, { limit, offset }) {
       'scheduledAt',
       'completedAt',
       [
-        // 서브쿼리: 'Adjustment' 대신 실제 DB 테이블명인 'adjustments'를 사용하는 것이 안전합니다.
         sequelize.literal(`(
-          SELECT name FROM cleaners WHERE cleaners.id = adjustments.cleaner_id
+          SELECT name FROM cleaners WHERE cleaners.id = adjustment.cleaner_id
         )`),
         'cleanerName'
       ],
       [
         sequelize.literal(`(
-          SELECT phone_number FROM cleaners WHERE cleaners.id = adjustments.cleaner_id
+          SELECT phone_number FROM cleaners WHERE cleaners.id = adjustment.cleaner_id
         )`),
         'cleanerPhoneNumber'
       ]
@@ -46,18 +44,16 @@ async function paginationAdjustments(t = null, { limit, offset }) {
 
 /**
  * 2. 정산 통계 카운트
- * 프론트엔드 통계 카드에서 '정산 대기' 건수를 정확히 집계하기 위함입니다.
  */
 async function findAdjustmentsCount(t = null, paramWhere) {
   let where = {
-    deleted_at: null // Soft delete 사용 시 추가
+    deleted_at: null
   };
 
   if (paramWhere?.status) {
     where.status = paramWhere.status;
   }
 
-  // 기간 필터링이 필요한 경우
   if (paramWhere?.startAt || paramWhere?.endAt) {
     where.scheduledAt = {};
     if (paramWhere.startAt) where.scheduledAt[Op.gte] = paramWhere.startAt;
@@ -72,17 +68,16 @@ async function findAdjustmentsCount(t = null, paramWhere) {
 
 /**
  * 3. 정산 상태 업데이트
- * 관리자가 버튼을 클릭했을 때 '정산 대기' -> '정산 완료'로 변경하며 시간을 기록합니다.
  */
 async function updateAdjustmentStatus(id, status, t = null) {
   return await Adjustment.update(
-    { 
+    {
       status: status, // '정산 완료'가 전달됨
-      completedAt: status === '정산 완료' ? new Date() : null 
+      completedAt: status === '정산 완료' ? new Date() : null
     },
-    { 
+    {
       where: { id },
-      transaction: t 
+      transaction: t
     }
   );
 }

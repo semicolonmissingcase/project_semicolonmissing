@@ -4,16 +4,16 @@
  * 260110 v1.0.0 jae init
  */
 
-import adminAdjustmentsRepositorie from "../../repositories/admin/admin.adjustments.repositorie";
+import adminAdjustmentsRepositorie from '../../repositories/admin/admin.adjustments.repositorie.js';
 
 /**
  * 1. 정산 목록 조회 서비스
  */
 async function getAdjustments({ limit, offset }) {
   const { rows, count } = await adminAdjustmentsRepositorie.paginationAdjustments(null, { limit, offset });
-  
-  return { 
-    adjustments: rows, 
+
+  return {
+    adjustments: rows,
     total: count,
     currentPage: Math.floor(offset / limit) + 1
   };
