@@ -1,8 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SettlementCards.css';
 
 const SettlementCards = ({ data }) => {
   const { pending = 0, completed = 0 } = data || {};
+  const navigate = useNavigate();
+
+  const handleAccountEdit = () => {
+    navigate('/cleaners/accountedit');
+  };
 
   return (
     <div className="SettlementCards-container">
@@ -32,7 +38,12 @@ const SettlementCards = ({ data }) => {
       </div>
       
       <div className="SettlementCards-footer">
-        <button className="SettlementCards-account-btn">계좌 수정</button>
+        <button 
+          className="SettlementCards-account-btn" 
+          onClick={handleAccountEdit}
+        >
+          계좌 수정
+        </button>
       </div>
     </div>
   );
