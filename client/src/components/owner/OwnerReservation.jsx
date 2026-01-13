@@ -6,7 +6,6 @@ import StoreSelectModal from "../commons/StoreSelectModal.jsx";
 import useKakaoPostcode from "../hooks/useKakaoPostcode.js";
 import { storeGetThunk } from '../../store/thunks/storeGetThunk.js';
 import { createReservation } from '../../api/axiosOwner.js';
-// OwnerOption이 export default이므로 중괄호 없이 가져옵니다.
 import OwnerOption, { RESERVATION_QUESTIONS } from "./OwnerOption.jsx";
 import './OwnerReservation.css';
 

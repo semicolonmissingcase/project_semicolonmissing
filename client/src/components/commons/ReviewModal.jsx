@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import './ReviewModal.css';
 import { createReview } from '../../api/axiosPost.js';
 
-export default function ReviewModal({ isOpen, onClose, targetData, fetchReviews }) {
+export default function ReviewModal({ isOpen, onClose, targetData, onSuccess }) {
   const [rating, setRating] = useState(5);
   const [content, setContent] = useState('');
-  const [images, setImages] = useState([]); // 이미지 파일들을 담을 배열 (최대 2개)
-  const [previews, setPreviews] = useState([]); // 미리보기 URL 배열
+  const [images, setImages] = useState([]); 
+  const [previews, setPreviews] = useState([]); 
   const [loading, setLoading] = useState(false);
   
-  const fileInputRef = useRef(null); // 숨겨진 input 태그 참조
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -22,28 +22,25 @@ export default function ReviewModal({ isOpen, onClose, targetData, fetchReviews 
 
   if (!isOpen) return null;
 
-  // 파일 선택 시 핸들러
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    
-    // 최대 2개까지만 허용
     if (images.length + selectedFiles.length > 2) {
       alert("이미지는 최대 2장까지만 첨부 가능합니다.");
       return;
     }
-
     const newImages = [...images, ...selectedFiles];
     setImages(newImages);
 
-    // 미리보기 URL 생성
     const newPreviews = selectedFiles.map(file => URL.createObjectURL(file));
     setPreviews([...previews, ...newPreviews]);
   };
 
-  // 이미지 삭제 핸들러
+  // 이미지 삭제 핸들러 추가
   const removeImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
-    setPreviews(previews.filter((_, i) => i !== index));
+    const newImages = images.filter((_, i) => i !== index);
+    const newPreviews = previews.filter((_, i) => i !== index);
+    setImages(newImages);
+    setPreviews(newPreviews);
   };
 
   const handleSubmit = async () => {
@@ -60,7 +57,6 @@ export default function ReviewModal({ isOpen, onClose, targetData, fetchReviews 
       formData.append('star', rating);
       formData.append('content', content);
 
-      // 이미지 파일 추가 (key값은 서버 API 명세에 맞춰 조정 필요)
       images.forEach((file, index) => {
         formData.append(`reviewPicture${index + 1}`, file);
       });
@@ -68,8 +64,12 @@ export default function ReviewModal({ isOpen, onClose, targetData, fetchReviews 
       const response = await createReview(formData);
       
       if (response) {
+        alert("리뷰가 등록되었습니다.");
+        
+        // 부모의 fetchReviews 함수 실행
+        if (onSuccess) await onSuccess(); 
+        
         onClose();
-        if (fetchReviews) fetchReviews();
       }
     } catch (error) {
       console.error(error);
@@ -83,7 +83,6 @@ export default function ReviewModal({ isOpen, onClose, targetData, fetchReviews 
     <div className="reviewmodal-overlay" onClick={onClose}>
       <div className="reviewmodal-content" onClick={(e) => e.stopPropagation()}>
         <button className="reviewmodal-close-x" onClick={onClose}>X</button>
-
         <h2 className="reviewmodal-title">{targetData?.name || '기사님'} 리뷰 작성</h2>
 
         <div className="reviewmodal-rating-container">
@@ -102,7 +101,6 @@ export default function ReviewModal({ isOpen, onClose, targetData, fetchReviews 
           <p className="reviewmodal-price">견적 금액 {targetData?.price?.toLocaleString()}원</p>
         </div>
 
-        {/* 파일 첨부*/}
         <input 
           type="file" 
           accept="image/*"
@@ -118,7 +116,6 @@ export default function ReviewModal({ isOpen, onClose, targetData, fetchReviews 
           첨부파일 ({images.length}/2)
         </button>
 
-        {/* 이미지 미리보기 영역 */}
         <div className="reviewmodal-preview-container">
           {previews.map((url, index) => (
             <div key={index} className="reviewmodal-preview-item">

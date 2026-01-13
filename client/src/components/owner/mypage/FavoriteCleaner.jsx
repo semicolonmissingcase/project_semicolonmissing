@@ -84,7 +84,7 @@ export default function FavoriteCleaner() {
             {/* 기사님 원형 프로필 이미지 */}
             <div className="favoritecleaner-fav-avatar-circle">
               <img 
-                src={cleaner.profileImage || "/icons/default-profile.png"} 
+                src={cleaner.profile || "/icons/default-profile.png"} 
                 alt={`${cleaner.name} 기사님`} 
                 className="favoritecleaner-fav-img" 
               />

@@ -36,7 +36,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/cleaners\/accountedit$/, roles: [CLEANER] }, // 기사님 계좌 조회
     { path: /^\/api\/cleaners\/locations$/, roles: [CLEANER] }, // 지역 전체 불러오기
     { path: /^\/api\/cleaners\/profile$/, roles: [CLEANER] }, // 기사님 지역, 자격증 등 정보 조회
-    { path: /^\/api\/owner\/questionslist$/, roles: [OWNER] }, // 질문 리스트
+    { path: /^\/api\/owner\/questionslist$/, roles: [OWNER,] }, // 질문 리스트
     // -------------------------
     // 관리자 관련
     // -------------------------
@@ -77,6 +77,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/chat\/rooms\/\d+\/close$/, roles: [OWNER, CLEANER] }, // 채팅 상담 종료
     { path: /^\/api\/cleaners\/mypage\/job\/\d+\/complete$/, roles: [CLEANER] },  // 기사님 작업완료
     { path: /^\/api\/cleaners\/mypage\/job\/\d+\/status$/, roles: [CLEANER] }, // 기사님 정산 대기
+    { path: /^\/api\/reservations\/estimates\/\d+\/cancel$/, roles: [OWNER] }, // 예약 취소
   ],
   PUT: [
     { path: /^\/api\/auth\/me$/, roles: [OWNER] }, // 점주 정보수정용

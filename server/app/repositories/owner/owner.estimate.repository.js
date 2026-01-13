@@ -5,6 +5,7 @@
  */
 
 import modelsConstants from '../../constants/models.constants.js';
+import myError from '../../errors/customs/my.error.js';
 const { ReservationStatus, EstimateStatus } = modelsConstants;
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
@@ -18,34 +19,23 @@ import { Sequelize } from 'sequelize';
  */
 async function getEstimatesByReservationId(reservationId, ownerId) {
   const estimates = await Estimate.findAll({
-    where: {
-      reservationId
-    },
-    include: 
-    [
+    where: { reservationId },
+    include: [
       {
         model: Cleaner,
         as: 'cleaner',
-        attributes: 
-        [
-          'id', 
-          'name', 
-          'profile',
+        attributes: [
+          'id', 'name', 'profile',
           [Sequelize.fn('AVG', Sequelize.col('cleaner.reviews.star')), 'avgReviewScore'],
           [Sequelize.fn('COUNT', Sequelize.col('cleaner.reservations.id')), 'jobCount'],
         ],
-        include: [ 
-          {
-            model: Review,
-            as: 'reviews',
-            attributes: [],
-            duplicating: false,
-          },
+        include: [
+          { model: Review, as: 'reviews', attributes: [], duplicating: false },
           {
             model: Reservation,
             as: 'reservations',
             attributes: [],
-            where: { status: ReservationStatus.APPROVED },
+            where: { status: '승인' },
             required: false,
             duplicating: false,
           },
@@ -59,51 +49,42 @@ async function getEstimatesByReservationId(reservationId, ownerId) {
         ],
       },
     ],
-    // 정렬 로직 적용
-    order: [
-      [
-        Sequelize.literal(`
-          CASE 
-            WHEN "Estimate"."status" = '${ReservationStatus.REQUEST}' THEN 1 
-            WHEN "Estimate"."status" = '${ReservationStatus.APPROVED}' THEN 2 
-            WHEN "Estimate"."status" = '${ReservationStatus.COMPLETED}' THEN 3 
-            ELSE 4 
-          END
-        `), 
-        'ASC'
-      ],
-      ['createdAt', 'ASC'],
-    ],
     group: ['Estimate.id', 'cleaner.id', 'cleaner->likes.id'],
-    order: [
-      ['status', 'ASC'],
-      ['createdAt', 'ASC'],
-    ]
   });
 
-  // 승인을 상태를 가장 위로 정렬
-  estimates.sort((a, b) => {
-    if(a.status === EstimateStatus.PAID && b.status !== EstimateStatus.PAID) return -1;
-    if (a.status !== EstimateStatus.PAID && b.status === EstimateStatus.PAID) return 1;
-    return new Date(a.createdAt) - new Date(b.createdAt);
+  // 1. 데이터를 먼저 평탄화(Plain Object) 및 가공
+  const processed = estimates.map(estimate => {
+    const plain = estimate.get({ plain: true });
+    const isFavorited = !!(plain.cleaner?.likes && plain.cleaner.likes.length > 0);
+
+    if (plain.cleaner) {
+      delete plain.cleaner.likes;
+      plain.cleaner.isFavorited = isFavorited;
+    }
+    return plain;
   });
 
-  // 후처리하여 isFavorited 속성 추가
-  const processedEstimates = estimates.map(estimate => {
-    const plainEstimate = estimate.get({ plain: true });
-    const isFavorited = plainEstimate.cleaner?.likes && plainEstimate.cleaner.likes.length > 0;
+  // 2. 가공된 데이터(JSON 객체)를 가지고 정렬을 수행
+  const statusPriority = {
+    '요청': 1,
+    '승인': 2,
+    '완료': 3,
+    '취소': 4
+  };
 
-    delete plainEstimate.cleaner.likes;
-    return {
-      ...plainEstimate,
-      cleaner: {
-        ...plainEstimate.cleaner,
-        isFavorited: isFavorited // isFavorited 속성 추가
-      }
-    };
+  processed.sort((a, b) => {
+    const priorityA = statusPriority[a.status] || 99;
+    const priorityB = statusPriority[b.status] || 99;
+
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
+    
+    // 상태가 같으면 최신순 (날짜 내림차순)
+    return new Date(b.createdAt) - new Date(a.createdAt);
   });
 
-  return processedEstimates;
+  return processed;
 }
 
 /**
@@ -187,7 +168,46 @@ async function findAcceptedEstimatesByOwnerId(ownerId) {
   });
 }
 
+/**
+ * 견적서, 관련 예약 상테 취소로 변경
+ */
+async function cancelEstimateAndReservation(estimateId, ownerId) {
+  const estimate = await Estimate.findOne({
+    where: {id: estimateId},
+    include: [{
+      model: Reservation,
+      as: 'reservation',
+      where: { ownerId: ownerId }
+    }]
+  });
+
+  if(!estimate) {
+    throw new myError('취소할 수 있는 예약 정보를 찾을 수 없습니다.', NOT_FOUND_ERROR);
+  }
+
+  const t = await db.sequelize.transaction();
+  try {
+    // 예약 상태를 CANCELED로 변경
+    await Reservation.update(
+      { status: ReservationStatus.CANCELED },
+      { where: { id: estimate.reservationId }, transaction: t }
+    );
+
+    // 견적서 상태도 MATCHING_FAILED로 변경
+    await Estimate.update(
+      { status: EstimateStatus.MATCHING_FAILED },
+      { where: { id: estimateId }, transaction: t }
+    );
+
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    throw error;
+  }
+}
+
 export default {
   getEstimatesByReservationId,
   findAcceptedEstimatesByOwnerId,
+  cancelEstimateAndReservation,
 }

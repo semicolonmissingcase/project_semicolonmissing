@@ -34,8 +34,17 @@ async function getAcceptedEstimatesByOwnerId(ownerId) {
   return estimates;
 }
 
+/**
+ * 견적서(예약) 취소
+ * @param {number} ownerId 
+ */
+async function cancelEstimate(estimateId, ownerId) {
+  return await ownerEstimateRepository.cancelEstimateAndReservation(estimateId, ownerId);
+}
+
 export default {
   getOwnerReservations,
   getAcceptedEstimatesByReservationId,
   getAcceptedEstimatesByOwnerId,
+  cancelEstimate,
 }

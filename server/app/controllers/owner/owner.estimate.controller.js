@@ -46,7 +46,28 @@ async function getEstimatesByOwnerId(req, res, next) {
   }
 }
 
+/**
+ * 견적서(예약) 취소
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+async function cancelEstimate(req, res, next) {
+  try {
+    const { estimateId } = req.params;
+    const { id: ownerId } = req.user;
+
+    await ownerEstimateService.cancelEstimate(estimateId, ownerId);
+    
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, '예약이 성공적으로 취소되었습니다.'));
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export default {
   getEstimatesByReservationId,
   getEstimatesByOwnerId,
+  cancelEstimate,
 }

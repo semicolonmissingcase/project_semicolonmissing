@@ -27,14 +27,10 @@ export default function MyReviews() {
         getCompletedReservations()
       ]);
 
-      console.log("작성 완료된 리뷰 API 응답:", completedReviewsData);
-      console.log("작성할 리뷰 API 응답:", reviewsToWriteData);
-
       setReviews(completedReviewsData || []);
       setReviewsToWrite(reviewsToWriteData?.data || []);
 
     } catch (err) {
-      console.error("리뷰 목록 불러오기 실패:", err);
       setError(err);
 
       setReviews([]);
@@ -71,7 +67,6 @@ export default function MyReviews() {
         setReviews(prev => prev.filter(r => r.id !== reviewId));
         alert("리뷰가 삭제되었습니다.");
       } catch (err) {
-        console.error("리뷰 삭제 실패:", err);
         alert(`리뷰 삭제에 실패했습니다: ${err.message || err.msg || '알 수 없는 오류'}`);
       }
     }
@@ -171,7 +166,8 @@ export default function MyReviews() {
       <ReviewModal 
         isOpen={isWriteModalOpen}
         onClose={() => setIsWriteModalOpen(false)} 
-        targetData={selectedItem} 
+        targetData={selectedItem}
+        onSuccess={fetchReviews} 
       />
 
       {/* 리뷰 보기 모달 */}

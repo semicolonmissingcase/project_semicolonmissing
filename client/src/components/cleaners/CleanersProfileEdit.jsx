@@ -10,6 +10,7 @@ function CleanersProfileEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const [isLoaded, setIsLoaded] = useState(false); // 네비 고장 방지용
 
   // 프로필 정보 상태
   const [tagline, setTagline] = useState("");
@@ -30,40 +31,38 @@ function CleanersProfileEdit() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState(null);
 
-  // 사용자 정보 로드
+  // 초기 데이터 로드
   useEffect(() => {
-    // Redux store에 상세 프로필 정보가 없으면 API 호출
-    if (!user || (!user.certifications && !user.driverRegions)) {
-      console.log('--- getCleanerProfileThunk 호출 ---');
-      dispatch(getCleanerProfileThunk())
-        .unwrap()
-        .then(profileData => {
-          const cleaner = profileData;
-          setProfileImageUrl(cleaner.profile || "/icons/default-profile.png");
-          setTagline(cleaner.introduction || "");
-          setCertificateFiles(cleaner.certification.map(cert => ({
-            file: null,
-            name: cert.name,
-            url: cert.image
-          })));
-          setSelectedRegions(cleaner.driverRegions.map(region => region.locationId));
-        })
-        .catch(error => {
-          console.error("기사 프로필 정보 불러오기 실패:", error);
-          navigate('/login');
-        });
-    } else {
-      // Redux store에 이미 상세 프로필 정보가 있으면 사용
-      setProfileImageUrl(user.profile || "/icons/default-profile.png");
-      setTagline(user.introduction || "");
-      setCertificateFiles(user.certification.map(cert => ({
-        file: null,
-        name: cert.name,
-        url: cert.image
-      })));
-      setSelectedRegions(user.driverRegions.map(region => region.locationId));
-    }
-  }, [user, dispatch, navigate]);
+    if(!user || isLoaded) return
+
+    const fetchInitialData = async() => {
+      try {
+        if (!user.certifications && !user.driverRegions) {
+          const profileData = await dispatch(getCleanerProfileThunk()).unwrap();
+          setInitialForm(profileData);
+        } else {
+          setInitialForm(user);
+        }
+        setIsLoaded(true);        
+      } catch (error) {
+        console.error("데이터 로드 실패:", error);
+        setIsLoaded(true);
+      }
+    };
+
+    fetchInitialData();
+  },[user?.id, dispatch, isLoaded]);
+
+  const setInitialForm = (data) => {
+    setProfileImageUrl(data.profile || "/icons/default-profile.png");
+    setTagline(data.introduction || data.tagline || "");
+    setCertificateFiles(data.certification?.map(cert => ({
+      file: null,
+      name: cert.name,
+      url: cert.image
+    })) || []);
+    setSelectedRegions(data.driverRegions?.map(region => region.locationId) || []);
+  };
 
   // 프로필 이미지 선택
   const handleImageSelect = (e) => {
@@ -118,14 +117,8 @@ function CleanersProfileEdit() {
 
   // 수정 완료 처리
   const handleUpdateProfile = async () => {
-    // 변경된 내용이 있는지 확인
-    const originalProfile = user.profile;
-    const originalTagline = user.tagline || "";
-    const originalCerts = user.certifications?.map(c => c.path) || [];
-    const originalRegions = user.driverRegions?.map(r => r.locationId).sort() || [];
-
     try {
-      let profilePath = originalProfile;
+      let profilePath = user.profile;
       let finalCertsData = certificateFiles
         .filter(cert => !cert.file)
         .map(cert => ({ name: cert.name, url: cert.url }));
@@ -149,30 +142,14 @@ function CleanersProfileEdit() {
         finalCertsData = [...finalCertsData, ...newCertsData];
       }
 
-      const isTaglineChanged = originalTagline !== tagline;
-      const areRegionsChanged = JSON.stringify(originalRegions) !== JSON.stringify([...selectedRegions].sort());
-      const originalCertUrls = originalCerts.sort();
-      const finalCertUrls = finalCertsData.map(c => c.url).sort();
-      const areCertsChanged = JSON.stringify(originalCertUrls) !== JSON.stringify(finalCertUrls);
-
-      if(!isProfileImageChanged && !isTaglineChanged && !areRegionsChanged && !areCertsChanged) {
-        setModalConfig({
-          title: '알림',
-          message: '변경된 내용이 없습니다.',
-          onClose: () => setIsConfirmModalOpen(false)
-        });
-        setIsConfirmModalOpen(true);
-        return;
-      }
-
       const updateData = {
         profile: profilePath,
         tagline: tagline,
         certifications: finalCertsData,
         regions: selectedRegions,
       };
-    
-      await dispatch(updateCleanerInfoThunk(updateData)).unwrap();
+
+      await dispatch(updateCleanerInfoThunk(updateData)).unwrap();      
 
       setModalConfig({
         title: '수정 완료',
