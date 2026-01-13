@@ -29,7 +29,7 @@ const PaymentSuccess = () => {
         }); 
 
         // 성공 처리
-        if(res.data.code === "200") { setStatus("success");
+        if(res.data.code === "00") { setStatus("success");
         } else {
         // 승인 거절 시 실패 페이지로 이동
         const msg = res.data.msg || "승인에 실패했습니다.";

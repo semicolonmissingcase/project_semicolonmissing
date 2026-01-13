@@ -6,6 +6,9 @@ import './ChatRoom.css';
 import { FaRegFileImage } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 
+// 결제
+import PaymentModal from '../payment/paymentModal'; 
+
 import { 
   getChatRoomDetail, 
   getChatMessages, 
@@ -18,7 +21,9 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
   const [inputText, setInputText] = useState("");
   const [opponentName, setOpponentName] = useState("채팅방");
   const [opponentId, setOpponentId] = useState(null);
-  
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [roomDetail, setRoomDetail] = useState(null);
+
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,9 +86,12 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     const init = async () => {
       try {
         const roomRes = await getChatRoomDetail(roomId);
+        
         const responseData = roomRes.data?.data;
         if (responseData) {
+          setRoomDetail(responseData.data); 
           onOpenSidebar(responseData, false);
+          
           const detail = responseData.data; 
           const isMeOwner = responseData.sideType === 'OWNER';
           setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
@@ -137,7 +145,6 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
           return isDup ? prev : [...prev, newMsg];
         });
         
-        // 상대방이 보낸 메시지를 받았을 때만 실시간 읽음 처리
         socket.emit('mark_as_read', { roomId, userRole: currentMyRole }); 
         markMessageAsRead(roomId).catch(() => {});
         
@@ -191,6 +198,13 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
       alert("이미지 전송에 실패했습니다.");
     }
   };
+  const handleReservationClick = () => {
+    if (!roomDetail || !roomDetail.estimateId) {
+      alert("결제에 필요한 정보를 불러오는 중입니다.");
+      return;
+    }
+    setIsPaymentModalOpen(true);
+  };
 
   return (
     <div className='chatroom-container'>
@@ -201,7 +215,9 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
         </div>
         <div className='chatroom-header-right'>
           <button className='chatroom-detail-btn' onClick={() => onOpenSidebar(true)}>상세보기</button>
-          {userRole === 'OWNER' && (<button className='chatroom-book-btn'>예약하기</button>)}
+          {userRole === 'OWNER' && (
+            <button className='chatroom-book-btn' onClick={handleReservationClick}>예약하기</button>
+          )}
         </div>
       </div>
 
@@ -215,9 +231,7 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
         {messageList.map((msg, index) => {
           const sId = Number(msg.senderId || msg.sender_id);
           const sRole = (msg.senderType || msg.sender_role || '').toUpperCase();
-          
           const isMe = sId === myId && sRole === currentMyRole;
-          
           const isImage = (msg.messageType || msg.type) === 'IMAGE';
           const isReadVal = msg.isRead !== undefined ? msg.isRead : msg.is_read;
           const showUnread = isMe && Number(isReadVal) === 0;
@@ -227,7 +241,6 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
               <div className='chatroom-bubble-container'>
                 <div className='chatroom-bubble-row'>
                   {showUnread && <span className='unread-count'>1</span>}
-                  
                   <div className={`chatroom-bubble ${isImage ? 'has-image' : ''}`}>
                     {isImage ? (
                       <img 
@@ -272,6 +285,18 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
           <IoSend size={22} />
         </button>
       </div>
+
+      {isPaymentModalOpen && roomDetail && (
+        <PaymentModal 
+          isOpen={isPaymentModalOpen}
+          onClose={() => setIsPaymentModalOpen(false)}
+          roomId={roomId}
+          estimateId={roomDetail.estimateId}
+          reservationId={roomDetail.reservationId}
+          amount={roomDetail.totalPrice || roomDetail.price}
+          cleanerName={opponentName}
+        />
+      )}
     </div>
   );
 };
