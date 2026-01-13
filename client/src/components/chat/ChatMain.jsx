@@ -27,7 +27,8 @@ const ChatMain = () => {
   const [sidebarError, setSidebarError] = useState(null);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3000', {
+    const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
+    const newSocket = io(SERVER_URL, {
       withCredentials: true,
       transports: ['websocket'],
       reconnectionAttempts: 5,

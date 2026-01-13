@@ -33,7 +33,7 @@ const ChatList = () => {
 
   // --- 소켓 연결 ---
   useEffect(() => {
-    const socketAddr = 'http://localhost:3000'; 
+    const socketAddr = import.meta.env.VITE_APP_SERVER_URL; 
     const newSocket = io(socketAddr, { withCredentials: true });
     const token = localStorage.getItem('accessToken');
     if (token) newSocket.emit("authenticate", { token });
