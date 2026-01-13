@@ -32,6 +32,8 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
   const isCleanerUser = String(userRole).toUpperCase().includes('CLEANER');
   const roomId = rawRoomId ? String(rawRoomId).replace(/[^0-9]/g, '') : null;
 
+  const currentMyRole = isCleanerUser ? 'CLEANER' : 'OWNER';
+
   const scrollToBottom = useCallback((behavior = 'smooth') => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
@@ -73,51 +75,50 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     }
   };
 
-  // 초기화 및 읽음 처리 순서 최적화
   useEffect(() => {
-    if (!roomId) return;
+    if (!roomId || !myId) return;
     
-  const init = async () => {
-  try {
-    //1. 방 정보 먼저 세팅 (UI 제목 등)
-    const roomRes = await getChatRoomDetail(roomId);
-    const responseData = roomRes.data?.data;
-    if (responseData) {
-      onOpenSidebar(responseData, false);
-      const detail = responseData.data; 
-      const isMeOwner = responseData.sideType === 'OWNER';
-      setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
-      setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
-    }
+    const init = async () => {
+      try {
+        const roomRes = await getChatRoomDetail(roomId);
+        const responseData = roomRes.data?.data;
+        if (responseData) {
+          onOpenSidebar(responseData, false);
+          const detail = responseData.data; 
+          const isMeOwner = responseData.sideType === 'OWNER';
+          setOpponentName((isMeOwner ? detail.cleanerName : detail.ownerName) || "이름 없음");
+          setOpponentId(isMeOwner ? detail.cleanerId : detail.ownerId);
+        }
 
-    await markMessageAsRead(roomId);
+        setHasMore(true);
+        setPage(1);
+        await fetchMessages(1, true);
+        setTimeout(async () => {
+          try {
+            await markMessageAsRead(roomId);
+            if (socket) {
+              socket.emit("mark_as_read", { roomId, userRole: currentMyRole });
+            }
+          } catch (readErr) {
+            console.warn("초기 읽음 처리 실패:", readErr);
+          }
+        }, 300);
 
-    if (socket) {
-      socket.emit("mark_as_read", { roomId, userRole });
-    }
-
-    setHasMore(true);
-    setPage(1);
-    await fetchMessages(1, true);
-
-  } catch (err) { 
-    console.warn("초기화 중 오류 발생:", err);
-    setOpponentName("채팅방");
-    fetchMessages(1, true);
-  }
-};
+      } catch (err) { 
+        console.warn("채팅방 초기화 중 오류 발생:", err);
+        fetchMessages(1, true);
+      }
+    };
 
     init();
-  }, [roomId, socket]);
+  }, [roomId, myId, socket]);
 
-  // 스크롤 핸들러
   const handleScroll = () => {
     if (scrollRef.current && scrollRef.current.scrollTop === 0 && hasMore && !isLoading) {
       fetchMessages(page);
     }
   };
 
-  // 소켓 리스너
   useEffect(() => {
     if (!socket || !roomId) return;
 
@@ -132,12 +133,12 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
     const handleReceive = (newMsg) => {
       if (String(newMsg.chatRoomId || newMsg.room_id) === String(roomId)) {
         setMessageList(prev => {
-          // 중복 메시지 방지 로직 추가
           const isDup = prev.some(m => m.id && newMsg.id && m.id === newMsg.id);
           return isDup ? prev : [...prev, newMsg];
         });
         
-        socket.emit('mark_as_read', { roomId }); 
+        // 상대방이 보낸 메시지를 받았을 때만 실시간 읽음 처리
+        socket.emit('mark_as_read', { roomId, userRole: currentMyRole }); 
         markMessageAsRead(roomId).catch(() => {});
         
         setTimeout(() => scrollToBottom('smooth'), 100);
@@ -151,7 +152,7 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
       socket.off("messages_read", handleMessagesRead);
       socket.off("receive_message", handleReceive);
     };
-  }, [socket, roomId]);
+  }, [socket, roomId, currentMyRole]);
 
   const handleSendMessage = async () => {
     if (!inputText.trim() || !socket) return;
@@ -214,10 +215,8 @@ const ChatRoom = ({ roomId: rawRoomId, onOpenSidebar, isSidebarOpen, socket }) =
         {messageList.map((msg, index) => {
           const sId = Number(msg.senderId || msg.sender_id);
           const sRole = (msg.senderType || msg.sender_role || '').toUpperCase();
-          const isMe = sId === myId && (
-            (isCleanerUser && sRole.includes('CLEANER')) ||
-            (!isCleanerUser && sRole.includes('OWNER'))
-          );
+          
+          const isMe = sId === myId && sRole === currentMyRole;
           
           const isImage = (msg.messageType || msg.type) === 'IMAGE';
           const isReadVal = msg.isRead !== undefined ? msg.isRead : msg.is_read;

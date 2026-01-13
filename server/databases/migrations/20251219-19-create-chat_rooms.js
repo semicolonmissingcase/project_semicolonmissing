@@ -6,10 +6,8 @@
 
 import { DataTypes } from "sequelize";
 
-// 테이블명 
 const tableName = 'chat_rooms';
 
-// 컬럼 정의
 const attributes = {
   id: {
     field: 'id',
@@ -29,14 +27,14 @@ const attributes = {
     field: 'cleaner_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true, 
+    unique: false,
     comment: '기사 PK',
   },
   estimateId: {
     field: 'estimate_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true,
+    unique: false,
     comment: '견적서 PK',
   },
   status: {
@@ -61,7 +59,7 @@ const attributes = {
     field: 'owner_leaved_at',
     type: DataTypes.DATE,
     allowNull: true,
-    comment: '점주가 체팅방을 나간 시간',
+    comment: '점주가 채팅방을 나간 시간',
   },
   cleanerLeavedAt: {
     field: 'cleaner_leaved_at',
@@ -71,21 +69,22 @@ const attributes = {
   }
 };
 
-// 옵션 
 const options = {
-  charset: 'utf8mb4',      // 테이블 문자셋 설정 (이모지 지원)
-  collate: 'utf8mb4_bin',  // 정렬 방식 설정 (영어 대소문자 구분 정렬)
-  engine: 'InnoDB'         // 사용 엔진 설정, 대량의 데이터 조회에 특화 
+  charset: 'utf8mb4',
+  collate: 'utf8mb4_bin',
+  engine: 'InnoDB'
 };
 
-/** @type {import('sequelize-cli').Migration} */
 export default {
-  // 마이그레이션 실행 시 호출되는 메소드 (스키마 생성, 수정)
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable(tableName, attributes, options);
+
+    await queryInterface.addIndex(tableName, ['owner_id', 'cleaner_id', 'estimate_id'], {
+      unique: true,
+      name: 'unique_chat_room_per_estimate'
+    });
   },
 
-  // 마이그레이션을 롤백 시 호출되는 메소드 (스키마 제거, 수정)
   async down (queryInterface, Sequelize) {
     await queryInterface.dropTable(tableName);
   }

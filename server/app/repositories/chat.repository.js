@@ -10,11 +10,12 @@ const chatRepository = {
   /**
    * 견적 ID와 기사 ID로 기존 채팅방 조회
    */
-  findByKeys: async (transaction, estimate_id, cleaner_id) => {
+  findByKeys: async (transaction, estimate_id, cleaner_id, owner_id) => {
     return await db.ChatRoom.findOne({
       where: { 
         estimateId: estimate_id, 
-        cleanerId: cleaner_id 
+        cleanerId: cleaner_id,
+        ownerId: owner_id
       },
       transaction
     });
@@ -23,14 +24,14 @@ const chatRepository = {
   /**
    * 새 채팅방 생성
    */
-  create: async (transaction, data) => {
-    return await db.ChatRoom.create({
-      estimateId: data.estimate_id,
-      cleanerId: data.cleaner_id,
-      ownerId: data.owner_id,
-      status: 'OPEN'
-    }, { transaction });
-  },
+  create: async (transaction, { estimate_id, cleaner_id, owner_id }) => {
+      return await db.ChatRoom.create({
+        estimateId: estimate_id,
+        cleanerId: cleaner_id,
+        ownerId: owner_id,
+        status: 'OPEN'
+      }, { transaction });
+    },
 
   /**
    * 사용자별 채팅방 목록 조회
@@ -140,24 +141,28 @@ findMessagesByRoomId: async (transaction, room_id, limit = 50, offset = 0) => {
   /**
    * 읽음 처리 업데이트
    */
-markAsRead: async (transaction, room_id, user_id, user_role) => {
-  const roleStr = String(user_role || '').toUpperCase();
-  
-  const opponentRole = roleStr.includes('OWNER') ? 'CLEANER' : 'OWNER';
-  const result = await db.ChatMessage.update(
-    { isRead: 1 },
-    {
-      where: {
-        chatRoomId: room_id,
-        senderType: opponentRole,
-        isRead: 0
-      },
-      transaction
-    }
-  );
+  markAsRead: async (transaction, room_id, user_id, user_role) => {
+    if (!user_id || !user_role) return [0];
 
-  return result;
-}
+    const roleStr = String(user_role || '').toUpperCase();
+    
+    const result = await db.ChatMessage.update(
+      { isRead: 1 },
+      {
+        where: {
+          chatRoomId: room_id,
+          isRead: 0,
+          [Op.or]: [
+            { senderId: { [Op.ne]: user_id } },
+            { senderType: { [Op.ne]: roleStr } }
+          ]
+        },
+        transaction
+      }
+    );
+
+    return result;
+  }
 }
 
 export default chatRepository;

@@ -15,24 +15,16 @@ import db from '../models/index.js';
  */
 async function createOrGetRoom({ owner_id, cleaner_id, estimate_id }) {
   return await db.sequelize.transaction(async (t) => {
-    let room = await db.ChatRoom.findOne({
-      where: {
-        estimateId: estimate_id,
-        ownerId: owner_id,
-        cleanerId: cleaner_id
-      },
-      transaction: t
-    });
+    let room = await chatRepository.findByKeys(t, estimate_id, cleaner_id, owner_id);
 
     let isNew = false;
 
     if (!room) {
-      room = await db.ChatRoom.create({
-        estimateId: estimate_id,
-        ownerId: owner_id,
-        cleanerId: cleaner_id,
-        status: 'OPEN'
-      }, { transaction: t });
+      room = await chatRepository.create(t, { 
+        estimate_id, 
+        cleaner_id, 
+        owner_id 
+      });
       isNew = true;
     }
 
