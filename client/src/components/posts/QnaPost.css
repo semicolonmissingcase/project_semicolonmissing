@@ -57,6 +57,10 @@
   cursor: pointer;
 }
 
+.qnapost-answer {
+  padding: 0 0 1.2rem 1.2rem;
+}
+
 /* --- 테이블 섹션 기본 구조 --- */
 .qnapost-table-section {
   width: 100%;
