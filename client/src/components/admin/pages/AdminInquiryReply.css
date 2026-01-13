@@ -1,0 +1,28 @@
+.AdminInquiryReply-container { padding: 20px; color: #333; }
+.AdminInquiryReply-header { display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 10px; }
+.AdminInquiryReply-close-btn { border: none; background: none; font-size: 24px; cursor: pointer; }
+
+.AdminInquiryReply-main { margin-top: 20px; }
+.AdminInquiryReply-row { display: flex; margin-bottom: 10px; }
+.AdminInquiryReply-label { width: 100px; font-weight: bold; color: #666; font-size: 14px; }
+.AdminInquiryReply-value { font-size: 14px; }
+
+.AdminInquiryReply-text-display { 
+    background: #f5f5f5; padding: 15px; border-radius: 4px; 
+    min-height: 120px; margin-top: 8px; white-space: pre-wrap; font-size: 14px; 
+}
+
+.AdminInquiryReply-divider { margin: 20px 0; border: 0; border-top: 1px solid #ddd; }
+
+.AdminInquiryReply-textarea { 
+    width: 100%; height: 250px; margin-top: 10px; padding: 12px; 
+    border: 1px solid #ccc; border-radius: 4px; resize: none; box-sizing: border-box;
+}
+
+.AdminInquiryReply-status-msg { color: #e74c3c; font-weight: bold; margin-top: 10px; font-size: 14px; }
+
+.AdminInquiryReply-footer { margin-top: 30px; text-align: center; display: flex; gap: 10px; justify-content: center; }
+
+.AdminInquiryReply-btn { padding: 10px 30px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
+.AdminInquiryReply-btn-primary { background: #3498db; color: white; }
+.AdminInquiryReply-btn-secondary { background: #95a5a6; color: white; }

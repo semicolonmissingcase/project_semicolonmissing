@@ -1,0 +1,25 @@
+.favoritebtn-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+}
+
+.favoritebtn-button.favoritebtn-favorited {
+  color: var(--color-red);
+}
+
+.favoritebtn-heart-icon {
+  display: block;
+}
+
+.favoritebtn-favorited {
+  transform: scale(1.1);
+}
+
+.favoritebtn-loading-spinner {
+  position: absolute;
+  margin-left: 5px;
+  font-size: 0.8rem;
+}

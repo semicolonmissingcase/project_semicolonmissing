@@ -1,0 +1,46 @@
+/* 메인 이미지 영역 */
+.main-top-img {
+  background-image: url('/icons/main-ice-img.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 600px;
+  display: grid;
+  place-items: left;
+  align-items: end;
+  padding: 3rem 13rem;
+}
+
+
+.main-top-text {
+  color: var(--color-black);
+  text-align: left; 
+}
+
+.main-top-text > h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: var(--color-dark-blue);
+}
+
+.main-top-text > p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 820px) {
+  .main-top-img {
+    height: 400px;
+    padding: 2rem;
+  }
+
+  .main-top-text > h2 {
+    font-size: 1.5rem;
+  }
+
+  .main-top-text > p {
+    font-size: 0.9rem;
+  }
+}

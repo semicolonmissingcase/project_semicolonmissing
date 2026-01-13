@@ -1,0 +1,100 @@
+import React, { useState, useEffect } from 'react';
+import { getCleanerInquiries } from "../../../api/axiosCleaner.js";
+import "./CleanersInquiries.css";
+
+export default function InquiryList() {
+  const [inquiries, setInquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  useEffect(() => {
+    const fetchInquiries = async () => {
+      try {
+        setLoading(true);
+        const response = await getCleanerInquiries();
+        
+        // 데이터 추출 로직 강화
+        const data = response.data?.data || response.data || [];
+        setInquiries(data);
+      } catch (error) {
+        console.error("문의 목록 조회 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInquiries();
+  }, []);
+
+  const toggleAccordion = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  if (loading) return <div className="cleaners-inquiries-empty">데이터를 불러오는 중입니다...</div>;
+  if (inquiries.length === 0) return <div className="cleaners-inquiries-empty">등록된 문의 내역이 없습니다.</div>;
+
+  return (
+    <div className="cleaners-inquiries-tab-container">
+      {/* 상단 버튼 영역 */}
+      <div className="cleaners-inquiries-top-action">
+        <button className="cleaners-inquiries-write-btn" onClick={() => window.location.href='/qnaposts/create'}>
+          문의 작성하기 <span className="cleaners-inquiries-btn-icon">▶</span>
+        </button>
+      </div>
+
+      <div className="cleaners-inquiries-list">
+        {inquiries.map((item, index) => {
+          const isPending = item.status === "대기중";
+          const isActive = activeIndex === index;
+
+          const actualAnswer = item.answer?.content || item.answerContent;
+
+          return (
+            <div key={item.id} className={`cleaners-inquiries-item ${isActive ? 'active' : ''}`}>
+              {/* 헤더 부분 */}
+              <div className="cleaners-inquiries-header" onClick={() => toggleAccordion(index)}>
+                <span className="cleaners-inquiries-q-prefix">Q.</span>
+                <span className="cleaners-inquiries-title-text">{item.title}</span>
+                <span className={`cleaners-inquiries-status ${isPending ? 'is-pending' : 'is-completed'}`}>
+                  {isPending ? '답변 대기중' : '답변 완료'}
+                </span>
+                <span className="cleaners-inquiries-arrow-icon">
+                  {isActive ? '▲' : '▼'}
+                </span>
+              </div>
+
+              {/* 바디 부분 */}
+              {isActive && (
+                <div className="cleaners-inquiries-body">
+                  <div 
+                    className="cleaners-inquiries-question-content"
+                    dangerouslySetInnerHTML={{ __html: item.content }} 
+                  />
+
+                  <div className="cleaners-inquiries-divider"></div>
+
+                  <div className="cleaners-inquiries-answer-content">
+                    <span className="cleaners-inquiries-a-prefix">A.</span>
+                    <div className="cleaners-inquiries-answer-text">
+                      {actualAnswer ? (
+                        <div dangerouslySetInnerHTML={{ __html: actualAnswer }} />
+                      ) : (
+                        <p className="cleaners-inquiries-no-answer">아직 답변이 등록되지 않았습니다.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 답변 작성일 표시 */}
+                  {(item.answer?.createdAt || item.answerDate) && (
+                    <div className="cleaners-inquiries-date">
+                      답변일: {item.answer?.createdAt || item.answerDate}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

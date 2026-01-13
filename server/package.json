@@ -1,5 +1,5 @@
 {
-  "name": "meerkatgram",
+  "name": "icedoctor",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -24,6 +24,7 @@
     "mysql2": "^3.15.3",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.3",
+    "socket.io": "^4.8.1",
     "swagger-parser": "^10.0.3",
     "swagger-ui-express": "^5.0.1",
     "web-push": "^3.6.7",

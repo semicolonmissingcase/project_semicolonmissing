@@ -1,0 +1,267 @@
+/* 사이드바 전체 컨테이너 */
+.ChatSidebarProfile-container {
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* 프로필 헤더 (타이틀 + X 버튼) */
+.ChatSidebarProfile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ChatSidebarProfile-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-black);
+}
+
+.ChatSidebarProfile-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-gray);
+  padding: 0;
+  line-height: 1;
+}
+
+/* 프로필 이미지 + 정보 섹션 */
+.ChatSidebarProfile-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ChatSidebarProfile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--color-light-gray);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.ChatSidebarProfile-info {
+  flex: 1;
+}
+
+.ChatSidebarProfile-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.ChatSidebarProfile-name-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ChatSidebarProfile-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-dark-blue);
+}
+
+.ChatSidebarProfile-location {
+  font-size: 0.875rem;
+  color: var(--color-gray);
+  margin-top: 4px;
+}
+
+.ChatSidebarProfile-price-box {
+  text-align: right;
+}
+
+.ChatSidebarProfile-price-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-gray);
+  margin-bottom: 2px;
+}
+
+.ChatSidebarProfile-price-value {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-black);
+}
+
+/* 견적 설명 및 소개 */
+.ChatSidebarProfile-description {
+  background-color: #f8f9fc;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.ChatSidebarProfile-description p {
+  font-size: 0.9rem;
+  color: var(--color-blue);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* [복구] 통계 (고용, 리뷰) 박스 영역 */
+.ChatSidebarProfile-stats {
+  display: flex;
+  background-color: #f3f4f6; /* 회색 박스 강제 적용 */
+  padding: 16px;
+  border-radius: 12px;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.ChatSidebarProfile-stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.ChatSidebarProfile-stat-item:first-child {
+  border-right: 1px solid #d1d5db;
+}
+
+.ChatSidebarProfile-stat-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-gray);
+  margin-bottom: 4px;
+}
+
+.ChatSidebarProfile-stat-value {
+  font-weight: 700;
+  color: var(--color-dark-blue);
+}
+
+/* ===== 리뷰 리스트 영역 (요청하신 구조로 정밀 수정) ===== */
+.ChatSidebarProfile-review-preview h4 {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.ChatSidebarProfile-review-item {
+  padding: 16px 0;
+  border-top: 1px solid var(--color-light-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* 각 줄 사이 간격 */
+}
+
+.ChatSidebarProfile-review-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* 이름과 별점/날짜 사이 간격 */
+}
+
+/* 1단: 고객명 */
+.ChatSidebarProfile-review-user-row {
+  display: flex;
+  align-items: center;
+}
+
+.ChatSidebarProfile-review-user {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+/* 2단: 별점 + 날짜 */
+.ChatSidebarProfile-review-info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* 별점그룹과 날짜 사이 간격 */
+}
+
+.ChatSidebarProfile-star-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.stars-full { color: #ffb800; }
+.stars-empty { color: #d1d5db; }
+
+.star-number, .ChatSidebarProfile-review-date {
+  font-size: 0.8rem;
+  color: var(--color-gray);
+}
+
+/* 3단: 리뷰 본문 */
+.ChatSidebarProfile-review-content {
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.6;
+  margin: 4px 0 0 0;
+  white-space: pre-wrap;
+}
+
+/* 리뷰 없음 안내 */
+.no-review-text {
+  font-size: 0.9rem;
+  color: var(--color-gray);
+  text-align: center;
+  padding: 30px 0;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 820px) {
+  .ChatSidebarProfile-container {
+    padding: 20px;
+  }
+  .ChatSidebarProfile-close-btn {
+    display: block;
+  }
+}
+/* 페이지네이션 컨테이너 */
+.ChatSidebarProfile-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* 화살표 및 숫자 공통 스타일 */
+.ChatSidebarProfile-page-arrow,
+.ChatSidebarProfile-page-number {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ChatSidebarProfile-page-arrow:hover:not(:disabled),
+.ChatSidebarProfile-page-number:hover {
+  background-color: #f8f9fa;
+}
+
+/* 활성화된 페이지 번호 (파란색 계열) */
+.ChatSidebarProfile-page-number.active {
+  background-color: #5eb5f8;
+  color: #fff;
+  border-color: #5eb5f8;
+  font-weight: bold;
+}
+
+/* 비활성화된 화살표 */
+.ChatSidebarProfile-page-arrow:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  border-color: #eee;
+}

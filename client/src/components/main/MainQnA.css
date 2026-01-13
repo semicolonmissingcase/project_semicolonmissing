@@ -1,0 +1,154 @@
+/* 전체 컨테이너 */
+.mainqna-container {
+  margin: 3rem auto;
+  padding: 2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background-color: var(--color-white);
+}
+
+/* 헤더 영역 */
+.mainqna-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* 제목 */
+.mainqna-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-blue);
+}
+
+/* 더보기 버튼 */
+.mainqna-more-btn {
+  background: none;
+  border: none;
+  color: var(--color-dark-blue);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.mainqna-more-btn:hover {
+  color: var(--color-blue);
+}
+
+/* 아코디언 리스트 */
+.mainqna-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* 아코디언 항목 */
+.mainqna-accordion-item {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--color-white);
+}
+
+/* 질문 버튼 */
+.mainqna-question {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--color-white);
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #374151;
+  transition: background-color 0.2s ease;
+}
+
+.mainqna-question:hover {
+  background-color: #f9fafb;
+}
+
+/* 활성화된 질문 */
+.mainqna-question.active {
+  background-color: #f9fafb;
+}
+
+/* 화살표 아이콘 */
+.mainqna-arrow {
+  font-size: 0.75rem;
+  color: var(--color-blue);
+  transition: transform 0.3s ease;
+}
+
+/* 화살표 회전 (열렸을 때) */
+.mainqna-arrow.rotate {
+  transform: rotate(180deg);
+}
+
+/* 답변 영역 */
+.mainqna-answer {
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  color: #6b7280;
+  animation: mainqnaSlideDown 0.3s ease;
+}
+
+/* 슬라이드 다운 애니메이션 */
+@keyframes mainqnaSlideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+/* 태블릿 크기 (820px ~ 501px) */
+@media (max-width: 820px) {
+  .mainqna-container {
+    padding: 1.5rem;
+    margin: 2rem auto;
+  }
+
+  .mainqna-title {
+    font-size: 1.125rem;
+  }
+}
+
+/* 모바일 크기 (500px 이하) */
+@media (max-width: 500px) {
+  .mainqna-container {
+    padding: 1rem;
+    margin: 1.5rem 1rem;
+  }
+
+  .mainqna-title {
+    font-size: 1rem;
+  }
+
+  .mainqna-question {
+    padding: 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .mainqna-answer {
+    padding: 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .mainqna-accordion-list {
+    gap: 0.5rem;
+  }
+}

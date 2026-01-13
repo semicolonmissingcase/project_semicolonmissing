@@ -1,0 +1,85 @@
+/* 화면 전체를 차지하는 컨테이너 */
+.payment-success-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* 화면 높이 전체 사용 */
+  background-color: #f8f9fa; /* 연한 회색 배경으로 집중도 향상 */
+  padding: 1.5rem;
+}
+
+/* 중앙 화이트 박스: 기존 모달 컨텐츠 스타일 계승 */
+.payment-success-container {
+  background: var(--color-white);
+  width: 100%;
+  max-width: 30rem; /* 기존 모달보다 살짝 여유 있게 */
+  padding: 4rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+/* 성공 체크 아이콘 박스 */
+.payment-success-icon-box {
+  width: 5rem;
+  height: 5rem;
+  background-color: var(--color-light-blue);
+  color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  margin: 0 auto 2rem;
+  /* 퐁! 하고 나타나는 효과 */
+  animation: icon-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.payment-success-status-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #191f28;
+  margin-bottom: 1rem;
+}
+
+.payment-success-status-desc {
+  font-size: 1.125rem;
+  color: #4e5968;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+}
+
+/* 버튼 그룹 */
+.payment-success-button-group {
+  display: flex;
+  flex-direction: column; /* 모바일 우선: 세로 배치 */
+  gap: 1rem;
+}
+
+.payment-success-button-group button {
+  width: 100%;
+  padding: 1.125rem;
+  border-radius: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.payment-success-button-primary {
+  background-color: var(--color-light-blue);
+  color: var(--color-white);
+}
+
+.payment-success-button-secondary {
+  background-color: #f2f4f6;
+  color: #4e5968;
+}
+
+/* 반응형: 태블릿 이상에선 버튼 가로 배치 */
+@media screen and (min-width: 480px) {
+  .payment-success-button-group {
+    flex-direction: row;
+  }
+}

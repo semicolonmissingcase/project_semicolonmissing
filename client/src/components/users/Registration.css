@@ -1,0 +1,61 @@
+.registration-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.registration-logo {
+  width: 480px;
+  aspect-ratio: 70 / 9;
+  margin: 2rem 0 4rem 0;
+}
+
+.registration-card-container {
+  margin-bottom: 3rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* 820px 이하일 때 세로로 배치 */
+@media (max-width: 820px) {
+  .registration-card-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .registration-logo {
+    width: 90%;
+    max-width: 300px;
+    aspect-ratio: 70 / 9; /* 비율 자동 유지 */
+  }
+}
+
+.registration-btn-container {
+  width: 100%;
+  padding: 1.5rem 3rem;
+  border-radius: 15px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.registration-comment {
+ text-align: center;
+}
+
+.registration-top-comment {
+  font-weight: 600;
+  color: var(--color-blue);
+}
+
+.registration-owner-img {
+  width: 8rem;
+  height: 10rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}

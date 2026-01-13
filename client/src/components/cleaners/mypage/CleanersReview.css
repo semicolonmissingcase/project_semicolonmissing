@@ -1,0 +1,176 @@
+/* 컨테이너 및 상태 메시지 */
+.cleaners-review-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.cleaners-review-status {
+  text-align: center;
+  padding: 50px;
+  color: #888;
+  font-size: 1rem;
+}
+
+/* 리뷰 카드 메인 */
+.cleaners-review-card {
+  background-color: #ffffff;
+  border: 1px solid #eef2f6;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cleaners-review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* 상단 섹션: 매장명 및 별점 */
+.cleaners-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f4f8;
+}
+
+.cleaners-review-store-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cleaners-review-store-icon {
+  font-size: 1.4rem;
+  color: #4a90e2;
+}
+
+.cleaners-review-store-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.cleaners-review-rating-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cleaners-review-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.cleaners-review-star-filled {
+  color: #ffcc00;
+  font-size: 1.1rem;
+}
+
+.cleaners-review-star-empty {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+}
+
+.cleaners-review-rating-num {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #5d6d7e;
+  background: #f8f9fa;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* 본문 섹션: 리뷰 내용 */
+.cleaners-review-body {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.cleaners-review-quote-box {
+  padding-top: 4px;
+}
+
+.cleaners-review-quote-icon {
+  color: #d1d8e0;
+  font-size: 1rem;
+}
+
+.cleaners-review-content {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+  word-break: break-all;
+  flex: 1;
+}
+
+/* 하단 섹션: 정보 그룹 */
+.cleaners-review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px dashed #e9ecef;
+}
+
+.cleaners-review-info-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cleaners-review-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cleaners-review-footer-icon {
+  color: #95a5a6;
+  font-size: 0.9rem;
+}
+
+.cleaners-review-info-label {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  font-weight: 500;
+}
+
+.cleaners-review-info-value {
+  font-size: 0.8rem;
+  color: #5d6d7e;
+  font-weight: 600;
+}
+
+.cleaners-review-info-divider {
+  color: #e0e0e0;
+  font-size: 0.7rem;
+}
+
+/* 예약번호 태그 */
+.cleaners-review-id-tag {
+  background-color: #edf2ff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.cleaners-review-id-label {
+  font-size: 0.75rem;
+  color: #748ffc;
+  font-weight: 500;
+}
+
+.cleaners-review-id-value {
+  font-size: 0.75rem;
+  color: #4a90e2;
+  font-weight: 700;
+}
