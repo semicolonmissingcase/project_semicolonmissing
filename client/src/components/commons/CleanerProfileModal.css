@@ -38,9 +38,9 @@
 
 .cleanerprofilemodal-profile-modal-img {
   width: 10rem; 
-  height: 13rem; 
+  height: 10rem; 
   object-fit: cover;
-  border-radius: 1rem;
+  border-radius: 50%;
   background-color: #d9d9d9;
 }
 

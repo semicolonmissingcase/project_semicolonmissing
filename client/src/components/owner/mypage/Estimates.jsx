@@ -7,7 +7,6 @@ import { createChatRoom } from '../../../api/axiosChat.js';
 
 // 받은 견적
 export default function Estimates() {
-  const APP_SERVER_URL = import.meta.env.APP_SERVER_URL; // 기사님 프로필 이미지 불러오기
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]); // 예약 목록
   const [loading, setLoading] = useState(true); // 예약 목록 로딩 상태 추가
@@ -51,6 +50,7 @@ export default function Estimates() {
     }
   };
 
+  // 채팅방 생성 및 연결
   const handleChatRoom = async (estimateId, cleanerId) => {
     if(!cleanerId) {
       alert("기사님 정보가 유효하지 않아 채팅을 시작할 수 없습니다.");
@@ -138,7 +138,7 @@ export default function Estimates() {
                       <div className="estimates-driver-image-box">
                         <img 
                           src={estimate.cleaner?.profile 
-                            ? (APP_SERVER_URL + estimate.cleaner.profile) : '/icons/default-profile.png'}
+                            ? (estimate.cleaner?.profile) : '/icons/default-profile.png'}
                           alt={`${estimate.cleaner?.name} 기사님`} 
                           className="estimates-driver-img"
                         />

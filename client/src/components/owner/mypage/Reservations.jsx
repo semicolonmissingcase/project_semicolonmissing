@@ -1,33 +1,99 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import './Reservations.css';
 import { getAcceptedEstimatesByOwnerId } from '../../../api/axiosOwner.js';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import CleanerProfileModal from '../../commons/CleanerProfileModal.jsx';
+import { useNavigate } from 'react-router-dom';
+import { createChatRoom } from '../../../api/axiosChat.js';
+import { useCallback } from 'react';
+import { cancelEstimateThunk } from '../../../store/thunks/estimateThunk.js';
 
 // 예약완료
 export default function Reservations() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [estimates, setEstimates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const APP_SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCleaner, setSelectedCleaner] = useState(null);
+  
+  // 취소관련
+  const fetchEstimates = useCallback(async() => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getAcceptedEstimatesByOwnerId();
+      setEstimates(data);
+    } catch(err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchEstimates = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getAcceptedEstimatesByOwnerId();
-        setEstimates(data);
-      } catch (err) {
-        console.error("예약 목록 불러오기 실패:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchEstimates();
-  }, []);
+  }, [fetchEstimates]);
+
+  const handleCancel = async (estimateId) => {
+    // 사용자에게 재확인
+    if(window.confirm("정말로 예약을 취소하시겠습니까?")) {
+      try {
+        const resultAction = await dispatch(cancelEstimateThunk(estimateId));
+
+        // 성공 완료 확인
+        if(cancelEstimateThunk.fulfilled.match(resultAction)) {
+          alert("예약이 취소되었습니다.");
+          fetchEstimates(); // 예약목록 새로고침
+        } else {
+          //실패시 에러 메세지
+          const errorMessage = resultAction.payload?.message || "예약 취소에 실패했습니다."
+          alert(errorMessage);        
+        }
+      } catch (error) {
+        alert("예약 취소 중 오류가 발생했습니다.");
+      } 
+    }
+  };
+
+  function reservationShow() {
+    navigate('/owners/reservation/:id');
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCleaner(null);
+  };
+
+  // 채팅방 생성 및 연결
+  const handleChatRoom = async (estimateId, cleanerId) => {
+    if(!cleanerId) {
+      alert("기사님 정보가 유효하지 않아 채팅을 시작할 수 없습니다.");
+      return 
+    }
+
+    try {
+      const response = await createChatRoom({
+        estimate_id: estimateId,
+        cleaner_id: cleanerId,
+      });
+
+      const chatRoomId = response.data.data.id;
+
+      if(chatRoomId) {
+        navigate(`/chatroom/${chatRoomId}`);
+      } else {
+        alert("채팅방을 찾을 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("채팅방 생성/조회 실패:", error);
+      alert("채팅방 연결에 실패했습니다.");
+    }
+  };
 
   if (loading) {
     return <div className="reservations-tab-container"><p>예약 목록을 불러오는 중...</p></div>;
@@ -73,22 +139,33 @@ export default function Reservations() {
             </div>
 
             <div className="reservations-card-right">
-              <button className="reservations-btn-secondary">견적보기</button>
+              <button className="reservations-btn-secondary"
+                onClick={() => handleChatRoom(item.id, item.cleanerId)}
+              >채팅하기</button>
               
               {item.status === '승인' ? (
                 <>
-                  <button className="reservations-btn-danger">예약취소</button>
+                  <button className="reservations-btn-danger"
+                    onClick={() => handleCancel(item.id)}>
+                    예약취소
+                  </button>
                 </>
               ) : item.status === '완료' ? (
-                <button className="bg-blue">프로필</button>
-              ) : (
-                <button className="reservations-btn-secondary" disabled>대기중</button>
-              )
-              }
+                <button className="bg-blue" onClick={reservationShow} >견적서 보기</button>
+              ) : null}
             </div>
           </div>
         ))}
       </div>
+
+      {/* 기사님 프로필 모달 */}
+      {isModalOpen && selectedCleaner && (
+        <CleanerProfileModal 
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          cleanerData={selectedCleaner}
+        />
+      )}  
     </div>
   );
 }

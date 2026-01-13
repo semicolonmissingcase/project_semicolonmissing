@@ -87,3 +87,14 @@ export const getLikedCleaners = async () => {
      throw error;
   }
 };
+
+// 예약 취소
+export const cancelReservation = async (estimateId) => {
+  try {
+    const response = await axiosInstance.patch(`/api/reservations/estimates/${estimateId}/cancel`);
+    return response.data;
+  } catch (error) {
+    console.error(`예약(${estimateId}) 취소 실패:`, error);
+    throw error;
+  }
+};
