@@ -12,7 +12,7 @@ export default function CleanerProfileModal({ isOpen, onClose, cleanerData }) {
         {/* 프로필 이미지 영역 */}
         <div className="cleanerprofilemodal-profile-image-container">
           <img 
-            src={cleanerData.profileImage || "/icons/default-profile.png"} 
+            src={cleanerData.profile || "/icons/default-profile.png"} 
             alt={`${cleanerData.name} 기사님`} 
             className="cleanerprofilemodal-profile-modal-img" 
           />
@@ -39,7 +39,6 @@ export default function CleanerProfileModal({ isOpen, onClose, cleanerData }) {
           <div className="cleanerprofilemodal-info-row">
             <span className="cleanerprofilemodal-info-label">작업 지역</span>
             <div className="cleanerprofilemodal-tag-container">
-              {/* 1. 배열인 경우: 배열 길이가 0보다 크면 map, 아니면 메시지 출력 */}
               {Array.isArray(cleanerData.regions) ? (
                 cleanerData.regions.length > 0 ? (
                   cleanerData.regions.map((region, idx) => (
@@ -49,7 +48,6 @@ export default function CleanerProfileModal({ isOpen, onClose, cleanerData }) {
                   <span className="cleanerprofilemodal-no-region">선택된 지역이 없습니다.</span>
                 )
               ) : (
-                /* 2. 배열이 아닌 경우: 데이터가 있으면 출력, 없으면 메시지 출력 */
                 cleanerData.region ? (
                   <span className="cleanerprofilemodal-info-tag">{cleanerData.region}</span>
                 ) : (
