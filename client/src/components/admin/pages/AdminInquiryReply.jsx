@@ -88,7 +88,9 @@ export default function AdminInquiryReply() {
           </div>
           <div className="AdminInquiryReply-content-box">
             <p className="AdminInquiryReply-label">문의 내용</p>
-            <div className="AdminInquiryReply-text-display">{inquiry.content}</div>
+            <div className="AdminInquiryReply-text-display">
+              <div dangerouslySetInnerHTML={{ __html: inquiry.content}} />
+            </div>
           </div>
         </section>
 
