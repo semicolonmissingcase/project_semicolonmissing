@@ -10,13 +10,13 @@ import chatService from '../services/chat.service.js'
  */
 const createRoom = async (req, res, next) => {
   try {
-    const { id, role } = req.user; 
+    const { id, role } = req.user;
     const { estimate_id, cleaner_id, owner_id } = req.body;
 
     const roomData = {
       estimate_id,
       cleaner_id: role === 'CLEANER' ? id : cleaner_id,
-      owner_id: role === 'OWNER' ? id : (owner_id || null) 
+      owner_id: role === 'OWNER' ? id : (owner_id || null)
     };
 
     const result = await chatService.createOrGetRoom(roomData);
@@ -50,9 +50,9 @@ const getSidebarReviews = async (req, res, next) => {
     const { roomId } = req.params;
     const { page, sort } = req.query;
 
-    const result = await chatService.getSidebarReviews(roomId, { 
-      page: parseInt(page) || 1, 
-      sort: sort || 'latest' 
+    const result = await chatService.getSidebarReviews(roomId, {
+      page: parseInt(page) || 1,
+      sort: sort || 'latest'
     });
     res.status(200).json({ success: true, data: result });
   } catch (error) {
@@ -65,8 +65,8 @@ const getSidebarReviews = async (req, res, next) => {
  */
 const getRooms = async (req, res, next) => {
   try {
-    const { id, role } = req.user; 
-    
+    const { id, role } = req.user;
+
     const rooms = await chatService.getRoomsByUser(id, role);
     res.status(200).json({ success: true, data: rooms });
   } catch (error) {
@@ -81,7 +81,7 @@ const getMessages = async (req, res, next) => {
   try {
     const { roomId } = req.params;
     const { page, limit } = req.query;
-    
+
     const messages = await chatService.getMessages(roomId, page, limit);
     res.status(200).json({ success: true, data: messages });
   } catch (error) {
@@ -135,7 +135,7 @@ const chatUploadImage = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ success: false, message: "파일이 업로드 되지 않았습니다." });
     }
-    const fileUrl = `/uploads/chat/${req.file.filename}`;
+    const fileUrl = `${ACCESS_FILE_CHAT_IMAGE_PATH}/${req.file.filename}`;
     res.status(200).json({ success: true, url: fileUrl });
   } catch (error) {
     next(error);

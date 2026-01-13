@@ -31,7 +31,7 @@ async function createInquiry(inquiryData) {
  */
 async function getInquiriesByOwner(ownerId) {
   const inquiries = await ownerInquiryRepository.findInquiriesByOwnerId(ownerId);
-  
+
   if (!inquiries) {
     throw new Error('문의 목록을 찾을 수 없습니다.');
   }
@@ -56,7 +56,7 @@ async function getInquiriesByOwner(ownerId) {
 async function getInquiryDetailsForOwner(inquiryId, ownerId) {
   // Repository에서 단일 객체를 가져오도록 수정 권장
   const inquiry = await ownerInquiryRepository.findInquiryByIdAndOwnerId({ inquiryId, ownerId });
-  
+
   // 오타 수정: inquiries -> inquiry
   if (!inquiry || inquiry.length === 0) {
     throw new Error('해당 문의를 찾을 수 없거나 접근 권한이 없습니다.');
@@ -84,7 +84,7 @@ async function getAllInquiries(page = 1, pageSize = 10) {
   const offset = (parseInt(page) - 1) * limit;
 
   const { count, rows } = await ownerInquiryRepository.findAllInquiries(limit, offset);
-  
+
   return { count, rows };
 }
 
@@ -93,8 +93,8 @@ async function getAllInquiries(page = 1, pageSize = 10) {
  */
 async function getInquiryShow(inquiryId, userId, userRole, password = null) {
   const inquiry = await ownerInquiryRepository.findById(inquiryId);
-  
-  if(!inquiry) {
+
+  if (!inquiry) {
     throw myError('문의글을 찾을 수 없습니다.', NOT_FOUND_ERROR);
   }
 
@@ -108,17 +108,17 @@ async function getInquiryShow(inquiryId, userId, userRole, password = null) {
   const numericCleanerId = Number(inquiry.cleanerId);
 
   // 로그인한 회원(점주/기사)이 본인 글을 조회하는 경우  
-  const isAuthor = 
+  const isAuthor =
     (userRole === 'OWNER' && numericOwnerId === numericUserId) ||
     (userRole === 'CLEANER' && numericCleanerId === numericUserId);
-  if(!isAuthor) { //  임시로 모두가 볼 수 있게 했습니다. 
+  if (!isAuthor) { //  임시로 모두가 볼 수 있게 했습니다. 
     return inquiry;
   }
 
   //비회원 문의글이면서, 비밀번호가 필요한 경우
-  if(!inquiry.ownerId && !inquiry.cleanerId) {
-    if(inquiry.guestPassword) {
-      if(!password) {
+  if (!inquiry.ownerId && !inquiry.cleanerId) {
+    if (inquiry.guestPassword) {
+      if (!password) {
         const error = myError('비회원 문의글은 비밀번호를 입력해야 조회할 수 있습니다.', UNAUTHORIZED_ERROR);
         error.code = 'PASSWORD_REQUIRED';
         throw error;
@@ -154,7 +154,7 @@ async function getCompletedReservationsForReview(ownerId) {
   return reservations.map(reservation => {
     const plainReservation = reservation.get({ plain: true });
     const price = plainReservation.estimate?.estimatedAmount
-        ? plainReservation.estimate.estimatedAmount.toLocaleString() : '정보없음';
+      ? plainReservation.estimate.estimatedAmount.toLocaleString() : '정보없음';
 
     return {
       id: plainReservation.id, // 예약id
@@ -178,7 +178,7 @@ async function getCompletedReservationsForReview(ownerId) {
  */
 async function getReviewDetails(reviewId, ownerId) {
   const review = await ownerInquiryRepository.findReviewByIdAndOwnerId(reviewId, ownerId);
-
+  console.log(review);
   if (!review) {
     throw new Error('해당 리뷰를 찾을 수 없거나 접근 권한이 없습니다.');
   }
@@ -192,10 +192,10 @@ async function getReviewDetails(reviewId, ownerId) {
  * @returns 
  */
 async function createReview(ownerId, reviewBody) {
-  if(!ownerId) {
+  if (!ownerId) {
     throw new Error('점주 ID가 필요합니다.');
   }
-  if(!reviewBody.cleanerId || !reviewBody.reservationId || !reviewBody.star || !reviewBody.content) {
+  if (!reviewBody.cleanerId || !reviewBody.reservationId || !reviewBody.star || !reviewBody.content) {
     throw new Error('필수 리뷰 정보가 누락되었습니다.');
   }
   if (reviewBody.star < 1 || reviewBody.star > 5) {
@@ -221,7 +221,7 @@ async function createReview(ownerId, reviewBody) {
  */
 async function deleteReviews(reviewId, ownerId) {
   const deletedCount = await ownerInquiryRepository.deleteReview(reviewId, ownerId);
-  if(deletedCount === 0) {
+  if (deletedCount === 0) {
     throw myError('삭제할 리뷰를 찾을 수 없거나 삭제 권한이 없습니다.', BAD_REQUEST_ERROR);
   }
   return deletedCount;

@@ -39,7 +39,7 @@ import AdminReservation from "../components/admin/pages/AdminReservation.jsx";
 import AdminOwnerDetail from "../components/admin/pages/AdminOwnerDetail.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
-import ChatList from "../components/chat/chatList.jsx";
+import ChatList from "../components/chat/ChatList.jsx";
 // 결제 관련 
 import PaymentSuccess from "../components/payment/paymentSuccess.jsx";
 import PaymentFail from "../components/payment/paymentFail.jsx";

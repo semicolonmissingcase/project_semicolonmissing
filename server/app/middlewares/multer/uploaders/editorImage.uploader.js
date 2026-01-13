@@ -11,11 +11,10 @@ import dayjs from 'dayjs';
 import { randomUUID } from 'crypto';
 import myError from '../../../errors/customs/my.error.js';
 import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
-import pathUtil from '../../../utils/path/path.util.js';
 
 const editorImageStorage = multer.diskStorage({
   destination(req, file, cb) {
-    const uploadPath = pathUtil.getEditorImagePath();
+    const uploadPath = process.env.FILE_EDITOR_IMAGE_PATH;
     console.log(`[DEBUG][editorImageUploader] Destination Path: ${uploadPath}`);
     if (!fs.existsSync(uploadPath)) {
       console.log(`[DEBUG][editorImageUploader] Creating directory: ${uploadPath}`);
@@ -40,7 +39,7 @@ const editorImageUploader = multer({
     }
     cb(null, true);
   },
-  limits: { fileSize: 5 * 1024 * 1024 }, //5mb
+  limits: Number(process.env.FILE_EDITOR_IMAGE_SIZE), //5mb
 }).single('upload');
 
 export default editorImageUploader;

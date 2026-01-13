@@ -5,7 +5,7 @@
  */
 
 import models from '../../constants/models.constants.js';
-const { ReservationStatus } = models
+const { ReservationStatus, EstimateStatus } = models
 import { Sequelize } from 'sequelize';
 import db from '../../models/index.js';
 import dayjs from 'dayjs';
@@ -232,7 +232,10 @@ async function findCompletedReservations(ownerId) {
         model: Estimate,
         as: 'estimate',
         attributes: ['estimatedAmount'],
-        required: false,
+        required: true,
+        where: {
+          status: EstimateStatus.PAID
+        }
       },
     ],
     

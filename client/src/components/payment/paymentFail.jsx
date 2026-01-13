@@ -5,7 +5,7 @@
  */
 
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import './PaymentFail.css';
+import './paymentFail.css';
 
 const PaymentFail = () => {
   const [searchParams] = useSearchParams();

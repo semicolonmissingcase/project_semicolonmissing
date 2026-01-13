@@ -11,11 +11,10 @@ import dayjs from 'dayjs';
 import { randomUUID } from 'crypto';
 import myError from '../../../errors/customs/my.error.js';
 import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
-import pathUtil from '../../../utils/path/path.util.js';
 
 const inquiryImageStorage = multer.diskStorage({
   destination(req, file, cb) {
-    const uploadPath = pathUtil.getInquiryImagePath();
+    const uploadPath = process.env.FILE_INQUIRY_IMAGE_PATH;
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
@@ -37,7 +36,7 @@ const inquiryImageUploader = multer({
     }
     cb(null, true);
   },
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5mb
+  limits: Number(process.env.FILE_INQUIRY_IMAGE_SIZE), // 5mb
 }).fields([
   { name: 'inquiryPicture1', maxCount: 1 },
   { name: 'inquiryPicture2', maxCount: 1 }

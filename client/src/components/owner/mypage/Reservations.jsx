@@ -80,10 +80,11 @@ export default function Reservations() {
                   <button className="reservations-btn-danger">예약취소</button>
                 </>
               ) : item.status === '완료' ? (
-                <button className="bg-blue">기능고민중</button>
+                <button className="bg-blue">프로필</button>
               ) : (
                 <button className="reservations-btn-secondary" disabled>대기중</button>
-              )}
+              )
+              }
             </div>
           </div>
         ))}

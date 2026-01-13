@@ -95,7 +95,7 @@
   color: var(--color-blue);
 }
 
-/* actions */{result.settledComplete.toLocaleString()}
+/* actions */
 .cleaners-quotations-preparation-save-action-col {
   display: grid;
   justify-items: end;

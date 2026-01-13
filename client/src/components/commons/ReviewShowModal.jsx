@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './ReviewShowModal.css';
 import { getReviewsDetails } from '../../api/axiosPost.js';
 
-const API_BASE_URL = import.meta.env.VITE_APP_SERVER_URL;
-
 export default function ReviewShowModal({ isOpen, onClose, reviewId }) {
   const [review, setReview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -85,7 +83,7 @@ export default function ReviewShowModal({ isOpen, onClose, reviewId }) {
   
   const createImageUrl = (path) => {
     if(!path) return null;
-    const imageUrl = `${API_BASE_URL}/${path.replace(/\\/g, '/')}`;
+    const imageUrl = `${path.replace(/\\/g, '/')}`;
     console.log("생성된 이미지 URL:", imageUrl);
     return imageUrl;
   };

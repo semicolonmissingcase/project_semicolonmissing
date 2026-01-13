@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./CleanersInfoEdit.css";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../result/ConfirmModal.jsx"; // 확인 모달
-import CleanerPwModal from "./cleaners-modal/cleanerPwModal.jsx"; // 비밀번호 변경 모달
+import CleanerPwModal from "./cleaners-modal/CleanerPwModal.jsx"; // 비밀번호 변경 모달
 import NameEditModal from "../commons/NameEditModal.jsx"; // 이름 변경 모달
 import { useDispatch, useSelector } from "react-redux";
 import { getMeThunk, updateCleanerInfoThunk } from "../../store/thunks/authThunk.js";
