@@ -13,7 +13,7 @@ export function injectStoreInAxios(_store) {
 
 // axios 인스턴스 생성  (컴포넌트 X , 훅 사용 불가)
 const axiosInstance = axios.create({
-  baseURL: import.meta.VITE_APP_SERVER_URL, // 기본 URL (axios 호출 시, 가장 앞에 자동으로 연결하여 동작)
+  baseURL: import.meta.env.VITE_APP_SERVER_URL, // 기본 URL (axios 호출 시, 가장 앞에 자동으로 연결하여 동작)
   headers: {  // Json
     'Content-Type': 'application/json',  // 문자열로 인식시키기 위해서 ' '사용
   },
