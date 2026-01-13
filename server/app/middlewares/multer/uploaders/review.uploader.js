@@ -18,17 +18,17 @@ import { BAD_FILE_ERROR } from '../../../../configs/responseCode.config.js';
  * @param {import("express").Response} res 
  * @param {import("express").NextFunction} next 
  */
-export default function(req, res, next) {
+export default function (req, res, next) {
   // multer 객체 인스턴스
   const upload = multer({
     // storage: 파일을 저장할 위치를 상세하게 제어하는 프로퍼티
     storage: multer.diskStorage({
       // 파일 저장 경로 설정
       destination(req, file, callback) {
-        const uploadDir = 'uploads/reviews/';
+        const uploadDir = process.env.FILE_REVIEW_IMAGE_PATH;
 
         // 저장 디렉토리 설정
-        if(!fs.existsSync(uploadDir)) {
+        if (!fs.existsSync(uploadDir)) {
           // 해당 디렉토리 없으면 생성 처리
           fs.mkdirSync(
             uploadDir,
@@ -45,21 +45,22 @@ export default function(req, res, next) {
       filename(req, file, callback) {
         // 저장할 파일명 생성
         const uniqueFileName = `${dayjs().format('YYYYMMDD')}_${crypto.randomUUID()}`;
-        const ext = path.extname(file.originalname).toLowerCase();
-        
+        const fileNameParts = file.originalname.split('.');
+        const ext = fileNameParts[fileNameParts.length - 1].toLowerCase();
+
         callback(null, `${uniqueFileName}.${ext}`);
       }
     }),
     // fileFilter: 파일 필터링 처리를 제어하는 프로퍼티
     fileFilter(req, file, callback) {
-      if(!file.mimetype.startsWith('image/')) {
+      if (!file.mimetype.startsWith('image/')) {
         return callback(myError('이미지 파일 아님', BAD_FILE_ERROR));
       }
       callback(null, true);
     },
     // limits: 파일 사이즈 제한, 파일 개수 제한
     limits: {
-      fileSize: 10 * 1024 * 1024
+      fileSize: Number(process.env.FILE_REVIEW_IMAGE_SIZE)
     }
   }).fields([
     { name: 'reviewPicture1', maxCount: 1 },
@@ -68,7 +69,7 @@ export default function(req, res, next) {
 
   // 예외 처리
   upload(req, res, err => {
-    if(err instanceof multer.MulterError || err) {
+    if (err instanceof multer.MulterError || err) {
       next(myError(err.message, BAD_FILE_ERROR));
     }
     next();

@@ -8,7 +8,6 @@ import { BAD_FILE_ERROR, BAD_REQUEST_ERROR, SUCCESS } from "../../../configs/res
 import ownerInquiryService from "../../services/owner/owner.inquiry.service.js";
 import { createBaseResponse } from "../../utils/createBaseResponse.util.js";
 import myError from "../../errors/customs/my.error.js";
-import pathUtil from "../../utils/path/path.util.js";
 
 /**
  * 새로운 문의 생성(회원)
@@ -21,10 +20,10 @@ async function ownerCreateInquiry(req, res, next) {
     const { title, content, category } = req.body;
 
     // 유효성 검사
-    if(!title || !content) {
+    if (!title || !content) {
       throw myError('제목은 필수입니다.', BAD_REQUEST_ERROR);
     }
-    if(!content || content === '<p>&nbsp;</p>' || content.trim() === '') {
+    if (!content || content === '<p>&nbsp;</p>' || content.trim() === '') {
       throw myError('내용은 필수입니다.', BAD_REQUEST_ERROR);
     }
     if (!category || category === '카테고리 선택') {
@@ -42,7 +41,7 @@ async function ownerCreateInquiry(req, res, next) {
     } else {
       throw myError('알 수 없는 사용자 역할입니다.', BAD_REQUEST_ERROR);
     }
-    
+
 
     const inquiryPicture1File = req.files?.inquiryPicture1?.[0];
     const inquiryPicture2File = req.files?.inquiryPicture2?.[0];
@@ -51,10 +50,10 @@ async function ownerCreateInquiry(req, res, next) {
     let inquiryPicture2 = null;
 
     if (inquiryPicture1File) {
-      inquiryPicture1 = `${process.env.APP_URL}${pathUtil.getInquiryImagePath()}/${inquiryPicture1File.filename}`;
+      inquiryPicture1 = `${process.env.APP_URL}${process.env.ACCESS_FILE_INQUIRY_IMAGE_PATH}/${inquiryPicture1File.filename}`;
     }
     if (inquiryPicture2File) {
-      inquiryPicture2 = `${process.env.APP_URL}${pathUtil.getInquiryImagePath()}/${inquiryPicture2File.filename}`;
+      inquiryPicture2 = `${process.env.APP_URL}${process.env.ACCESS_FILE_INQUIRY_IMAGE_PATH}/${inquiryPicture2File.filename}`;
     }
 
     const newInquiry = await ownerInquiryService.createInquiry({
@@ -166,7 +165,7 @@ async function getInquiryShow(req, res, next) {
     const userRole = req.user?.role || null;
     const password = req.query.password || null;
 
-    if(!inquiryId) {
+    if (!inquiryId) {
       throw myError('유효한 문의글 ID가 없습니다.', BAD_REQUEST);
     }
 
@@ -190,10 +189,10 @@ async function guestCreateInquiry(req, res, next) {
     const { title, content, category, guestName, guestPassword } = req.body;
 
     // 유효성 검사
-    if(!title || !content) {
+    if (!title || !content) {
       throw myError('제목은 필수입니다.', BAD_REQUEST_ERROR);
     }
-    if(!content || content === '<p>&nbsp;</p>' || content.trim() === '') {
+    if (!content || content === '<p>&nbsp;</p>' || content.trim() === '') {
       throw myError('내용은 필수입니다.', BAD_REQUEST_ERROR);
     }
     if (!category || category === '카테고리 선택') {
@@ -208,11 +207,11 @@ async function guestCreateInquiry(req, res, next) {
     let inquiryPicture1 = null;
     let inquiryPicture2 = null;
 
-    if(inquiryPicture1File) {
-      inquiryPicture1 = `${process.env.APP_URL}${pathUtil.getInquiryImagePath()}/${inquiryPicture1File.filename}`;
+    if (inquiryPicture1File) {
+      inquiryPicture1 = `${process.env.APP_URL}${process.env.ACCESS_FILE_INQUIRY_IMAGE_PATH}/${inquiryPicture1File.filename}`;
     }
-    if(inquiryPicture2File) {
-      inquiryPicture2 = `${process.env.APP_URL}${pathUtil.getInquiryImagePath()}/${inquiryPicture2File.filename}`;
+    if (inquiryPicture2File) {
+      inquiryPicture2 = `${process.env.APP_URL}${process.env.ACCESS_FILE_INQUIRY_IMAGE_PATH}/${inquiryPicture2File.filename}`;
     }
 
     // 서비스 호출
@@ -299,10 +298,11 @@ async function createReview(req, res, next) {
   try {
     const ownerId = req.user.id;
     const { cleanerId, reservationId, star, content } = req.body;
-    // 이미지용
-    const reviewPicture1 = req.files?.reviewPicture1?.[0]?.path || null;
-    const reviewPicture2 = req.files?.reviewPicture2?.[0]?.path || null;
 
+    // 이미지용
+    const reviewPicture1 = req.files?.reviewPicture1?.[0]?.filename ? `${process.env.APP_URL}${process.env.ACCESS_FILE_REVIEW_IMAGE_PATH}/${req.files?.reviewPicture1?.[0]?.filename}` : null;
+    const reviewPicture2 = req.files?.reviewPicture2?.[0]?.filename ? `${process.env.APP_URL}${process.env.ACCESS_FILE_REVIEW_IMAGE_PATH}/${req.files?.reviewPicture2?.[0]?.filename}` : null;
+    console.log(reviewPicture1, reviewPicture2);
     const reviewBody = {
       cleanerId,
       reservationId,
