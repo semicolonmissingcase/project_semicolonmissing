@@ -16,7 +16,6 @@ import db from '../models/index.js';
 async function createOrGetRoom({ owner_id, cleaner_id, estimate_id }) {
   return await db.sequelize.transaction(async (t) => {
     let room = await chatRepository.findByKeys(t, estimate_id, cleaner_id, owner_id);
-
     let isNew = false;
 
     if (!room) {
@@ -29,7 +28,7 @@ async function createOrGetRoom({ owner_id, cleaner_id, estimate_id }) {
     }
 
     return {
-      room: room.get({ plain: true }),
+      room: room ? room.get({ plain: true }) : null,
       isNew: isNew
     };
   });
@@ -45,7 +44,6 @@ async function getRoomsByUser(userId, userRole) {
     const roomsWithDetails = await Promise.all(rooms.map(async (room) => {
       const roomPlain = room.get({ plain: true });
       const isOwner = /OWNER/i.test(String(userRole));
-      
       const opponent = isOwner ? roomPlain.cleaner : roomPlain.owner;
       
       return {
@@ -138,7 +136,7 @@ async function getChatRoomWithSidebar(roomId, userRole) {
               model: db.Location, 
               as: 'locations', 
               attributes: ['city', 'district'],
-              through: { model: db.DriverRegion, attributes: [] } 
+              through: { attributes: [] } 
             }
           ]
         },
@@ -154,60 +152,66 @@ async function getChatRoomWithSidebar(roomId, userRole) {
     if (!room) throw myError('채팅방을 찾을 수 없습니다.', BAD_REQUEST_ERROR);
     
     const roomPlain = room.get({ plain: true });
-    const reservationId = roomPlain.estimate?.reservationId;
+    const reservationId = roomPlain.estimate?.reservationId || roomPlain.estimate?.reservation_id;
 
-    // 예약 데이터 및 서브미션 조회
     let reservationDetail = null;
     let submissions = [];
 
     if (reservationId) {
-      reservationDetail = await quotationRepository.reservationFindByIdAndStatusIsRequest(t, reservationId);
+      reservationDetail = await db.Reservation.findOne({
+        where: { id: reservationId },
+        include: [{ model: db.Store, as: 'store' }],
+        transaction: t
+      });
       submissions = await quotationRepository.submissionFindByReservationId(t, reservationId);
     }
     
     const cleaner = roomPlain.cleaner;
     const store = reservationDetail?.store;
     
-    const hireCount = cleaner?.reservations?.filter((r) => r.status === '완료').length || 0;
+    const hireCount = (cleaner?.reservations || []).filter((r) => r.status === '완료').length;
+    
     const primaryLoc = cleaner?.locations?.[0];
     const regionText = primaryLoc ? `${primaryLoc.city} ${primaryLoc.district}` : '지역 정보 없음';
     
     const fullAddress = store 
-      ? `${store.address1 || ''} ${store.address2 || ''} ${store.address3 || ''}`.trim() 
+      ? `${store.addr1 || ''} ${store.addr2 || ''} ${store.addr3 || ''}`.trim() 
       : '주소 정보 없음';
 
     return {
       sideType: isOwner ? 'OWNER' : 'CLEANER',
       data: {
         ownerId: roomPlain.owner?.id,
-        ownerName: roomPlain.owner?.name,
+        ownerName: roomPlain.owner?.name || '정보 없음',
         cleanerId: cleaner?.id,
-        cleanerName: cleaner?.name,
+        cleanerName: cleaner?.name || '정보 없음',
         
         estimateId: roomPlain.estimate?.id, 
         reservationId: reservationId, 
         
         region: regionText,
-        price: roomPlain.estimate?.estimated_amount,
-        introduction: cleaner?.introduction,
+        price: roomPlain.estimate?.estimated_amount || 0,
+        introduction: cleaner?.introduction || '',
         hireCount: hireCount,
         star: roomPlain.star || 0,
         storeName: store?.name || '정보 없음',
-        storeAddress: fullAddress,
-        wishDate: reservationDetail?.date,
-        wishTime: reservationDetail?.time,
-        estimateContent: roomPlain.estimate?.description,
-        qaList: submissions?.map(s => ({
-          question: s.question?.content || '질문 정보 없음',
-          answer: s.answer_text || '답변 없음'
-        })) || []
+        storeAddress: fullAddress || '주소 정보 없음',
+        
+        wishDate: reservationDetail?.date || '날짜 정보 없음',
+        wishTime: reservationDetail?.time || '시간 정보 없음',
+        estimateContent: roomPlain.estimate?.description || '',
+        
+        qaList: (submissions || []).map(s => ({
+          question: s?.question?.content || '질문 정보 없음',
+          answer: s?.answer_text || s?.answerText || '답변 없음'
+        }))
       },
     };
   });
 }
 
 /**
- * 사이드바 리뷰 목록 조회 (리뷰 작성자 직접 조인 방식)
+ * 사이드바 리뷰 목록 조회
  */
 async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
   const limit = 5;
@@ -221,17 +225,12 @@ async function getSidebarReviews(roomId, { page = 1, sort = 'latest' }) {
 
   const room = await db.ChatRoom.findByPk(roomId);
   if (!room) throw myError('방 정보를 찾을 수 없습니다.', BAD_REQUEST_ERROR);
-  const targetCleanerId = room.cleanerId;
+  
+  const targetCleanerId = room.cleanerId || room.cleaner_id;
 
   const { count, rows } = await db.Review.findAndCountAll({
-    where: { cleanerId: targetCleanerId }, // 이 기사에 대한 리뷰만
-    include: [
-      {
-        model: db.Owner,
-        as: 'owner',
-        attributes: ['id', 'name'] 
-      }
-    ],
+    where: { cleanerId: targetCleanerId },
+    include: [{ model: db.Owner, as: 'owner', attributes: ['id', 'name'] }],
     order: orderMap[sort] || orderMap.latest,
     limit,
     offset
