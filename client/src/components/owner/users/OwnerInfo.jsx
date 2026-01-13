@@ -17,14 +17,14 @@ export default function OwnerInfo() {
   const navigate = useNavigate();
   const { stores = [], status, error:storeError } = useSelector((state) => state.store);
   const { user, isLoggedIn, isLoading, error:authError } = useSelector((state) => state.auth);
-  const [cleanerName, setCleanerName] = useState("");
   // 전화번호 상태 (수정 가능하게)
   const [phonePrefix, setPhonePrefix] = useState("010");
   const [phoneMiddle, setPhoneMiddle] = useState("");
   const [phoneLast, setPhoneLast] = useState("");
   // 이름 수정 모달 관련 상태
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
-  const [tempName, setTempName] = useState("");
+  const [name, setName] = useState(user?.name || '');
+  const [tempName, setTempName] = useState(user?.name || '');
 
   const [pwModalOpen, setPwModalOpen] = useState(false); // 비밀번호 모달
   const [isModalOpen, setIsModalOpen] = useState(false); // 매장 추가 모달
@@ -44,17 +44,21 @@ export default function OwnerInfo() {
 
   // user 정보가 로드되면 전화번호를 파싱하여 상태에 저장
   useEffect(() => {
-    if (user && user.phoneNumber) {
-      const parts = user.phoneNumber.split('-');
-      if (parts.length === 3) {
-        setPhonePrefix(parts[0]);
-        setPhoneMiddle(parts[1]);
-        setPhoneLast(parts[2]);
-      } else {
-        const num = user.phoneNumber.replace(/[^0-9]/g, '');
-        setPhonePrefix(num.substring(0, 3));
-        setPhoneMiddle(num.substring(3, 7));
-        setPhoneLast(num.substring(7, 11));
+    if(user) {
+      setName(user.name);
+      setTempName(user.name);
+      if (user && user.phoneNumber) {
+        const parts = user.phoneNumber.split('-');
+        if (parts.length === 3) {
+          setPhonePrefix(parts[0]);
+          setPhoneMiddle(parts[1]);
+          setPhoneLast(parts[2]);
+        } else {
+          const num = user.phoneNumber.replace(/[^0-9]/g, '');
+          setPhonePrefix(num.substring(0, 3));
+          setPhoneMiddle(num.substring(3, 7));
+          setPhoneLast(num.substring(7, 11));
+        }
       }
     }
   }, [user]);
@@ -67,31 +71,32 @@ export default function OwnerInfo() {
 
   // 이름 수정 모달 열기
   const handleOpenNameModal = () => {
-    setTempName(cleanerName);
+    setTempName(name);
     setIsNameModalOpen(true);
-  };
-
-  const handleSaveName = () => {
-    const newName = tempName.trim();
-    if (!newName) {
-      alert('이름을 입력해주세요.');
-      return;
-    }
-    setCleanerName(newName);
-    setIsNameModalOpen(false);
   };
 
   // 수정 완료 버튼
   const handleUpdateProfile = async() => {
+    const payload = {};
     const newPhoneNumber = `${phonePrefix}-${phoneMiddle}-${phoneLast}`;
+
+    // 이름관련
+    if(user && user.name !== tempName) {
+      payload.name = tempName;
+    }
 
     // 현재 전화번호와 다를 경우만 수정
     if(user.phoneNumber === newPhoneNumber) {
-      return
+      payload.phone = newPhoneNumber;
+    }
+
+    if (Object.keys(payload).length === 0) {
+      alert("수정된 내용이 없습니다.");
+      return;
     }
     
     try {
-      await dispatch(updateOwnerInfoThunk({ phone: newPhoneNumber })).unwrap();
+      await dispatch(updateOwnerInfoThunk(payload)).unwrap();
       dispatch(getMeThunk()); // 내 정보 다시 불러오기
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -116,7 +121,6 @@ export default function OwnerInfo() {
       await dispatch(storeCreateThunk(newStore)).unwrap();
       dispatch(storeGetThunk());
     } catch (error) {
-      console.error('매장 추가 실패:', error);
       alert(error.msg || '매장 추가 중 오류가 발생했습니다.');
     } finally {
       setIsModalOpen(false);
@@ -136,7 +140,6 @@ export default function OwnerInfo() {
             await dispatch(storeDeleteThunk(id)).unwrap();
             dispatch(storeGetThunk());
           } catch (error) {
-            console.error("삭제 실패:", error);
             alert(error.msg || '매장 삭제 중 오류가 발생했습니다.');
           }
         }
@@ -166,7 +169,7 @@ export default function OwnerInfo() {
           {/* 이름 + 수정 아이콘 그룹 */}
           <div className="ownerinfo-name-wrapper">
             <h2 className="ownerinfo-name">
-              {user ? `${user.name} 점주님` : '점주님'}
+              {name ? `${name} 점주님` : '점주님'}
             </h2>
             <div className="ownerinfo-edit-btn-area">
               <CiEdit className="ownerinfo-edit-icon" />
@@ -291,7 +294,7 @@ export default function OwnerInfo() {
         config={modalConfig}        
       />
 
-      {/* 비밀번호 변경 모달 */}
+     {/* 비밀번호 변경 모달 */}
       <OwnerPwModal 
         isOpen={pwModalOpen}
         onClose={() => setPwModalOpen(false)}
@@ -300,11 +303,12 @@ export default function OwnerInfo() {
       {/* 이름 수정 모달 호출 */}
       <NameEditModal 
         isOpen={isNameModalOpen}
-        tempName={tempName}
-        setTempName={setTempName}
-        onCancel={() => setIsNameModalOpen(false)}
-        onSave={handleSaveName}
-      />
+        currentName={tempName}
+        onClose={() => setIsNameModalOpen(false)}
+        onSave={(newName) =>{
+          setTempName(newName);
+           setIsNameModalOpen(false);
+        }} />
     </>
   );
 }

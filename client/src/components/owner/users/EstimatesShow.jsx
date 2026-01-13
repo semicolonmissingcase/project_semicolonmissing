@@ -7,8 +7,6 @@ export default function EstimatesShow({ isOpen, onClose, data, showReserveButton
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); // 결제 모달
   if (!isOpen || !data) return null;
 
-  console.log('EstimatesShow data:', data);
-
   return (
     <div className="estimateshow-overlay" onClick={onClose}>
       <div className="estimateshow-content" onClick={(e) => e.stopPropagation()}>

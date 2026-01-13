@@ -348,6 +348,10 @@ async function updateOwner(userId, role, updateData) {
     fieldsToUpdate.profile = updateData.profile;
   }
 
+  if(updateData.password !== undefined) {
+    fieldsToUpdate.password = bcrypt.hashSync(updateData.password, 10);
+  }
+
   // 트랜잭션 시작
   return await db.sequelize.transaction(async t => {
     // 리포지토리를 통해 db업뎃
