@@ -94,7 +94,7 @@ function CleanersMyPage() {
           <div className="cleanermypage-profile-image-container">
             <div 
               className="cleanermypage-profile-placeholder-img" 
-              style={{ backgroundImage: `url(${user?.profileImage || '/icons/default-profile.png'})`, backgroundSize: 'cover' }}
+              style={{ backgroundImage: `url(${user?.profile || '/icons/default-profile.png'})`, backgroundSize: 'cover' }}
             ></div>            
             <button type='button' className="cleanermypage-profile-edit-badge" onClick={() => navigate('/cleaners/profileedit')}></button>
           </div>
