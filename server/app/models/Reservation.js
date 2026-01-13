@@ -39,17 +39,17 @@ const attributes = {
     comment: '희망 날짜',
     get() {
       const val = this.getDataValue('date')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD');
-    }  
+    }
   },
   time: {
     field: 'time',
     type: DataTypes.TIME,
     allowNull: false,
-    comment: '희망 시간(nullable 고려중)', 
+    comment: '희망 시간(nullable 고려중)',
   },
   status: {
     field: 'status',
@@ -81,11 +81,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('createdAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    } 
+    }
   },
   updatedAt: {
     field: 'updated_at',
@@ -93,11 +93,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('updatedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }     
+    }
   },
   deletedAt: {
     field: 'deleted_at',
@@ -105,11 +105,11 @@ const attributes = {
     allowNull: true,
     get() {
       const val = this.getDataValue('deletedAt')
-      if(!val) {
+      if (!val) {
         return null;
       }
       return dayjs(val).format('YYYY-MM-DD HH:mm:ss');
-    }    
+    }
   }
 };
 
@@ -124,7 +124,7 @@ const Reservation = {
     const define = sequelize.define(modelName, attributes, options);
 
     // JSON으로 serialize시, 제외할 컬럼을 지정
-    define.prototype.toJSON = function() {
+    define.prototype.toJSON = function () {
       const attributes = this.get();
 
       return attributes;
@@ -141,6 +141,7 @@ const Reservation = {
     db.Reservation.hasMany(db.VirtualAccount, { sourceKey: 'id', foreignKey: 'reservationId', as: 'virtualAccount' });
     db.Reservation.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'reservationId', as: 'reviews' });
     db.Reservation.hasOne(db.Estimate, { sourceKey: 'id', foreignKey: 'reservationId', as: 'estimate' });
+    db.Reservation.hasOne(db.Payment, { sourceKey: 'id', foreignKey: 'reservationId', as: 'payment' });
   }
 }
 

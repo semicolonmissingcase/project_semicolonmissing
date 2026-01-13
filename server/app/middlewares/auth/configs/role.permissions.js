@@ -50,6 +50,7 @@ const ROLE_PERMISSIONS = {
     { path: /^\/api\/admin\/adjustments\/view$/, roles: [ADMIN] }, // 관리자 정산 관리 조회
     { path: /^\/api\/admin\/reservations\/view$/, roles: [ADMIN] }, // 관리자 예약 관리 조회
     { path: /^\/api\/admin\/cleaners\/tasks$/, roles: [ADMIN] }, // 기사 작업 내역 관리 조회
+    { path: /^\/api\/admin\/reviews$/, roles: [ADMIN] }, // 리뷰 관리 조회
   ],
   POST: [
     { path: /^\/api\/chat\/rooms$/, roles: [OWNER] },

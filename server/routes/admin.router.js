@@ -16,6 +16,8 @@ import adminOwnersController from '../app/controllers/admin/admin.owners.control
 import adminAdjustmentsController from '../app/controllers/admin/admin.adjustments.controller.js';
 import adminReservationsController from '../app/controllers/admin/admin.reservations.controller.js';
 import adminOwnerDetailsController from '../app/controllers/admin/admin.ownerDetails.controller.js';
+import adminCleanerTasksController from '../app/controllers/admin/admin.cleanerTasks.controller.js';
+import adminReviewsController from '../app/controllers/admin/admin.reviews.controller.js';
 
 const adminRouter = express.Router();
 
@@ -48,5 +50,13 @@ adminRouter.get('/reservations/statistics', authMiddleware, adminReservationsCon
 // 점주 상세 프로필
 adminRouter.get('/owners/profiles/:ownerId', authMiddleware, adminOwnerDetailsController.ownerDetailIndex);
 adminRouter.get('/owners/profiles/:ownerId/reservations', authMiddleware, adminOwnerDetailsController.ownerReservationHistoryIndex);
+
+// 전체 기사 작업 내역
+adminRouter.get('/cleaners/tasks', authMiddleware, adminCleanerTasksController.tasksIndex);
+adminRouter.get('/cleaners/tasks/statistics', authMiddleware, adminCleanerTasksController.statisticsIndex);
+
+// 리뷰 관리
+adminRouter.get('/reviews', authMiddleware, adminReviewsController.reviewIndex);
+adminRouter.get('/reviews/statistics', authMiddleware, adminReviewsController.statisticsIndex);
 
 export default adminRouter;
