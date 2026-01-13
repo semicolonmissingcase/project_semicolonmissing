@@ -65,10 +65,13 @@ export default function AdminAdjustment() {
       size: 130,
     },
     {
-      accessorKey: 'settlementAmount',
-      header: '정산금액',
-      size: 120,
-      cell: ({ getValue }) => `${getValue().toLocaleString()} 원`,
+    accessorKey: 'settlementAmount',
+    header: '정산 금액',
+    size: 120,
+    cell: ({ getValue }) => {
+      const value = getValue();
+      return (value || 0).toLocaleString() + '원';
+      },
     },
     {
       accessorKey: 'status',

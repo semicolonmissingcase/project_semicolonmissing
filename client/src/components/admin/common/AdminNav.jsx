@@ -19,11 +19,11 @@ export default function AdminNav() {
       </div>
 
       <ul className="admin-nav-menu">
-        <li className="admin-nav-item">
+        <li className="admin-nav-item" onClick={() => navigate('')}>
           통합모니터링
         </li>
 
-        <li className="admin-nav-item">
+        <li className="admin-nav-item" onClick={() => navigate('reservations')}>
           예약 관리
         </li>
 
@@ -55,11 +55,11 @@ export default function AdminNav() {
         {isDriverOpen && (
           <ul className="admin-nav-submenu">
             <li className="admin-nav-subitem" onClick={() => navigate('cleaners/profiles')}>프로필</li>
-            <li className="admin-nav-subitem">작업 내역</li>
+            <li className="admin-nav-subitem" onClick={() => navigate('cleanerTasks')}>작업 내역</li>
           </ul>
         )}
 
-        <li className="admin-nav-item">
+        <li className="admin-nav-item" onClick={() => navigate('adjustments')}>
           정산 관리
         </li>
 
@@ -74,8 +74,8 @@ export default function AdminNav() {
 
         {isInquiryOpen && (
           <ul className="admin-nav-submenu">
-            <li className="admin-nav-subitem">문의 관리</li>
-            <li className="admin-nav-subitem">리뷰 관리</li>
+            <li className="admin-nav-subitem" onClick={() => navigate('qna')}>문의 관리</li>
+            <li className="admin-nav-subitem" onClick={() => navigate('reviews')}>리뷰 관리</li>
           </ul>
         )}
       </ul>

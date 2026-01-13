@@ -119,9 +119,9 @@ export default function AdminOwnerDetail() {
 
     // 언마운트 시 점주 상세 데이터 초기화
     return () => {
-      dispatch(clearAdminOwnerDetail());
+      dispatch(clearAdminOwnerDetails());
     };
-  }, [ownerId]);
+  }, []);
 
   // -----------------------
   // 예외 랜더링

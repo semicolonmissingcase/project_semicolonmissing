@@ -9,7 +9,7 @@ import AdminTableUi from "../common/table/AdminTableUi.jsx";
 import AdminStatistics from '../common/AdminStatistics.jsx';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearAdminCleaners, setPage, setOffset } from "../../../store/slices/adminPaginationSlice.js";
+import { clearAdminReservations, setPage, setOffset } from "../../../store/slices/adminPaginationSlice.js";
 import adminReservationsThunk from "../../../store/thunks/adminReservationsThunk.js";
 import AdminError from "../common/AdminError.jsx";
 import dayjs from "dayjs";
@@ -64,12 +64,15 @@ const columns = [
     cell: ({ getValue }) => dayjs(getValue()).format('YYYY-MM-DD'),
   },
   {
-    accessorKey: 'time',
-    header: '방문 시간',
-    size: 100,
-    enableSorting: true,
-    cell: ({ getValue }) => getValue().slice(0, 5), // 'HH:mm' 형식
+  accessorKey: 'time',
+  header: '방문 시간',
+  size: 100,
+  enableSorting: true,
+  cell: ({ getValue }) => {
+    const timeValue = getValue();
+    return timeValue ? timeValue.slice(0, 5) : "-";
   },
+},
   {
     accessorKey: 'cleanerName',
     header: '매칭 기사',
@@ -92,7 +95,6 @@ const columns = [
 
 export default function AdminReservation() {
   const dispatch = useDispatch();
-  // adminPagination 슬라이스에 예약 관련 상태(statistics 등)가 저장된다고 가정
   const { data, page, totalCount, offset, error, statistics } = useSelector(state => state.adminPagination);
 
   const changeOffset = async (val) => {
@@ -114,7 +116,7 @@ export default function AdminReservation() {
   useEffect(() => {
     fetchPagenation();
     return () => {
-      dispatch(clearAdminCleaners());
+      dispatch(clearAdminReservations());
     };
   }, []);
 

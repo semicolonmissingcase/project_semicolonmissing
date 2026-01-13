@@ -12,6 +12,8 @@ import adminDashboardThunk from "../thunks/adminDashboardThunk.js";
 import adminAdjustmentsThunk from "../thunks/adminAdjustmentsThunk.js";
 import adminReservationsThunk from "../thunks/adminReservationsThunk.js";
 import adminOwnerDetailsThunk from "../thunks/adminOwnerDetailsThunk.js";
+import adminCleanerTasksThunk from "../thunks/adminCleanerTasksThunk.js";
+import adminReviewsThunk from "../thunks/adminReviewsThunk .js";
 
 const initialState = {
   // index 관련
@@ -37,7 +39,7 @@ const slice = createSlice({
     clearAdminCleaners(state) {
       state.data = [];
       state.statistics = null;
-      state.page = 0;
+      state.page = 1;
       state.offset = 10;
       state.totalCount = 0;
       state.error = null;
@@ -45,7 +47,7 @@ const slice = createSlice({
     clearAdminOwners(state) {
       state.data = [];
       state.statistics = null;
-      state.page = 0;
+      state.page = 1;
       state.offset = 10;
       state.totalCount = 0;
       state.error = null;
@@ -54,7 +56,7 @@ const slice = createSlice({
       state.data = [];
       state.statistics = null;
       state.chartData = [];
-      state.page = 0;
+      state.page = 1;
       state.totalCount = 0;
       state.error = null;
     },
@@ -81,7 +83,23 @@ const slice = createSlice({
       state.page = 1;
       state.totalCount = 0;
       state.error = null;
-    }
+    },
+    clearAdminCleanerTasks(state) {
+      state.data = [];
+      state.statistics = null;
+      state.page = 1;
+      state.offset = 10;
+      state.totalCount = 0;
+      state.error = null;
+    },
+    clearAdminReviews(state) {
+      state.data = [];
+      state.statistics = null;
+      state.page = 1;
+      state.offset = 10;
+      state.totalCount = 0;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -169,7 +187,7 @@ const slice = createSlice({
         state.page = currentPage;
         state.error = null;
       })
-      
+
       // ------------------------
       // 예약 관리 내역 조회
       // ------------------------
@@ -181,6 +199,36 @@ const slice = createSlice({
         state.totalCount = total;
         state.page = currentPage;
         state.error = null;
+      })
+
+      // ------------------------
+      // 기사 작업 내역 관리
+      // ------------------------
+      .addCase(adminCleanerTasksThunk.getTasks.fulfilled, (state, action) => {
+        const { total, currentPage, reservations } = action.payload.data;
+        state.data = reservations;
+        state.totalCount = total;
+        state.page = currentPage;
+        state.error = null;
+      })
+      .addCase(adminCleanerTasksThunk.getStatistics.fulfilled, (state, action) => {
+        const { statistics } = action.payload.data;
+        state.statistics = statistics;
+      })
+
+      // ------------------------
+      // 리뷰 관리
+      // ------------------------
+      .addCase(adminReviewsThunk.getReviews.fulfilled, (state, action) => {
+        const { total, currentPage, reviews } = action.payload.data;
+        state.data = reviews;
+        state.totalCount = total;
+        state.page = currentPage;
+        state.error = null;
+      })
+      .addCase(adminReviewsThunk.getStatistics.fulfilled, (state, action) => {
+        const { statistics } = action.payload.data;
+        state.statistics = statistics;
       })
 
       // ------------------------
@@ -239,8 +287,10 @@ export const {
   clearAdminOwners,
   clearAdminDashboards,
   clearAdminAdjustments,
-  clearAdminReservaions,
+  clearAdminReservations,
   clearAdminOwnerDetails,
+  clearAdminCleanerTasks,
+  clearAdminReviews,
 } = slice.actions;
 
 export default slice.reducer;

@@ -35,15 +35,16 @@ import AdminQna from "../components/admin/pages/AdminQna.jsx"
 import AdminInquiryReply from "../components/admin/pages/AdminInquiryReply.jsx";
 import AdminOwnerProfile from "../components/admin/pages/cleaners/AdminOwnerProfile.jsx";
 import AdminAdjustment from "../components/admin/pages/AdminAdjustment.jsx";
-import AdminReservation from "../components/admin/pages/AdminReservation.jsx";
+import AdminCleanerTask from "../components/admin/pages/AdminCleanerTask.jsx";
+import AdminReview from "../components/admin/pages/AdminReview.jsx";
 import AdminOwnerDetail from "../components/admin/pages/AdminOwnerDetail.jsx";
+import AdminReservation from "../components/admin/pages/AdminReservation.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
 import ChatList from "../components/chat/ChatList.jsx";
 // 결제 관련 
 import PaymentSuccess from "../components/payment/paymentSuccess.jsx";
 import PaymentFail from "../components/payment/paymentFail.jsx";
-
 
 
 const router = createBrowserRouter([
@@ -85,95 +86,110 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: '/cleaners',
-        element: <Outlet />,
+        element: <ProtectedRouter />,
         children: [
-           {
-            // 기사 계좌 수정 페이지
-            path: 'accountedit',
-            element: <CleanersAccountEdit />
-          },
           {
-            // 기사 정보 수정 페이지
-            path: 'infoedit',
-            element: <CleanersInfoEdit />
-          },
-          {
-            // 기사 프로필 수정 페이지
-            path: 'profileedit',
-            element: <CleanersProfileEdit />,
-          },
-          { 
-            // 기사 마이 페이지
-            path: 'mypage',
-            element: <CleanersMyPage />,
-          },
-          {
-            path: 'mypage/job/:id', 
-            element: <ReservationDetail />,
-          },
-          {
-            // 기사 견적 작성 임시저장 페이지
-            path: 'quotationspreparationsave',
-            element: <CleanersQuotationsPreparationSave />,
-          },
-          {
-            // 유저 견적 작성 페이지
-            path: 'quotations',
-            element: <CleanersUserQuotations />,
-          },
-          {
-            // 유저 견적 작성 페이지 상세
-            path: 'quotations/:id',
-            element: <CleanersUserQuotationsShow />,
+            path: '/cleaners',
+            element: <Outlet />,
+            children: [
+               {
+                // 기사 계좌 수정 페이지
+                path: 'accountedit',
+                element: <CleanersAccountEdit />
+              },
+              {
+                // 기사 정보 수정 페이지
+                path: 'infoedit',
+                element: <CleanersInfoEdit />
+              },
+              {
+                // 기사 프로필 수정 페이지
+                path: 'profileedit',
+                element: <CleanersProfileEdit />,
+              },
+              { 
+                // 기사 마이 페이지
+                path: 'mypage',
+                element: <CleanersMyPage />,
+              },
+              {
+                path: 'mypage/job/:id', 
+                element: <ReservationDetail />,
+              },
+              {
+                // 기사 견적 작성 임시저장 페이지
+                path: 'quotationspreparationsave',
+                element: <CleanersQuotationsPreparationSave />,
+              },
+              {
+                // 유저 견적 작성 페이지
+                path: 'quotations',
+                element: <CleanersUserQuotations />,
+              },
+              {
+                // 유저 견적 작성 페이지 상세
+                path: 'quotations/:id',
+                element: <CleanersUserQuotationsShow />,
+              },
+            ]
           },
         ]
       },
       {
-        path: '/owners',
-        element: <Outlet />,
+        element: <ProtectedRouter />,
         children: [
           {
-            // 점주 마이페이지
-            path: 'mypage',
-            element: <OwnerMyPage />
+            path: '/owners',
+            element: <Outlet />,
+            children: [
+              {
+                // 점주 마이페이지
+                path: 'mypage',
+                element: <OwnerMyPage />
+              },
+              {
+                // 점주 정보 수정페이지
+                path: 'info',
+                element: <OwnerInfo />
+              },
+              {
+                // 점주 견적 요청서 작성 페이지
+                path: 'reservation',
+                element: <OwnerReservation />,
+              },
+              {
+                // 점주가 확인하는 요청서 페이지
+                path: 'reservation/:id',
+                element: <OwnerReservationShow />
+              }
+            ]
           },
-          {
-            // 점주 정보 수정페이지
-            path: 'info',
-            element: <OwnerInfo />
-          },
-          {
-            // 점주 견적 요청서 작성 페이지
-            path: 'reservation',
-            element: <OwnerReservation />,
-          },
-          {
-            // 점주가 확인하는 요청서 페이지
-            path: 'reservation/:id',
-            element: <OwnerReservationShow />
-          }
         ]
       },
       {
-        path: '/qnaposts',
-        element: <Outlet />,
+        element: <ProtectedRouter />,
         children: [
           {
-            // 문의게시판
-            path: '',
-            element: <QnaPost />
+            path: '/qnaposts',
+            element: <Outlet />,
+            children: [
+              {
+                // 문의게시판
+                path: '',
+                element: <QnaPost />
+              },
+              {
+                // 글작성 페이지
+                path: 'create',
+                element: <PostCreate />
+              },
+              {
+                // 게시글 확인 페이지
+                path: 'show/:id',
+                element: <QnaPostShow />
+              }
+            ]
           },
-          {
-            // 글작성 페이지
-            path: 'create',
-            element: <PostCreate />
-          },
-          {
-            // 게시글 확인 페이지
-            path: 'show/:id',
-            element: <QnaPostShow />
-          }
         ]
       },
       // -------------------------------------
@@ -241,14 +257,14 @@ const router = createBrowserRouter([
                     element: <AdminMain />
                   },
                   {
-                    // 예약 관리 페이지
-                    path: 'reservation',
-                    element: <AdminReservation />
-                  },
-                  {
                     // 기사 프로필 관리 페이지
                     path: 'cleanerprofile',
                     element: <AdminCleanerProfile />
+                  },
+                  {
+                    // 예약 관리 페이지
+                    path: 'reservations',
+                    element: <AdminReservation />
                   },
                   {
                     // 문의 관리 페이지
@@ -266,14 +282,24 @@ const router = createBrowserRouter([
                     element: <AdminOwnerProfile />
                   },
                   {
-                    // 점주 상세 정보 관리 페이지
-                    path: 'owners/profiles/:ownerId',
+                    // 점주 프로필 상세 페이지
+                    path: 'ownerDetails',
                     element: <AdminOwnerDetail />
                   },
                   {
-                    // 정산 관리 페이지 추가
+                    // 정산 관리 페이지
                     path: 'adjustments',
                     element: <AdminAdjustment />
+                  },
+                  {
+                    // 기사 작업 내역 관리 페이지
+                    path: 'cleanertasks',
+                    element: <AdminCleanerTask />
+                  },
+                  {
+                    // 리뷰 관리 페이지
+                    path: 'reviews',
+                    element: <AdminReview />
                   },
                 ],
               },
