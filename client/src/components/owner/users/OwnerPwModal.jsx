@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import "./OwnerPwModal.css";
+import { updateOwnerInfoThunk } from "../../../store/thunks/authThunk.js";
+import { useDispatch } from "react-redux";
 
 function OwnerPwModal({ isOpen, onClose }) {
+  const dispatch = useDispatch();
   const [pwData, setPwData] = useState({
     currentPw: "",
     newPw: "",
@@ -15,12 +18,27 @@ function OwnerPwModal({ isOpen, onClose }) {
     setPwData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: 비밀번호 변경 로직 (API 호출 등)
-    console.log("비밀번호 변경 데이터:", pwData);
-    alert("비밀번호가 변경되었습니다.");
-    onClose();
+
+    if (pwData.newPw !== pwData.confirmPw) {
+      alert("새 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    const payload = {
+      password: pwData.newPw 
+    };
+
+    try {
+      await dispatch(updateOwnerInfoThunk(payload)).unwrap();
+      
+      alert("비밀번호가 변경되었습니다.");
+      setPwData({ currentPw: "", newPw: "", confirmPw: "" });
+      onClose();
+    } catch (err) {
+      alert(err.msg || "비밀번호 변경 중 오류가 발생했습니다.");
+    }
   };
 
   return (
