@@ -171,7 +171,8 @@ export default function MyReviews() {
       <ReviewModal 
         isOpen={isWriteModalOpen}
         onClose={() => setIsWriteModalOpen(false)} 
-        targetData={selectedItem} 
+        targetData={selectedItem}
+        onSuccess={fetchReviews} 
       />
 
       {/* 리뷰 보기 모달 */}
