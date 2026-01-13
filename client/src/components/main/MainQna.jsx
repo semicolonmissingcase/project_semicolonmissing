@@ -12,23 +12,23 @@ export default function MainQna() {
   const faqs = [
     {
       id: 1,
-      question: "Q. 이거는 문의 제목이 들어갑니다.",
-      answer: "A. 이거는 답변 출력"
+      question: "Q. 제빙기 청소는 얼마나 자주 해야 하나요?",
+      answer: "A. 일반적으로 3개월에 한 번 정기 청소를 권장합니다."
     },
     {
       id: 2,
-      question: "Q. 이거는 문의 제목이 들어갑니다.",
-      answer: "A. 이거는 답변 출력"
+      question: "Q. 보험은 어떻게 되나요?",
+      answer: "A. 작업 중 발생한 사고는 플랫폼 보험으로 처리됩니다."
     },
     {
       id: 3,
-      question: "Q. 이거는 문의 제목이 들어갑니다.",
-      answer: "A. 이거는 답변 출력"
+      question: "Q. 예약 취소는 어떻게 하나요?",
+      answer: "A. 예약 관리 페이지에서 24시간 전까지 취소 가능합니다."
     },
     {
       id: 4,
-      question: "Q. 이거는 문의 제목이 들어갑니다.",
-      answer: "A. 이거는 답변 출력"
+      question: "Q. 기사 등록은 어떻게 하나요?",
+      answer: "A. 회원가입 후 기사 인증 서류를 제출하시면 됩니다."
     }
   ];
 

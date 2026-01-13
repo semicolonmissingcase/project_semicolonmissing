@@ -68,10 +68,10 @@ app.use(process.env.ACCESS_FILE_EDITOR_IMAGE_PATH, express.static(process.env.FI
 app.use(process.env.ACCESS_FILE_INQUIRY_IMAGE_PATH, express.static(process.env.FILE_INQUIRY_IMAGE_PATH));
 app.use(process.env.ACCESS_FILE_RESERVATION_IMAGE_PATH, express.static(process.env.FILE_RESERVATION_IMAGE_PATH));
 app.use(process.env.ACCESS_FILE_REVIEW_IMAGE_PATH, express.static(process.env.FILE_REVIEW_IMAGE_PATH));
-
+app.use('/', express.static(process.env.APP_DIST_PATH));
 // React 뷰 반환
 app.get(/^(?!\/storage).*/, (req, res) => {
-  return res.sendFile(process.env.APP_DIST_PATH);
+  return res.sendFile(`${process.env.APP_DIST_PATH}/index.html`);
 });
 
 // 에러 핸들러 등록
