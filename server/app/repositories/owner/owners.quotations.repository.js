@@ -59,7 +59,7 @@ async function submissionFindByReservationId(t = null, id) {
 
       ],
       order: [
-        [sequelize.literal('`Question`.`code` IS NULL'), 'ASC'],
+        [sequelize.literal('`question`.`code` IS NULL'), 'ASC'],
         [{ model: Question, as: 'question' }, 'code', 'ASC']
       ]
     },

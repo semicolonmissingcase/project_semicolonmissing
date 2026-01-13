@@ -145,6 +145,7 @@ const Cleaner = {
     db.Cleaner.hasMany(db.CleanerAccount, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'cleanerAccounts' });
     db.Cleaner.hasMany(db.Like, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'likes' });
     db.Cleaner.hasMany(db.Review, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'reviews' });
+    db.Cleaner.hasMany(db.Adjustment, { sourceKey: 'id', foreignKey: 'cleanerId', as: 'adjustments'});
   }
 }
 
