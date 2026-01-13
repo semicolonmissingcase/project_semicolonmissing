@@ -15,7 +15,6 @@ export default function InquiryHistory() {
       try {
         setLoading(true);
         const responseData = await getMyInquiry();
-console.log('서버로부터 받은 실제 데이터:', responseData);
         const transformedData = responseData.map(item => ({
           id: item.id,
           title: item.title,

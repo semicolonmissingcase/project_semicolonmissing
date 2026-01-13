@@ -46,6 +46,17 @@ export const getEstimatesByReservationId = async (reservationId) => {
   return response.data.data;
 };
 
+// 견적서 상세조회
+export const getQuotationDetails = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/api/owners/quotations/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.error(`견적서(${id}) 상세 정보 조회 실패:`, error);
+    throw error;
+  }
+};
+
 // 내 예약목록
 export const getAcceptedEstimatesByOwnerId = async (reservationId) => {
   try {
@@ -61,9 +72,6 @@ export const getAcceptedEstimatesByOwnerId = async (reservationId) => {
 export const toggleCleanerFavorite = async (cleanerId) => {
   try {
     const response = await axiosInstance.post(`${OWNER_API_URL}/cleaners/${cleanerId}/like`);
-    console.log("[DEBUG] toggleCleanerFavorite API 응답 객체:", response);
-    console.log("[DEBUG] toggleCleanerFavorite API 응답 데이터:", response.data);
-    console.log("[DEBUG] toggleCleanerFavorite API 실제 데이터:", response.data.data);
  
     if (response && response.data && response.data.data !== undefined) {
       return response.data.data;

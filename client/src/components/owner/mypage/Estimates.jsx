@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
 import { getOwnerReservations, getEstimatesByReservationId } from '../../../api/axiosOwner.js';
 import { createChatRoom } from '../../../api/axiosChat.js';
+import EstimatesShow from '../users/EstimatesShow.jsx';
 
 // 받은 견적
 export default function Estimates() {
@@ -15,6 +16,9 @@ export default function Estimates() {
   const [estimates, setEstimates] = useState([]); // 견적서 관련
   const [estimatesLoading, setEstimatesLoading] = useState(false);
   const [estimatesError, setEstimatesError] = useState(null);
+  // --- 모달 관련 상태 추가 ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
 
   // 예약 목록
   useEffect(() => {
@@ -44,10 +48,26 @@ export default function Estimates() {
       setEstimates(data);
     } catch (err) {
       setEstimatesError(err);
-      console.error("견적 목록 불러오기 실패:", err);
     } finally {
       setEstimatesLoading(false); // 로딩 종료
     }
+  };
+
+  // 모달 열기 핸들러
+  const handleOpenModal = (estimate) => {
+    // 모달에서 필요한 데이터 형식으로 매핑
+    const dataForModal = {
+      cleanerId: estimate.cleaner?.id,
+      cleanerName: estimate.cleaner?.name,
+      cleanerProfile: estimate.cleaner?.profile,
+      avgReviewScore: Number(estimate.cleaner?.avgReviewScore || 0).toFixed(1),
+      comment: estimate.comment, // 기사님 한마디
+      price: estimate.estimatedAmount,
+      description: estimate.description, // 견적 상세 설명
+      reservationId: selectedReservation.id,
+    };
+    setModalData(dataForModal);
+    setIsModalOpen(true);
   };
 
   // 채팅방 생성 및 연결
@@ -63,8 +83,6 @@ export default function Estimates() {
         cleaner_id: cleanerId,
       });
 
-      console.log('API로부터 받은 응답 전체 (response):', response);
-
       const chatRoomId = response.data.data.id;
 
       if(chatRoomId) {
@@ -73,14 +91,9 @@ export default function Estimates() {
         alert("채팅방을 찾을 수 없습니다.");
       }
     } catch (error) {
-      console.error("채팅방 생성/조회 실패:", error);
       alert("채팅방 연결에 실패했습니다.");
     }
   };
-
-  function reservationShow() {
-    navigate('/owners/reservation/:id');
-  }
 
   return (
     <div className="estimates-page">
@@ -165,7 +178,11 @@ export default function Estimates() {
                     </div>
   
                     <div className="estimates-card-action-row">
-                      <button className="estimates-btn-light" onClick={reservationShow}>견적서 보기</button>
+                      <button className="estimates-btn-light"
+                        onClick={() => handleOpenModal(estimate)}
+                      >
+                        견적서 보기
+                        </button>
                       <button className="estimates-btn-primary" 
                         onClick={() => handleChatRoom(estimate.id, estimate.cleaner?.id)}>
                           채팅하기
@@ -178,6 +195,14 @@ export default function Estimates() {
           </div>
         </div>
       )}
+
+      {/* 견적서 모달 */}
+      <EstimatesShow 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        data={modalData}
+        showReserveButton={true}
+      />
     </div>
   );
 }

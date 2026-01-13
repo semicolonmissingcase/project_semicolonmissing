@@ -101,7 +101,6 @@ export default function OwnerMyPage() {
         setSelectedFile(null); // 파일 선택 상태 초기화
       })
       .catch((error) => {
-        console.error('프로필 업로드 실패:', error);
         alert('업로드에 실패했습니다. 다시 시도해주세요.')
       });
   };

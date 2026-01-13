@@ -5,11 +5,11 @@ import { getAcceptedEstimatesByOwnerId } from '../../../api/axiosOwner.js';
 import FavoriteButton from '../../commons/FavoriteBtn.jsx';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import CleanerProfileModal from '../../commons/CleanerProfileModal.jsx';
 import { useNavigate } from 'react-router-dom';
 import { createChatRoom } from '../../../api/axiosChat.js';
 import { useCallback } from 'react';
 import { cancelEstimateThunk } from '../../../store/thunks/estimateThunk.js';
+import EstimatesShow from '../users/EstimatesShow.jsx';
 
 // 예약완료
 export default function Reservations() {
@@ -18,8 +18,9 @@ export default function Reservations() {
   const [estimates, setEstimates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // --- 모달 관련 상태 추가 ---
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCleaner, setSelectedCleaner] = useState(null);
+  const [modalData, setModalData] = useState(null);
   
   // 취소관련
   const fetchEstimates = useCallback(async() => {
@@ -60,13 +61,20 @@ export default function Reservations() {
     }
   };
 
-  function reservationShow() {
-    navigate('/owners/reservation/:id');
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedCleaner(null);
+  // 모달 열기 핸들러
+  const handleOpenModal = (item) => {
+    // 모달에서 필요한 데이터 형식으로 매핑
+    const dataForModal = {
+      cleanerId: item.cleanerId,
+      cleanerName: item.name,           // item.name 사용
+      cleanerProfile: item.cleanerProfile,
+      avgReviewScore: Number(item.avgReviewScore || 0).toFixed(1),
+      comment: item.comment,           // API에서 넘어오는 기사님 한마디
+      price: item.price,               // item.price 사용
+      description: item.description,   // API에서 넘어오는 상세 설명
+    };
+    setModalData(dataForModal);
+    setIsModalOpen(true);
   };
 
   // 채팅방 생성 및 연결
@@ -151,21 +159,20 @@ export default function Reservations() {
                   </button>
                 </>
               ) : item.status === '완료' ? (
-                <button className="bg-blue" onClick={reservationShow} >견적서 보기</button>
+                <button className="bg-blue" onClick={() => handleOpenModal(item)}>견적서 보기</button>
               ) : null}
             </div>
           </div>
         ))}
-      </div>
+      </div>  
 
-      {/* 기사님 프로필 모달 */}
-      {isModalOpen && selectedCleaner && (
-        <CleanerProfileModal 
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          cleanerData={selectedCleaner}
+        {/* 견적서 모달 */}
+        <EstimatesShow 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          data={modalData}
+          showReserveButton={false}
         />
-      )}  
     </div>
   );
 }

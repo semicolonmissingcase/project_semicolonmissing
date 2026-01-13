@@ -126,7 +126,6 @@ export default function OwnerReservationShow({ data, estimateData }) {
         </div>
       </div>
 
-      {/* 이미지 라이트박스 모달 생략 (동일) */}
     </div>
   );
 }
