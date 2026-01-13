@@ -1,7 +1,7 @@
 import "./MainTopSection.css";
 import "./MainCleaningInfo.css";
 import "./MainServiceProcess.css";
-import "./MainQnA.css";
+import "./MainQna.css";
 import { useState } from "react";
 import MainQna from "./MainQna.jsx";
 
