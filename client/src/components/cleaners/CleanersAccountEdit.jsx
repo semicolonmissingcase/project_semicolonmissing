@@ -12,7 +12,6 @@ import banksThunk from "../../store/thunks/banksThunk.js";
 function CleanerAccountEdit() {
   const dispatch = useDispatch();
   const { bankList } = useSelector(state => state.banks);
-
   const [toggleNew, setToggleNew] = useState(true);
   const [toggleInfo, setToggleInfo] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -158,7 +157,7 @@ function CleanerAccountEdit() {
                     </div>
                     {account ? (
                       <p className="cleaners-account-edit-account-message">
-                        현재 등록된 계좌: <br /> <strong>{account.bank.name} {account.accountNumber} {account.depositor}</strong>
+                        현재 등록된 계좌: <br /> <strong>{account?.bank?.name} {account.accountNumber} {account.depositor}</strong>
                       </p>
                     ) : (
                       <p className="cleaners-account-edit-account-message">정산에 사용할 계좌를 등록해 주세요.</p>
