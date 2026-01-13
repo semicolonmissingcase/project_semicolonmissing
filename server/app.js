@@ -30,19 +30,12 @@ import estimateRouter from './routes/estimate.router.js';
 import paymentsRouter from './routes/payments.router.js';
 import notFoundRouter from './routes/notFoundRouter.js';
 import bankAccountRouter from './routes/banks.routes.js';
+import corsMiddleware from './app/middlewares/cors/cors.middleware.js';
 
 const app = express();
-app.use(cors({
-  origin: "http://localhost:5173", // 프론트 주소
-  credentials: true,
-  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
-}));
+app.use(corsMiddleware);
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
-app.use('/storage/images/posts', express.static('storage/images/posts'));
-app.use('/storage/images/profiles', express.static('storage/images/profiles'));
-app.use('/storage/images/chat', express.static('storage/images/chat'));
-app.use('/uploads', express.static('uploads'));
 
 // -----------------
 // 라우터 정의
@@ -63,6 +56,24 @@ app.use('/api/banks', bankAccountRouter); // 은행 관련
 // API notFound 처리
 app.use(notFoundRouter);
 
+// --------------------
+// 뷰 반환 처리
+// --------------------
+// 퍼블릭 정적파일 제공 활성화
+app.use(process.env.ACCESS_FILE_POST_IMAGE_PATH, express.static(process.env.FILE_POST_IMAGE_PATH));
+app.use(process.env.ACCESS_FILE_USER_PROFILE_PATH, express.static(process.env.FILE_USER_PROFILE_PATH));
+app.use(process.env.ACCESS_FILE_CHAT_IMAGE_PATH, express.static(process.env.FILE_CHAT_IMAGE_PATH));
+app.use(process.env.ACCESS_FILE_UPLOADS_IMAGE_PATH, express.static(process.env.FILE_UPLOADS_IMAGE_PATH));
+app.use(process.env.ACCESS_FILE_EDITOR_IMAGE_PATH, express.static(process.env.FILE_EDITOR_IMAGE_PATH));
+app.use(process.env.ACCESS_FILE_INQUIRY_IMAGE_PATH, express.static(process.env.FILE_INQUIRY_IMAGE_PATH));
+app.use(process.env.ACCESS_FILE_RESERVATION_IMAGE_PATH, express.static(process.env.FILE_RESERVATION_IMAGE_PATH));
+app.use(process.env.ACCESS_FILE_REVIEW_IMAGE_PATH, express.static(process.env.FILE_REVIEW_IMAGE_PATH));
+
+// React 뷰 반환
+app.get(/^(?!\/storage).*/, (req, res) => {
+  return res.sendFile(process.env.APP_DIST_PATH);
+});
+
 // 에러 핸들러 등록
 app.use(errorHandler);
 
@@ -72,7 +83,7 @@ app.use(errorHandler);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.APP_URL,
     methods: ["GET", "POST"],
     credentials: true
   }
