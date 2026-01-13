@@ -89,15 +89,15 @@ export default function TodayJobList() {
             {/* 중단: 상세 정보 섹션 */}
             <div className="todayJobList-info-section">
               <div className="todayJobList-info-item">
-                <span className="todayJobList-label"><FaClock /> 방문 시간</span>
+                <span className="todayJobList-label"><FaClock /> 시간</span>
                 <span className="todayJobList-value highlight">{job.time ? job.time.slice(0, 5) : "시간 미정"}</span>
               </div>
               <div className="todayJobList-info-item">
-                <span className="todayJobList-label"><FaMapMarkerAlt /> 상세 위치</span>
+                <span className="todayJobList-label"><FaMapMarkerAlt /> 위치</span>
                 <span className="todayJobList-value">{job.store?.addr1 || "주소 정보 없음"}</span>
               </div>
               <div className="todayJobList-info-item">
-                <span className="todayJobList-label"><FaUser /> 담당 점주</span>
+                <span className="todayJobList-label"><FaUser /> 예약자</span>
                 <span className="todayJobList-value">{job.owner?.name || "정보 없음"} 점주님</span>
               </div>
             </div>

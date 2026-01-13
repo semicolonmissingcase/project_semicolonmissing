@@ -156,7 +156,7 @@ async function getChatRoomWithSidebar(roomId, userRole) {
     const roomPlain = room.get({ plain: true });
     const reservationId = roomPlain.estimate?.reservationId;
 
-    // 예약 데이터 및 서브미션 조회 (reservationId가 없을 경우를 대비해 null 처리)
+    // 예약 데이터 및 서브미션 조회
     let reservationDetail = null;
     let submissions = [];
 
@@ -183,6 +183,10 @@ async function getChatRoomWithSidebar(roomId, userRole) {
         ownerName: roomPlain.owner?.name,
         cleanerId: cleaner?.id,
         cleanerName: cleaner?.name,
+        
+        estimateId: roomPlain.estimate?.id, 
+        reservationId: reservationId, 
+        
         region: regionText,
         price: roomPlain.estimate?.estimated_amount,
         introduction: cleaner?.introduction,
@@ -193,7 +197,6 @@ async function getChatRoomWithSidebar(roomId, userRole) {
         wishDate: reservationDetail?.date,
         wishTime: reservationDetail?.time,
         estimateContent: roomPlain.estimate?.description,
-        reservationId: reservationId,
         qaList: submissions?.map(s => ({
           question: s.question?.content || '질문 정보 없음',
           answer: s.answer_text || '답변 없음'
