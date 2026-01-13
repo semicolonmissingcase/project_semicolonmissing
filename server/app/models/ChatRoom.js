@@ -36,7 +36,7 @@ const attributes = {
     field: 'estimate_id',
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false,
-    unique: true,
+    unique: false,
     comment: '견적서 PK',
   },
   status: {
@@ -75,6 +75,13 @@ const options = {
   tableName: 'chat_rooms',  // 실제 DB 테이블명
   timestamps: true,      // createdAt, updatedAt를 자동 관리
   paranoid: false,       // soft delete 설정 (deletedAt 자동 관리), leaved_at이 관리하고, deleatedAt이 없으므로 false로 바꿈.
+  indexes: [
+    {
+      unique: true,
+      name: 'unique_chat_room_per_estimate',
+      fields: ['owner_id', 'cleaner_id', 'estimate_id'] 
+    }
+  ]
 }
 
 const ChatRoom = {
