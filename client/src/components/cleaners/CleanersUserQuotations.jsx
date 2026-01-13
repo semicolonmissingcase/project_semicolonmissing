@@ -78,10 +78,7 @@ function CleanersUserQuotations() {
                     </div>
                   </div>
                   <div className="cleaners-user-quotations-img-frame">
-                    {
-                      reservation.store?.owner?.profile ? <img src={reservation.store?.owner?.profile} alt="profile" className="cleaners-user-quotations-img" />
-                        : <div className="cleaners-user-quotations-profile-placeholder" />
-                    }
+                    <div className="cleaners-user-quotations-profile-placeholder" />
                   </div>
                 </div>
               </div>
