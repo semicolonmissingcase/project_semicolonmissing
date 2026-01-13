@@ -39,7 +39,7 @@ async function changePassword(req, res, next) {
     const { id } = req.user;
     const { currentPassword, newPassword } = req.body;
 
-    // 유효성 걱ㅁ사
+    // 유효성 검사
     if(!currentPassword || !newPassword) {
       return res.status(400).send(createBaseResponse({ code: 'BAD_REQUEST', info: '필수 정보가 누락되었습니다'}));
     }

@@ -99,6 +99,7 @@ export default function CleanersInfoEdit() {
       return;
     }
     setCleanerName(newName);
+    setTempName(newName);
     setIsNameModalOpen(false);
   };
 
@@ -125,12 +126,12 @@ export default function CleanersInfoEdit() {
       updateData.name = newName;
     }
     if(isPhoneNumberChanged) {
-      updateData.phoneNumber = newPhoneNumber;
+      updateData.phone = newPhoneNumber;
     }
 
     try {
       await dispatch(updateCleanerInfoThunk(updateData)).unwrap();
-      dispatch(getMeThunk());
+      await dispatch(getMeThunk());
 
       setModalConfig({
         title: '수정 완료',
