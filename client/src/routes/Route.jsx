@@ -37,7 +37,7 @@ import AdminOwnerProfile from "../components/admin/pages/cleaners/AdminOwnerProf
 import AdminAdjustment from "../components/admin/pages/AdminAdjustment.jsx";
 // 채팅 관련 import
 import ChatMain from "../components/chat/ChatMain.jsx";
-import ChatList from "../components/chat/chatList.jsx";
+import ChatList from "../components/chat/ChatList.jsx";
 // 결제 관련 
 import PaymentSuccess from "../components/payment/paymentSuccess.jsx";
 import PaymentFail from "../components/payment/paymentFail.jsx";
