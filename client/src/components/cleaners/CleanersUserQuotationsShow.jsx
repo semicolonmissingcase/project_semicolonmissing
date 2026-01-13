@@ -255,7 +255,7 @@ function CleanersUserQuotationsShow() {
                 className="cleaners-user-quotations-textarea"
                 value={quoteData.description}
                 onChange={(e) => changeQuoteData('description', e.target.value)}
-                placeholder="견적에 대한 상세 설명을 입력하거나 임시 저장 견적을 불러오세요."
+                placeholder="견적에 대한 상세 설명을 입력해주세요."
               ></textarea>
             </div>
           </div>
