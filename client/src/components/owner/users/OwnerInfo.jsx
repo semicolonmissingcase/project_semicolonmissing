@@ -86,7 +86,7 @@ export default function OwnerInfo() {
     }
 
     // 현재 전화번호와 다를 경우만 수정
-    if(user.phoneNumber === newPhoneNumber) {
+    if(user.phoneNumber !== newPhoneNumber) {
       payload.phone = newPhoneNumber;
     }
 
@@ -303,11 +303,12 @@ export default function OwnerInfo() {
       {/* 이름 수정 모달 호출 */}
       <NameEditModal 
         isOpen={isNameModalOpen}
-        currentName={tempName}
-        onClose={() => setIsNameModalOpen(false)}
-        onSave={(newName) =>{
-          setTempName(newName);
-           setIsNameModalOpen(false);
+        tempName={tempName}
+        setTempName={setTempName}
+        onCancel={() => setIsNameModalOpen(false)}
+        onSave={() =>{
+          setName(tempName);
+          setIsNameModalOpen(false);
         }} />
     </>
   );
