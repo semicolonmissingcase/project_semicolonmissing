@@ -2,14 +2,15 @@ import { useState, useEffect } from "react";
 import CleanersRegion from "./cleaners-region-dropdown/CleanersRegion.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getMeThunk, updateCleanerInfoThunk, uploadFileThunk, getCleanerProfileThunk } from "../../store/thunks/authThunk.js";
+import { getMeThunk, updateCleanerInfoThunk, uploadFileThunk, getCleanerProfileThunk, logoutThunk, reissueThunk } from "../../store/thunks/authThunk.js";
 import ConfirmModal from "../result/ConfirmModal.jsx";
 import "./CleanersProfileEdit.css";
 
 function CleanersProfileEdit() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { user, isLoggedIn, isLoading } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
   const [isLoaded, setIsLoaded] = useState(false); // 네비 고장 방지용
 
   // 프로필 정보 상태
@@ -33,25 +34,67 @@ function CleanersProfileEdit() {
 
   // 초기 데이터 로드
   useEffect(() => {
-    if(!user || isLoaded) return
+    if(user) {
+      setProfileImageUrl(user.profile || "/icons/default-profile.png");
+      setTagline(user.introduction || user.tagline || "");
 
-    const fetchInitialData = async() => {
-      try {
-        if (!user.certifications && !user.driverRegions) {
-          const profileData = await dispatch(getCleanerProfileThunk()).unwrap();
-          setInitialForm(profileData);
-        } else {
-          setInitialForm(user);
-        }
-        setIsLoaded(true);        
-      } catch (error) {
-        console.error("데이터 로드 실패:", error);
-        setIsLoaded(true);
+      if (user.certifications) {
+        setCertificateFiles(user.certifications.map(cert => ({
+          file: null,
+          name: cert.name,
+          url: cert.image,
+        })));
       }
-    };
 
-    fetchInitialData();
-  },[user?.id, dispatch, isLoaded]);
+      if (user.driverRegions) {
+        setSelectedRegions(user.driverRegions.map(region => region.locationId));
+      }
+    }
+    else if (isLoggedIn === false && isLoading === false) {
+      dispatch(getMeThunk());
+    }
+  }, [user, isLoggedIn, isLoading]);
+  // useEffect(() => {
+  //   if(!user || isLoaded) return
+
+  //   const fetchInitialData = async() => {
+  //     try {        
+  //       const refreshedUserAction = await dispatch(getMeThunk());
+  //       const refreshedUser = refreshedUserAction.payload.data.user;
+
+  //       if (refreshedUser && refreshedUser.driverRegions && refreshedUser.driverRegions.length > 0) {
+  //         setInitialForm(refreshedUser);
+  //       } else {
+  //         const profileData = await dispatch(getCleanerProfileThunk()).unwrap();
+  //         setInitialForm(profileData);
+  //       }
+  //       setIsLoaded(true);        
+  //     } catch (error) {
+  //       if (error?.status === 401) {
+  //         console.log("401 인증 오류 감지. 토큰 재발급을 시도합니다...");
+  //         try {
+  //           await dispatch(reissueThunk()).unwrap();
+
+  //           console.log("토큰 재발급 성공. 프로필 정보를 다시 가져옵니다.");
+  //           const profileData = await dispatch(getCleanerProfileThunk()).unwrap();
+  //           setInitialForm(profileData);
+  //           setIsLoaded(true);
+
+  //         } catch (reissueError) {
+  //           console.error("토큰 재발급 최종 실패. 로그아웃합니다.", reissueError);
+  //           alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+  //           dispatch(logoutThunk());
+  //         }
+  //       } else {
+  //         console.error("데이터 로드에 최종적으로 실패했습니다:", error);
+  //         alert("사용자 정보를 불러오는 데 실패했습니다. 다시 로그인해주세요.");
+  //         setIsLoaded(true);
+  //       }
+  //     }
+  //   };
+
+  //   fetchInitialData()
+  // }, [user?.id, dispatch, isLoaded]);
 
   const setInitialForm = (data) => {
     setProfileImageUrl(data.profile || "/icons/default-profile.png");

@@ -21,5 +21,4 @@ authRouter.get('/callback/:provider', userController.socialCallback);
 authRouter.post('/signup/complete', userController.completeSignup);
 authRouter.get('/me', authMiddleware, userController.getMe);
 
-
 export default authRouter;

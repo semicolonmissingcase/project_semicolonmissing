@@ -16,6 +16,10 @@ export default function QnaPost () {
   const [page, setPage] = useState(1); // 현재 페이지
   const [pageSize, setPageSize] = useState(10); // 페이지당 항목 수
   const [totalCount, setTotalCount] = useState(0); // 총 게시글 수
+  // 비번관련
+  const [isPwModalOpen, setIsPwModalOpen] = useState(false);
+  const [selectedInquiryId, setSelectedInquiryId] = useState(null);
+  const [pwError, setPwError] = useState("");
 
   // FAQ 데이터
   const faqData = {

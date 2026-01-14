@@ -168,7 +168,10 @@ const router = createBrowserRouter([
         ]
       },
       {
-        element: <ProtectedRouter />,
+        // 비회원 접근 불가이길래 풀었습니다.
+        path: '/qnaposts',
+        element: <Outlet />,
+        // element: <ProtectedRouter />,
         children: [
           {
             path: '/qnaposts',

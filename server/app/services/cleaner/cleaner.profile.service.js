@@ -56,7 +56,6 @@ async function updateCleaner(id, role, updateData) {
 
     // 작업 지역 처리
     if (updateData.regions !== undefined) {
-      console.log('>> 작업 지역 처리 시작. 전달된 regions:', updateData.regions);
       const regionIds = updateData.regions;
       const newDriverRegions = regionIds.map(locationId => ({
         cleanerId: id,
@@ -126,6 +125,7 @@ async function getCleanerProfile(id) {
   }
 
   const cleanerResponse = cleaner.toJSON();
+  console.log(">> 클라이언트에 전달 직전의 프로필 데이터:", cleanerResponse);
   return cleanerResponse;
 }
 

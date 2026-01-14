@@ -33,6 +33,7 @@ import bankAccountRouter from './routes/banks.routes.js';
 import corsMiddleware from './app/middlewares/cors/cors.middleware.js';
 
 const app = express();
+
 app.use(corsMiddleware);
 app.use(express.json()); // JSON 요청 파싱 처리
 app.use(cookieParser()); // 쿠키 파서
