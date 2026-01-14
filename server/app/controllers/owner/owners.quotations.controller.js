@@ -32,8 +32,6 @@ async function show(req, res, next) {
  */
 async function createReservation(req, res, next) {
   try {
-    console.log('컨트롤러 수신 req.body:', req.body);
-    console.log('컨트롤러 수신 req.files:', req.files);
     const { storeId, date, time, cleanerId } = req.body;
     let submissions = req.body.submissions;
 
