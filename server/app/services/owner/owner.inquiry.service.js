@@ -156,12 +156,15 @@ async function getCompletedReservationsForReview(ownerId) {
     const price = plainReservation.estimate?.estimatedAmount
       ? plainReservation.estimate.estimatedAmount.toLocaleString() : '정보없음';
 
+    const heartStatus = plainReservation.cleaner?.likes?.length > 0;
+
     return {
       id: plainReservation.id, // 예약id
       reservationId: plainReservation.id,
       cleanerId: plainReservation.cleaner?.id,
       name: plainReservation.cleaner?.name || '기사님 정보 없음',
       cleanerProfile: plainReservation.cleaner?.profile || '/icons/default-profile.png',
+      heart: heartStatus,
       time: `${dayjs(plainReservation.date).format('YYYY-MM-DD')} ${plainReservation.time}`,
       store: plainReservation.store?.name || '매장 정보 없음',
       price: price,

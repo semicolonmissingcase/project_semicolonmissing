@@ -7,7 +7,7 @@ import "./DatePicker.css";
 export default function DatePicker({ 
   selected, 
   onChange, 
-  minDate = new Date(), 
+  minDate = new Date(new Date().setDate(new Date().getDate() + 1)),
   maxDate = null,
   dateFormat = "yyyy-MM-dd",
   placeholderText = "날짜 선택",
