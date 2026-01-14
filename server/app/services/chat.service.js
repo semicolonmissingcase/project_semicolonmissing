@@ -158,22 +158,24 @@ async function getChatRoomWithSidebar(roomId, userRole) {
     let submissions = [];
 
     if (reservationId) {
-      reservationDetail = await db.Reservation.findOne({
-        where: { id: reservationId },
-        include: [{ model: db.Store, as: 'store' }],
-        transaction: t
-      });
-      submissions = await quotationRepository.submissionFindByReservationId(t, reservationId);
+      try {
+        reservationDetail = await db.Reservation.findOne({
+          where: { id: reservationId },
+          include: [{ model: db.Store, as: 'store' }],
+          transaction: t
+        });
+        submissions = await quotationRepository.submissionFindByReservationId(t, reservationId);
+      } catch (error) {
+        console.error("사이드바 상세 정보 조회 중 에러:", error.message);
+        submissions = [];
+      }
     }
     
     const cleaner = roomPlain.cleaner;
     const store = reservationDetail?.store;
-    
     const hireCount = (cleaner?.reservations || []).filter((r) => r.status === '완료').length;
-    
     const primaryLoc = cleaner?.locations?.[0];
     const regionText = primaryLoc ? `${primaryLoc.city} ${primaryLoc.district}` : '지역 정보 없음';
-    
     const fullAddress = store 
       ? `${store.addr1 || ''} ${store.addr2 || ''} ${store.addr3 || ''}`.trim() 
       : '주소 정보 없음';
@@ -185,10 +187,8 @@ async function getChatRoomWithSidebar(roomId, userRole) {
         ownerName: roomPlain.owner?.name || '정보 없음',
         cleanerId: cleaner?.id,
         cleanerName: cleaner?.name || '정보 없음',
-        
         estimateId: roomPlain.estimate?.id, 
         reservationId: reservationId, 
-        
         region: regionText,
         price: roomPlain.estimate?.estimated_amount || 0,
         introduction: cleaner?.introduction || '',
@@ -196,15 +196,26 @@ async function getChatRoomWithSidebar(roomId, userRole) {
         star: roomPlain.star || 0,
         storeName: store?.name || '정보 없음',
         storeAddress: fullAddress || '주소 정보 없음',
-        
         wishDate: reservationDetail?.date || '날짜 정보 없음',
         wishTime: reservationDetail?.time || '시간 정보 없음',
         estimateContent: roomPlain.estimate?.description || '',
         
-        qaList: (submissions || []).map(s => ({
-          question: s?.question?.content || '질문 정보 없음',
-          answer: s?.answer_text || s?.answerText || '답변 없음'
-        }))
+        qaList: (submissions || []).map(s => {
+          let displayAnswer = s?.answer_text || s?.answerText;
+
+          const optionId = s?.question_option_id || s?.questionOptionId;
+          if (!displayAnswer && optionId && s?.question?.questionOptions) {
+            const matchedOption = s.question.questionOptions.find(opt => opt.id === optionId);
+            if (matchedOption) {
+              displayAnswer = matchedOption.correct;
+            }
+          }
+
+          return {
+            question: s?.question?.content || '질문 정보 없음', //
+            answer: displayAnswer || '답변 없음'
+          };
+        })
       },
     };
   });

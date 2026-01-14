@@ -49,7 +49,7 @@ export default function ProtectedRouter() {
       }
     }
     checkAuth();
-  }, [location.pathname, isPublicPage]); // 의존성 추가
+  }, []);
 
   if (!isAuthChecked) return null;
 
@@ -63,10 +63,8 @@ export default function ProtectedRouter() {
 
   if (!isLoggedIn) {
     if (location.pathname === '/login' || location.pathname === '/hospital/login') {
-      return <Outlet />;
+      return <Navigate to={isAdminPath ? "/hospital/login" : "/login"} replace />;
     }
-    alert('로그인이 필요한 서비스입니다.');
-    return <Navigate to={isAdminPath ? "/hospital/login" : "/login"} replace />;
   }
 
   // 4. 권한 규칙 매칭 (기존 로직 유지)

@@ -19,25 +19,40 @@ export default function ReservationDetail() {
         if (response.data.success) {
           const { reservation, submissions } = response.data.data;
           
+          // 주소 병합
           const fullAddress = [
             reservation.store?.addr1,
             reservation.store?.addr2,
             reservation.store?.addr3
           ].filter(Boolean).join(' ');
 
+          const formattedQaList = (submissions || []).map(s => {
+            let displayAnswer = s.answerText || s.answer_text;
+
+            const optionId = s.questionOptionId || s.question_option_id;
+            if (!displayAnswer && optionId && s.question?.questionOptions) {
+              const matchedOption = s.question.questionOptions.find(opt => opt.id === optionId);
+              if (matchedOption) {
+                displayAnswer = matchedOption.correct;
+              }
+            }
+
+            return {
+              question: s.question?.content || '상세 항목', //
+              answer: displayAnswer || '답변 없음'
+            };
+          });
+
           setData({
             storeName: reservation.store?.name || '정보 없음',
             storeAddress: fullAddress || '주소 정보 없음',
             wishDate: reservation.date,
             wishTime: reservation.time?.slice(0, 5),
-            ownerName: reservation.owner?.name,
+            ownerName: reservation.owner?.name || '정보 없음',
             ownerPhone: reservation.owner?.phone, 
             price: reservation.estimate?.estimated_amount || 0,
             description: reservation.description,
-            qaList: submissions.map(s => ({
-              question: s.question?.questionText || s.question?.content || '상세 항목',
-              answer: s.answerText
-            }))
+            qaList: formattedQaList
           });
         }
       } catch (error) {
