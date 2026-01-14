@@ -38,9 +38,9 @@ async function storeQuotation({cleanerId, reservationId, estimatedAmount, descri
 
     await cleanerQuotationsRepository.store(t, newEstimate);
 
-    // 예약 상태 변경
-    reservation.status = ReservationStatus.APPROVED;
-    await cleanerQuotationsRepository.saveReservation(t, reservation);
+    // // 예약 상태 변경
+    // reservation.status = ReservationStatus.APPROVED;
+    // await cleanerQuotationsRepository.saveReservation(t, reservation);
 
     return;
   });
