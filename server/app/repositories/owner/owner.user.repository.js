@@ -92,6 +92,10 @@ async function getReservationsByOwnerId(ownerId) {
       {
         model: Store,
         as: 'store',
+        where: {
+          deletedAt: null
+        },
+        required: true,
         attributes:
         [
           'name',
