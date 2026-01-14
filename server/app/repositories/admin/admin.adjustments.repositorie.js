@@ -20,7 +20,7 @@ async function paginationAdjustments(t = null, { limit, offset }) {
       'completedAt',
       [
         sequelize.literal(`(
-          SELECT name FROM cleaners WHERE cleaners.id = Asdjustment.cleaner_id
+          SELECT name FROM cleaners WHERE cleaners.id = Adjustment.cleaner_id
         )`),
         'cleanerName'
       ],
