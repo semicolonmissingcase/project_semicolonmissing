@@ -221,6 +221,13 @@ async function findCompletedReservations(ownerId) {
         as: 'cleaner',
         attributes: ['id', 'name', 'profile'],
         required: false,
+        include: [{
+          model: Like,
+          as: 'likes',
+          where: { ownerId: ownerId },
+          required: false,
+          attributes: ['id'],
+        }]
       },
       {
         model: Store,

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import DatePicker from "../commons/DatePicker";
 import StoreSelectModal from "../commons/StoreSelectModal.jsx";
 import useKakaoPostcode from "../hooks/useKakaoPostcode.js";
@@ -12,7 +12,10 @@ import './OwnerReservation.css';
 export default function OwnerReservation() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location =useLocation();
   const { openPostcode } = useKakaoPostcode();
+
+  const [cleanerId, setCleanerId] = useState(null);
 
   const { user: owner } = useSelector(state => state.auth || {});
   const { stores = [], status: storesStatus = 'idle' } = useSelector(state => state.store || {});
@@ -39,8 +42,16 @@ export default function OwnerReservation() {
   const areaCodes = ["02", "010", "031", "032", "033", "041", "042", "043", "044", "051", "052", "053", "054", "055", "061", "062", "063", "064", "070"];
   const timeSlots = ["09시 ~ 10시", "11시 ~ 12시", "12시 ~ 13시", "13시 ~ 14시", "14시 ~ 15시", "15시 ~ 16시", "16시 ~ 17시", "17시 ~ 18시", "18시 ~ 19시", "19시 ~ 20시"];
 
-  // --- 추가된 핸들러 함수들 ---
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get('cleanerId');
+    if(id) {
+      setCleanerId(id);
+      console.log("OwnerReservation 페이지가 URL에서 추출한 cleanerId:", id);
+    }
+  }, [location]);
 
+  // --- 추가된 핸들러 함수들 ---
   const handleInputChange = (setter, value) => {
     setter(value);
     if (selectedStoreId) setSelectedStoreId(null);
@@ -108,6 +119,10 @@ export default function OwnerReservation() {
       formData.append("date", formattedDate);
       formData.append("time", formattedTime);
       formData.append("isDateNegotiable", isDateNegotiable);
+
+      if(cleanerId) {
+        formData.append("cleanerId", cleanerId);
+      }
 
       const submissions = RESERVATION_QUESTIONS.map(q => {
         const rawValue = answers[`q${q.id}`];
